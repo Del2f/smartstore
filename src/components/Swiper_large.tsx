@@ -15,7 +15,7 @@ function Swiper_large() {
       <Carousel.Item>
         <img
           className="carousel_img" 
-          src="img/bottom-banner-1.png"
+          src="/smartstore/img/bottom-banner-1.png"
           alt="First slide"
         />
         <Carousel.Caption>
@@ -24,7 +24,7 @@ function Swiper_large() {
       <Carousel.Item>
         <img
           className="carousel_img"
-          src="img/bottom-banner-2.png"
+          src="/smartstore/img/bottom-banner-2.png"
           alt="Second slide"
         />
 
@@ -34,7 +34,7 @@ function Swiper_large() {
       <Carousel.Item>
         <img
           className="carousel_img"
-          src="img/bottom-banner-3.png"
+          src="/smartstore/img/bottom-banner-3.png"
           alt="Third slide"
         />
         <Carousel.Caption>
@@ -43,7 +43,7 @@ function Swiper_large() {
       <Carousel.Item>
         <img
           className="carousel_img"
-          src="img/bottom-banner-4.jpg"
+          src="/smartstore/img/bottom-banner-4.jpg"
           alt="Fourth slide"
         />
         <Carousel.Caption>

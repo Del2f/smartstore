@@ -23,10 +23,10 @@ function Accordion(props: Props) {
       }
       if (parentRef.current.clientHeight > 0) {
         parentRef.current.style.height = "0";
-        console.log('접었다')
+        // console.log('접었다')
       } else {
         parentRef.current.style.height = `${childRef.current.clientHeight}px`;
-        console.log('폈다')
+        // console.log('폈다')
       }
       setIsCollapse(!isCollapse);
     },
@@ -42,7 +42,7 @@ function Accordion(props: Props) {
         <span>
         {props.title}
         </span>
-        <span className={props.className}><i></i></span>
+        <span className={props.className}><i className='icon-beta'></i></span>
         <Button className={buttonArrow}></Button>
       </Header>
       <ContentsWrapper ref={parentRef}>
@@ -83,7 +83,6 @@ const ContentsWrapper = styled.div`
 `;
   
 const Contents = styled.div`
-  color: #949ca6;
   background-color: #414958;
   font-size: 13px;
   font-weight: 500;

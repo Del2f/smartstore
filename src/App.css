@@ -1,8 +1,10 @@
-.App {
-  position: relative;
-  font-family: 나눔고딕;
+@charset "UTF-8";
+body {
+  margin: 0;
+}
+
+div {
   box-sizing: border-box;
-  min-width: 1200px;
 }
 
 ul, li {
@@ -13,6 +15,13 @@ a {
   text-decoration: none !important;
 }
 
+.App {
+  position: relative;
+  font-family: 나눔고딕;
+  box-sizing: border-box;
+  min-width: 1200px;
+}
+
 p {
   font-size: 13px;
 }
@@ -21,61 +30,88 @@ html {
   background-color: #edf0f5;
 }
 
+.vertical-middle {
+  vertical-align: middle;
+}
+
 /* 네이버 아이콘 */
-
 @font-face {
-  font-family : Naver Icons;
-  src : url(../public/img/Naver-Icons.woff2) format("woff2");
-  /* format("woff2"),url(../public/img//Naver-Icons.woff) */
-  /* format("woff"),url(../public/img//Naver-Icons.ttf) */
-  /* format("truetype"),url(../public/img//Naver-Icons.svg) */
-  /* format("svg"); */
-}  
-
-@font-face {
-  font-family : Naver booking Icons;
-  src : url(../public/img/Naver-booking-Icons.woff2) format("woff2");
-  /* format("woff2"),url(../public/img//Naver-Icons.woff) */
-  /* format("woff"),url(../public/img//Naver-Icons.ttf) */
-  /* format("truetype"),url(../public/img//Naver-Icons.svg) */
-  /* format("svg"); */
-}  
-
-/* 돋보기 */
-
-.fn:before {
   font-family: Naver Icons;
-  font-size: 15px;
+  src: url(../public/img/Naver-Icons.woff2) format("woff2");
+  /* format("woff2"),url(../public/img//Naver-Icons.woff) */
+  /* format("woff"),url(../public/img//Naver-Icons.ttf) */
+  /* format("truetype"),url(../public/img//Naver-Icons.svg) */
+  /* format("svg"); */
+}
+@font-face {
+  font-family: Naver booking Icons;
+  src: url(../public/img/Naver-booking-Icons.woff2) format("woff2");
+  /* format("woff2"),url(../public/img//Naver-Icons.woff) */
+  /* format("woff"),url(../public/img//Naver-Icons.ttf) */
+  /* format("truetype"),url(../public/img//Naver-Icons.svg) */
+  /* format("svg"); */
+}
+/* 나눔스퀘어 폰트 */
+@font-face {
+  font-family: "NanumSquare";
+  font-weight: 300;
+  font-style: normal;
+  src: url(https://cdn.jsdelivr.net/gh/webfontworld/naver/NanumSquare_acL.woff2) format("woff2");
+  font-display: swap;
+}
+@font-face {
+  font-family: "NanumSquare";
   font-weight: 400;
   font-style: normal;
-  line-height: 1em;
+  src: url(https://cdn.jsdelivr.net/gh/webfontworld/naver/NanumSquare_acR.woff2) format("woff2");
+  font-display: swap;
+}
+@font-face {
+  font-family: "NanumSquare";
+  font-weight: 500;
+  font-style: normal;
+  src: url(https://cdn.jsdelivr.net/gh/webfontworld/naver/NanumSquare_acB.woff2) format("woff2");
+  font-display: swap;
+}
+@font-face {
+  font-family: "NanumSquare";
+  font-weight: 700;
+  font-style: normal;
+  src: url(https://cdn.jsdelivr.net/gh/webfontworld/naver/NanumSquare_acEB.woff2) format("woff2");
+  font-display: swap;
+}
+.fn:before {
+  font-family: Naver Icons;
+  font-style: normal;
   vertical-align: middle;
 }
 
 .fn:after {
   font-family: Naver Icons;
-  font-size: 15px;
-  font-weight: 400;
   font-style: normal;
   position: relative;
-  top:-2px;
-  line-height: 1em;
 }
 
+/* 돋보기 */
 .fn-search:before {
-  content: "\EA94";
+  content: "\ea94";
   color: #9399A3;
-  font-weight: 600;
+  font-size: 15px !important;
+  font-weight: 600 !important;
   position: relative;
-  top:-2px;
+  top: -2px;
 }
 
+/* i 아이콘 */
+.fn-info1:before {
+  content: "\ea50";
+  color: #b0b6c4;
+  font-size: 17px;
+  margin-left: 3px;
+}
 
 /* 네비게이션 */
-
 .navi {
-  display: flex;
-  justify-content: space-between;
   align-items: center;
   background-color: #2D3539;
   height: 55px;
@@ -84,41 +120,257 @@ html {
 }
 
 .nav-left {
-  display: flex;
-  padding-left: 20px;
+  margin-left: 25px;
 }
 
-.nav-left span {
-  margin: 10px;
+.nav-logo {
+  margin: 0px;
+  padding: 0px;
 }
 
+.nav-left .naver-logo {
+  width: 60px;
+  height: 25px;
+  content: "";
+  display: inline-block;
+  background: url(../public/img/Naver_Logotype.svg) no-repeat;
+  background-position: 0px 8px;
+  vertical-align: middle;
+  background-size: 52px;
+}
+
+.nav-left .sell-shop {
+  font-size: 22px;
+  font-weight: 500;
+  font-family: NanumSquare;
+  letter-spacing: 1.5px;
+  color: white;
+}
+
+.nav-left .quick-link {
+  padding: 0px;
+  margin: 0px;
+  margin-left: 10px;
+  /* line-height: 27px; */
+}
+
+.nav-left .quick-link li a {
+  color: #fff;
+  /* border-left: 1px solid black; */
+  position: relative;
+  padding: 0 10px 0 11px;
+  font-size: 16px;
+}
+
+.nav-left .quick-link li a {
+  opacity: 0.5;
+}
+
+.nav-left .quick-link li a:hover {
+  opacity: 0.8;
+}
+
+.nav-left .quick-link li a:before {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  margin-top: -8px;
+  width: 1px;
+  height: 15px;
+  background-color: #000;
+  content: "";
+}
+
+.quick-link .icon-beta:after {
+  position: relative;
+  content: "";
+  top: -3px;
+  display: inline-block;
+  width: 20px;
+  height: 10px;
+  margin-left: 2px;
+  margin-right: 4px;
+  background: url(../public/img/sp_common.png);
+  background-position: -260px -110px;
+  margin: -3px 0 0 3px;
+}
+
+.quick-link .nav-dropdown-menu li {
+  padding: 4px 15px;
+  color: #767a83;
+  font-size: 13px;
+  opacity: 1;
+}
+
+.quick-link .nav-dropdown-menu li:first-child {
+  /* margin-top: 6px; */
+}
+
+.quick-link .arrow {
+  position: relative;
+  top: 3px;
+  margin-left: 3px;
+}
+
+.quick-link .fn-down2:after {
+  content: "\ea3e";
+  font-size: 13px;
+}
+
+.quick-link .fn-up2:after {
+  content: "\eac3";
+  font-size: 13px;
+}
+
+.nav-dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 50px;
+  font-size: 13px;
+  text-align: left;
+  background-color: #fff;
+  color: #2D3539;
+  z-index: 10;
+  border-radius: 5px;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2) !important;
+  padding: 10px 0px;
+}
+
+.nav-dropdown-menu-active {
+  display: block;
+}
+
+.nav-dropdown-menu li:hover {
+  color: #00c73c;
+  font-weight: 800;
+  background-color: #2D3539;
+}
+
+/* 네비 우측 */
 .nav-right {
-  display: flex;
-  justify-content: right;
+  margin-right: 25px;
+  font-size: 12px;
 }
 
-.nav-right span{
-  margin: 10px;
+.nav-user {
+  margin: 0px;
+  padding: 0px;
+}
 
+.nav-right li {
+  padding: 5px;
+}
+
+.nav-right .my-info {
+  margin-left: 4px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  border: 1px solid #dedede;
+  color: #fff;
+  font-size: 10px;
+  line-height: 15px;
+  cursor: pointer;
+}
+
+.nav-right .icon-alarm {
+  position: relative;
+  width: 20px;
+  height: 21px;
+  content: "";
+  display: inline-block;
+  background: url(../public/img/sp_alarm-mini.svg) no-repeat;
+  background-position: 97.1962616822% 18.0722891566%;
+  vertical-align: middle;
+}
+
+.nav-right .icon-alarm-new {
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  width: 16px;
+  height: 16px;
+  content: "";
+  display: inline-block;
+  background: url(../public/img/sp_alarm-mini.svg) no-repeat;
+  background-position: 93.6936936937% 62.5%;
+  vertical-align: middle;
+}
+
+.nav-right .nav-talk-btn {
+  margin: 15px 0 14px 5px;
+  padding: 4px 7px;
+  text-decoration: none;
+  background-color: #455264;
+  border-color: #202528;
+  font-size: 11px;
+  color: #fff;
+}
+
+.nav-right .talktalk-icon:before {
+  content: "\eab2";
+  color: #00c73c;
 }
 
 /* 메뉴 프로필 */
-
 .main-menu {
   position: absolute;
   background-color: #445163;
   width: 210px;
+  left: 210px;
   height: 100%;
   color: white;
   font-size: 15px;
   font-weight: 500;
+  margin-left: -210px;
+  transition: all 0.4s;
+}
+
+.main-menu-hide {
+  left: 0;
+  transition: all 0.4s;
+}
+
+.main-menu-btn {
+  position: absolute;
+  top: 0;
+  left: 210px;
+  display: inline-block;
+  width: 26px;
+  height: 60px;
+  margin-bottom: 0;
+  background-color: #edf0f5;
+  border-right: 1px solid #dbdde2;
+  border-bottom: 1px solid #dbdde2;
+  vertical-align: top;
+  text-align: center;
+}
+
+.hide-btn:after {
+  position: absolute;
+  top: 26px;
+  left: 11px;
+  width: 5px;
+  height: 9px;
+  content: "";
+  background: url(../public/img/sp_icon_pc.png);
+  background-position: -180px -100px;
+}
+
+.show-btn:after {
+  position: absolute;
+  top: 26px;
+  left: 11px;
+  width: 5px;
+  height: 9px;
+  content: "";
+  background: url(../public/img/sp_icon_pc.png);
+  background-position: -190px -100px;
 }
 
 .menu-list {
   padding: 16px 0px 0px;
   border-bottom: 1px solid #3d4858;
 }
-
 
 .menu-store {
   padding: 20px 25px 28px;
@@ -142,19 +394,17 @@ html {
 }
 
 /* 메뉴1 selectize */
-
 .order-check {
   padding: 2px 25px 22px;
   background-color: #3f4b5c;
   font-size: 12px;
-  -ms-user-select: none; 
+  -ms-user-select: none;
   -moz-user-select: -moz-none;
-  -khtml-user-select: none;
   -webkit-user-select: none;
   user-select: none;
 }
 
-.selectize-control{
+.selectize-control {
   width: 160px;
   height: 30px;
 }
@@ -177,11 +427,11 @@ html {
   display: block;
 }
 
-.selectize-dropdown-content{
+.selectize-dropdown-content {
   padding-bottom: 4px;
 }
 
-.selectize-input{
+.selectize-input {
   color: #cdced1;
   background-color: #37404d;
   border: 1px solid #646d7b;
@@ -191,33 +441,33 @@ html {
 }
 
 .selectize-input:after {
-    content: " ";
-    display: block;
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    margin-top: -3px;
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 5px 5px 0;
-    border-color: #8d8d92 transparent transparent;
-    clear: left;
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  margin-top: -3px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 5px 5px 0;
+  border-color: #8d8d92 transparent transparent;
+  clear: left;
 }
 
 .check:after {
-    content: " ";
-    display: block;
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    margin-top: -4px;
-    width: 0;
-    height: 0;
-    border-color: transparent transparent #767a83;
-    border-style: solid;
-    border-width: 0px 5px 5px;
-    clear: left;
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  margin-top: -4px;
+  width: 0;
+  height: 0;
+  border-color: transparent transparent #767a83;
+  border-style: solid;
+  border-width: 0px 5px 5px;
+  clear: left;
 }
 
 .item {
@@ -240,7 +490,6 @@ html {
 }
 
 /* 메뉴1 검색창 인풋 */
-
 /* 셀러인풋 감싸고있는거 */
 .seller-input-wrap {
   position: relative;
@@ -249,22 +498,21 @@ html {
 }
 
 /* 셀러인풋 자체 */
-.seller-input{
-    width: 100%;
-    height: 26px;
-    padding: 2px 20px 2px 0;
-    background-color: #3f4b5c;
-    color: #e8e8e8;
-    font-size: 14px;
-    line-height: 1;
-    border: none;
+.seller-input {
+  width: 100%;
+  height: 26px;
+  padding: 2px 20px 2px 0;
+  background-color: #3f4b5c;
+  color: #e8e8e8;
+  font-size: 14px;
+  line-height: 1;
+  border: none;
 }
 
 /* 셀러인풋 클릭했을때 */
 .seller-input:focus {
   outline: none;
 }
-
 
 /* 돋보기 아이콘 위에 얹은 버튼 */
 .seller-input-Btn {
@@ -277,32 +525,33 @@ html {
 }
 
 /* 돋보기 아이콘 */
-  .search-icon {
-    font-size: 14px;
-    color: #959BA5;
-  }
+.search-icon {
+  font-size: 14px;
+  color: #959BA5;
+}
 
-  .contents li {
-    padding: 5px 30px 9px 30px;
-    display: flex;
-  }
-
-  .contents li:hover {
-    color:#00c73c;
-  }
-
-  .contents li:first-child{
-    padding-top: 20px;
-  }
-
-  .contents li:last-child{
-    padding-bottom: 20px;
-    
-  }
-
+#menu-list .contents li {
+  color: #949ca6;
+  padding: 5px 30px 9px 30px;
+  display: flex;
+}
+#menu-list .contents li a {
+  color: #949ca6;
+}
+#menu-list .contents li:hover {
+  color: #00c73c;
+}
+#menu-list .contents li a:hover {
+  color: #00c73c;
+}
+#menu-list .contents li:first-child {
+  padding-top: 20px;
+}
+#menu-list .contents li:last-child {
+  padding-bottom: 20px;
+}
 
 /* 좌측 메뉴 맨아래 */
-
 .outer_link {
   padding: 30px;
   text-align: left;
@@ -316,7 +565,7 @@ html {
   line-height: 1.6;
 }
 
-.outer_link .title:not(:first-child){
+.outer_link .title:not(:first-child) {
   margin-top: 35px;
   margin-bottom: 7px;
 }
@@ -328,9 +577,6 @@ html {
   display: block;
   line-height: 20px;
   position: relative;
-}
-
-.outer_menu .link:first-child {
 }
 
 .outer_menu .link:not(:first-child) {
@@ -350,7 +596,7 @@ html {
   text-align: center;
 }
 
-.fn-booking-newlayer{
+.fn-booking-newlayer {
   margin-left: 4px;
   font-size: 12px;
   color: #9199a2;
@@ -358,12 +604,11 @@ html {
   margin-left: 8px;
 }
 
-.fn-booking-newlayer:after{
-  content: "\EA23";
+.fn-booking-newlayer:after {
+  content: "\ea23";
 }
 
 /* 톡톡상담 버튼 */
-
 .talktalk_Btn_wrap {
   padding: 0 30px;
 }
@@ -379,8 +624,8 @@ html {
   vertical-align: middle;
 }
 
-.talktalk_Btn:before {
-  content: "\EAB2";
+.talktalk_Btn .talktalk-icon:before {
   color: #00c73c;
+  content: "\eab2";
   font-size: 16px;
 }
