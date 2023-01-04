@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/smartstore/static/css/main.c0e477a7.css",
-    "main.js": "/smartstore/static/js/main.28056a2c.js",
+    "main.js": "/smartstore/static/js/main.f4a73f49.js",
     "static/media/spText_svg-1.svg": "/smartstore/static/media/spText_svg-1.48859ce837b2d041d33f.svg",
     "static/media/spIcon_svg-2.svg": "/smartstore/static/media/spIcon_svg-2.5fbdd84916aed8e2caed.svg",
     "static/media/spIcon_svg-1.svg": "/smartstore/static/media/spIcon_svg-1.b3c8941706f0646b57eb.svg",
@@ -35,10 +35,10 @@
     "static/media/icon-help-16.svg": "/smartstore/static/media/icon-help-16.a302f8f8038dd8a2af0b.svg",
     "static/media/logo-naver-green.svg": "/smartstore/static/media/logo-naver-green.5824370b8dc9f53021dc.svg",
     "main.c0e477a7.css.map": "/smartstore/static/css/main.c0e477a7.css.map",
-    "main.28056a2c.js.map": "/smartstore/static/js/main.28056a2c.js.map"
+    "main.f4a73f49.js.map": "/smartstore/static/js/main.f4a73f49.js.map"
   },
   "entrypoints": [
     "static/css/main.c0e477a7.css",
-    "static/js/main.28056a2c.js"
+    "static/js/main.f4a73f49.js"
   ]
 }
