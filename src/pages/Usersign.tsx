@@ -341,7 +341,10 @@
                             <li className="signup-item">
                                 <div className="signup-id-pc">
                                     <div className="text">
-                                        <label className="title">로그인 아이디</label>
+                                        <label className="title">
+                                            <span>로그인 아이디</span>
+                                            <span className="icon-point"/>
+                                        </label>
                                         <div className="input-item">
                                             <div className="input-area">
                                                 <div className="input-box" ref={inputRefID}>
@@ -364,7 +367,10 @@
                             <li className="signup-item">
                                 <div className="signup-id-pc">
                                     <div className="text">
-                                        <label className="title">비밀번호</label>
+                                        <label className="title">
+                                            <span>비밀번호</span>
+                                            <span className="icon-point"/>
+                                        </label>
                                         <div className="input-item">
                                             <div className="input-area">
                                                 <div className="input-box" ref={inputRefPW}>
@@ -382,7 +388,10 @@
                             <li className="signup-item">
                                 <div className="signup-id-pc">
                                     <div className="text">
-                                        <label className="title">비밀번호 확인</label>
+                                        <label className="title">
+                                            <span>비밀번호 확인</span>
+                                            <span className="icon-point"/>
+                                        </label>
                                         <div className="input-item">
                                             <div className="input-area">
                                                 <div className="input-box" ref={inputRefPW2}>
@@ -400,7 +409,10 @@
                             <li className="signup-item">
                                 <div className="signup-id-pc">
                                     <div className="text">
-                                        <label className="title">이름</label>
+                                        <label className="title">
+                                            <span>이름</span>
+                                            <span className="icon-point"/>
+                                        </label>
                                         <div className="input-item">
                                             <div className="input-area">
                                                 <div className="input-box" ref={inputRefName}>
@@ -418,8 +430,10 @@
                             <li className="signup-item signup-number">
                                 <div className="signup-id-pc">
                                     <div className="text">
-                                        <label className="title">휴대전화 번호
-                                            <img src={`${process.env.PUBLIC_URL}/img/icon-help-16.svg`} alt=" " className="icon-help"/>
+                                        <label className="title">
+                                            <span>휴대전화 번호</span>
+                                            <span className="icon-help"/>
+                                            <span className="icon-point"/>
                                         </label>
                                         <div className="input-item">
                                             <div className="input-area">
@@ -536,8 +550,10 @@
                             <li className="signup-item">
                                 <div className="signup-id-pc">
                                     <div className="text">
-                                        <label className="title">본인확인 이메일
-                                            <img src={`${process.env.PUBLIC_URL}/img/icon-help-16.svg`} alt=" " className="icon-help"/>
+                                        <label className="title">
+                                            <span>본인확인 이메일</span>
+                                            <span className="icon-help"/>
+                                            <span className="icon-point"/>
                                         </label>
                                         <div className="input-item">
                                             <div className="input-area">
@@ -567,7 +583,7 @@
                                 <input type="checkbox" className="blind" id="checkbox01" onChange={agree}/>
                                 <label className="agree-check-box" htmlFor="checkbox01">
                                     <span className="agree-ico-box"></span>
-                                    <img src={`${process.env.PUBLIC_URL}/img/icon-check-16.00020358.svg`} alt=" " className="agree-ico"/>
+                                    <span className="agree-ico"/>
                                 </label>
                                 <div className="agree-desc">
                                     <a href="{() => false}">

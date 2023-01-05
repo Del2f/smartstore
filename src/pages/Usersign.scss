@@ -94,35 +94,49 @@
             }
         }
 
-
         .signup-item:not(:first-child) {
             margin-top: 34px;
         }
 
         .title {
             position: relative;
-            display: inline-block;
+            display: flex;
+            justify-content: left;
+            align-items: center;
+
+            vertical-align: middle;
             font-size: 15px;
-            line-height: 19px;
-            text-align: left;
             letter-spacing: -.2px;
         }
 
-        .title:after { // 빨간점
-            position: absolute;
-            top: 6px;
-            right: -10px;
+        // .title:after { // 빨간점
+        //     position: absolute;
+        //     content: "";
+        //     top: 6px;
+        //     right: -10px;
+        //     width: 6px;
+        //     height: 6px;
+        //     border-radius: 50%;
+        //     background-color: #ff3627;
+        // }
+
+        .icon-point { // 빨간점
+            content: "";
+            margin-left: 4px;
             width: 6px;
             height: 6px;
             border-radius: 50%;
             background-color: #ff3627;
-            content: "";
         }
 
         .icon-help {
-            padding: 4px;
-            padding-right: 0px;
-            margin-top: -5px;
+            display: inline-block;
+            content: "";
+            margin-left: 2px;
+            width: 16px;
+            height: 16px;
+            background: url(../../public/img/icon-help-16.svg);
+            background-repeat: no-repeat;
         }
 
         .input-item {
@@ -406,6 +420,10 @@
                 bottom: 0;
                 left: 0;
                 margin: auto;
+                width: 17px;
+                height: 17px;
+                content: "";
+                background: url(../../public/img/icon-check-16.00020358.svg) 0px 0px no-repeat;
             }
 
             .agree-desc {

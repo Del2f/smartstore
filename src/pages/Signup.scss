@@ -84,13 +84,20 @@
         left: 0;
         width: 64px;
 
-        img {
+        div {
             position: absolute;
             top: 0;
             right: 0;
             bottom: 0;
             left: 0;
             margin: auto;
+            width: 33px;
+            height: 32px;
+            content: "";
+            background: url(../../public/img/logo-naver-32.abe8a6de.svg);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
         }
     }
 
@@ -119,6 +126,13 @@
 
     .signup-btn-arrow-pc {
         display: none;
+        width: 24px;
+        height: 24px;
+        content: "";
+        background: url(../../public/img/icon-arrow-24.0ac349d5.svg);
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
     }
 
     .signup-subnotice {

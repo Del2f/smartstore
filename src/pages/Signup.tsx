@@ -34,13 +34,13 @@
                         <Link to="usersign">
                             <button type="button" className="signup-btn">
                                 <span className="signup-btn-icon-wrap">
-                                    <img src={`${process.env.PUBLIC_URL}/img/logo-naver-32.abe8a6de.svg`} alt=" " className="signup-btn-icon"/>
+                                    <div className="signup-btn-icon"></div>
                                 </span>
                                 <span className="signup-btn-title">네이버 아이디로 가입하기</span>
                                 <span className="signup-btn-desc">네이버 회원 정보로 간편하게 가입 하실 수 있습니다.</span>
                                 <span className="signup-btn-arrow-wrap">
-                                    <img src={`${process.env.PUBLIC_URL}/img/icon-arrow-24.0ac349d5.svg`} alt=" " className="signup-btn-arrow-pc"/>
-                                    <img src={`${process.env.PUBLIC_URL}/img/icon-arrow-16.b0874407.svg`} alt=" " className="signup-btn-arrow-m"/>
+                                    <span className="signup-btn-arrow-pc"/>
+                                    <span className="signup-btn-arrow-m"/>
                                 </span>
                             </button>
                         </Link>
