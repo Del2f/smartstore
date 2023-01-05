@@ -1,4 +1,4 @@
-    import axiosPrivate from "../api/axios";
+    import axios from "../api/axios";
     import { useState, useRef, useEffect } from "react";
     import { Link, useNavigate } from "react-router-dom";
     import { useDispatch } from "react-redux";
@@ -45,7 +45,7 @@
         const handleSubmit = async (e : any) => {
             e.preventDefault();
             try {
-            const data = await axiosPrivate.post( "/smartstore/commerce/login", userdata,
+            const data = await axios.post( "/smartstore/commerce/login", userdata,
             { withCredentials: true })
             
             .then((res) => {
@@ -99,7 +99,7 @@
 
         return (
             <>
-            <form onSubmit={(e) => handleSubmit(e)} method="POST">
+            <form method="POST" onSubmit={(e) => handleSubmit(e)} >
                 <div className="layout-wrap">
                     <div className="layout-inner">
                         <div className="login-content">
