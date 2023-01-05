@@ -30,7 +30,7 @@ root.render(
   <>
   {/* <React.StrictMode> */}
   <CookiesProvider>
-    <BrowserRouter basename="/smartstore">
+    <BrowserRouter basename="/index.html">
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
             <Routes>  
