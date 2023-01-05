@@ -99,7 +99,7 @@
 
         return (
             <>
-            <form onSubmit={(e) => handleSubmit(e)}>
+            <form onSubmit={(e) => handleSubmit(e)} method="POST">
                 <div className="layout-wrap">
                     <div className="layout-inner">
                         <div className="login-content">
