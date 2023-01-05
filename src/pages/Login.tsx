@@ -1,16 +1,16 @@
+    import axiosPrivate from "../api/axios";
     import { useState, useRef, useEffect } from "react";
     import { Link, useNavigate } from "react-router-dom";
     import { useDispatch } from "react-redux";
     import $ from 'jquery';
     import "bootstrap/dist/css/bootstrap.min.css";
     import { useCookies } from "react-cookie";
-    import axios from "axios";
     import { loginUser } from '../store/userSlice';
+    
     import "./Login.scss";
 
-
     function Login() {
-        
+
         const cookies = useCookies();
         const dispatch = useDispatch();
         const navigate = useNavigate(); // 다른 페이지로 이동히게 해주는 Hook.
@@ -45,7 +45,7 @@
         const handleSubmit = async (e : any) => {
             e.preventDefault();
             try {
-            const data = await axios.post( "http://localhost:8080/smartstore/commerce/login", userdata,
+            const data = await axiosPrivate.post( "/smartstore/commerce/login", userdata,
             { withCredentials: true })
             
             .then((res) => {
