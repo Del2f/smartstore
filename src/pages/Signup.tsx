@@ -26,11 +26,8 @@
                     네이버 커머스 ID 알아보기
                 </a>
                 </div>
-                <div className="signup-img">
-                <img
-                    src={`${process.env.PUBLIC_URL}/img/img-business-454x240.svg`}
-                    alt=" "
-                />
+                <div className="signup-img-wrap">
+                    <div className="signup-img"></div>
                 </div>
                 <div className="signup-btn-area">
                     <div className="signup-btn-content">

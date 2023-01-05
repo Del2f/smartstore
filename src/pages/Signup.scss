@@ -25,13 +25,18 @@
         word-break: keep-all;   
     }
 
-    .signup-img {
-        display: block;
-        max-width: 453px;
+    .signup-img-wrap {
         margin: 32px auto 0;
-        
-        img {
-            width:100%;
+        .signup-img {
+            display: inline-block;
+            max-width: 100%;
+            width: 454px;
+            height: 240px;
+            content: "";
+            background: url(../../public/img/img-business-454x240.svg);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
         }
     }
 }
