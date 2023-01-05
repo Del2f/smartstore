@@ -1,0 +1,158 @@
+.ag-theme-alpine {
+    --ag-row-hover-color: rgb(233, 233, 233);
+    --ag-background-color: rgb(255, 255, 255);
+    --ag-selected-row-background-color: rgb(224, 224, 224);
+}
+
+.delete-btn-wrap {
+    
+    .delete-btn {
+        height: 30px;
+        vertical-align: middle;
+        border: 1px solid #ffffff;
+        border-radius: 6px;
+        background-color: rgb(32, 132, 226);
+        color: #fff;
+        font-size: 13px;
+    }
+}
+
+.menu-bottom {
+
+    .top {
+        margin: 10px 0;
+
+        .delete-btn {
+            background-color: #fff;
+            border: 1px solid #dbdde2;
+            padding: 2px 10px;
+
+            span {
+                color: #666;
+                font-size: 12px;
+                line-height: 24px;
+            }
+        }
+
+        .menu-bottom-right {
+
+            div {
+                display: flex;
+                align-items: center;
+            }
+            
+            span {
+                color: #666;
+                font-size: 12px;
+                margin: 0 5px;
+            }
+
+            input {
+                height: 30px;
+                border: 1px solid #dbdde2;
+            }
+
+            .option-use input {
+                width: 50px;
+            }
+
+            .selected-modify-btn {
+                margin-left: 5px;
+                background-color: #8991a3;
+                border: 1px solid #727b90;
+                span {
+                    display: inline-block;
+                    color: #fff;
+                    margin-bottom: 1px;
+                }
+            }
+        }
+    }
+
+    .ag-root-wrapper {
+        border: 1px solid #d3d8e1;
+
+        .ag-cell {
+            color: #555;
+        }
+        
+        .ag-row-selected:before { // 선택된 백그라운드 hover 컬러
+            background-image: none;
+        }
+
+        .ag-cell-normal-height {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .ag-selection-checkbox {
+            margin: 0px;
+        }
+
+        .ag-checkbox-input-wrapper {
+            width: 20px;
+            height: 20px;
+        }
+        
+        .ag-checkbox-input-wrapper:focus-within {
+            box-shadow: none;
+        }
+        
+        .ag-checkbox-input-wrapper:after {
+            content: "";
+            outline: none;
+            width: 20px;
+            height: 20px;
+            background: url(../../public/img/sp_icon_pc.png) no-repeat;
+            background-position: -30px -530px;
+        }
+
+        .ag-checked:after{
+            content: "";
+            width: 20px;
+            height: 20px;
+            background: url(../../public/img/sp_icon_pc.png) no-repeat;
+            background-position: -0px -530px;
+        }
+
+        .ag-checkbox-input {
+        }
+    }
+    
+    .ag-header {
+        border-bottom: 1px solid #d3d8e1;
+
+        .ag-header-row {
+            
+            .ag-header-select-all{
+                margin: 0px;
+            }
+
+            .ag-focus-managed:first-child {
+                
+                .ag-header-cell-comp-wrapper {
+                    display: none;
+                }
+            }
+
+            .ag-focus-managed {
+                justify-content: center;
+            }
+        }
+
+
+        
+        .ag-header-cell-label{
+            justify-content: center;
+
+            .ag-header-cell-text {
+                color: #555;
+                font-size: 13px;
+                font-weight: 400;
+            }
+        }
+
+    }
+
+}
