@@ -15,7 +15,7 @@ function Swiper_Intro() {
       <Carousel.Item>
         <img
           className="carousel_img" 
-          src="/smartstore/img/home/pay.png"
+          src="img/home/pay.png"
         />
         <Carousel.Caption>
         </Carousel.Caption>
@@ -23,7 +23,7 @@ function Swiper_Intro() {
       <Carousel.Item>
         <img
           className="carousel_img"
-          src="/smartstore/img/home/ntalk.png"
+          src="/img/home/ntalk.png"
         />
         <Carousel.Caption>
         </Carousel.Caption>
@@ -31,7 +31,7 @@ function Swiper_Intro() {
       <Carousel.Item>
         <img
           className="carousel_img"
-          src="/smartstore/img/home/graph.png"
+          src="/img/home/graph.png"
         />
         <Carousel.Caption>
         </Carousel.Caption>
@@ -39,7 +39,7 @@ function Swiper_Intro() {
       <Carousel.Item>
         <img
           className="carousel_img"
-          src="/smartstore/img/home/commission.jpg"
+          src="/img/home/commission.jpg"
         />
         <Carousel.Caption>
         </Carousel.Caption>
@@ -47,7 +47,7 @@ function Swiper_Intro() {
       <Carousel.Item>
         <img
           className="carousel_img" 
-          src="/smartstore/img/home/map.png"
+          src="/img/home/map.png"
         />
         <Carousel.Caption>
         </Carousel.Caption>
@@ -55,7 +55,7 @@ function Swiper_Intro() {
       <Carousel.Item>
         <img
           className="carousel_img"
-          src="/smartstore/img/home/site.png"
+          src="/img/home/site.png"
         />
         <Carousel.Caption>
         </Carousel.Caption>
@@ -63,7 +63,7 @@ function Swiper_Intro() {
       <Carousel.Item>
         <img
           className="carousel_img"
-          src="/smartstore/img/home/modoo.png"
+          src="/img/home/modoo.png"
         />
         <Carousel.Caption>
         </Carousel.Caption>
@@ -71,7 +71,7 @@ function Swiper_Intro() {
       <Carousel.Item>
         <img
           className="carousel_img"
-          src="/smartstore/img/home/price.png"
+          src="/img/home/price.png"
         />
         <Carousel.Caption>
         </Carousel.Caption>

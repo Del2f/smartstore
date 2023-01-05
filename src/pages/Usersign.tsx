@@ -328,7 +328,7 @@
 
     return (
         <>
-        <form method='post' onSubmit={(e) => handleSubmit(e)}>
+        <form method='POST' onSubmit={(e) => handleSubmit(e)}>
         <div className="usersign-layout-wrap">
             <div className="layout-inner">
                 <div className="content">
