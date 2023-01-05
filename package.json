@@ -77,7 +77,7 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "http://35.76.233.160/smartstore",
+  "homepage": ".",
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
   "main": "index.tsx",
   "keywords": [],
