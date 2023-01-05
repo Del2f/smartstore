@@ -2,10 +2,10 @@
     import { useState, useRef, useEffect } from "react";
     import { useDispatch } from "react-redux";
     import { useNavigate } from "react-router-dom";
-    // import { RootState } from "../store/store";
     import $ from "jquery";
     import "./Usersign.scss";
-
+    
+    // import { RootState } from "../store/store";
     // import { useCookies } from "react-cookie";
 
 
@@ -155,7 +155,7 @@
 
             try {
                 const data = await axios.post(
-                    "http://localhost:8080/smartstore/commerce/usersign", userdata,
+                    "/smartstore/commerce/usersign", userdata,
                     {
                         withCredentials: true
                     })
