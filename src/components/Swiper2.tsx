@@ -15,7 +15,7 @@ function Swiper2() {
       <Carousel.Item>
         <img
           className="carousel_img" 
-          src="/smartstore/img/top-banner-right1-pc.png"
+          src="/img/top-banner-right1-pc.png"
           alt="First slide"
         />
         <Carousel.Caption>
@@ -24,7 +24,7 @@ function Swiper2() {
       <Carousel.Item>
         <img
           className="carousel_img"
-          src="/smartstore/img/top-banner-right2-pc.png"
+          src="/img/top-banner-right2-pc.png"
           alt="Second slide"
         />
 
@@ -34,7 +34,7 @@ function Swiper2() {
       <Carousel.Item>
         <img
           className="carousel_img"
-          src="/smartstore/img/top-banner-right3-pc.png"
+          src="/img/top-banner-right3-pc.png"
           alt="Third slide"
         />
         <Carousel.Caption>
@@ -43,7 +43,7 @@ function Swiper2() {
       <Carousel.Item>
         <img
           className="carousel_img"
-          src="/smartstore/img/top-banner-right4-pc.png"
+          src="/img/top-banner-right4-pc.png"
           alt="Fourth slide"
         />
         <Carousel.Caption>

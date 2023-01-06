@@ -1,6 +1,5 @@
 import { useState } from "react";
 import Carousel from "react-bootstrap/Carousel";
-import styled from "styled-components";
 import './Swiper_lntro.scss';
 
 function Swiper_Intro() {
@@ -15,7 +14,7 @@ function Swiper_Intro() {
       <Carousel.Item>
         <img
           className="carousel_img" 
-          src="img/home/pay.png"
+          src="/img/home/pay.png"
         />
         <Carousel.Caption>
         </Carousel.Caption>

@@ -1,15 +1,17 @@
-import { Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import { Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from 'react-redux';
+import { useCookies } from "react-cookie";
 
-import "./Shop.scss";
-import "../../components/flex.css";
 import Home from "./Home";
 import Category from "./Category";
 import Products from "./Products";
 import NotFound from "./NotFound";
-import { useCookies } from "react-cookie";
+
 import { selectCurrentUser } from '../../store/userSlice';
+
+import "./Shop.scss";
+import "../../components/flex.css";
 
 let currentPath = "";
 

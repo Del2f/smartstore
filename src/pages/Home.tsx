@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import styled from "styled-components";
-import { Link } from "react-router-dom";
 import { useSelector } from "react-redux"
 
-import $ from "jquery";
+// import styled from "styled-components";
+// import { Link, useNavigate } from "react-router-dom";
+// import $ from "jquery";
+
 import Swiper from "../components/Swiper";
 import Swiper2 from "../components/Swiper2";
 import Swiper_large from "../components/Swiper_large";
@@ -11,16 +12,14 @@ import Chart from "../components/Chart";
 import StoreChart from "../components/StoreChart";
 import Btn from "../components/Btn";
 import QAtabs from "../components/QAtabs";
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../components/flex.css";
 import "./Home.scss";
+
 import { Gift, ArrowClockwise, Truck, ExclamationCircle } from "react-bootstrap-icons";
-import { useNavigate } from "react-router-dom";
 import { selectShowMenu } from '../store/menuSlice';
 import { selectCurrentUser } from '../store/userSlice';
-
-
-
 
 type Props = {
   Showmainmenu?: boolean;

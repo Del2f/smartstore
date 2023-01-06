@@ -14,7 +14,7 @@ function Swiper_Shop() {
       <Carousel.Item>
         <img
           className="carousel_img" 
-          src="/smartstore/img/shop/iPad_Pro.jpg"
+          src="/img/shop/iPad_Pro.jpg"
         />
         <Carousel.Caption>
         </Carousel.Caption>
@@ -22,7 +22,7 @@ function Swiper_Shop() {
       <Carousel.Item>
         <img
           className="carousel_img"
-          src="/smartstore/img/shop/iPad_10th.jpg"
+          src="/img/shop/iPad_10th.jpg"
         />
         <Carousel.Caption>
         </Carousel.Caption>
@@ -30,7 +30,7 @@ function Swiper_Shop() {
       <Carousel.Item>
         <img
           className="carousel_img"
-          src="/smartstore/img/shop/Apple-TV_4K.jpg"
+          src="/img/shop/Apple-TV_4K.jpg"
         />
         <Carousel.Caption>
         </Carousel.Caption>
@@ -38,7 +38,7 @@ function Swiper_Shop() {
       <Carousel.Item>
         <img
           className="carousel_img"
-          src="/smartstore/img/shop/AirPods_Pro_2nd.jpg"
+          src="/img/shop/AirPods_Pro_2nd.jpg"
         />
         <Carousel.Caption>
         </Carousel.Caption>
@@ -46,7 +46,7 @@ function Swiper_Shop() {
       <Carousel.Item>
         <img
           className="carousel_img" 
-          src="/smartstore/img/shop/iPhone14_Pro.jpg"
+          src="/img/shop/iPhone14_Pro.jpg"
         />
         <Carousel.Caption>
         </Carousel.Caption>
@@ -54,7 +54,7 @@ function Swiper_Shop() {
       <Carousel.Item>
         <img
           className="carousel_img"
-          src="/smartstore/img/shop/iPhone14.jpg"
+          src="/img/shop/iPhone14.jpg"
         />
         <Carousel.Caption>
         </Carousel.Caption>
@@ -62,7 +62,7 @@ function Swiper_Shop() {
       <Carousel.Item>
         <img
           className="carousel_img"
-          src="/smartstore/img/shop/Watch_ULTRA.jpg"
+          src="/img/shop/Watch_ULTRA.jpg"
         />
         <Carousel.Caption>
         </Carousel.Caption>
@@ -70,7 +70,7 @@ function Swiper_Shop() {
       <Carousel.Item>
         <img
           className="carousel_img"
-          src="/smartstore/img/shop/Watch8.jpg"
+          src="/img/shop/Watch8.jpg"
         />
         <Carousel.Caption>
         </Carousel.Caption>
@@ -78,7 +78,7 @@ function Swiper_Shop() {
       <Carousel.Item>
         <img
           className="carousel_img"
-          src="/smartstore/img/shop/Macbook_Air_M2.jpg"
+          src="/img/shop/Macbook_Air_M2.jpg"
         />
         <Carousel.Caption>
         </Carousel.Caption>

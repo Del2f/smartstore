@@ -1,8 +1,9 @@
 import { useState } from "react";
 
-import Tab from "react-bootstrap/Tab";
-import Tabs from "react-bootstrap/Tabs";
-import styled from "styled-components";
+// import Tab from "react-bootstrap/Tab";
+// import Tabs from "react-bootstrap/Tabs";
+// import styled from "styled-components";
+
 import "./QAtabs.scss";
 import { ExclamationCircle, ChevronRight } from "react-bootstrap-icons";
 

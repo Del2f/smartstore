@@ -1,8 +1,8 @@
-    import { useState, useRef, useEffect } from "react";
+    // import { useState, useRef, useEffect } from "react";
     import { Link } from "react-router-dom";
-    import $ from "jquery";
     import "./Signup.scss";
-    import axios from 'axios';
+    // import $ from "jquery";
+    // import axios from 'axios';
 
     function Signup() {
 

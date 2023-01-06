@@ -1,5 +1,5 @@
-import "./Products.scss";
 import { useState, useRef, useEffect } from "react";
+import "./Products.scss";
 
 function Products () {
 
@@ -45,16 +45,16 @@ function Products () {
 
     // 상품 정보 좌측
     const [imgList, setImgList] = useState([
-        { id: 1, img: '/smartstore/img/shop/products/macbookpro/01.jpg'},
-        { id: 2, img: '/smartstore/img/shop/products/macbookpro/02.jpg'},
-        { id: 3, img: '/smartstore/img/shop/products/macbookpro/03.jpg'},
-        { id: 4, img: '/smartstore/img/shop/products/macbookpro/04.jpg'},
-        { id: 5, img: '/smartstore/img/shop/products/macbookpro/05.jpg'},
-        { id: 6, img: '/smartstore/img/shop/products/macbookpro/06.jpg'},
-        { id: 7, img: '/smartstore/img/shop/products/macbookpro/07.jpg'},
-        { id: 8, img: '/smartstore/img/shop/products/macbookpro/08.jpg'},
-        { id: 9, img: '/smartstore/img/shop/products/macbookpro/09.jpg'},
-        { id: 10, img: '/smartstore/img/shop/products/macbookpro/10.jpg'},
+        { id: 1, img: '/img/shop/products/macbookpro/01.jpg'},
+        { id: 2, img: '/img/shop/products/macbookpro/02.jpg'},
+        { id: 3, img: '/img/shop/products/macbookpro/03.jpg'},
+        { id: 4, img: '/img/shop/products/macbookpro/04.jpg'},
+        { id: 5, img: '/img/shop/products/macbookpro/05.jpg'},
+        { id: 6, img: '/img/shop/products/macbookpro/06.jpg'},
+        { id: 7, img: '/img/shop/products/macbookpro/07.jpg'},
+        { id: 8, img: '/img/shop/products/macbookpro/08.jpg'},
+        { id: 9, img: '/img/shop/products/macbookpro/09.jpg'},
+        { id: 10, img: '/img/shop/products/macbookpro/10.jpg'},
     ]);
 
     // 상품 정보
@@ -69,12 +69,10 @@ function Products () {
     const [originPrice, setOriginPrice] = useState(3360000);
     const [price, setPrice] = useState(3292800); // 상품 가격
     const [selected, setSelected] = useState<any>([]); // 선택된 옵션
-    console.log(selected)
     
     // 상품 영수증
     const [count, setCount] = useState<any>(0); // 개수 합계
     const [sum, setSum] = useState<any>(0); // 가격 합계
-
     const [seeImg, setSeeImg] = useState(0);
 
     const subimgList = imgList.map((list:any, index:any) => {
@@ -504,7 +502,7 @@ function Products () {
                                                     <div className="review-text"></div>
                                                 </div>
                                                 <div className="review-list-right">
-                                                    <img src="/smartstore/img/shop/products/macbookpro/review/04.jpeg" alt="" className="img"/>
+                                                    <img src="/img/shop/products/macbookpro/review/04.jpeg" alt="" className="img"/>
                                                 </div>
                                             </a>
                                         </li>
@@ -525,7 +523,7 @@ function Products () {
                                     <div className="wrap">
                                         <div className="product-info">
                                             <div className="img-wrap">
-                                                <img src="/smartstore/img/shop/products/macbookpro/01.jpg" alt="" />
+                                                <img src="/img/shop/products/macbookpro/01.jpg" alt="" />
                                             </div>
                                             <div className="product-name">{name}</div>
                                             <div className="product-price flex flex-align-center">
@@ -564,8 +562,8 @@ function Products () {
                                     </div>
                                 </div>
                                 <div className="product-pages">
-                                    <img src="/smartstore/img/shop/products/macbookpro/pages/01.jpg" alt="" />
-                                    <img src="/smartstore/img/shop/products/macbookpro/pages/02.jpg" alt="" />
+                                    <img src="/img/shop/products/macbookpro/pages/01.jpg" alt="" />
+                                    <img src="/img/shop/products/macbookpro/pages/02.jpg" alt="" />
                                 </div>
                             </div>
                         </div>

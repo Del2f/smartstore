@@ -1,16 +1,18 @@
 import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
-import Accordion from "./components/Accordion";
+import { useCookies } from "react-cookie";
+
+import { selectCurrentUser } from './store/userSlice';
+import { menuSlice, showMenu } from './store/menuSlice';
+
 import Home from "./pages/Home";
 import Product from "./pages/Product";
 import ProductRegister from "./pages/ProductRegister";
-import Notfound from "./pages/Notfound";
+import Accordion from "./components/Accordion";
+
 import $ from 'jquery';
-import axios from 'axios';
-import { useCookies } from "react-cookie";
-import { selectCurrentUser } from './store/userSlice';
-import { menuSlice, showMenu } from './store/menuSlice';
+import axios from '../src/api/axios';
 
 import './App.scss';
 
@@ -34,9 +36,7 @@ function App() {
       if (!cookies.jwt) { // 토큰이 없으면 로그인 페이지로 이동.
         navigate("/commerce/login");
       } else {
-        const { data } = await axios.post(
-          "http://localhost:8080/smartstore",
-          {},
+        const { data } = await axios.post("/smartstore",
           {
             withCredentials: true,
           }
@@ -61,14 +61,16 @@ function App() {
     const [showNavdropmenu, setShowNavdropmenu] = useState(false);
     const dropmenu = useRef<HTMLDivElement>(null);
 
+    // 좌측 메뉴 숨긴상태 전송
     useEffect(() => {
       dispatch(showMenu(showmainmenu));
     })
 
+    // 모달이 열려 있고 모달의 바깥쪽을 눌렀을 때 창 닫기
     useEffect(() => {
       const clickOutside = (e : any) => {
 
-        // 모달이 열려 있고 모달의 바깥쪽을 눌렀을 때 창 닫기
+
         // useRef의 current 값은 선택한 DOM을 말함.
         // 드롭메뉴를 제외한 나머지 공간을 클릭하면 닫히게된다.
 
@@ -88,6 +90,7 @@ function App() {
 
     const navdropmenu = useRef<HTMLLIElement>(null);
 
+    // 모달이 열려 있고 모달의 바깥쪽을 눌렀을 때 창 닫기
     useEffect(() => {
       const clickOutside1 = (e : any) => {
 
@@ -268,11 +271,11 @@ function App() {
     setShowdrop(false)
     }
 
+    // 메뉴 파트1 옵션 마우스 올렸을때
   useEffect(()=>{
 
     showdropmenu == false ? $('.selectize-dropdown-content').children('.option').removeClass('active') : $('.selectize-dropdown-content').children('.selected').addClass('active')
 
-    // 메뉴 파트1 옵션 마우스 올렸을때
     $('.selectize-dropdown-content').on('mouseover', function(e){
       $('.option').removeClass('active');
       $(e.target).addClass('active');
@@ -355,7 +358,7 @@ function App() {
           <div className="menu-store">
             <a>
               <span className='thumb'>
-                <img src={process.env.PUBLIC_URL + '/img/cat.jpeg'} alt="abc" className='img-circle'/>
+                <img src='/img/cat.jpeg' alt="abc" className='img-circle'/>
               </span>
               <span className='shopname'>포트폴리오</span>
               </a>

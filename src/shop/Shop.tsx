@@ -1,6 +1,6 @@
 import "./shop.scss";
-import { useState, useRef, useEffect } from "react";
-import $ from 'jquery';
+// import { useState, useRef, useEffect } from "react";
+// import $ from 'jquery';
 import { Router, Routes, Route, BrowserRouter } from "react-router-dom";
 
     function Shop() {

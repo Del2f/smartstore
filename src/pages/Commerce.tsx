@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect } from "react";
+import { Routes, Route } from "react-router-dom";
 import Login from './Login';
 import Signup from './Signup';
 import Usersign from './Usersign';
-import { Routes, Route } from "react-router-dom";
 import "./Commerce.scss";
 
     function Commerce() {

@@ -1,13 +1,13 @@
-    import axios from "../api/axios";
-    import { useState, useRef, useEffect } from "react";
-    import { Link, useNavigate } from "react-router-dom";
-    import { useDispatch } from "react-redux";
-    import $ from 'jquery';
-    import "bootstrap/dist/css/bootstrap.min.css";
-    import { useCookies } from "react-cookie";
-    import { loginUser } from '../store/userSlice';
+import { useState, useRef, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useCookies } from "react-cookie";
+import { loginUser } from '../store/userSlice';
+import axios from "../api/axios";
+import $ from 'jquery';
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./Login.scss";
     
-    import "./Login.scss";
 
     function Login() {
 

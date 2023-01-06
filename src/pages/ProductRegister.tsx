@@ -1,13 +1,11 @@
-    import { useState, useRef, useEffect } from "react";
-    import { useSelector } from "react-redux";
-    import { useNavigate } from "react-router-dom";
-    import axios from "../api/axios";
-    import "./ProductRegister.scss";
-    import { selectShowMenu } from '../store/menuSlice';
-    import TableProduct from '../components/TableProductRegi';
-    import $ from "jquery";
-
-
+import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import axios from "../api/axios";
+import { selectShowMenu } from '../store/menuSlice';
+import TableProduct from '../components/TableProductRegi';
+import "./ProductRegister.scss";
+// import $ from "jquery";
 
     function ProductRegister() {
 

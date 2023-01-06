@@ -1,10 +1,10 @@
 import { useState, useRef, useEffect } from "react";
-import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
+// import styled from "styled-components";
+import SwiperIntro from "../components/Intro/Swiper_lntro";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../components/flex.css";
 import "./Intro.scss";
-import SwiperIntro from "../components/Intro/Swiper_lntro";
 
 function Intro() {
   const navigate = useNavigate();

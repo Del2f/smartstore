@@ -1,6 +1,7 @@
-import "./Category.scss";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+
+import "./Category.scss";
 
 
 function Category () {
@@ -63,7 +64,7 @@ function Category () {
                             <div className="product-inner flex flex-wrap flex-ju-start">
                                 <div className="product">
                                     <Link to="../products" className="img-wrap">
-                                        <img src="/smartstore/img/shop/products/macbookpro/01.jpg" alt="" className="img"/>
+                                        <img src="/img/shop/products/macbookpro/01.jpg" alt="" className="img"/>
                                         <div className="price-wrap">
                                             <strong className="sale-percent">2%</strong>
                                             <strong className="sale-after-price">

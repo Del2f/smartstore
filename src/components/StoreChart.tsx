@@ -1,4 +1,4 @@
-import react , {useState, useEffect} from 'react';
+// import react , {useState, useEffect} from 'react';
 import * as Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 
