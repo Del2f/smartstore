@@ -143,8 +143,8 @@
 
         const userdata = {
             id: Id,
-            optionname: Password,
-            plusPrice: PasswordConfirm,
+            password: Password,
+            passwordconfirm: PasswordConfirm,
             name: Name,
             phone: Phone,
             email: Email
@@ -154,13 +154,8 @@
             e.preventDefault();
 
             try {
-                const data = await axios.post(
-                    "/smartstore/commerce/usersign", userdata,
-                    {
-                        withCredentials: true
-                    })
+                const data = await axios.post("/smartstore/commerce/usersign", userdata, { withCredentials: true })
                     .then((res) => {
-
                         if (Id.length < 5 || Id.length > 10) {
                             setIdMessage('5글자 이상 10글자 미만으로 입력 해주세요.')
                             setIsId(false)
@@ -202,17 +197,17 @@
                     .then((res) => {
                         // console.log(res.data.error)
                         console.log(res.data)
-                        if (res.data.errorId === '아이디중복'){
+                        if (res.data.errorId == '아이디중복'){
                             setIdMessage('이미 가입된 아이디 입니다.')
                             setIsId(false)
                         }
                         
-                        if (res.data.errorEmail === '이메일중복') {
+                        if (res.data.errorEmail == '이메일중복') {
                             setEmailMessage('이미 가입된 이메일 입니다.')
                             setIsEmail(false)
                         }
                         
-                        if (res.data.errorPassword === '비밀번호서로다름') {
+                        if (res.data.errorPassword == '비밀번호서로다름') {
                             setPasswordConfirmMessage('비밀번호가 일치하지 않습니다.')
                             setIsPasswordConfirm(false)
                             return

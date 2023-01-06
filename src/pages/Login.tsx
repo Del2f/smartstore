@@ -51,10 +51,10 @@
             .then((res) => {
                 console.log(res.data.user)
                 
-                if (res.data.error === '아이디및비밀번호오류'){
+                if (res.data.error == '아이디및비밀번호오류'){
                     setErrorMessage('아이디 혹은 비밀번호가 틀렸습니다.')
                     setIsError(false)
-                } else if (res.data.status === true){
+                } else if (res.data.status == true){
                     dispatch(loginUser( res.data.user ));
                     navigate("/home");
                 }
