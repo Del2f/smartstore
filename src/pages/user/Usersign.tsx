@@ -452,7 +452,7 @@
                                 <div className="signup-id-pc">
                                     <div className="text">
                                         <label className="title">휴대전화 번호
-                                            <img src={`${process.env.PUBLIC_URL}/img/icon-help-16.svg`} alt=" " className="icon-help"/>
+                                            <img src="/img/icon-help-16.svg" alt=" " className="icon-help"/>
                                         </label>
                                         <div className="input-item">
                                             <div className="input-area">
@@ -570,7 +570,7 @@
                                 <div className="signup-id-pc">
                                     <div className="text">
                                         <label className="title">주소
-                                            <img src={`${process.env.PUBLIC_URL}/img/icon-help-16.svg`} alt=" " className="icon-help"/>
+                                            <img src="/img/icon-help-16.svg" alt=" " className="icon-help"/>
                                         </label>
                                         <div className="input-item">
                                             <div className="input-area">
@@ -590,7 +590,7 @@
                                 <div className="signup-id-pc">
                                     <div className="text">
                                         <label className="title">본인확인 이메일
-                                            <img src={`${process.env.PUBLIC_URL}/img/icon-help-16.svg`} alt=" " className="icon-help"/>
+                                            <img src="/img/icon-help-16.svg" alt=" " className="icon-help"/>
                                         </label>
                                         <div className="input-item">
                                             <div className="input-area">
@@ -620,7 +620,7 @@
                                 <input type="checkbox" className="blind" id="checkbox01" onChange={agree}/>
                                 <label className="agree-check-box" htmlFor="checkbox01">
                                     <span className="agree-ico-box"></span>
-                                    <img src={`${process.env.PUBLIC_URL}/img/icon-check-16.00020358.svg`} alt=" " className="agree-ico"/>
+                                    <img src="/img/icon-check-16.00020358.svg" alt=" " className="agree-ico"/>
                                 </label>
                                 <div className="agree-desc">
                                     <a href="{() => false}">
