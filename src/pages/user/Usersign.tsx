@@ -1,9 +1,9 @@
     import { useState, useRef, useEffect } from "react";
     import { useDispatch } from "react-redux";
     import { useNavigate } from "react-router-dom";
+    import axios from "../../api/axios";
     import $ from "jquery";
     import "./Usersign.scss";
-    import axios from "../../api/axios";
     // import { RootState } from "../../store/store";
     // import { useCookies } from "react-cookie";
     // import DaumPostcode from 'react-daum-postcode';
@@ -184,11 +184,7 @@
             e.preventDefault();
 
             try {
-                const data = await axios.post(
-                    "http://localhost:8080/smartstore/user/usersign", userdata,
-                    {
-                        withCredentials: true
-                    })
+                const data = await axios.post("/smartstore/user/usersign", userdata,{ withCredentials: true })
                     .then((res) => {
 
                         if (Id.length < 5 || Id.length > 10) {
@@ -226,11 +222,7 @@
             }
 
             try {
-                const data = await axios.post(
-                    "http://localhost:8080/smartstore/user/usersign", userdata,
-                    {
-                        withCredentials: true
-                    })
+                const data = await axios.post("/smartstore/user/usersign", userdata, { withCredentials: true })
                     .then((res) => {
 
                         if (res.data.errorId === '아이디중복'){

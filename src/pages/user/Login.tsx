@@ -1,12 +1,12 @@
-    import { useState, useRef, useEffect } from "react";
-    import { Link, useNavigate } from "react-router-dom";
-    import { useDispatch } from "react-redux";
-    import "bootstrap/dist/css/bootstrap.min.css";
-    import axios from "axios";
-    import { loginUser } from '../../store/userSlice';
-    import "./Login.scss";
-    // import $ from 'jquery';
-    // import Signup from '../Signup';
+import { useState, useRef, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import "bootstrap/dist/css/bootstrap.min.css";
+import axios from "axios";
+import { loginUser } from '../../store/userSlice';
+import "./Login.scss";
+// import $ from 'jquery';
+// import Signup from '../Signup';
 
 
     function Login() {
@@ -58,11 +58,12 @@
             pwinput.current.value = null
         }
 
-            const userdata = {
-                id: Id,
-                password: Password,
-            };
+        const userdata = {
+            id: Id,
+            password: Password,
+        };
 
+        // 로그인 버튼
         const handleSubmit = async (e : any) => {
             e.preventDefault();
             if (!idinput.current.value) {
@@ -79,50 +80,46 @@
             }
 
             try {
-            const data = await axios.post( "http://localhost:8080/smartstore/user/login", userdata,
-            { withCredentials: true })
-            
-            .then((res) => {
-                console.log(res.data.user)
-
-                
-                if (res.data.error == '아이디및비밀번호오류'){
-                    setErrorMessage('아이디 혹은 비밀번호가 틀렸습니다.')
-                    setIsError(false)
-                } else if (res.data.status == true){
-                    dispatch(loginUser( res.data.user ));
-                    navigate("/shop");
-                }
-            })
+            const data = await axios.post( "/smartstore/user/login", userdata, { withCredentials: true })
+                .then((res) => {
+                    if (res.data.error == '아이디및비밀번호오류'){
+                        setErrorMessage('아이디 혹은 비밀번호가 틀렸습니다.')
+                        setIsError(false)
+                    } else if (res.data.status == true){
+                        dispatch(loginUser( res.data.user ));
+                        navigate("/shop");
+                    }
+                })
             } catch (err) {
                 console.log(err)
             }
         };
 
-            const [inputClickNumber, setInputClickNumber] = useState(0);
-            const [inputClick, setInputClick] = useState(false);
-            const inputRef = useRef<HTMLUListElement>(null);
+        const [inputClickNumber, setInputClickNumber] = useState(0);
+        const [inputClick, setInputClick] = useState(false);
+        const inputRef = useRef<HTMLUListElement>(null);
+
+         // 모달의 바깥쪽을 눌렀을 때 창 닫기
+        useEffect(() => {
+                const clickOutside = (e : any) => {
             
-                useEffect(() => {
-                    const clickOutside = (e : any) => {
+
+                 // useRef의 current 값은 선택한 DOM을 말함.
+                // 드롭메뉴를 제외한 나머지 공간을 클릭하면 닫히게된다.
             
-                    // 모달이 열려 있고 모달의 바깥쪽을 눌렀을 때 창 닫기
-                    // useRef의 current 값은 선택한 DOM을 말함.
-                    // 드롭메뉴를 제외한 나머지 공간을 클릭하면 닫히게된다.
-            
-                    if (inputClick && inputRef.current && !inputRef.current.contains(e.target)) {
-                        setInputClick(false);
-                        setInputClickNumber(0);
-                    } 
-                    };
+                if (inputClick && inputRef.current && !inputRef.current.contains(e.target)) {
+                    setInputClick(false);
+                    setInputClickNumber(0);
+                } 
+                };
                 
-                    document.addEventListener("mousedown", clickOutside);
+                document.addEventListener("mousedown", clickOutside);
                 
-                    return () => {
-                    // Cleanup the event listener
-                    document.removeEventListener("mousedown", clickOutside);
-                    };
-                }, [inputClick]);
+                return () => {
+                // Cleanup the event listener
+                document.removeEventListener("mousedown", clickOutside);
+                };
+        }, [inputClick]);
 
         return (
             <>
