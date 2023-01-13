@@ -88,4 +88,4 @@ const Contents = styled.div`
   font-weight: 500;
 `;
 
-export default React.memo(Accordion);
+export default Accordion;

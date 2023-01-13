@@ -30,9 +30,6 @@ function Home(props : Props) {
   const menu = useSelector(selectShowMenu);
   const user = useSelector(selectCurrentUser);
 
-  console.log(user.id)
-  console.log(menu)
-
   const [order, setOrder] = useState([3,0,0,1,0,0,0,1,0,1,0,0,0,0,1,2,0,0,0,0,0,0,1,0,0,0,1,1,0,0]);
   const [customerstatus, setCustomerstatus] = useState([0,0,0,1,0,0,0,1,0,1,0,0,0,0,1,2,0,0,0,0,0,0,1,0]);
 

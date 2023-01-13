@@ -3,9 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import axios from "../api/axios";
 import { selectShowMenu } from '../store/menuSlice';
-import TableProduct from '../components/TableProductRegi';
+import TableProduct from '../components/admin/TableProductRegi';
 import "./ProductRegister.scss";
 // import $ from "jquery";
+import ImageProductRegi from "../components/admin/ImageProductRegi";
+import SubImageProductRegi from "../components/admin/SubImageProductRegi";
+import DetailImageProductRegi from "../components/admin/DetailImageProductRegi";
 
     function ProductRegister() {
 
@@ -21,45 +24,81 @@ import "./ProductRegister.scss";
         const [OptionID, setOptionID] = useState<any>(0);
         const [OptionName, setOptionName] = useState<any>("");
         const [OptionValue, setOptionValue] = useState<any>([]);
+
         // const [OptionPrice, setOptionPrice] = useState<any>(0);
         // const [OptionStock, setOptionStock] = useState<any>(0);
         // const [OptionStatus, setOptionStatus] = useState<any>(OptionStock > 1 ? "판매" : "품절");
         // const [OptionUse, setOptionUse] = useState<any>(true);
         const [OptionResult, setOptionResult] = useState<any>([]);
-        const [OptionReset, setOptionReset] = useState<any>([]);
-        console.log('원본↓')
-        console.log(OptionResult)
+        // console.log('원본↓')
+        // console.log(OptionResult)
 
-          //오류메시지 상태저장
+        useEffect(() => {
+            const stock = OptionResult.some((list:any) => {
+                return list.optionStock > 0
+            })
+            if(stock){
+                console.log('판매 가능')
+                setIsOptionList(true);
+            } else {
+                console.log('판매 불가능')
+                setIsOptionList(false);
+            }
+        },[OptionResult])
+
+        const [MainImage, setMainImage] = useState<any>([]);
+
+        useEffect(() => {
+            for (const keyValue of MainImage) console.log(keyValue);
+        },[MainImage])
+
+
+
+        const [Delivery, setDelivery] = useState("");
+
+
+        //오류메시지 상태저장
         const [NameMessage, setNameMessage] = useState<string>('');
         const [PriceMessage, setPriceMessage] = useState<string>('');
-        const [OptionMessage, setOptionMessage] = useState<string>('');
-        // const [NameMessage, setNameMessage] = useState<string>('');
-        // const [PhoneMessage, setPhoneMessage] = useState<string>('');
-        // const [EmailMessage, setEmailMessage] = useState<string>('');
+        const [OptionNameMessage, setOptionNameMessage] = useState<string>('');
+        const [OptionValueMessage, setOptionValueMessage] = useState<string>('');
+        const [ImageMessage, setImageMessage] = useState<string>('');
+        const [DetailMessage, setDetailMessage] = useState<string>('');
+        const [DeliveryMessage, setDeliveryMessage] = useState<string>('');
 
-          // 유효성 검사
+        // 유효성 검사
+        const [isCategory, setIsCategory] = useState<boolean>(false);
         const [isName, setIsName] = useState<boolean>(false);
         const [isPrice, setIsPrice] = useState<boolean>(false);
-        const [isOption, setIsOption] = useState<boolean>(false);
-        // const [isName, setIsName] = useState<boolean>(false);
-        // const [isPhone, setIsPhone] = useState<boolean>(false);
-        // const [isEmail, setIsEmail] = useState<boolean>(false);
-        // const [Agree, setAgree] = useState<boolean>(false);
+        const [isOptionName, setIsOptionName] = useState<boolean>(false);
+        const [isOptionValue, setIsOptionValue] = useState<boolean>(false);
+        const [isOptionList, setIsOptionList] = useState<boolean>(false);
+        const [isImage, setIsImage] = useState<boolean>(false);
+        const [isDetail, setIsDetail] = useState<boolean>(false);
+        const [isDelivery, setIsDelivey] = useState<boolean>(false);
         const [Submit, setSubmit] = useState<boolean>(false);
 
+        console.log('카테고리'+isCategory)
+        console.log('상품명'+isName)
+        console.log('가격'+isPrice)
+        console.log('옵션명'+isOptionName)
+        console.log('옵션값'+isOptionValue)
+        console.log('옵션재고'+isOptionList)
+        console.log('메인사진'+isImage)
+        console.log('상세사진'+isDetail)
+        console.log('배송비'+isDelivery)
 
         const NameHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
             setName(e.target.value)
-
-                if (e.target.value.length > 100) {
-                    setNameMessage('100글자 미만으로 입력 해주세요.')
-                    setIsName(false)
-                    if (e.target.value == ''){
-                        setNameMessage('상품명을 입력해 주세요.')
-                        setIsName(false)
-                    }
-                } 
+            if (e.target.value == ''){
+                setNameMessage('상품명을 입력해 주세요.')
+                setIsName(false)
+            } else if (e.target.value.length > 100) {
+                setNameMessage('100글자 미만으로 입력 해주세요.')
+                setIsName(false)
+            } else {
+                setIsName(true)
+            }
         }
 
         const PriceHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -102,39 +141,60 @@ import "./ProductRegister.scss";
             setOptionName(e.target.value)
 
             if(e.target.value === ''){
-                setIsOption(false)
-                setOptionMessage('옵션명을 입력 해주세요.')
+                setIsOptionName(false)
+                setOptionNameMessage('옵션명을 입력 해주세요.')
             } else if (e.target.value.length > 5) {
-                setIsOption(false)
-                setOptionMessage('옵션명을 5글자 이내로 작성 해주세요.')
+                setIsOptionName(false)
+                setOptionNameMessage('옵션명을 5글자 이내로 작성 해주세요.')
             } else {
-                setIsOption(true)
+                setIsOptionName(true)
             }
         }
 
         // 옵션 인풋
-        const OptionValueHandler = (e?: any) => {
+        const OptionValueHandler = (e: any) => {
             const dataSlice = e.target.value.split(",");
-            setOptionValue(dataSlice)
-            setOptionReset(dataSlice)
+            setOptionValue(dataSlice);
+            if(dataSlice[dataSlice.length -1] == ''){
+                setIsOptionValue(false)
+                setOptionValueMessage('입력되지 않은 옵션값이 있습니다.')
+            } else {
+                setIsOptionValue(true)
+            }
+
+            // OptionValue.map((list:any, index:any) => 
+            //     {
+            //         if(list === ''){
+            //             setIsOptionValue(false)
+            //             setOptionValueMessage('옵션값을 입력 해주세요.')
+            //         }
+            //     })
         }
 
         // 옵션목록으로 적용 버튼
-        const optionSubmit = (option:any) => {
+        const optionSubmit = () => {
 
-            console.log(option)
+            if(!(isOptionName && isOptionValue)){
+                return
+            }
+
             setOptionResult('')
             OptionValue.map((list:any, index:any) => 
                 {
-                    if(OptionValue[index].length > 25){
-                        console.log('하나의 옵션값은 최대 25자로 입력해주세요.')
+                    if(list === ''){
+                        setIsOptionValue(false)
+                        setOptionValueMessage('옵션값을 입력 해주세요.')
+                    } else if(list.length > 25){
+                        setOptionValueMessage('하나의 옵션값은 최대 25자로 입력해주세요.')
                         return
+                    } else {
+                        setIsOptionValue(true)
                     }
 
                     const optiondata = { 
                         id: OptionID + index,
                         optionName: OptionName,
-                        optionValue: OptionValue[index],
+                        optionValue: list,
                         optionPrice: 0,
                         optionStock: 0,
                         optionStatus: '품절',
@@ -145,6 +205,45 @@ import "./ProductRegister.scss";
                     setOptionResult((data:any) => [...data, optiondata])
                 }
             )
+        }
+
+
+
+
+        // 배송비 핸들러
+        const DeliveryHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+            e.target.value = e.target.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
+
+            const priceRegex =/^d[1-9]$/
+            const passwordCurrent = e.target.value
+            setDelivery(passwordCurrent)
+
+            if (e.target.value == ''){
+                setDeliveryMessage('필수 정보입니다.')
+                setIsDelivey(false)
+                return
+            }
+
+            if(e.target.value.length === 1){
+                setDeliveryMessage('최소 10원 이상 입력해주세요.')
+                setIsDelivey(false)
+                return
+            }
+
+            if(e.target.value.length === 10){
+                setDeliveryMessage('최대 999,999,990원 이하로 입력해주세요.')
+                setIsDelivey(false)
+                return
+            }
+
+            if (priceRegex.test(e.target.value)) {
+                setDeliveryMessage('10원 단위로 입력해주세요.')
+                setIsDelivey(false)
+                return
+            } else {
+                setDeliveryMessage('')
+                setIsDelivey(true)
+            }
         }
 
         // const PhoneHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -175,23 +274,15 @@ import "./ProductRegister.scss";
         //     }
         // }
 
-        // 최종 가입 승인 체크
-        // useEffect(() => {
-        //     if (isId && isPassword && isPasswordConfirm && isName && isPhone && isEmail){
-        //         setSubmit(true)
-        //     } else {
-        //         setSubmit(false)
-        //     }
-        // })
-
         const [inputClickNumber, setInputClickNumber] = useState(0);
         const [inputClick, setInputClick] = useState(false);
         const inputRefName = useRef<HTMLDivElement>(null);
         const inputRefPrice = useRef<HTMLDivElement>(null);
-        const inputRefOption = useRef<HTMLDivElement>(null);
-        // const inputRefName = useRef<HTMLDivElement>(null);
-        // const inputRefNum = useRef<HTMLDivElement>(null);
-        // const inputRefEmail = useRef<HTMLDivElement>(null);
+        const inputRefOptionName = useRef<HTMLDivElement>(null);
+        const inputRefOptionValue = useRef<HTMLDivElement>(null);
+        const inputRefImage = useRef<HTMLDivElement>(null);
+        const inputRefDetail = useRef<HTMLDivElement>(null);
+        const inputRefDelivery = useRef<HTMLDivElement>(null);
 
         // 모든 인풋 바깥 클릭시 닫기
         useEffect(() => {
@@ -210,18 +301,18 @@ import "./ProductRegister.scss";
                     setInputClick(false);
                     setInputClickNumber(0);
                 } 
-                // if (inputClickNumber == 3 && inputRefPW2.current && !inputRefPW2.current.contains(e.target)) {
-                //     setInputClick(false);
-                //     setInputClickNumber(0);
-                // } 
-                // if (inputClickNumber == 4 && inputRefName.current && !inputRefName.current.contains(e.target)) {
-                //     setInputClick(false);
-                //     setInputClickNumber(0);
-                // } 
-                // if (inputClickNumber == 5 && inputRefNum.current && !inputRefNum.current.contains(e.target)) {
-                //     setInputClick(false);
-                //     setInputClickNumber(0);
-                // } 
+                if (inputClickNumber == 3 && inputRefOptionName.current && !inputRefOptionName.current.contains(e.target)) {
+                    setInputClick(false);
+                    setInputClickNumber(0);
+                } 
+                if (inputClickNumber == 4 && inputRefOptionValue.current && !inputRefOptionValue.current.contains(e.target)) {
+                    setInputClick(false);
+                    setInputClickNumber(0);
+                } 
+                if (inputClickNumber == 5 && inputRefDelivery.current && !inputRefDelivery.current.contains(e.target)) {
+                    setInputClick(false);
+                    setInputClickNumber(0);
+                } 
                 // if (inputClickNumber == 6 && inputRefEmail.current && !inputRefEmail.current.contains(e.target)) {
                 //     setInputClick(false);
                 //     setInputClickNumber(0);
@@ -237,15 +328,14 @@ import "./ProductRegister.scss";
 
         }, [inputClick]);
 
-
         // 드롭메뉴 접기
         const [ CategoryDrop, setCategoryDrop ] = useState(true);
         const [ ProductDrop, setProductDrop ] = useState(true);
         const [ PriceDrop, setPriceDrop ] = useState(true);
         const [ OptionDrop, setOptionDrop ] = useState(true);
-        // const [ ImageDrop, setImageDrop ] = useState(false);
-        // const [ DetailDrop, setDetailDrop ] = useState(false);
-        // const [ DeliveryDrop, setDeliveryDrop ] = useState(false);
+        const [ ImageDrop, setImageDrop ] = useState(true);
+        const [ DetailDrop, setDetailDrop ] = useState(true);
+        const [ DeliveryDrop, setDeliveryDrop ] = useState(true);
         // const [ TakebackDrop, setTakebackDrop ] = useState(false);
 
         // 카테고리 타입 선택
@@ -1107,9 +1197,6 @@ import "./ProductRegister.scss";
         const [ selectedCategory03, setSelectedCategory03 ] = useState<any>([]);
         const [ selectedCategory04, setSelectedCategory04 ] = useState<any>([]);
 
-        const [ finished, setFinished ] = useState(false);
-        
-
         const onFirstClick = (e:any) => {
             const result = second.filter((element:any) => 
                 element.parentcode == e.code
@@ -1117,7 +1204,7 @@ import "./ProductRegister.scss";
             const first = e
 
             if(result.length == 0){
-                setFinished(false)
+                setIsCategory(false)
 
                 setOnCategory02(true)
                 setOnCategory03(false)
@@ -1145,7 +1232,7 @@ import "./ProductRegister.scss";
                 setOnCategoryText03(false)
                 setOnCategoryText04(false)
 
-                setFinished(false)
+                setIsCategory(false)
             }
         }
 
@@ -1165,7 +1252,7 @@ import "./ProductRegister.scss";
                 setOnCategoryText02(true)
                 setOnCategoryText03(false)
                 
-                setFinished(true)
+                setIsCategory(true)
 
             } else {
                 setShowThird(result)
@@ -1180,7 +1267,7 @@ import "./ProductRegister.scss";
                 setOnCategoryText03(false)
                 setOnCategoryText04(false)
 
-                setFinished(false)
+                setIsCategory(false)
             }
         }
 
@@ -1194,7 +1281,7 @@ import "./ProductRegister.scss";
             if(result.length == 0){
                 setSelectedCategory03(third)
                 setOnCategory04(false)
-                setFinished(true)
+                setIsCategory(true)
 
 
                 setOnCategoryText03(true)
@@ -1212,7 +1299,7 @@ import "./ProductRegister.scss";
                 setOnCategoryText03(true)
                 setOnCategoryText04(false)
 
-                setFinished(false)
+                setIsCategory(false)
             }
         }
 
@@ -1223,10 +1310,19 @@ import "./ProductRegister.scss";
 
             setOnCategoryText04(true)
 
-            setFinished(true)
+            setIsCategory(true)
 
         }
-        
+
+        // 최종 상품 등록 체크
+        useEffect(() => {
+            if (isCategory && isName && isPrice && isOptionName && isOptionValue && isOptionList && isImage && isDetail && isDelivery){
+                setSubmit(true)
+            } else {
+                setSubmit(false)
+            }
+        })
+
         // 상품 데이터
         const productdata = {
             category1 : selectedCategory01,
@@ -1251,7 +1347,7 @@ import "./ProductRegister.scss";
 
             try {
                 const data = await axios.post(
-                    "http://localhost:8080/smartstore/home/productregister", productdata,
+                    "/smartstore/home/productregister", productdata,
                     {
                         withCredentials: true
                     })
@@ -1261,20 +1357,8 @@ import "./ProductRegister.scss";
                         //     setIdMessage('이미 가입된 아이디 입니다.')
                         //     setIsId(false)
                         // }
-                        
-                        // if (res.data.errorEmail == '이메일중복') {
-                        //     setEmailMessage('이미 가입된 이메일 입니다.')
-                        //     setIsEmail(false)
-                        // }
-                        
-                        // if (res.data.errorPassword == '비밀번호서로다름') {
-                        //     setPasswordConfirmMessage('비밀번호가 일치하지 않습니다.')
-                        //     setIsPasswordConfirm(false)
-                        //     return
-                        // }
-
                         if(Submit == true) {
-                            navigate("/"); // 가입완료시 메인화면으로 이동
+                            navigate("/"); // 등록시 상품목록으로 가게하기
                         }
                         
                     })
@@ -1384,7 +1468,7 @@ import "./ProductRegister.scss";
                                                 </div>
                                             </div>
                                             {/* <div className={isName ? "error" : "error-active" }>{NameMessage}</div> */}
-                                            <div className={ finished == true ? "selected-category-show selected-category" : "selected-category"}>
+                                            <div className={ isCategory == true ? "selected-category-show selected-category" : "selected-category"}>
                                                 <span className="text">선택한 카테고리 : </span>
                                                 <strong className={ onCategoryText01 == false ? "text-hide text" : "text" }>{selectedCategory01.name}</strong>
                                                 <strong className={ onCategoryText02 == false ? "text-hide text" : "text" }>{" > "+selectedCategory02.name}</strong>
@@ -1465,7 +1549,7 @@ import "./ProductRegister.scss";
                                                 <div className="menu-right">
                                                     <div className="input-item input-item-name"> {/* 옵션명 */}
                                                         <div className="input-area">
-                                                            <div className="input-box" ref={inputRefOption}>
+                                                            <div className="input-box" ref={inputRefOptionName}>
                                                                 <div className="input-box-title">
                                                                     <span>옵션명</span>
                                                                 </div>
@@ -1473,12 +1557,14 @@ import "./ProductRegister.scss";
                                                                     <input type="text" maxLength={10} name="productOptionName" placeholder="예시 : 컬러" className="input"
                                                                         onClick={() => { setInputClick(true); setInputClickNumber(3);}} onChange={OptionNameHandler}/>
                                                                 </div>
+                                                                <div className={isOptionName === false ? "error-active name" : "error" }>{OptionNameMessage}</div>
+
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div className="input-item input-item-value"> {/* 옵션값 */}
                                                         <div className="input-area">
-                                                            <div className="input-box" ref={inputRefOption}>
+                                                            <div className="input-box" ref={inputRefOptionValue}>
                                                                 <div className="input-box-title">
                                                                     <span>옵션값</span>
                                                                 </div>
@@ -1486,15 +1572,15 @@ import "./ProductRegister.scss";
                                                                     <input type="text" name="productOptionValue" placeholder="예시 : 빨강,노랑 ( ,로 구분 )" className="input" id="OptionInputValue" value={OptionValue}
                                                                         onClick={() => { setInputClick(true); setInputClickNumber(4);}} onChange={OptionValueHandler}/>
                                                                 </div>
+                                                                <div className={isOptionValue === false ? "error-active value" : "error" }>{OptionValueMessage}</div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div className="apply-btn-wrap">
-                                                        <button className={isOption === true ? "apply-btn-active" : "apply-btn" } onClick={ optionSubmit }>
+                                                        <button className={isOptionName && isOptionValue ? "apply-btn-active" : "apply-btn" } onClick={ optionSubmit }>
                                                             <span className="apply-btn-text">옵션목록으로 적용</span>
                                                             <span className="apply-btn-icon"></span>
                                                         </button>
-                                                        <div className={isOption === false ? "error-active" : "error" }>{OptionMessage}</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1505,9 +1591,105 @@ import "./ProductRegister.scss";
                                                 <div className="menu-bottom">
                                                     <div className="info">
                                                     </div>
-                                                        <TableProduct optionResult={OptionResult} setOptionResult={setOptionResult} optionSubmit={optionSubmit} setOptionValue={setOptionValue} ></TableProduct>
+                                                        <TableProduct optionResult={OptionResult} setOptionResult={setOptionResult} optionSubmit={optionSubmit} setOptionValue={setOptionValue}></TableProduct>
                                                 </div>
                                             </div>
+                                        </div>
+                                    </li>
+                                    <li className="product-register-item"> {/* 메인사진 */}
+                                        <div className="title flex flex-ju-bt flex-align-center" onClick={ () => setImageDrop((e) => !e) }>
+                                            <div className="text-wrap">
+                                                <label className="text">메인 사진</label>
+                                            </div>
+                                            <div className="btn-wrap">
+                                                <button className="showdropmenu">
+                                                    <span className={ ImageDrop === true ? "icon-arrow reverse" : "icon-arrow"}></span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div className={ ImageDrop === true ? "menu show" : "menu hide"}>
+                                            <div className="inner-menu-list flex flex-align-center">
+                                                <div className="menu-left">
+                                                    <span>메인 사진</span>
+                                                </div>
+                                                <div className="menu-right">
+                                                    <div className="input-item"> {/* 메인사진*/}
+                                                        <ImageProductRegi setIsImage={setIsImage} setMainImage={setMainImage}/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="inner-menu-list flex flex-align-center">
+                                                <div className="menu-left">
+                                                    <span>추가 사진</span>
+                                                </div>
+                                                <div className="menu-right">
+                                                    <div className="input-item"> {/* 추가 사진 */}
+                                                        <div className="input-area">
+                                                            <div className="input-box" ref={inputRefImage}>
+                                                                <div className="Image-box"></div>
+                                                                <SubImageProductRegi/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li className="product-register-item"> {/* 상세사진 */}
+                                        <div className="title flex flex-ju-bt flex-align-center" onClick={ () => setDetailDrop((e) => !e) }>
+                                            <div className="text-wrap">
+                                                <label className="text">상세 사진</label>
+                                            </div>
+                                            <div className="btn-wrap">
+                                                <button className="showdropmenu">
+                                                    <span className={ DetailDrop === true ? "icon-arrow reverse" : "icon-arrow"}></span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div className={ DetailDrop === true ? "menu show" : "menu hide"}>
+                                            <div className="inner-menu-list flex flex-align-center">
+                                                <div className="menu-left">
+                                                    <span>상세 사진</span>
+                                                </div>
+                                                <div className="menu-right">
+                                                    <div className="input-item"> {/* 추가 사진 */}
+                                                        <div className="input-area">
+                                                            <div className="input-box" ref={inputRefDetail}>
+                                                                <div className="Image-box"></div>
+                                                                <DetailImageProductRegi setIsDetail={setIsDetail}/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li className="product-register-item"> {/* 배송비 */}
+                                    <div className="title flex flex-ju-bt flex-align-center" onClick={ () => setDeliveryDrop((e) => !e) }>
+                                            <div className="text-wrap">
+                                                <label className="text">배송비</label>
+                                            </div>
+                                            <div className="btn-wrap">
+                                                <button className="showdropmenu">
+                                                    <span className={ DeliveryDrop == true ? "icon-arrow reverse" : "icon-arrow"}></span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div className={ DeliveryDrop == true ? "menu flex flex-align-center" : "menu hide"}>
+                                            <div className="menu-left">
+                                                <span>배송비</span>
+                                            </div>
+                                            <div className="input-item">
+                                                <div className="input-area">
+                                                    <div className="input-box" ref={inputRefDelivery}>
+                                                        <div id={ inputClick && inputClickNumber == 3 ? "input-inner-active" : "input-inner"}>
+                                                            <input type="text" maxLength={10} name="productDelivery" placeholder="숫자만 입력" className="input" 
+                                                                onClick={() => { setInputClick(true); setInputClickNumber(3);}} onChange={DeliveryHandler}/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className={isDelivery == false ? "error-active" : "error-active" }>{DeliveryMessage}</div>
                                         </div>
                                     </li>
                                 </ul>

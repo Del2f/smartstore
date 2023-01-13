@@ -1,3 +1,4 @@
+import axios from './api/axios';
 import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
@@ -9,10 +10,9 @@ import { menuSlice, showMenu } from './store/menuSlice';
 import Home from "./pages/Home";
 import Product from "./pages/Product";
 import ProductRegister from "./pages/ProductRegister";
-import Accordion from "./components/Accordion";
+import Accordion from "./components/admin/Accordion";
 
 import $ from 'jquery';
-import axios from '../src/api/axios';
 
 import './App.scss';
 
@@ -31,37 +31,61 @@ function App() {
     currentPath = location.pathname;
   }, [location]);
 
+  // useEffect(() => {
+  //   const verifyUser = async () => {
+  //     if (!cookies.jwt) { // 토큰이 없으면 로그인 페이지로 이동.
+  //       navigate("/commerce/login");
+  //     } else {
+  //       const { data } = await axios.post("/smartstore", { withCredentials: true });
+  //       console.log(data)
+  //       if (!data.status) {
+  //         removeCookie("jwt");
+  //         // navigate("/commerce/login");
+  //       } else {
+  //         console.log(`Hi ${data.user} `);
+  //         console.log(data);
+  //       }
+  //     }
+  //   };
+  //   verifyUser();
+  // }, [cookies, navigate, removeCookie]);
+
+  // 유저의 로그인 상태를 확인.
   useEffect(() => {
     const verifyUser = async () => {
-      if (!cookies.jwt) { // 토큰이 없으면 로그인 페이지로 이동.
+
+      if(!cookies.jwt){
         navigate("/commerce/login");
-      } else {
-        const { data } = await axios.post("/smartstore",
-          {
-            withCredentials: true,
-          }
-        );
-        if (!data.status) {
-          removeCookie("jwt");
-          navigate("/commerce/login");
-        } else
-          console.log(`Hi ${data.user} `);
-          console.log(data);
       }
-    };
+
+      try {
+          const data = await axios.post("/smartstore", {}, { withCredentials: true })
+            .then((res) => {
+              if (!res.data.status){
+                removeCookie("jwt");
+                navigate("/commerce/login");
+              } else {
+                console.log(`Hi ${res.data.user}`);
+              }
+            })
+      } catch (errors) {
+          console.log(errors)
+      }
+  };
     verifyUser();
   }, [cookies, navigate, removeCookie]);
 
-    const logOut = () => {
-      removeCookie("jwt", { path: '/' });
-    };
-    
-    const [showmainmenu, setShowmainmenu] = useState(false);
-    const [showdropmenu, setShowdrop] = useState(false);
-    const [showNavdropmenu, setShowNavdropmenu] = useState(false);
-    const dropmenu = useRef<HTMLDivElement>(null);
+  // 로그아웃 버튼을 누르면 쿠키를 삭제한다.
+  const logOut = () => {
+    removeCookie("jwt", { path: '/' });
+  };
+  
+  const [showmainmenu, setShowmainmenu] = useState(false);
+  const [showdropmenu, setShowdrop] = useState(false);
+  const [showNavdropmenu, setShowNavdropmenu] = useState(false);
+  const dropmenu = useRef<HTMLDivElement>(null);
 
-    // 좌측 메뉴 숨긴상태 전송
+    // 좌측 메뉴 숨김상태 전송
     useEffect(() => {
       dispatch(showMenu(showmainmenu));
     })
@@ -70,13 +94,11 @@ function App() {
     useEffect(() => {
       const clickOutside = (e : any) => {
 
-
         // useRef의 current 값은 선택한 DOM을 말함.
         // 드롭메뉴를 제외한 나머지 공간을 클릭하면 닫히게된다.
 
         if (showdropmenu && dropmenu.current && !dropmenu.current.contains(e.target)) {
           setShowdrop(false);
-          // console.log('바깥을 눌렀습니다')
         } 
       };
   
@@ -106,7 +128,6 @@ function App() {
         document.removeEventListener("mousedown", clickOutside1);
       };
     }, [showNavdropmenu]);
-
 
   const contents1 = (
     <div className='contents'>
@@ -269,9 +290,9 @@ function App() {
     $('.selectize-input').children('.option').attr('class', 'item');
 
     setShowdrop(false)
-    }
+  }
 
-    // 메뉴 파트1 옵션 마우스 올렸을때
+  // 메뉴 파트1 옵션 마우스 올렸을때
   useEffect(()=>{
 
     showdropmenu == false ? $('.selectize-dropdown-content').children('.option').removeClass('active') : $('.selectize-dropdown-content').children('.selected').addClass('active')
@@ -284,7 +305,6 @@ function App() {
   })
 
   return (
-    
     <div className="App">
         <div className="navi flex flex-ju-bt flex-align-center">
           <div className="nav-left flex flex-align-center">

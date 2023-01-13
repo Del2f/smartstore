@@ -1,9 +1,9 @@
+import axios from "../api/axios";
 import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useCookies } from "react-cookie";
 import { loginUser } from '../store/userSlice';
-import axios from "../api/axios";
 import $ from 'jquery';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Login.scss";
@@ -37,28 +37,25 @@ import "./Login.scss";
         //     }
         // }, [cookies, navigate]);
 
-            const userdata = {
-                id: Id,
-                password: Password,
-            };
+        const userdata = {
+            id: Id,
+            password: Password,
+        };
 
+        // 로그인 버튼
         const handleSubmit = async (e : any) => {
             e.preventDefault();
             try {
-            const data = await axios.post( "/smartstore/commerce/login", userdata,
-            { withCredentials: true })
-            
-            .then((res) => {
-                console.log(res.data.user)
-                
-                if (res.data.error == '아이디및비밀번호오류'){
-                    setErrorMessage('아이디 혹은 비밀번호가 틀렸습니다.')
-                    setIsError(false)
-                } else if (res.data.status == true){
-                    dispatch(loginUser( res.data.user ));
-                    navigate("/home");
-                }
-            })
+            const data = await axios.post( "/smartstore/commerce/login", userdata, { withCredentials: true })
+                .then((res) => {
+                    if (res.data.error == '아이디및비밀번호오류'){
+                        setErrorMessage('아이디 혹은 비밀번호가 틀렸습니다.')
+                        setIsError(false)
+                    } else if (res.data.status == true){
+                        dispatch(loginUser( res.data.user ));
+                        navigate("/home");
+                    }
+                })
             } catch (err) {
                 console.log(err)
             }

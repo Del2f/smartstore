@@ -190,12 +190,8 @@ import "./Usersign.scss";
             }
 
             try {
-                const data = await axios.post("/smartstore/commerce/usersign", userdata,
-                    {
-                        withCredentials: true
-                    })
+                const data = await axios.post("/smartstore/commerce/usersign", userdata, { withCredentials: true })
                     .then((res) => {
-                        // console.log(res.data.error)
                         console.log(res.data)
                         if (res.data.errorId == '아이디중복'){
                             setIdMessage('이미 가입된 아이디 입니다.')

@@ -4,7 +4,7 @@
     right: -27px;
     width: 9px;
     height: 5px;
-    background: url(../../public/img/sp_icon_pc.png);
+    background: url(../../../public/img/sp_icon_pc.png);
     content: "";
 }
 
@@ -26,7 +26,7 @@
     width: 38px;
     height: 15px;
     margin: -3px 0 1px;
-    background: url(../../public/img/sp_icon_pc.png);
+    background: url(../../../public/img/sp_icon_pc.png);
     background-position: -360px -230px;
 }
 
@@ -55,6 +55,6 @@
     height: 10px;
     margin-left: 2px;
     margin-right: 4px;
-    background: url(../../public/img/sp_common.png);
+    background: url(../../../public/img/sp_common.png);
     background-position: -260px -110px;
 }
