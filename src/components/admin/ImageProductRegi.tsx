@@ -33,25 +33,13 @@ function ImageUploadBox(props:any) {
         }
       };
       reader.readAsDataURL(file);
+      console.log(file)
     }
   };
 
   const changeHandler = (event: any) => {
     const files = event.target.files;
     handleFiles(files);
-    const formData = new FormData();
-    formData.append("file", files[0]);
-    props.setMainImage(formData)
-    // if (files) {
-    //   axios
-    //     .post("/smartstore/home/productregister", img)
-    //     .then((res:any) => {
-    //       setImageUrl(res.data);
-    //     })
-    //     .catch((err:any) => {
-    //       console.error(err);
-    //     });
-    // }
   };
 
   const dropHandler = (event: any) => {

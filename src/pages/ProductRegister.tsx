@@ -38,19 +38,33 @@ import DetailImageProductRegi from "../components/admin/DetailImageProductRegi";
                 return list.optionStock > 0
             })
             if(stock){
-                console.log('판매 가능')
+                // console.log('판매 가능')
                 setIsOptionList(true);
             } else {
-                console.log('판매 불가능')
+                // console.log('판매 불가능')
                 setIsOptionList(false);
             }
         },[OptionResult])
 
         const [MainImage, setMainImage] = useState<any>([]);
+        const [SubImage, setSubImage] = useState<any>([]);
+        const [DetailImage, setDetailImage] = useState<any>([]);
+        console.log(MainImage)
+
 
         useEffect(() => {
             for (const keyValue of MainImage) console.log(keyValue);
         },[MainImage])
+
+
+        // useEffect(() => {
+        //     for (const keyValue of SubImage) console.log(keyValue);
+        // },[SubImage])
+
+
+        // useEffect(() => {
+        //     for (const keyValue of DetailImage) console.log(keyValue);
+        // },[DetailImage])
 
 
 
@@ -78,15 +92,15 @@ import DetailImageProductRegi from "../components/admin/DetailImageProductRegi";
         const [isDelivery, setIsDelivey] = useState<boolean>(false);
         const [Submit, setSubmit] = useState<boolean>(false);
 
-        console.log('카테고리'+isCategory)
-        console.log('상품명'+isName)
-        console.log('가격'+isPrice)
-        console.log('옵션명'+isOptionName)
-        console.log('옵션값'+isOptionValue)
-        console.log('옵션재고'+isOptionList)
-        console.log('메인사진'+isImage)
-        console.log('상세사진'+isDetail)
-        console.log('배송비'+isDelivery)
+        // console.log('카테고리'+isCategory)
+        // console.log('상품명'+isName)
+        // console.log('가격'+isPrice)
+        // console.log('옵션명'+isOptionName)
+        // console.log('옵션값'+isOptionValue)
+        // console.log('옵션재고'+isOptionList)
+        // console.log('메인사진'+isImage)
+        // console.log('상세사진'+isDetail)
+        // console.log('배송비'+isDelivery)
 
         const NameHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
             setName(e.target.value)
@@ -206,9 +220,6 @@ import DetailImageProductRegi from "../components/admin/DetailImageProductRegi";
                 }
             )
         }
-
-
-
 
         // 배송비 핸들러
         const DeliveryHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -1332,9 +1343,10 @@ import DetailImageProductRegi from "../components/admin/DetailImageProductRegi";
             name: Name,
             price: Price,
             option: OptionResult,
-            // name: Name,
-            // phone: Phone,
-            // email: Email
+            image: MainImage,
+            subImage: SubImage,
+            detailImage: DetailImage,
+            delivery: Delivery
         };
 
         // 등록 버튼
@@ -1627,7 +1639,7 @@ import DetailImageProductRegi from "../components/admin/DetailImageProductRegi";
                                                         <div className="input-area">
                                                             <div className="input-box" ref={inputRefImage}>
                                                                 <div className="Image-box"></div>
-                                                                <SubImageProductRegi/>
+                                                                <SubImageProductRegi setSubImage={setSubImage}/>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1656,7 +1668,7 @@ import DetailImageProductRegi from "../components/admin/DetailImageProductRegi";
                                                         <div className="input-area">
                                                             <div className="input-box" ref={inputRefDetail}>
                                                                 <div className="Image-box"></div>
-                                                                <DetailImageProductRegi setIsDetail={setIsDetail}/>
+                                                                <DetailImageProductRegi setIsDetail={setIsDetail} setDetailImage={setDetailImage}/>
                                                             </div>
                                                         </div>
                                                     </div>

@@ -47,6 +47,13 @@ import "./DetailImageProductRegi.scss";
       const changeHandler = (event:any) => {
         const files = event.target.files;
         handleFiles(files);
+        const formData = new FormData();
+
+        uploadedImages.forEach((img:any) => {
+          formData.append("detailImage", img);
+        })
+
+        props.setDetailImage(formData)
       };
       
       const dropHandler = (event:any) => {

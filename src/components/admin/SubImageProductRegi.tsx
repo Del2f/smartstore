@@ -17,8 +17,9 @@ import "./SubImageProductRegi.scss";
     );
   }
 
-  function SubImageUploadBox({ max = 10 }) {
+  function SubImageUploadBox(props:any) {
     
+    const [max, setMax] = useState<any>(10); // 이미지 최대 개수
     const [uploadedImages, setUploadedImages] = useState<any>([]);
     const [previewImages, setPreviewImages] = useState<any>([]);
     const uploadBoxRef = useRef<any>();
@@ -36,6 +37,7 @@ import "./SubImageProductRegi.scss";
             const result = e.target!.result;
             if (result) {
               setUploadedImages((state:any) => [...state, result].slice(0, max));
+              props.setSubImage(uploadedImages)
             }
           };
           reader.readAsDataURL(file);
@@ -45,6 +47,13 @@ import "./SubImageProductRegi.scss";
       const changeHandler = (event:any) => {
         const files = event.target.files;
         handleFiles(files);
+        // const formData = new FormData();
+
+        // uploadedImages.forEach((img:any) => {
+        //     formData.append("subimage", img);
+        //     for (const keyValue of formData) console.log(keyValue);
+        //   })
+
       };
       
       const dropHandler = (event:any) => {
