@@ -1,0 +1,136 @@
+.SubImageUploadBox {
+    .text_box {
+        display: flex;
+        flex-direction: column;
+        align-items: left;
+
+        span {
+            margin-top: 10px;
+            font-size: 13px;
+            color: #525252;
+            font-weight: 500;
+        }
+    }
+
+    .ImagePreview {
+        $size: 60px;
+    
+        @keyframes ImagePreview_construct {
+            0% {
+                opacity: 0;
+            }
+    
+            100% {
+                opacity: 1;
+            }
+        }
+    
+        position: relative;
+        width: $size;
+        height: $size;
+        overflow: hidden;
+        animation: ImagePreview_construct 0.5s;
+    
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    
+        .icon_container {
+            $size: 20px;
+    
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: $size;
+            height: $size;
+            margin: 5px;
+            background-color: #c4c4c4;
+            border-radius: 50%;
+    
+            i {
+                color: white;
+            }
+        }
+    }
+}
+
+
+@mixin centerFill($width, $direction: row) {
+    width: $width;
+    display: flex;
+    flex-direction: $direction;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
+.SubImageUploadBox {
+
+    >* {
+        width: 100%;
+        border-radius: 3px;
+    }
+
+    input {
+        position: absolute;
+        //   display: none;
+        opacity: 0;
+    }
+
+    .drag_or_click {
+        position: absolute;
+        top:0;
+        left:0;
+        width: 100%;
+        height: 100%;
+        justify-content: space-between;
+        background-color: transparent;
+        padding: 20px 50px;
+
+        &:hover {
+            // background-color: #c8c8c8;
+        }
+
+
+    }
+
+    .preview_wrapper {
+        position: relative;
+        height: 80px;
+        padding: 10px;
+        border: 1px solid #e2e2e2;
+
+        .preview_container {
+            display: flex;
+            $height: 60px;
+
+            width: 100%;
+            overflow-y: auto;
+            grid-template-columns: repeat(auto-fill, 104px);
+            column-gap: 20px;
+            row-gap: 10px;
+
+            &::-webkit-scrollbar {
+                width: 10px;
+                height: 10px;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background: #7c7c7c;
+                border-radius: 10px;
+            }
+
+            &::-webkit-scrollbar-thumb:hover {
+                background: #a6a6a6;
+            }
+
+            &::-webkit-scrollbar-track {
+                background: #ededed;
+                border-radius: 10px;
+            }
+        }
+    }
+}

@@ -1,0 +1,161 @@
+body {
+  margin: 0;
+}
+
+div {
+  box-sizing: border-box;
+}
+
+ul {
+  list-style: none;
+  padding: 0px;
+}
+
+li {
+  list-style: none;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+.usersign-layout-wrap .content {
+  padding: 40px 18px 63px;
+  color: rgba(0, 0, 0, 0.93);
+}
+.usersign-layout-wrap .signup-title {
+  font-size: 32px;
+  font-weight: bold;
+  line-height: 42px;
+  letter-spacing: -0.8px;
+  text-align: center;
+  word-break: keep-all;
+}
+.usersign-layout-wrap .signup-area {
+  margin-top: 8px;
+  padding-top: 40px;
+  border-top: 1px solid rgba(0, 0, 0, 0.93);
+}
+.usersign-layout-wrap .signup-area .signup-area-title {
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 26px;
+  letter-spacing: -0.2px;
+}
+.usersign-layout-wrap .signup-area .accent {
+  display: inline-block;
+  position: relative;
+  margin-left: 8px;
+  padding-right: 10px;
+  font-size: 15px;
+  font-weight: 400;
+  color: #ff3627;
+  vertical-align: top;
+}
+.usersign-layout-wrap .signup-area .accent:after {
+  position: absolute;
+  top: 10px;
+  right: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #ff3627;
+  content: "";
+}
+.usersign-layout-wrap .signup-list {
+  margin-top: 24px;
+}
+.usersign-layout-wrap .signup-list .signup-item:not(:first-child) {
+  margin-top: 34px;
+}
+.usersign-layout-wrap .signup-list .title {
+  position: relative;
+  font-size: 15px;
+  line-height: 19px;
+  text-align: left;
+}
+.usersign-layout-wrap .signup-list .title:after {
+  position: absolute;
+  top: 6px;
+  right: -9px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #ff3627;
+  content: "";
+}
+.usersign-layout-wrap .signup-list .input-item {
+  margin-top: 8px;
+}
+.usersign-layout-wrap .signup-list .input-area {
+  display: flex;
+  flex-direction: row;
+  margin: 0px;
+}
+.usersign-layout-wrap .signup-list .input-box {
+  width: 100%;
+}
+.usersign-layout-wrap .signup-list .input-inner {
+  position: relative;
+  padding: 0 15px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  margin-right: 8px;
+}
+.usersign-layout-wrap .signup-list #input-inner-active {
+  border: 1px solid blue !important;
+  z-index: 1;
+}
+.usersign-layout-wrap .signup-list .input-inner:hover {
+  border: 1px solid red;
+  z-index: 1;
+}
+.usersign-layout-wrap .signup-list .input {
+  display: block;
+  width: 100%;
+  border: none;
+  font-size: 15px;
+  line-height: 46px;
+  color: rgba(0, 0, 0, 0.93);
+  letter-spacing: -0.2px;
+  outline: transparent;
+}
+.usersign-layout-wrap .signup-list .error {
+  display: none;
+  margin-top: 8px;
+  color: #ff3627;
+  letter-spacing: -0.2px;
+}
+.usersign-layout-wrap .input-btn-wrap {
+  width: 92px;
+}
+.usersign-layout-wrap .input-btn-wrap .input-btn {
+  width: 92px;
+  border: none;
+  display: block;
+  height: 100%;
+  border-radius: 8px;
+  background-color: #e5e5e5;
+}
+.usersign-layout-wrap .input-btn-wrap .input-btn .text {
+  color: rgba(0, 0, 0, 0.26);
+  font-size: 15px;
+  line-height: 48px;
+  font-weight: 700;
+}
+@media (min-width: 664px) {
+  .usersign-layout-wrap .layout-inner {
+    width: 664px;
+    margin: 0 auto;
+  }
+  .usersign-layout-wrap .content {
+    padding: 80px 18px;
+  }
+  .usersign-layout-wrap .signup-area {
+    margin-top: 16px;
+    padding-top: 48px;
+  }
+  .usersign-layout-wrap .signup-area .input-item {
+    width: 100%;
+  }
+}/*# sourceMappingURL=usersign.css.map */

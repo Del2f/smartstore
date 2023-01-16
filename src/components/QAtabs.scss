@@ -1,0 +1,194 @@
+#inquiry {
+    padding-top: 0px;
+}
+
+.nav {
+    display: flex;
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    border: 0px solid #EAECED !important;
+    
+    .nav-item {
+        flex: 33.3333%;
+        position: relative;
+        background-color: #F8F9FD;
+        border-bottom: 1px solid #EAECED;
+        border-right: 1px solid #EAECED;
+    }
+    
+    .nav-item:last-child {
+        border-right: 0px solid #EAECED;
+    }
+    
+    .nav-item-active {
+        background-color: #fff;
+        border-bottom: 0px solid #EAECED;
+    }
+    
+    .nav-link {
+        display: block ;
+        font-size: 14px;
+        height: 80px;
+        padding: 50px 0 10px ;
+        pointer-events:none !important;
+    }
+
+    .text-number {
+        position: absolute;
+        min-width: 16px;
+        top: 8px;
+        left: 50%;
+        z-index: 1;
+        margin-top: 0;
+        margin-left: 8px;
+        padding: 1px 4px;
+        line-height: 1;
+        height: 16px;
+        font-size: 12px;
+        color: #fff;
+        background-color: #abaeb8;
+        border-radius: 10px;
+    }
+    .text-number-active {
+        background-color: #00c73c;
+    }
+
+    .text-title {
+        vertical-align: middle;
+        color: #767A83;
+    }
+    .text-title-active {
+        color: #00c73c;
+    }
+    
+    .text-service {
+        display: flex;
+        justify-content: center;
+    }
+
+    
+.first:before {
+    position: absolute;
+    top: 13px;
+    left: 50%;
+    margin-left: -15px;
+    width: 34px;
+    height: 30px;
+    content: "";
+    background: url(../../public/img/sp_icon_pc.png) -0px -620px;
+}
+
+.firstclick:before {
+    position: absolute;
+    top: 13px;
+    left: 50%;
+    margin-left: -15px;
+    width: 34px;
+    height: 30px;
+    content: "";
+    background: url(../../public/img/sp_icon_pc.png) -40px -620px;
+}
+.second:before {
+    position: absolute;
+    top: 13px;
+    left: 50%;
+    margin-left: -15px;
+    width: 34px;
+    height: 30px;
+    content: "";
+    background: url(../../public/img/sp_icon_pc.png) -80px -620px;
+}
+.secondclick:before {
+    position: absolute;
+    top: 13px;
+    left: 50%;
+    margin-left: -15px;
+    width: 34px;
+    height: 30px;
+    content: "";
+    background: url(../../public/img/sp_icon_pc.png) -120px -620px;
+}
+
+.third:before {
+    position: absolute;
+    top: 13px;
+    left: 50%;
+    margin-left: -15px;
+    width: 34px;
+    height: 30px;
+    content: "";
+    background: url(../../public/img/sp_icon_pc.png) -160px -620px;
+}
+
+.third .text-service .text-icon:after {
+    font-family: Naver Icons;
+    font-style: normal;
+    content: "\EA50";
+    color: #b0b6c4;
+    font-size: 17px;
+    margin-left: 3px;
+}
+
+.thirdclick:before {
+    position: absolute;
+    top: 13px;
+    left: 50%;
+    margin-left: -15px;
+    width: 34px;
+    height: 30px;
+    content: "";
+    background: url(../../public/img/sp_icon_pc.png) -200px -620px;
+}
+
+.thirdclick .text-service .text-icon:after {
+    font-family: Naver Icons;
+    font-style: normal;
+    content: "\EA50";
+    color: #b0b6c4;
+    font-size: 17px;
+    margin-left: 3px;
+}
+}
+
+
+.qna-content {
+    padding: 20px 24px 10px;
+
+    .result-info{
+        margin: 40px 10px 0;
+        height: 180px;
+    }
+
+    .title {
+        margin: 18px 0 15px;
+        font-size: 16px;
+        color: #767A83;
+    }
+
+    .qna-btn {
+        width: 100%;
+        padding: 7px 0px;
+        background-color: #fff;
+        border: 1px solid #DBDDE2;
+        color: #666;
+        font-size: 12px;
+    }
+
+    .qna-btn-icon {
+        font-size: 11px;
+        font-weight: 900;
+        text-align: center;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+

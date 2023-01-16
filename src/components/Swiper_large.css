@@ -1,0 +1,78 @@
+.carousel {
+    /* width: 463px; */
+}
+
+.swiper_large .carousel_img {
+    max-width: 100%;
+    height: auto;
+}
+
+.swiper_large .carousel-item {
+    padding: 0px;
+}
+
+.swiper_large .carousel-item:nth-child(1) {
+    background-color: #FAFAFA;
+}
+.swiper_large .carousel-item:nth-child(2) {
+    background-color: #FFFFFF;
+}
+.swiper_large .carousel-item:nth-child(3) {
+    background-color: #FFEED8;
+}
+.swiper_large .carousel-item:nth-child(4) {
+    background-color: #FAFAFA;
+}
+
+.carousel-control-prev{
+    padding: 10px !important;
+}
+
+.carousel-control-prev-icon {
+
+    position: relative !important;
+    width: 23px !important;
+    top: -3px !important;
+    left: -5px !important;
+    
+}
+
+.carousel-control-next-icon {
+    position: relative !important;
+    width: 23px !important;
+    top: -3px !important;
+    right: -5px !important;
+}
+
+.carousel-caption {
+    text-align: center;
+}
+
+
+/* 퀵슬롯 */
+.swiper_large .carousel-indicators{
+    z-index: 1;
+    position: absolute;
+    top: 25px;
+    bottom: auto;
+    left: auto;
+    right: 0;
+    width: auto;
+    text-align: right;
+}
+
+.swiper_large .carousel-indicators button {
+    border-radius: 50% !important;
+    background-color: #dddfe1 !important;
+    margin: 0 5px !important;
+    width: 10px !important;
+    height: 10px !important;
+}
+
+.swiper_large .carousel-indicators button:last-child{
+    margin-right: 30px !important;
+}
+
+.swiper_large .carousel-indicators .active {
+    background-color: #00C73C !important;
+}

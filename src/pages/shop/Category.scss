@@ -1,0 +1,400 @@
+
+.category-wrap {
+    padding-top: 225px;
+
+    .category-inner {
+        width: 100%;
+        background-color: rgb(255, 255, 255);
+
+        .category-inner2 {
+            width: 1280px;
+
+            .title {
+                color: #000;
+                margin: 50px 0 13px;
+
+                strong {
+                    font-size: 22px;
+                    line-height: 24px;
+                }
+
+                a {
+                    color: #8f8f8f;
+                    font-size: 12px;
+                }
+
+                .type-first:before {
+                    display: inline-block;
+                    margin: 0 6px;
+                    color: #ddd;
+                    vertical-align: top;
+                    content: ">";
+                }
+
+                .type-first:after {
+                    display: inline-block;
+                    margin: 7px 0 0 4px;
+                    border: 4px solid transparent;
+                    border-top-color: #888;
+                    vertical-align: top;
+                    content: "";
+                }
+
+                .type-second {
+                    color: #5f5f5f;
+                    font-weight: bold;
+                }
+
+                .type-second:before {
+                    display: inline-block;
+                    margin: 0 6px;
+                    color: #ddd;
+                    vertical-align: top;
+                    content: ">";
+                }
+
+                .type-second:after {
+                    display: inline-block;
+                    margin: 7px 0 0 4px;
+                    border: 4px solid transparent;
+                    border-top-color: #888;
+                    vertical-align: top;
+                    content: "";
+                }
+            }
+
+            .buttons {
+
+                .left {
+
+                    button:not(:last-child) {
+                        position: relative;
+                        font-size: 13px;
+                        line-height: 27px;
+                        color: #888;
+                        outline: none;
+                        border: 0px;
+                        padding: 0 12px;
+                        background-color: transparent;
+                    }
+                    button:last-child {
+                        font-size: 13px;
+                        line-height: 27px;
+                        color: #888;
+                        outline: none;
+                        border: 0px;
+                        background-color: transparent;
+                    }
+
+                    button:first-child {
+                        padding-left: 0px;
+                    }
+
+                    button:after {
+                        position: absolute;
+                        top: 50%;
+                        right: 0px;
+                        width: 1px;
+                        height: 12px;
+                        margin-top: -6px;
+                        background-color: #e1e1e1;
+                        content: "";
+                    }
+                }
+
+                .right {
+                    font-size: 13px;
+
+                    span {
+                        color: #000;
+                    }
+
+                    .free-shipping-wrap {
+                        position: relative;
+
+                        .label-checkbox {
+                            cursor: pointer;
+
+                            .text {
+                                margin-right: 5px;
+                            }
+                        }
+
+                        input {
+                            position: absolute;
+                            top: 5px;
+                            right: 22px;
+                        }
+
+                        .free-shipping {
+                            position: relative;
+                            display: inline-block;
+                            width: 44px;
+                            height: 20px;
+                            border-radius: 10px;
+                            background-color: #c8ccd0;
+                            vertical-align: top;
+                            border: 0px;
+                        }
+    
+                        .free-shipping:before {
+                            position: absolute;
+                            top: 7px;
+                            left: 24px;
+                            width: 14px;
+                            height: 6px;
+                            color: transparent;
+                            content: "OFF";
+                            background-image: url(../../../public/img/shop/spBs_text_svg.svg);
+                            background-size: 336px 268px;
+                            background-position: -278px -149px;
+                        }
+
+                        .free-shipping:after {
+                            position: absolute;
+                            background-color: #fff;
+                            box-shadow: 0 0 0 1px rgb(221, 221, 221);
+                            border-radius: 50%;
+                            top: -2px;
+                            left: -2px;
+                            width: 24px;
+                            height: 24px;
+                            content: "";
+                            transition-duration: .2s;
+                        }
+
+                        input[type=checkbox]:checked {
+                            + .label-checkbox .free-shipping {
+                                background-color: #03c75a;
+                            }
+                            + .label-checkbox .free-shipping:before {
+                                background-position: -270px -174px;
+                                left: 7px;
+                                content: "ON";
+                            }
+                            + .label-checkbox .free-shipping:after {
+                                left: 22px;
+                            }
+                        }
+                    }
+
+                    .more-show-btn {
+                        position: relative;
+                        width: 100px;
+                        padding: 0 15px;
+                        line-height: 27px;
+                        -webkit-box-sizing: border-box;
+                        box-sizing: border-box;
+                        outline: none;
+                        border: 0px;
+                        background-color: transparent;
+                        
+                        .icon {
+                            position: absolute;
+                            top: 10px;
+                            right: 0;
+                            display: block;
+                            width: 10px;
+                            height: 5px;
+                        }
+
+                        .icon:before {
+                            display: block;
+                            border: solid #000;
+                            content: "";
+                            border-width: 5px 5px 0 5px;
+                            border-right-color: transparent;
+                            border-left-color: transparent;
+                        }
+                    }
+
+                    .view-type-wrap {
+                        position: relative;
+                        display: inline-block;
+                        vertical-align: top;
+                        margin-left: 15px;
+
+                        ul {
+
+                            li {
+                                display: inline-block;
+                                vertical-align: top;
+
+                                button {
+                                    position: relative;
+                                    width: 27px;
+                                    height: 27px;
+                                    border: 1px solid #e0e0e0;
+                                    vertical-align: top;
+                                    background-color: transparent;
+                                    padding-top: 3px;
+                                }
+                                
+                                button:before {
+                                    display: inline-block;
+                                    content: "";
+                                    width: 11px;
+                                    height: 11px;
+                                    background-image: url(../../../public/img/shop/spBs_icon_svg.svg);
+                                    background-size: 333px 313px;
+                                }
+
+                                .one:before {
+                                    background-position: -318px -99px;
+                                }
+
+                                .one-select:before {
+                                    background-position: -318px -118px;
+                                }
+
+                                .five:before {
+                                    background-position: -318px -61px;
+                                }
+
+                                .five-select:before {
+                                    background-position: -318px -80px;
+                                }
+
+                                .four:before {
+                                    background-position: -292px -292px;
+                                }
+
+                                .four-select:before {
+                                    background-position: -318px -4px;
+                                }
+
+                                .three:before {
+                                    background-position: -318px -23px;
+                                }
+
+                                .three-select:before {
+                                    background-position: -318px -42px;
+                                }
+
+                                .select {
+                                    background-color: #2f2f2f;
+                                    border-color: #2f2f2f;
+                                }
+                            }
+
+                            li:not(:first-child){
+                                margin-left: -1px;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .product-wrap {
+
+                .product-inner {
+
+                    .product {
+                        flex: 0 0 33.3333%;
+                        margin: 20px 10px 0;
+                        padding: 20px 0;
+                        margin-bottom: 40px;
+
+                        .img-wrap {
+
+
+                            .img {
+                                width: 100%;
+                                background-color: transparent;
+                            }
+
+                            .price-wrap {
+                                font-family: tahoma,helvetica,"\B098\B214\ACE0\B515","Nanum Gothic","\B098\B214\C2A4\D018\C5B4","Nanum Square","Apple SD Gothic Neo","Malgun Gothic","\B9D1\C740\ACE0\B515",dotum,"\B3CB\C6C0",sans-serif;
+
+                                .sale-percent {
+                                    color: #6b90dc;
+                                    position: relative;
+                                    top: 1px;
+                                    margin-right: 5px;
+                                }
+
+                                .sale-after-price {
+                                    color: #000000;
+
+                                    .price-value {
+                                        font-size: 18px;
+                                        line-height: 22px;
+                                    }
+                                    .price-text {
+
+                                    }
+                                }
+
+                                .sale-before-price {
+                                    position: relative;
+                                    margin-left: 5px;
+                                    font-size: 14px;
+                                    color: #888;
+                                }
+                            }
+
+                            .product-name {
+                                color: #000;
+                                margin-top: 6px;
+                                padding-bottom: 2px;
+                                overflow: hidden;
+                                -o-text-overflow: ellipsis;
+                                text-overflow: ellipsis;
+                                line-height: 28px;
+                                word-break: break-all;
+                                display: -webkit-box;
+                                max-height: 56px;
+                                -webkit-line-clamp: 2;
+                                -webkit-box-orient: vertical;
+                                font-size: 20px;
+                                font-weight: 600;
+                            }
+                        }
+
+                        .score-wrap {
+
+                            span {
+                                font-size: 12px;
+                                line-height: 15px;
+                                color: rgb(129, 129, 129);
+                            }
+
+                            .review {
+                                margin-left: 12px;
+                                position: relative;
+                            }
+
+                            .review:before {
+                                position: absolute;
+                                top: 50%;
+                                left: -7px;
+                                width: 2px;
+                                height: 2px;
+                                margin-top: -1px;
+                                background-color: rgba(0,0,0,.3);
+                                border-radius: 50%;
+                                content: "";
+                            }
+                        }
+
+                        .freeshipping {
+                            display: inline-block;
+                            position: relative;
+                            height: 18px;
+                            margin-top: 10px;
+                            padding: 0 4px;
+                            border: 1px solid rgba(1,172,64,.4);
+                            border-radius: 1px;
+                            box-sizing: border-box;
+                            vertical-align: top;
+                            color: #01ac40;
+                            font-size: 10px;
+                            line-height: 16px;
+                            letter-spacing: -0.4px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

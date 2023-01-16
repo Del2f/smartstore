@@ -1,0 +1,153 @@
+
+
+/* 헤더 */
+
+.commerce-header-wrap {
+    border-bottom: 1px solid rgba(0,0,0,.106);
+    background: #fff;
+
+    .header-inner {
+        line-height: 24px;
+        margin: 0 auto;
+        height: 60px;
+    }
+
+    .header-icon {
+        width: 56px;
+        height: 12px;
+        content: "";
+        display: inline-block;
+        background: url(../../public/img/logo-naver-56x12.svg) 0px 0px no-repeat;
+    }
+
+    .header-logo {
+        width: 93px;
+        height: 24px;
+        content: "";
+        display: inline-block;
+        background: url(../../public/img/logo-cid-93x24.svg) 0px 0px no-repeat;
+        margin-left: 7px;
+    }
+
+    @media (min-width: 1440px) {
+        .header-inner {
+            width: 1440px;
+        }
+    }
+
+    @media (min-width: 664px) {
+        .header-inner {
+            padding: 0 48px;
+        }
+    }
+
+    @media (max-width: 663px) {
+        .header-inner {
+            padding: 0 18px;
+            height: 48px;
+        }
+
+        .header-icon {
+            width: 24px;
+            height: 24px;
+            content: "";
+            background: url(../../public/img/logo-naver-green.svg) 0px 0px no-repeat;
+        }
+        .header-logo {
+            width: 62px;
+            height: 16px;
+            content: "";
+            background: url(../../public/img/logo-cid-62x16.svg) 0px 0px no-repeat;
+        }
+        
+    }
+}
+
+
+    /* footer */
+    .footer-wrap {
+        background-color: #fafafa;
+        padding: 0px;
+
+        .footer-inner {
+            padding: 20px 0;
+
+            .footer-link-list {
+                margin: 0px;
+                padding: 0px;
+                text-align: center;
+
+                .footer-link-item {
+                    display: inline-block;
+
+                    .footer-link {
+                        display: inline-block;
+                        line-height: 14px;
+                        padding: 10px 7px;
+                    }
+                
+                    .footer-text {
+                        font-weight: 700;
+                        font-size: 12px;
+                        line-height: 14px;
+                        color: rgba(0,0,0,.87);
+                    }
+                }
+            }
+
+            .footer-copyright-pc {
+                display: none;
+                font-size: 11px;
+                line-height: 13px;
+                letter-spacing: -.2px;
+                color: rgba(0,0,0,.69);
+                text-align: center;
+
+                .footer-link-logo {
+                    margin-right: 11px;
+                    display: inline-block;
+                    padding: 10px 0;
+
+                    .naver-logo {
+                        width: 63px;
+                        height: 12px;
+                        content: "";
+                        display: inline-block;
+                        background: url(../../public/img/logo-naver-63x12.svg) 0px 0px no-repeat;
+                    }
+                }
+
+                .footer-link-text {
+                    display: inline-block;
+                    padding: 10px 0;
+                    vertical-align: top;
+                }
+
+                .footer-link-text b, .footer-link-text span {
+                    color: #535353;
+                }
+            }
+        
+            .footer-copyright-m {
+                padding: 3px 0 10px;
+                font-size: 12px;
+                line-height: 14px;
+                color: #767a83;
+                text-align: center;
+
+                span {
+                    color: #767a83;
+                }
+            }
+            
+            @media (min-width: 664px) {
+                .footer-copyright-pc {
+                    display: block;
+                }
+                .footer-copyright-m {
+                    display: none;
+                }
+            }
+
+        }
+    }

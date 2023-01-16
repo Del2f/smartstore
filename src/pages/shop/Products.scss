@@ -1,0 +1,1545 @@
+// 이미지 경로
+// ../../../public/img/shop/
+
+.products-wrap {
+    padding-top: 225px;
+
+    .icon-question-mark{
+        position: relative;
+        vertical-align: middle;
+        margin-left: 4px;
+        width: 16px;
+        height: 16px;
+        border: 1px solid #d7d7d7;
+        background-color: #fff;
+        cursor: pointer;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+    .icon-question-mark:before{
+        position: absolute;
+        display: inline-block;
+        top:3px;
+        left: 4px;
+        width: 6px;
+        height: 8px;
+        content: "";
+        background-image: url(../../../public/img/shop/spIcon_svg-1.svg);
+        background-position: -587px -444px;
+        background-size: 728px 711px;
+    }
+
+    .products-inner {
+        width: 100%;
+        background-color: rgb(255, 255, 255);
+
+        .products-inner2 {
+            width: 1020px;
+
+            .top-menu {
+                margin: 10px 0;
+
+                .send-wrap {
+                    .send {
+                        margin-right: -5px;
+                        
+                        li {
+                            position: relative;
+                            float: left;
+                            height: 29px;
+                            width: 30px;
+                            margin: 0 5px 0 0;
+                            padding: 0;
+                            
+                            a {
+                                position: absolute;
+                                width: 29px;
+                                height: 29px;
+                                background-image: url(../../../public/img/shop/sp_spi_pc.png);
+                            }
+                                
+                            .blog {
+                                background-position: -10px -127px;
+                            }
+                            .cafe {
+                                background-position: -44px -127px;
+                            }
+                            .keep {
+                                background-position: -49px -216px;
+                            }
+                            .release {
+                                top: 5px;
+                                left: 7px;
+                                width: 16px;
+                                height: 16px;
+                                background-position: -114px -160px;
+                            }
+                        }
+
+                        .release-list {
+                            border: 1px solid #d6d6d6;
+                        }
+                    }
+                }
+
+                .quick-menu {
+                    a {
+                        color: #8f8f8f;
+                        font-size: 12px;
+                    }
+
+                    .type-first:before {
+                        display: inline-block;
+                        margin: 0 6px;
+                        color: #ddd;
+                        vertical-align: top;
+                        content: ">";
+                    }
+    
+                    .type-first:after {
+                        display: inline-block;
+                        margin: 7px 0 0 4px;
+                        border: 4px solid transparent;
+                        border-top-color: #888;
+                        vertical-align: top;
+                        content: "";
+                    }
+    
+                    .type-second {
+                        color: #5f5f5f;
+                        font-weight: bold;
+                    }
+    
+                    .type-second:before {
+                        display: inline-block;
+                        margin: 0 6px;
+                        color: #ddd;
+                        vertical-align: top;
+                        content: ">";
+                    }
+    
+                    .type-second:after {
+                        display: inline-block;
+                        margin: 7px 0 0 4px;
+                        border: 4px solid transparent;
+                        border-top-color: #888;
+                        vertical-align: top;
+                        content: "";
+                    }
+                }
+            }
+
+            .product-info-wrap {
+                background-color: #fff;
+                width: 100%;
+
+                .product-info-top {
+                    border: 1px solid #ededed;
+
+                    .product-info-left {
+                        position: relative;
+
+                        .img-wrap {
+                            position: relative;
+
+                            .img {
+                                width: 510px;
+                                height: 510px;
+                                // background-color: #888;
+                            }
+
+                            .left-btn {
+                                position: absolute;
+                                background-color: transparent;
+                                border: 0px;
+                                top: 230px;
+                                left: 10px;
+                                width: 23px;
+                                height: 33px;
+                                background-image: url(../../../public/img/shop/spArrow_svg-1.svg);
+                                background-size: 228px 227px;
+                                background-position: -104px -4px;
+                            }
+
+                            .right-btn {
+                                position: absolute;
+                                background-color: transparent;
+                                border: 0px;
+                                top: 230px;
+                                right: 10px;
+                                width: 23px;
+                                height: 33px;
+                                background-image: url(../../../public/img/shop/spArrow_svg-1.svg);
+                                background-size: 228px 227px;
+                                background-position: -104px -45px;
+                            }
+                        }
+
+                        .img-sub-wrap {
+                            margin-top: 20px;
+
+                            ul {
+
+                                li {
+                                    display: inline-block;
+                                    margin: 0 1px;
+                                    border: 2px solid transparent;
+
+                                    a {
+                                        display: inline-block;
+                                        position: relative;
+                                        width: 40px;
+                                        height: 40px;
+                                        opacity: .6;
+                                        vertical-align: top;
+
+                                        .img-sub {
+                                            width: 40px;
+                                            height: 40px;
+                                        }
+
+                                        .img-sub-selected {
+                                            border: 2px solid #222;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        .review-wrap {
+                            position: absolute;
+                            bottom: 0px;
+                            color: #333;
+                            margin-left: 40px;
+                            margin-bottom: 20px;
+
+                            .review-text {
+                                margin-right: 4px;
+                                font-size: 12px;
+                                color: #555;
+                                vertical-align: top;
+                            }
+
+                            .number {
+                                font-family: tahoma,helvetica,"\B098\B214\ACE0\B515","Nanum Gothic","\B098\B214\C2A4\D018\C5B4","Nanum Square","Apple SD Gothic Neo","Malgun Gothic","\B9D1\C740\ACE0\B515",dotum,"\B3CB\C6C0",sans-serif;
+                                font-size: 20px;
+                                font-weight: bold;
+                                color: #000;
+                                letter-spacing: -1px;
+                            }
+
+                            .circle {
+                                display: inline-block;
+                                width: 3px;
+                                height: 3px;
+                                margin-top: 2px;
+                                margin-left: 2px;
+                                margin-right: 6px;
+                                border-radius: 100%;
+                                background-color: #bbb;
+                                vertical-align: top;
+                                content: "";
+                            }
+
+                            .bar {
+                                display: block;
+                                width: 8px;
+                                height: 15px;
+                                margin-top: 2px;
+                                content: "";
+                                background-image: url(../../../public/img/shop/spIcon_svg-2.svg);
+                                background-size: 731px 703px;
+                                background-position: -213px -683px;
+                            }
+
+                            .review-count, .review-min-score {
+                                margin-right: 3px;
+                            }
+
+                            .review-max-score {
+                                margin-left: 3px;
+                            }
+                        }
+                    }
+
+                    .product-info-right:before {
+                        position: absolute;
+                        top: 0;
+                        bottom: 0;
+                        left: 0;
+                        z-index: 1;
+                        margin-left: -1px;
+                        border-left: 1px solid #ededed;
+                        content: "";
+                    }
+
+                    .product-info-right {
+                        position: relative;
+                        width: 508px;
+                        padding: 40px;
+
+                        .name-price-wrap {
+                            margin-bottom: 15px;
+
+
+                            .name {
+                                display: inline;
+                                margin-right: 8px;
+                                font-size: 20px;
+                                color: #222;
+                                word-break: break-all;
+                                word-wrap: break-word;
+                                vertical-align: top;
+                            }
+
+                            .price-wrap {
+                                margin-top: 5px;
+
+                                .sale-percent {
+                                    color: #5f5f5f;
+                                    
+                                }
+
+                                .origin-sale-wrap {
+                                    color: #222;
+
+                                    .original-price {
+                                        font-size: 13px;
+                                        margin-right: 5px;
+                                    }
+
+                                    .sale-price {
+                                        font-size: 22px;
+
+                                        .unit {
+                                            font-size: 13px;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        .lotte-card {
+                            padding: 12px 16px 11px;
+                            border: 1px solid #dce0e3;
+                            background-color: #f7f8fa;
+                            position: relative;
+
+                            .icon-card:before {
+                                display: inline-block;
+                                width: 15px;
+                                height: 11px;
+                                margin: 4px 6px 0 0;
+                                content: "";
+                                background-image: url(../../../public/img/shop/spIcon_svg-1.svg);
+                                background-position: -368px -584px;
+                                background-size: 728px 711px;
+                            }
+
+                            .text {
+                                font-weight: bold;
+                                color: #03c75b;
+                                font-size: 12px;
+                            }
+
+                            .icon-quest {
+                                margin-left: 4px;
+                                position: relative;
+                                width: 16px;
+                                height: 16px;
+                                border: 1px solid #d7d7d7;
+                                background-color: #fff;
+                                cursor: pointer;
+                                -webkit-box-sizing: border-box;
+                                box-sizing: border-box;
+                            }
+
+                            .icon-quest:before {
+                                position: absolute;
+                                display: inline-block;
+                                top:3px;
+                                left: 4px;
+                                width: 6px;
+                                height: 8px;
+                                content: "";
+                                background-image: url(../../../public/img/shop/spIcon_svg-1.svg);
+                                background-position: -587px -444px;
+                                background-size: 728px 711px;
+                            }
+                        }
+
+                        .sale-info {
+                            color: #222;
+                            margin-top: 15px;
+                            padding-bottom: 19px;
+                            border: 1px solid #989aa5;
+
+                            .top {
+                                padding: 13px 16px;
+                                border-bottom: 1px solid #f4f4f4;
+
+                                .top-left {
+                                    font-size: 16px;
+                                    color: #000;
+                                    font-weight: bold;
+                                    
+                                    .username {
+                                    }
+
+                                    .text {
+
+                                    }
+                                }
+                                .top-right {
+
+                                    .coupon-wrap {
+                                        border: none;
+                                        background-color: transparent;
+                                        cursor: pointer;
+                                        float: right;
+                                        height: 26px;
+                                        padding: 0 9px 0 11px;
+                                        background-color: #454752;
+                                        font-weight: bold;
+                                        font-size: 12px;
+                                        line-height: 26px;
+                                        color: #fff;
+                                        cursor: pointer;
+
+                                        .coupon-text:after {
+                                            width: 5px;
+                                            height: 8px;
+                                            display: inline-block;
+                                            margin: 9px 0 0 5px;
+                                            vertical-align: top;
+                                            content: "";
+                                            background-image: url(../../../public/img/shop/spArrow_svg-1.svg);
+                                            background-size: 228px 227px;
+                                            background-position: -125px -197px;
+                                        }
+                                    }
+                                }
+                            }
+
+                            .middle {
+                                padding: 18px 16px 0;
+
+                                .middle-top {
+
+                                    .sale-text {
+                                        font-size: 13px;
+                                        font-weight: bold;
+                                        color: #333;
+                                    }
+
+                                    .sale-text-icon {
+                                        position: relative;
+                                        margin-left: 5px;
+                                        width: 16px;
+                                        height: 16px;
+                                        border: 1px solid #d7d7d7;
+                                        background-color: #fff;
+                                        cursor: pointer;
+                                    }
+
+                                    .sale-text-icon:before {
+                                        position: absolute;
+                                        top: 3px;
+                                        left: 4px;
+                                        width: 6px;
+                                        height: 8px;
+                                        content: "";
+                                        background-image: url(../../../public/img/shop/spIcon_svg-1.svg);
+                                        background-size: 728px 711px;
+                                        background-position: -587px -444px;
+                                    }
+
+                                    .sale-number-wrap {
+
+                                        .number {
+                                            position: relative;
+                                            top: -1px;
+                                            display: inline-block;
+                                            font-family: tahoma,helvetica,"\B098\B214\ACE0\B515","Nanum Gothic","\B098\B214\C2A4\D018\C5B4","Nanum Square","Apple SD Gothic Neo","Malgun Gothic","\B9D1\C740\ACE0\B515",dotum,"\B3CB\C6C0",sans-serif;
+                                            font-weight: 1000;
+                                            font-size: 22px;
+                                            color: #e2232b;
+                                        }
+
+                                        .unit {
+                                            font-weight: normal;
+                                            font-size: 16px;
+                                            color: #e2232b;
+                                        }
+                                    }
+                                }
+                                .middle-middle {
+                                    overflow: hidden;
+                                    position: relative;
+                                    font-size: 12px;
+                                    line-height: 18px;
+                                    color: #999;
+
+                                    li {
+                                        position: relative;
+                                        padding-left: 17px;
+                                        margin-bottom: 2px;
+                                    }
+                                    
+                                    li:before {
+                                        position: absolute;
+                                        top: 3px;
+                                        left: 5px;
+                                        width: 7px;
+                                        height: 6px;
+                                        border-left: 1px solid #e5e5e5;
+                                        border-bottom: 1px solid #e5e5e5;
+                                        -webkit-box-sizing: border-box;
+                                        box-sizing: border-box;
+                                        content: "";
+                                    }
+                                }
+                            }
+
+                            .bottom {
+                                padding: 18px 16px 0;
+
+                                li {
+                                    position: relative;
+                                    padding-left: 17px;
+                                    margin-bottom: 2px;
+                                }
+                                
+                                li:before {
+                                    position: absolute;
+                                    top: 3px;
+                                    left: 5px;
+                                    width: 7px;
+                                    height: 6px;
+                                    border-left: 1px solid #e5e5e5;
+                                    border-bottom: 1px solid #e5e5e5;
+                                    -webkit-box-sizing: border-box;
+                                    box-sizing: border-box;
+                                    content: "";
+                                }
+
+                                .bottom-top {
+                                    font-size: 13px;
+                                    line-height: 33px;
+                                    color: #333;
+
+                                    .point-max-text {
+                                        font-weight: bold;
+
+                                    }
+
+                                    .point-max-number-wrap {
+
+                                        .point-max-number {
+                                            font-weight: bold;
+                                        }
+
+                                        .point-max-unit {
+
+                                        }
+
+                                        .point-max-icon {
+                                            position: relative;
+                                            margin-left: 5px;
+                                            width: 16px;
+                                            height: 16px;
+                                            border: 1px solid #d7d7d7;
+                                            background-color: #fff;
+                                            cursor: pointer;
+                                        }
+        
+                                        .point-max-icon:before {
+                                            position: absolute;
+                                            top: 3px;
+                                            left: 4px;
+                                            width: 6px;
+                                            height: 8px;
+                                            content: "";
+                                            background-image: url(../../../public/img/shop/spIcon_svg-1.svg);
+                                            background-size: 728px 711px;
+                                            background-position: -587px -444px;
+                                        }
+                                    }
+                                }
+
+                                .bottom-middle {
+                                    overflow: hidden;
+                                    position: relative;
+                                    font-size: 12px;
+                                    color: #999;
+                                    
+                                    li {
+                                        
+                                        a {
+                                            color: #999;
+                                            text-decoration: underline;
+                                        }
+
+                                        .membership-icon {
+                                            width: 57px;
+                                            height: 14px;
+                                            content: "";
+                                            display: inline-block;
+                                            margin-right: 5px;
+                                            background-image: url(../../../public/img/shop/spIcon_svg-1.svg);
+                                            background-size: 728px 711px;
+                                            background-position: -536px -318px;
+                                        }
+
+                                        .arrow-icon {
+                                            margin-left: 4px;
+                                            width: 5px;
+                                            height: 8px;
+                                            content: "";
+                                            display: inline-block;
+                                            margin-right: 5px;
+                                            background-image: url(../../../public/img/shop/spArrow_svg-1.svg);
+                                            background-size: 228px 227px;
+                                            background-position: -112px -197px;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        .event-info {
+                            color: #333;
+                            font-size: 13px;
+                            margin-top: 16px;
+                            padding-bottom: 13px;
+                            border-bottom: 1px solid #ededed;
+
+                            .bar {
+                                display: inline-block;
+                                width: 1px;
+                                height: 12px;
+                                margin: 3px 6px 0 5px;
+                                background-color: #e9e9e9;
+                                vertical-align: top;
+                                content: "";
+                            }
+
+                            .icon-quest-wrap {
+                                display: inline-block;
+                                position: relative;
+                                width: 16px;
+                                height: 16px;
+                                border: 1px solid #d7d7d7;
+                                margin-left: 3px;
+                                text-align: center;
+                                vertical-align: middle;
+                                
+                                
+                                .icon-quest {
+                                    display: inline-block;
+                                    position: absolute;
+                                    top: 0px;
+                                    left: 4px;
+                                    width: 6px;
+                                    height: 8px;
+                                    margin-top: 3px;
+                                    content: "";
+                                    background-image: url(../../../public/img/shop/spIcon_svg-1.svg);
+                                    background-size: 728px 711px;
+                                    background-position: -587px -444px;
+                                }
+                            }
+
+                        }
+
+                        .delivery-info {
+                            color: #333;
+                            font-size: 13px;
+                            margin-top: 12px;
+                            padding-bottom: 13px;
+                            border-bottom: 1px solid #ededed;
+
+                            .top {
+
+
+                                .bar {
+                                    display: inline-block;
+                                    vertical-align: top;
+                                    margin: 4px 9px 0 7px;
+                                    width: 1px;
+                                    height: 12px;
+                                    background-color: #e9e9e9;
+                                    content: "";
+                                }
+        
+                                .delivery-company {
+                                    margin-left: 10px;
+                                    position: relative;
+                                }
+        
+                                .delivery-company:before {
+                                    display: inline-block;
+                                    position: absolute;
+                                    top: 50%;
+                                    left: -6px;
+                                    width: 2px;
+                                    height: 2px;
+                                    border-radius: 2px;
+                                    background-color: #333333;
+                                    content: "";
+                                }
+                            }
+
+
+
+                        }
+
+                        .option-info {
+                            position: relative;
+                            font-size: 13px;
+
+                            margin-top: 20px;
+
+                            .selectize-control {
+                                line-height: 46px;
+
+                                .check {
+                                    border: 1px solid rgb(71, 71, 71);
+                                }
+                            }
+
+                            .selectize-input {
+                                color: #000;
+                                border: 1px solid #D9D9D9;
+                                padding-left: 14px;
+                                height: 100%;
+                                cursor: pointer;
+                            }
+
+                            .selectize-input:hover {
+                                border: 1px solid rgb(71, 71, 71);
+                            }
+
+                            .selectize-dropdown {
+                                position: absolute;
+                                display: none;
+                                top: 47px;
+                                width: 420px;
+                                color: #000;
+                                background-color: #ffffff;
+                                border: 1px solid #D9D9D9;
+                                font-weight: 400;
+                                z-index: 100;
+                            }
+
+                            .dropdown-active {
+                                display: block;
+                            }
+
+                            .option {
+                                border-top: 1px solid rgba(0, 0, 0, 0.07);
+                                padding-left: 14px;
+                                line-height: 46px;
+                            }
+
+                            .option:hover {
+                                background-color: #ebebeb;
+                            }
+
+                            .option:first-child {
+                                border: 0px;
+                            }
+
+                            // .item {
+                            //     display: inline-block;
+                            //     font-weight: 400;
+                            // }
+
+
+                        }
+
+                        .cart-info {
+
+                            .cart-wrap {
+
+                                li:first-child {
+                                }
+                                
+                                li:not(:first-child) {
+                                    border-top: 1px solid rgb(233, 233, 233);
+                                    margin-top: -1px;
+                                }
+
+                                li {
+                                    position: relative;
+                                    margin-top: 15px;
+                                    padding: 15px 14px 15px 0;
+                                    border-top: 1px solid rgb(196, 196, 196);
+                                    border-bottom: 1px solid rgb(196, 196, 196);
+
+                                    .select-product {
+
+
+                                        .select-product-name {
+                                            color: #333333;
+                                            line-height: 20px;
+                                            font-size: 13px;
+                                            word-wrap: break-word;
+                                            word-break: keep-all;
+                                            margin-bottom: 12px;
+                                        }
+
+                                        .select-product-count {
+
+                                            .input-wrap {
+                                                width: 114px;
+                                                height: 34px;
+                                                border: solid 1px #dde0e3;
+
+                                                button {
+                                                    position: relative;
+                                                    flex: 0 0 33.3333%;
+                                                    width: 34px;
+                                                    height: 100%;
+                                                    background-color: #f1f2f4;
+                                                    border: 0px;
+                                                }
+
+                                                .minus:before {
+                                                    position: absolute;
+                                                    opacity: 0.2;
+                                                    content: "";
+                                                    top: 50%;
+                                                    left: 50%;
+                                                    width: 10px;
+                                                    height: 2px;
+                                                    margin: -1px 0 0 -5px;
+                                                    background-color: #000000;
+                                                }
+
+                                                .plus:before {
+                                                    position: absolute;
+                                                    top: 50%;
+                                                    left: 50%;
+                                                    width: 2px;
+                                                    height: 10px;
+                                                    margin: -5px 0 0 -1px;
+                                                    background-color: #000000;
+                                                    content: "";
+                                                }
+
+                                                .plus:after{
+                                                    position: absolute;
+                                                    top: 50%;
+                                                    left: 50%;
+                                                    width: 10px;
+                                                    height: 2px;
+                                                    margin: -1px 0 0 -5px;
+                                                    background-color: #000000;
+                                                    content: "";
+                                                }
+
+                                                input {
+                                                    width: 44px;
+                                                    height: 100%;
+                                                    border: solid #eff1f5;
+                                                    border-width: 0 1px;
+                                                    vertical-align: top;
+                                                    font-family: tahoma, helvetica, "\B098\B214\ACE0\B515", "Nanum Gothic", "\B098\B214\C2A4\D018\C5B4", "Nanum Square", "Apple SD Gothic Neo", "Malgun Gothic", "\B9D1\C740\ACE0\B515", dotum, "\B3CB\C6C0", sans-serif;
+                                                    color: #333333;
+                                                    font-size: 12px;
+                                                    font-weight: bold;
+                                                    line-height: 34px;
+                                                    text-align: center;
+                                                }
+
+                                                .number {
+                                                    font-family: tahoma, helvetica, "\B098\B214\ACE0\B515", "Nanum Gothic", "\B098\B214\C2A4\D018\C5B4", "Nanum Square", "Apple SD Gothic Neo", "Malgun Gothic", "\B9D1\C740\ACE0\B515", dotum, "\B3CB\C6C0", sans-serif;
+                                                    color: #333333;
+                                                    flex: 0 0 33.3333%;
+                                                    font-size: 12px;
+                                                    font-weight: bold;
+                                                    text-align: center;
+                                                }
+                                            }
+
+                                            .price-wrap {
+                                                color: #333;
+                                                position: relative;
+
+                                                .price {
+                                                    margin-top: -3px;
+                                                    font-family: tahoma, helvetica, "\B098\B214\ACE0\B515", "Nanum Gothic", "\B098\B214\C2A4\D018\C5B4", "Nanum Square", "Apple SD Gothic Neo", "Malgun Gothic", "\B9D1\C740\ACE0\B515", dotum, "\B3CB\C6C0", sans-serif;
+                                                    font-weight: bold;
+                                                    color: #222222;
+                                                    vertical-align: middle;
+                                                    font-size: 15px;
+                                                }
+
+                                                .unit {
+                                                    font-size: 13px;
+                                                }
+
+                                                .delete-btn {
+                                                    position: absolute;
+                                                    background-color: transparent;
+                                                    border: 0;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        .sum {
+                            color: #333;
+                            font-size: 13px;
+                            font-weight: bold;
+                            margin-top: 26px;
+
+                            .sum-left {
+                                display: inline-block;
+
+                                .sum-left-text {
+
+                                }
+                            }
+
+                            .sum-right {
+
+                                .sum-count-wrap {
+                                    color: #999999;
+                                    font-weight: 400;
+                                }
+
+                                .bar {
+                                    margin: 0 5px;
+                                    top: 50%;
+                                    right: 8px;
+                                    width: 1px;
+                                    height: 12px;
+                                    background-color: #e9e9e9;
+                                    content: "";
+                                }
+
+                                .sum-price-wrap {
+                                    color: #6b90dc;
+
+                                    .sum-price {
+                                        font-size: 24px;
+                                    }
+                                    
+                                    .sum-unit {
+                                        font-size: 17px;
+
+                                    }
+                                }
+                            }
+                        }
+
+                        .buttons {
+                            width: 100%;
+                            margin-top: 16px;
+
+                            .btn-buy-wrap {
+                                width: 100%;
+
+                                .btn-buy {
+                                    position: relative;
+                                    z-index: 0;
+                                    display: block;
+                                    height: 50px;
+                                    box-sizing: border-box;
+                                    border-radius: 5px;
+                                    background-color: #03c75a;
+                                }
+
+                                .btn-buy:hover {
+                                    background-color: #00af4f;
+                                }
+
+                                .btn-buy:before {
+                                    position: absolute;
+                                    top: 50%;
+                                    left: 50%;
+                                    width: 84px;
+                                    height: 22px;
+                                    -webkit-transform: translate(-50%, -50%);
+                                    -ms-transform: translate(-50%, -50%);
+                                    transform: translate(-50%, -50%);
+                                    content: "";
+                                    background-image: url(../../../public/img/shop/spText_svg-1.svg);
+                                    background-size: 487px 412px;
+                                    background-position: -236px -125px;
+                                }
+                            }
+
+                            .bottom {
+                                width: 100%;
+                                margin-top: 3px;
+
+                                .btn-keep-wrap {
+                                    display: inline-block;
+                                    width: 50%;
+                                    border: 1px solid #dcdee0;
+                                    border-radius: 5px;
+                                    margin-right: 3px;
+
+                                    .btn-keep {
+                                        position: relative;
+                                        box-sizing: border-box;
+                                        background-color: #fff;
+                                        text-align: center;
+
+                                        .btn-keep-inner {
+                                            height: 50px;
+
+                                            .btn-keep-icon {
+                                                display: inline-block;
+                                                margin-right: 3px;
+                                                width: 20px;
+                                                height: 20px;
+                                                content: "";
+                                                background-image: url(../../../public/img/shop/spIcon_svg-2.svg);
+                                                background-size: 731px 703px;
+                                                background-position: -120px -651px;
+                                            }
+                                            .btn-keep-icon2 {
+                                                display: inline-block;
+                                                margin-right: 3px;
+                                                margin-bottom: 1px;
+                                                width: 40px;
+                                                height: 14px;
+                                                content: "";
+                                                background-image: url(../../../public/img/shop/spText_svg-1.svg);
+                                                background-size: 487px 412px;
+                                                background-position: -146px -265px;
+                                            }
+                
+                                            .btn-keep-number {
+                                                line-height: 19px;
+                                                font-family: tahoma,helvetica,"\B098\B214\ACE0\B515","Nanum Gothic","\B098\B214\C2A4\D018\C5B4","Nanum Square","Apple SD Gothic Neo","Malgun Gothic","\B9D1\C740\ACE0\B515",dotum,"\B3CB\C6C0",sans-serif;
+                                                font-size: 15px;
+                                                color: #a5a5a5;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                .btn-keep-wrap:hover {
+                                    border: 1px solid #333;
+                                }
+
+                            }
+                            
+                            .btn-cart-wrap {
+                                display: inline-block;
+                                width: 50%;
+                                border: 1px solid #03c75a;
+                                border-radius: 5px;
+                                background-color: #fff;
+                                
+                                .btn-cart {
+                                    position: relative;
+                                    height: 50px;
+                                    display: block;
+                                }
+
+                                .btn-cart:before {
+                                    position: absolute;
+                                    top: 15px;
+                                    left: 60px;
+                                    background-image: url(../../../public/img/shop/spText_svg-1.svg);
+                                    background-size: 487px 412px;
+                                    background-position: -96px -156px;
+                                    width: 81px;
+                                    height: 20px;
+                                    content: "";
+                                }
+                            }
+
+                            .btn-cart-wrap:hover {
+                                border: 1px solid #333;
+                            }
+                        }
+
+                        .tip {
+                            font-size: 12px;
+                            margin-top: 15px;
+
+                                .tip-icon {
+                                    display: inline-block;
+                                    width: 14px;
+                                    height: 14px;
+                                    margin-right: 4px;
+                                    content: "";
+                                    background-image: url(../../../public/img/shop/spIcon_png.png);
+                                    background-size: 217px 130px;
+                                    background-position: -158px -67px;
+                                }
+
+                                .tip-text {
+                                    color: #999;
+                                }
+
+                            .tip-right {
+
+                                .tip-text {
+                                    margin-left: 5px;
+                                    color: #00c73c;
+                                    font-weight: bold;
+                                }
+
+                                .tip-text:after {
+                                    width: 5px;
+                                    height: 7px;
+                                    display: inline-block;
+                                    margin-left: 4px;
+                                    vertical-align: middle;
+                                    content: "";
+                                    background-image: url(../../../public/img/shop/spIcon_png.png);
+                                    background-size: 217px 130px;
+                                    background-position: -206px -67px;
+                                }
+                            }
+                        }
+                    }
+
+                }
+
+                .product-info-bottom {
+                    width: 100%;
+
+                    .top-review {
+                        padding: 30px 0 2px;
+                        border: solid #ededed;
+                        border-width: 0 1px 1px 1px;
+                        
+                        .top-review-text-wrap {
+                            font-size: 12px;
+                            font-weight: bold;
+                            padding: 0 40px;
+                            
+                            .top-review-left {
+                                
+                                .top-review-text {
+                                    color: #313131;
+                                }
+                                
+                                .top-review-number {
+                                    font-size: 14px;
+                                    color: #6b90dc;
+                                }
+                            }
+
+                            .top-review-right {
+                                
+                                
+                                button {
+                                    border: 0;
+                                    background: transparent;
+                                    vertical-align: top;
+
+                                }
+                                
+                                .moreview-btn {
+                                    color: #8f8f8f;
+
+                                }
+
+                                .leftbtn {
+                                    width: 19px;
+                                    height: 19px;
+                                    background-image: url(../../../public/img/shop/spArrow_svg-1.svg);
+                                    background-size: 228px 227px;
+                                    background-position: -4px -132px;
+                                }
+
+                                .rightbtn {
+                                    width: 19px;
+                                    height: 19px;
+                                    background-image: url(../../../public/img/shop/spArrow_svg-1.svg);
+                                    background-size: 228px 227px;
+                                    background-position: -31px -132px;
+                                    margin-left: -1px;
+                                }
+                            }
+
+                        }
+
+                        .top-review-list-wrap {
+                            margin-top: 10px;
+
+                            .review-list:nth-child(1){
+                                a{
+                                    border-top: 0px solid #f2f2f2;
+                                }
+                            }
+                            .review-list:nth-child(2){
+                                a{
+                                    border-top: 0px solid #f2f2f2;
+                                }
+                            }
+
+                            .review-list { // li
+                                flex: 0 0 50%;
+                                background-color: #ffffff;
+                                padding: 0 39px;
+                                border-right: 1px solid #f2f2f2;
+
+                                .review-list-link {
+                                    border-top: 1px solid #f2f2f2;
+                                    padding: 15px 0 ;
+
+                                    .review-list-left {
+                                        display: inline-block;
+
+                                        .review-info-wrap {
+
+                                            .score-wrap {
+                                                height: 14px;
+
+                                                .score {
+                                                    position: relative;
+                                                    display: inline-block;
+                                                    width: 74px;
+                                                    height: 14px;
+                                                    vertical-align: top;
+                                                    background-image: url(../../../public/img/shop/spIcon_svg-1.svg);
+                                                    background-size: 731px 703px;
+                                                    background-position: -601px -79px;
+
+                                                    .under {
+                                                        display: inline-block;
+                                                        position: absolute;
+                                                        width: 74px;
+                                                        height: 14px;
+                                                        background-image: url(../../../public/img/shop/spIcon_svg-1.svg);
+                                                        background-size: 731px 703px;
+                                                        background-position: -601px -101px;
+                                                    }
+
+                                                    .score1 {
+                                                        width: 20%;
+                                                    }
+                                                    .score2 {
+                                                        width: 40%;
+                                                    }
+                                                    .score3 {
+                                                        width: 60%;
+                                                    }
+                                                    .score4 {
+                                                        width: 80%;
+                                                    }
+                                                    .score5 {
+                                                        width: 100%;
+                                                    }
+                                                }
+
+                                                .number {
+                                                    display: inline-block;
+                                                    position: absolute;
+                                                    top: -1px;
+                                                    right: -12px;
+                                                    color: #333;
+                                                    font-weight: bold;
+                                                    font-size: 14px;
+                                                    line-height: 15px;
+                                                    color: #000;
+                                                    font-family: tahoma,helvetica,"\B098\B214\ACE0\B515","Nanum Gothic","\B098\B214\C2A4\D018\C5B4","Nanum Square","Apple SD Gothic Neo","Malgun Gothic","\B9D1\C740\ACE0\B515",dotum,"\B3CB\C6C0",sans-serif;
+                                                }
+                                            }
+
+                                            .review-info {
+                                                display: block;
+                                                overflow: hidden;
+                                                -o-text-overflow: ellipsis;
+                                                text-overflow: ellipsis;
+                                                line-height: 16px;
+                                                white-space: nowrap;
+                                                display: inline-block;
+                                                position: relative;
+                                                max-width: 100%;
+                                                margin-top: 6px;
+                                                padding-right: 40px;
+                                                font-size: 12px;
+                                                color: #aaa;
+
+                                                .username {
+                                                }
+                                                
+                                                .review-date {
+                                                    
+                                                }
+                                                
+                                                .selected-option {
+
+                                                }
+
+                                                .circle {
+                                                    display: inline-block;
+                                                    width: 2px;
+                                                    height: 2px;
+                                                    margin: 7px 7px;
+                                                    background-color: #d8d8d8;
+                                                    vertical-align: top;
+                                                    content: "";
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    .review-list-right {
+                                        display: inline-block;
+                                        overflow: hidden;
+                                        width: 80px;
+                                        height: 80px;
+
+                                        img {
+                                            width: 100%;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    .quick-menu {
+                        border-bottom: 1px solid #3d3d4f;
+                        margin-top: 40px;
+                        margin-bottom: 29px;
+                        color: #333;
+                        font-size: 13px;
+                        font-weight: 600;
+
+                        .menu {
+                            position: relative;
+                            flex: 0 0 25%;
+                            height: 42px;
+                            text-align: center;
+                            line-height: 43px;
+                            background-color: #f3f5f7;
+                        }
+
+                        .selected {
+                            background-color: #3d3d4f;
+                            color: #fff;
+                        }
+
+                        .menu:not(:first-child):before {
+                            position: absolute;
+                            top: 50%;
+                            left: 0;
+                            width: 1px;
+                            height: 18px;
+                            margin-top: -9px;
+                            background-color: #dbdddf;
+                            content: "";
+                        }
+
+                        .menu-number {
+                        }
+                    }
+
+                    .scroll-fixed-active {
+                        display: none;
+                    }
+
+                    .quick-menu-scroll {
+                        min-width: 1320px;
+                        position: fixed;
+                        top: 0;
+                        right: 0;
+                        left: 0;
+                        z-index: 10000;
+                        border-bottom: 1px solid #3a3b4e;
+                        background-color: #fff;
+                        
+                        .wrap {
+                            position: relative;
+                            width: 1020px;
+                            margin: 0 auto;
+
+                            .product-info {
+                                position: relative;
+                                height: 50px;
+                                margin-top: 20px;
+                                padding-left: 65px;
+
+                                .img-wrap {
+                                    position: absolute;
+                                    overflow: hidden;
+                                    top: 0;
+                                    left: 0;
+                                    width: 50px;
+                                    height: 50px;
+                                    border: 1px solid rgba(0,0,0,.04);
+                                    box-sizing: content-box;
+
+                                    img {
+                                        width: 100%;
+                                    }
+                                }
+
+                                .product-name {
+                                    color: #333;
+                                    font-weight: bold;
+                                }
+    
+                                .product-price {
+                                    font-family: tahoma,helvetica,"\B098\B214\ACE0\B515","Nanum Gothic","\B098\B214\C2A4\D018\C5B4","Nanum Square","Apple SD Gothic Neo","Malgun Gothic","\B9D1\C740\ACE0\B515",dotum,"\B3CB\C6C0",sans-serif;
+                                    
+                                    .sale-price {
+                                        font-size: 16px;
+                                        font-weight: bold;
+                                        color: #6b90dc;
+                                    }
+    
+                                    .sale-unit {
+                                        font-size: 14px;
+                                        font-weight: 500;
+                                        color: #6b90dc;
+                                        margin-bottom: 2px;
+                                    }
+                                    
+                                    .origin-price {
+                                        margin-left: 5px;
+                                        font-size: 14px;
+                                        color: #8f8f8f;
+
+                                        .origin-unit {
+                                            font-size: 13px;
+                                            color: #8f8f8f;
+                                        }
+                                    }
+                                }
+
+                                .btn-buy {
+                                    position: absolute;
+                                    top: 2px;
+                                    right: 0;
+                                    z-index: 0;
+                                    width: 165px;
+                                    height: 44px;
+                                    border-radius: 3px;
+                                    background-color: #03c75a;
+                                    border: 0;
+                                }
+
+                                .btn-buy:before {
+                                    position: absolute;
+                                    top: 50%;
+                                    left: 50%;
+                                    width: 84px;
+                                    height: 22px;
+                                    -webkit-transform: translate(-50%, -50%);
+                                    -ms-transform: translate(-50%, -50%);
+                                    transform: translate(-50%, -50%);
+                                    content: "";
+                                    background-image: url(../../../public/img/shop/spText_svg-1.svg);
+                                    background-size: 487px 412px;
+                                    background-position: -236px -125px;
+                                }
+
+                                .btn-buy:hover {
+                                    background-color: #00af4f;
+                                }
+                            }
+
+                            .fixed-quick-menu {
+                                margin-top: 20px;
+                                color: #333;
+                                font-size: 13px;
+                                font-weight: 600;
+                                background-color: #f3f5f7;
+        
+                                .selected {
+                                    background-color: #3d3d4f;
+                                    color: #fff;
+                                }
+
+                                .menu {
+                                    position: relative;
+                                    flex: 0 0 25%;
+                                    height: 42px;
+                                    text-align: center;
+                                    line-height: 43px;
+                                }
+        
+                                .menu:not(:first-child):before {
+                                    position: absolute;
+                                    top: 50%;
+                                    left: 0;
+                                    width: 1px;
+                                    height: 18px;
+                                    margin-top: -9px;
+                                    background-color: #dbdddf;
+                                    content: "";
+                                }
+        
+                                .menu-number {
+                                }
+                            }
+                        }
+                    }
+
+                    .caution {
+                        background-color: #fff8f8;
+                        color: #333;
+                        text-align: center;
+                        padding: 22px 16px;
+                        margin-bottom: 24px;
+                        
+
+                        .caution-top-wrap {
+                            margin-bottom: 12px;
+                            
+                            .caution-top {
+                                display: inline-block;
+                                position: relative;
+
+                                .caution-icon {
+                                    position: absolute;
+                                    top: 2px;
+                                    left: -23px;
+                                    width: 19px;
+                                    height: 19px;
+                                    content: "";
+                                    background-image: url(../../../public/img/shop/spIcon_svg-2.svg);
+                                    background-size: 731px 703px;
+                                    background-position: -684px -243px;
+                                }
+    
+                                .caution-title {
+                                    color: #ec000e;
+                                    font-size: 16px;
+                                    font-weight: bold;
+                                }
+                            }
+                        }
+
+                        .caution-bottom {
+                            font-size: 13px;
+                            font-weight: bold;
+
+                            .text2 {
+                                background-color: #fff4ac;
+                            }
+
+                            .text3 {
+                                color: #811515;
+                                text-decoration: underline;
+                            }
+                        }
+                    }
+
+                    .product-pages {
+                        text-align: center;
+                    }
+                }
+            }
+        }
+    }
+}
