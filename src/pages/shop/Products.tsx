@@ -136,7 +136,7 @@ function Products () {
         let copyArray = [...selected];
 
         if(findIndex != -1) {
-            copyArray[findIndex] = {...copyArray[findIndex], count: copyArray[findIndex].count += 1};
+            copyArray[findIndex] = { ...copyArray[findIndex], count: copyArray[findIndex].count += 1};
         }
 
         setSelected([...copyArray])

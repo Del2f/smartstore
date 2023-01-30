@@ -95,19 +95,7 @@
       opacity: 0;
     }
   
-    .drag_or_click {
-      position: absolute;
-      top: 0px;
-      left: 0px;
-      right: 0px;
-      bottom: 0px;
-      justify-content: space-between;
-      background-color: transparent;
 
-      &:hover {
-        // background-color: #c8c8c8;
-      }
-    }
   
     .preview_wrapper {
       position: relative;
@@ -124,10 +112,31 @@
         width: 300px;
         height: 300px;
         
+        .drag_or_click {
+          position: absolute;
+          top: 0px;
+          left: 0px;
+          right: 0px;
+          bottom: 0px;
+          background-color: transparent;
+
+          display: flex;
+          justify-content: center;
+          align-items: center;
+    
+          &:hover {
+            // background-color: #c8c8c8;
+          }
+        }
+
         .ImagePreview {
+          position: absolute;
           width: 270px;
           height: 270px;
           z-index: 2;
+          
+          img {
+          }
         }
   
         &::-webkit-scrollbar {

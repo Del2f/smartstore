@@ -10,6 +10,7 @@ import Intro from "./pages/Intro";
 import Notfound from "./pages/Notfound";
 import Shop from "./pages/shop/Shop";
 import UserPage from "./pages/user/Userpage";
+import ScrollToTop from './components/ScrollToTop';
 
 
 import { CookiesProvider } from 'react-cookie';
@@ -33,7 +34,8 @@ root.render(
     <BrowserRouter basename="smartstore">
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
-            <Routes>  
+            <ScrollToTop />
+            <Routes>
               <Route path="/" element={<Intro />} />
               <Route path="/commerce/*" element={<Commerce />} />
               <Route path="/home/*" element={<App />} />

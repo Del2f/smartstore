@@ -4,7 +4,7 @@
     import "ag-grid-community/dist/styles/ag-theme-alpine.css";
     import "./TableProductRegi.scss";
     import $ from 'jquery';
-
+import { listenerCancelled } from "@reduxjs/toolkit/dist/listenerMiddleware/exceptions";
 
     type Props = {
     optionResult?: any;
@@ -20,6 +20,18 @@
     function TableProductRegi(props: Props) {
       const [gridApi, setGridApi] = useState<any>(null);
       const rowData = [...props.optionResult];
+      
+      // useEffect(() => {
+      //   console.log('useEffect rowData')
+  
+      //   const stockModify = rowData.map((list:any) => {
+      //     list.optionStock > 0 ? list.optionStatus = "판매" : list.optionStatus = "품절"
+      //     return list
+      //   } )
+  
+      //   console.log(stockModify)
+      //   props.setOptionResult(stockModify)
+      // },[] )
 
       const [selectedRows, setSelectedRows] = useState<any>([]);
       const selectedID = selectedRows.map((list:any) => {
@@ -27,13 +39,13 @@
       })
 
       const [columnDefs] = useState([
-          { width: 100, checkboxSelection: true, headerCheckboxSelection: true, resizable: true },
-          { field: "optionValue", headerName: "옵션명", width: 330, editable: true, resizable: true },
-          { field: "optionPrice", headerName: "옵션가", width: 250, editable: true, resizable: true },
-          { field: "optionStock",headerName: "재고수량", width: 250, editable: true, resizable: true },
-          { field: "optionStatus", headerName: "판매상태", width: 250, resizable: true },
-          { field: "optionUse", headerName: "사용여부", width: 250, editable: true, resizable: true },
-          { field: "deleteBtn", headerName: "삭제", width: 200, cellRendererFramework:() => <div className="delete-btn-wrap"><button className="delete-btn flex flex-align-center" data-action="delete">삭제</button></div> },
+          { width: 50, checkboxSelection: true, headerCheckboxSelection: true, resizable: false },
+          { field: "optionValue", headerName: "옵션명", width: 250, editable: true, resizable: true },
+          { field: "optionPrice", headerName: "옵션가", width: 200, editable: true, resizable: true },
+          { field: "optionStock",headerName: "재고수량", width: 200, editable: true, resizable: true },
+          { field: "optionStatus", headerName: "판매상태", width: 200, resizable: true },
+          { field: "optionUse", headerName: "사용여부", width: 200, editable: true, resizable: true },
+          { field: "deleteBtn", headerName: "삭제", width: 200, resizable: false, cellRendererFramework:() => <div className="delete-btn-wrap"><button className="delete-btn flex flex-align-center" data-action="delete">삭제</button></div> },
       ]);
 
     const [ optionPriceValue, setOptionPriceValue ] = useState(0);
@@ -42,18 +54,27 @@
     const [ optionUseValue, setOptionUseValue ] = useState(true);
 
     const onCellEditingStarted = (params: any) => {
-        const newInput = rowData.map((list:any) => list.optionValue )
-        props.setOptionValue(newInput);
-    };
-
-    const onCellEditingStopped = (params: any) => {
-      console.log('편집종료')
       const copy = [...rowData]
 
-      const copy2 = copy.map((list:any) => 
-        list.optionStock > 0 ? {...list, optionStatus: "판매" } : {...list, optionStatus: "품절"}
-      )
-      props.setOptionResult(copy2)
+        const newInput = copy.map((list:any) => list.optionValue )
+        // console.log(newInput)
+        // props.setOptionValue(newInput);
+      // props.setOptionResult(copy2)
+
+    };
+
+
+
+    const onCellEditingStopped = (params: any) => {
+      const copy = [...rowData]
+      
+      const test = copy.map((list:any) =>
+      list.optionStock > 0
+      ? { ...list, optionStatus: "판매" }
+      : {...list, optionStatus: "품절" });
+
+      props.setOptionResult(test)
+
     };
     
 
@@ -202,14 +223,12 @@
           columnDefs={columnDefs}
           rowSelection={"multiple"}
           rowMultiSelectWithClick={true}
-          onCellEditingStarted={onCellEditingStarted}
+          // onCellEditingStarted={onCellEditingStarted}
           onCellEditingStopped={onCellEditingStopped}
           onSelectionChanged={onSelectionChanged}
           onCellClicked={(params:any) => {
-            console.log(params)
             if (params.column.colId === "deleteBtn"){
               let action = params.event.target.dataset.action;
-              console.log(action)
               if(action === "delete"){
                 const selectedData = [params.node.data];
                 const remove = rowData.filter((list:any, index:any) => (!selectedData.includes(list)));

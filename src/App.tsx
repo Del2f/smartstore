@@ -8,8 +8,8 @@ import { selectCurrentUser } from './store/userSlice';
 import { menuSlice, showMenu } from './store/menuSlice';
 
 import Home from "./pages/Home";
-import Product from "./pages/Product";
-import ProductRegister from "./pages/ProductRegister";
+import Product from "./pages/adminPage/Product";
+import ProductRegister from "./pages/adminPage/ProductRegister";
 import Accordion from "./components/admin/Accordion";
 
 import $ from 'jquery';
@@ -476,6 +476,7 @@ function App() {
         </div>
         <Routes>
           <Route path="/" element={<Home Showmainmenu={showmainmenu}/>}/>
+          <Route path="/product/:id" element={<ProductRegister />}/>
           <Route path="/productregister" element={<ProductRegister />}/>
           <Route path="/product" element={<Product />}/>
           {/* <Route path="*" element={<Notfound/>}/> */}
