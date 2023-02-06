@@ -1,7 +1,7 @@
+import axios from "../../api/axios";
 import { useState, useRef, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import axios from "../../api/axios";
 import { selectShowMenu } from '../../store/menuSlice';
 import TableProduct from '../../components/admin/TableProductRegi';
 import "./ProductRegister.scss";
@@ -10,7 +10,24 @@ import ImageProductRegi from "../../components/admin/ImageProductRegi";
 import SubImageProductRegi from "../../components/admin/SubImageProductRegi";
 import DetailImageProductRegi from "../../components/admin/DetailImageProductRegi";
 
+import { useCookies } from "react-cookie";
+
+
 function ProductRegister() {
+
+    const [cookies, setCookie, removeCookie] = useCookies(['jwt']);
+
+    // useEffect(() => {
+    //     const userObjectID = async (params?: any) => {
+    //         try {
+    //             const db = await axios.get( "/smartstore/home/productregister")
+    //             console.log(db)
+    //           } catch (err) {
+    //             console.log(err)
+    //           }
+    //     };
+    //     userObjectID();
+    // })
 
     const menu = useSelector(selectShowMenu);
     const navigate = useNavigate();
@@ -165,8 +182,6 @@ function ProductRegister() {
                 setDelivery('');
             }
         },[id])
-
-
 
         //오류메시지 상태저장
         const [NameMessage, setNameMessage] = useState<string>('');
@@ -1413,6 +1428,7 @@ function ProductRegister() {
 
         // 상품 데이터
         const productdata = {
+            userID : cookies,
             category1 : selectedCategory01,
             category2 : selectedCategory02,
             category3 : selectedCategory03,
@@ -1426,7 +1442,7 @@ function ProductRegister() {
             delivery: Delivery
         };
 
-        // console.log(productdata)
+        console.log(productdata)
 
         // 등록 버튼
         const handleSubmit = async (e: any) => {
@@ -1708,7 +1724,7 @@ function ProductRegister() {
                                                     <span>메인 사진</span>
                                                 </div>
                                                 <div className="menu-right">
-                                                    <div className="input-item"> {/* 메인사진*/}
+                                                    <div className="input-item"> {/* 메인 사진*/}
                                                         <ImageProductRegi setIsImage={setIsImage} setMainImage={setMainImage} MainImage={MainImage} SubImage={SubImage} DetailImage={DetailImage}/>
                                                     </div>
                                                 </div>
@@ -1730,7 +1746,7 @@ function ProductRegister() {
                                             </div>
                                         </div>
                                     </li>
-                                    <li className="product-register-item"> {/* 상세사진 */}
+                                    <li className="product-register-item"> {/* 상세 사진 */}
                                         <div className="title flex flex-ju-bt flex-align-center" onClick={ () => setDetailDrop((e) => !e) }>
                                             <div className="text-wrap">
                                                 <label className="text">상세 사진</label>

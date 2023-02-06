@@ -30,7 +30,7 @@ import axios from "../../api/axios";
   
     const [max, setMax] = useState<any>(10); // 이미지 최대 개수
     const [uploadedImages, setUploadedImages] = useState<any>([]);
-    console.log(uploadedImages)
+    // console.log(uploadedImages)
 
     const [previewImages, setPreviewImages] = useState<any>([]);
     const uploadBoxRef = useRef<any>();
@@ -60,16 +60,16 @@ import axios from "../../api/axios";
           //     if (result) {
           //       setUploadedImages((state:any) => [...state, result].slice(0, max));
           //       // props.setDetailImage((state:any) => [...state, file].slice(0, max));
-          //       props.setIsDetail(true);
           //     }
           //   };
           //   reader.readAsDataURL(file);
           // }
-
+          
           const URL = await axios.post('/smartstore/home/productregister/img2', formData);
           URL.data.location.DetailImage.map((list:any, index:any) => {
             console.log(list.location)
             props.setDetailImage((data:any) => [...data, list.location]);
+            props.setIsDetail(true);
           })
 
         } catch (error) {

@@ -1,10 +1,75 @@
 .ag-theme-alpine {
   --ag-border-color: #dbdde2;
+  --ag-checkbox-checked-color: #00c73c;
+  // --ag-checkbox-unchecked-color: #00ae34;
   
   .ag-root-wrapper {
     font-family: NanumGothic;
     font-size: 13px;
     
+  }
+
+  .ag-checkbox {
+
+    .ag-input-wrapper:focus-within {
+      box-shadow: none;
+    }
+  }
+
+  .ag-checked::after {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.ag-root-wrapper {
+  border: 1px solid #d3d8e1;
+
+  .ag-cell {
+      color: #555;
+  }
+  
+  .ag-row-selected:before { // 선택된 백그라운드 hover 컬러
+      background-image: none;
+  }
+
+  .ag-cell-normal-height {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  }
+
+  .ag-selection-checkbox {
+      margin: 0px;
+  }
+
+  .ag-checkbox-input-wrapper {
+      width: 20px;
+      height: 20px;
+  }
+  
+  .ag-checkbox-input-wrapper:focus-within {
+      box-shadow: none;
+  }
+  
+  .ag-checkbox-input-wrapper:after {
+      content: "";
+      outline: none;
+      width: 20px;
+      height: 20px;
+      background: url(../../../public/img/sp_icon_pc.png) no-repeat;
+      background-position: -30px -530px;
+  }
+
+  .ag-checked:after{
+      content: "";
+      width: 20px;
+      height: 20px;
+      background: url(../../../public/img/sp_icon_pc.png) no-repeat;
+      background-position: -0px -530px;
+  }
+
+  .ag-checkbox-input {
   }
 }
 
@@ -16,6 +81,73 @@
   .product-top {
     font-size: 12px;
     margin-bottom: 5px;
+
+    .unselectedErr {
+      color: red;
+      margin-left: 10px;
+    }
+
+    .delete-agree {
+      position: absolute;
+      display: none;
+      padding: 20px;
+      border: 1px solid #dbdde2;
+      border-radius: 10px;
+      z-index: 5;
+      margin-top: 10px;
+      margin-left: 10px;
+      width: 300px;
+      height: 200px;
+      background-color: #fff;
+
+      .err {
+        color: red;
+        display: block;
+        margin-bottom: 10px;
+      }
+
+
+
+      .input {
+        outline: transparent;
+        width: 100%;
+        border: none;
+        font-size: 13px;
+        line-height: 34px;
+        color: #000;
+        letter-spacing: -.2px;
+      }
+
+      #input-inner {
+        position: relative;
+        padding: 1px 15px;
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        margin-top: 10px;
+        margin-bottom: 10px;
+        margin-right: 8px;
+        background-color: #fff;
+      }
+
+      #input-inner:hover {
+        border: 1px solid rgb(117, 117, 117);
+      }
+  
+      #input-inner-active {
+        position: relative;
+        padding: 1px 15px;
+        border: 1px solid rgba(0,0,0,.15);
+        margin-top: 10px;
+        margin-bottom: 10px;
+        margin-right: 8px;
+        background-color: #fff;
+        border: 1px solid #03c75a;
+        z-index: 20;
+      }
+    }
+
+    .show {
+      display: block;
+    }
   }
 
   .delete-btn {

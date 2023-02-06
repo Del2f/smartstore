@@ -1,19 +1,23 @@
 import axios from "../api/axios";
 import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useCookies } from "react-cookie";
 import { loginUser } from '../store/userSlice';
+import { SET_TOKEN, selectToken } from '../store/authSlice';
+
 import $ from 'jquery';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Login.scss";
-    
 
     function Login() {
 
         const cookies = useCookies();
         const dispatch = useDispatch();
-        const navigate = useNavigate(); // 다른 페이지로 이동히게 해주는 Hook.
+        const navigate = useNavigate(); // 다른 페이지로 이동하게 해주는 Hook.
+        const token = useSelector(selectToken)
+        console.log(token)
+
         const [Id, setId] = useState("");
         const [Password, setPassword] = useState("");
         
@@ -52,7 +56,9 @@ import "./Login.scss";
                         setErrorMessage('아이디 혹은 비밀번호가 틀렸습니다.')
                         setIsError(false)
                     } else if (res.data.status == true){
+                        console.log(res.data)
                         dispatch(loginUser( res.data.user ));
+                        dispatch(SET_TOKEN( res.data.token ));
                         navigate("/home");
                     }
                 })

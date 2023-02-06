@@ -9,7 +9,7 @@ function Home () {
                 <Swiper_Shop/>
             </div>
         </div>
-        <div className="middle-cover"></div>
+        {/* <div className="middle-cover"></div> */}
         </>
     )
 }

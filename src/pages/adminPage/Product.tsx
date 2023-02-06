@@ -1,5 +1,6 @@
 // import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { useState } from 'react';
 
 import TableProductList from "../../components/admin/TableProductList";
 
@@ -7,6 +8,7 @@ import "./Product.scss";
 
     function Product() {
 
+        const [productTotal, setProductTotal] = useState(0);
 
     return (
         <>
@@ -22,7 +24,7 @@ import "./Product.scss";
                         <div className="panel-heading">
                             <div className="pull-left">
                                 <h3 className="panel-title">상품목록 (총&nbsp;
-                                    <span className="text-primary">0</span>
+                                    <span className="text-primary">{productTotal}</span>
                                     개)
                                 </h3>
                             </div>
@@ -30,7 +32,7 @@ import "./Product.scss";
                         <div className="panel-body">
                             <div className="btn-list"></div>
                             <div className="product-list">
-                                <TableProductList></TableProductList>
+                                <TableProductList setProductTotal={setProductTotal}></TableProductList>
                             </div>
                         </div>
                         <div className="panel-footer"></div>

@@ -1,9 +1,9 @@
+import axios from "../../api/axios";
 import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import "bootstrap/dist/css/bootstrap.min.css";
-import axios from "axios";
 import { loginUser } from '../../store/userSlice';
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./Login.scss";
 // import $ from 'jquery';
 // import Signup from '../Signup';
@@ -17,8 +17,8 @@ import "./Login.scss";
         const [Password, setPassword] = useState("");
 
         const idinput = useRef<any>(null);
-
         const pwinput = useRef<any>(null);
+
         const [IDDeleteIconShow, setIDDeleteIconShow] = useState(false);
         const [PWDeleteIconShow, setPWDeleteIconShow] = useState(false);
         
@@ -64,14 +64,16 @@ import "./Login.scss";
         };
 
         // 로그인 버튼
-        const handleSubmit = async (e : any) => {
+        const handleSubmit = async (e: any) => {
             e.preventDefault();
+
             if (!idinput.current.value) {
                 console.log('아이디공백')
                 setErrorMessage('아이디를 입력 해주세요')
                 setIsError(false)
                 return
             }
+
             if (!pwinput.current.value) {
                 console.log('비밀번호공백')
                 setErrorMessage('비밀번호를 입력 해주세요')
@@ -80,8 +82,8 @@ import "./Login.scss";
             }
 
             try {
-            const data = await axios.post( "/smartstore/user/login", userdata, { withCredentials: true })
-                .then((res) => {
+            const data = await axios.post("/smartstore/user/login", userdata, { withCredentials: true })
+                .then((res: any) => {
                     if (res.data.error == '아이디및비밀번호오류'){
                         setErrorMessage('아이디 혹은 비밀번호가 틀렸습니다.')
                         setIsError(false)

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux"
 
 // import styled from "styled-components";
@@ -18,6 +18,7 @@ import "../components/flex.css";
 import "./Home.scss";
 
 import { Gift, ArrowClockwise, Truck, ExclamationCircle } from "react-bootstrap-icons";
+import { selectToken } from '../store/authSlice';
 import { selectShowMenu } from '../store/menuSlice';
 import { selectCurrentUser } from '../store/userSlice';
 
@@ -29,6 +30,10 @@ function Home(props : Props) {
 
   const menu = useSelector(selectShowMenu);
   const user = useSelector(selectCurrentUser);
+  const token = useSelector(selectToken)
+  // console.log(menu)
+  // console.log(user)
+  console.log(token)
 
   const [order, setOrder] = useState([3,0,0,1,0,0,0,1,0,1,0,0,0,0,1,2,0,0,0,0,0,0,1,0,0,0,1,1,0,0]);
   const [customerstatus, setCustomerstatus] = useState([0,0,0,1,0,0,0,1,0,1,0,0,0,0,1,2,0,0,0,0,0,0,1,0]);

@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
+import { selectToken } from './store/authSlice';
 import { selectCurrentUser } from './store/userSlice';
 import { menuSlice, showMenu } from './store/menuSlice';
 
@@ -31,25 +32,6 @@ function App() {
     currentPath = location.pathname;
   }, [location]);
 
-  // useEffect(() => {
-  //   const verifyUser = async () => {
-  //     if (!cookies.jwt) { // 토큰이 없으면 로그인 페이지로 이동.
-  //       navigate("/commerce/login");
-  //     } else {
-  //       const { data } = await axios.post("/smartstore", { withCredentials: true });
-  //       console.log(data)
-  //       if (!data.status) {
-  //         removeCookie("jwt");
-  //         // navigate("/commerce/login");
-  //       } else {
-  //         console.log(`Hi ${data.user} `);
-  //         console.log(data);
-  //       }
-  //     }
-  //   };
-  //   verifyUser();
-  // }, [cookies, navigate, removeCookie]);
-
   // 유저의 로그인 상태를 확인.
   useEffect(() => {
     const verifyUser = async () => {
@@ -66,6 +48,7 @@ function App() {
                 navigate("/commerce/login");
               } else {
                 console.log(`Hi ${res.data.user}`);
+                // console.log(res.data);
               }
             })
       } catch (errors) {

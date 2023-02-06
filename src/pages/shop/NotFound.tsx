@@ -8,7 +8,7 @@ function NotFound () {
                 <h4>구현되지 않은 페이지 입니다.</h4>
             </div>
         </div>
-        <div className="middle-cover"></div>
+        {/* <div className="middle-cover"></div> */}
         </>
     )
 }

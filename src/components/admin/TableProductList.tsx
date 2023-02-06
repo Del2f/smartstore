@@ -1,23 +1,23 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import axios from "../../api/axios";
+
+import { useCallback, useRef, useEffect, useState, Dispatch, SetStateAction } from 'react';
 import { Link } from "react-router-dom";
 import { AgGridReact } from 'ag-grid-react';
-import axios from "../../api/axios";
+
+import { useSelector } from 'react-redux';
+import { selectToken } from '../../store/authSlice';
 
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import './TableProductList.scss';
 
-// var checkboxSelection = function (params: any) {
-//   // we put checkbox on the name if we are not doing grouping
-//   return params.columnApi.getRowGroupColumns().length === 0;
-// };
+type Props = {
+  setProductTotal?: Dispatch<SetStateAction<number>>;
+}
 
-// var headerCheckboxSelection = function (params: any) {
-//   // we put checkbox on the name if we are not doing grouping
-//   return params.columnApi.getRowGroupColumns().length === 0;
-// };
+function TableProductList(props: Props){
 
-function TableProductList(){
+  const token = useSelector(selectToken)
 
   const gridRef = useRef<any>();
 
@@ -25,7 +25,6 @@ function TableProductList(){
   // const gridStyle = useMemo(() => ({ height: '100%', width: '100%' }), []);
 
   const [rowData, setRowData] = useState();
-  const [modifyURL, setModifyURL] = useState<any>();
   const [selectedRows, setSelectedRows] = useState<any>([]);
   console.log(selectedRows)
 
@@ -45,7 +44,7 @@ function TableProductList(){
       )
     }
     },
-    { field: "_id", headerName: "id", width: 200, resizable: true },
+    { field: "_id", headerName: "상품코드", width: 200, resizable: true },
     { field: "name", headerName: "상품명", width: 200, resizable: true },
     { field: "price", headerName: "가격", width: 200, resizable: true },
     // { field: "option", headerName: "옵션", width: 200, resizable: true },
@@ -56,54 +55,20 @@ function TableProductList(){
     { field: "category4.name", headerName: "카테고리4", width: 200, resizable: true },
 ]);
 
-  // const autoGroupColumnDef = useMemo(() => {
-  //   return {
-  //     headerName: 'Group',
-  //     minWidth: 170,
-  //     field: 'athlete',
-  //     valueGetter: (params: any) => {
-  //       if (params.node.group) {
-  //         return params.node.key;
-  //       } else {
-  //         return params.data[params.colDef.field];
-  //       }
-  //     },
-  //     headerCheckboxSelection: true,
-  //     cellRenderer: 'agGroupCellRenderer',
-  //     cellRendererParams: {
-  //       checkbox: true,
-  //     },
-  //   };
-  // }, []);
-
-  // const defaultColDef = useMemo(() => {
-  //   return {
-  //     editable: true,
-  //     enableRowGroup: true,
-  //     enablePivot: true,
-  //     enableValue: true,
-  //     sortable: true,
-  //     resizable: true,
-  //     filter: true,
-  //     flex: 1,
-  //     minWidth: 100,
-  //   };
-  // }, []);
-
   const paginationNumberFormatter = useCallback((params: any) => {
     return '[' + params.value.toLocaleString() + ']';
   }, []);
 
   const onGridReady = async (params?: any) => {
-    // 
     try {
-        const db = await axios.get( "/smartstore/home/product")
-        console.log(db)
+        const db = await axios.post( "/smartstore/home/product", token, { withCredentials: true })
+        console.log(db.data.productList)
         setRowData(db.data.productList)
+        props.setProductTotal && props.setProductTotal(db.data.productList.length)
       } catch (err) {
-          console.log(err)
+        console.log(err)
       }
-  };
+    };
 
   // const onFirstDataRendered = useCallback((params: any) => {
   //   gridRef.current.api.paginationGoToPage(4);
@@ -118,28 +83,109 @@ function TableProductList(){
     setSelectedRows(gridRef.current.api.getSelectedRows());
   }
 
+  const [inputClickNumber, setInputClickNumber] = useState(0);
+  const [inputClick, setInputClick] = useState(false);
+
+  // 선택삭제 버튼을 눌렀을때
+  const selectedDelete = (e: any) => {
+    if(!selectedRows[0]){
+      setUnselectedErr('삭제할 상품을 선택 해주세요.')
+    } else {
+      setUnselectedErr('')
+      setDeleteAgreeModal(true);
+    }
+  }
+
+  // 선택삭제 모달안에 input의 border-active 컨트롤
+  useEffect(() => {
+
+    const clickOutside = (e : any) => {
+
+    // 모달이 열려 있고 모달의 바깥쪽을 눌렀을 때 창 닫기
+    // useRef의 current 값은 선택한 DOM을 말함.
+    // 드롭메뉴를 제외한 나머지 공간을 클릭하면 닫히게된다.
+      if (inputClick && dropmenu.current && dropmenu.current.contains(e.target)) {
+          setInputClick(false);
+      } 
+    };
+
+    document.addEventListener("mousedown", clickOutside);
+
+    return () => {
+    // Cleanup the event listener
+    document.removeEventListener("mousedown", clickOutside);
+    };
+
+}, [inputClick]);
+
+  const [deleteAgreeModal, setDeleteAgreeModal] = useState(false);
+  const [deleteAgreeValue, setDeleteAgreeValue] = useState('');
+  const [deleteAgreeErr, setDeleteAgreeErr] = useState('');
+  const [unselectedErr, setUnselectedErr] = useState('');
+  const dropmenu = useRef<HTMLDivElement>(null);
+
   // 삭제 버튼
   const deleteBtn = async (e: any) => {
-    console.log('삭제 버튼')
+
+    if(deleteAgreeValue !== '삭제'){
+      setDeleteAgreeErr('정확히 입력 해주세요.')
+      return
+    } 
+
     await selectedRows.forEach((list:any, index:any) => {
       try {
         axios.post(`/smartstore/home/product/${list._id}/delete`, { withCredentials: true })
+        setDeleteAgreeModal(false);
+        window.location.reload();
       } catch (errors) {
         console.log(errors)
       }
     })
-    // const db = await axios.get( "/smartstore/home/product")
-    // console.log(db)
-    // setRowData(db.data.productList)
   };
+  
+  const deleteOnChange = (e: any) => {
+    setDeleteAgreeValue(e.target.value);
+    setDeleteAgreeErr('');
+  }
+
+        // 모달이 열려 있고 모달의 바깥쪽을 눌렀을 때 창 닫기
+        useEffect(() => {
+          const clickOutside = (e : any) => {
+    
+            // useRef의 current 값은 선택한 DOM을 말함.
+            // 드롭메뉴를 제외한 나머지 공간을 클릭하면 닫히게된다.
+    
+            if (deleteAgreeModal && dropmenu.current && !dropmenu.current.contains(e.target)) {
+              setDeleteAgreeModal(false);
+            } 
+          };
+      
+          document.addEventListener("mousedown", clickOutside);
+      
+          return () => {
+            // Cleanup the event listener
+            document.removeEventListener("mousedown", clickOutside);
+          };
+        }, [deleteAgreeModal]);
 
   return (
     <>
           <div className="product-top flex flex-ju-bt flex-align-center">
             <div className='left'>
-              <button className="delete-btn" onClick={deleteBtn}>
+              <button className="delete-btn" onClick={selectedDelete}>
                 <span>선택삭제</span>
               </button>
+                <span className='unselectedErr'>{unselectedErr}</span>
+              <div className={deleteAgreeModal ? 'delete-agree show' : 'delete-agree'} ref={dropmenu}>
+                <span>상품을 삭제하시겠습니까? <br></br>삭제를 원하신다면 <strong>'삭제'</strong> 를 입력 해주세요.</span>
+                <div id={ inputClick ? "input-inner-active" : "input-inner"}>
+                  <input type="text" placeholder="" className="input" onClick={() => { setInputClick(true) }} onChange={deleteOnChange}/>
+                </div>
+                <span className='err'>{deleteAgreeErr}</span>
+                  <button className="delete-btn" onClick={deleteBtn}>
+                    <span>확인</span>
+                  </button>
+              </div>
             </div>
             <div className='right'>
               <span>페이지 노출 </span>

@@ -1,37 +1,26 @@
     import { useState, useEffect, useRef } from "react";
     import { AgGridReact } from "ag-grid-react";
+
     import "ag-grid-community/dist/styles/ag-grid.css";
     import "ag-grid-community/dist/styles/ag-theme-alpine.css";
     import "./TableProductRegi.scss";
+
     import $ from 'jquery';
-import { listenerCancelled } from "@reduxjs/toolkit/dist/listenerMiddleware/exceptions";
 
     type Props = {
     optionResult?: any;
-    setOptionResult?: any;
     optionSubmit?: any;
     OptionPrice?: any;
+    setOptionResult?: any;
     setOptionValue?: any;
     setOptionPrice?: any;
     gridOptions?: any;
-    setSendedPrice?: any;
     };
 
     function TableProductRegi(props: Props) {
+
       const [gridApi, setGridApi] = useState<any>(null);
       const rowData = [...props.optionResult];
-      
-      // useEffect(() => {
-      //   console.log('useEffect rowData')
-  
-      //   const stockModify = rowData.map((list:any) => {
-      //     list.optionStock > 0 ? list.optionStatus = "판매" : list.optionStatus = "품절"
-      //     return list
-      //   } )
-  
-      //   console.log(stockModify)
-      //   props.setOptionResult(stockModify)
-      // },[] )
 
       const [selectedRows, setSelectedRows] = useState<any>([]);
       const selectedID = selectedRows.map((list:any) => {
@@ -53,18 +42,6 @@ import { listenerCancelled } from "@reduxjs/toolkit/dist/listenerMiddleware/exce
     const [ optionStatusValue, setOptionStatusValue ] = useState('품절');
     const [ optionUseValue, setOptionUseValue ] = useState(true);
 
-    const onCellEditingStarted = (params: any) => {
-      const copy = [...rowData]
-
-        const newInput = copy.map((list:any) => list.optionValue )
-        // console.log(newInput)
-        // props.setOptionValue(newInput);
-      // props.setOptionResult(copy2)
-
-    };
-
-
-
     const onCellEditingStopped = (params: any) => {
       const copy = [...rowData]
       
@@ -77,7 +54,6 @@ import { listenerCancelled } from "@reduxjs/toolkit/dist/listenerMiddleware/exce
 
     };
     
-
     // 2023-01-10 드디어 해결한 옵션.
     // 선택목록 일괄 수정을 눌렀을때 체크된 row만 값이 변하는 코드.
     const onUpdateBtn = () => {
@@ -92,8 +68,7 @@ import { listenerCancelled } from "@reduxjs/toolkit/dist/listenerMiddleware/exce
             optionUse: optionUseValue == true ? "Y" : "N" }
             : {...list}
       )
-            
-        console.log(copy2)
+        // console.log(copy2)
         props.setOptionResult(copy2)
     }
 
