@@ -1,29 +1,33 @@
-// import React from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
-import { useState } from 'react';
+import { useState, useEffect, SetStateAction } from "react";
 
 import TableProductList from "../../components/admin/TableProductList";
 
-import "./Product.scss";
+import "bootstrap/dist/css/bootstrap.min.css";
 
-    function Product() {
+type Props = {
+    setNoticeIcon?: React.Dispatch<SetStateAction<any>>;
+    setNotice?: React.Dispatch<SetStateAction<string>>;
+    setNoticeDate?: React.Dispatch<SetStateAction<string>>;
+};
 
-        const [productTotal, setProductTotal] = useState(0);
+function Product(props: Props) {
+    const [productTotal, setProductTotal] = useState(0);
+
+    useEffect(() => {
+        props.setNoticeIcon && props.setNoticeIcon('');
+        props.setNotice && props.setNotice("상품 조회/수정");
+        props.setNoticeDate && props.setNoticeDate("");
+    },[]);
 
     return (
         <>
-        <div className="seller-content seller-content-product">
-            <div className="Notice">
-                <div className="NoticeWrapper">
-                    <a>상품 조회/수정</a>
-                </div>
-            </div>
-            <div className="SellerSubframe">
+            <div className="SellerSubframe product">
                 <div className="product-list">
                     <div className="panel panel-seller">
                         <div className="panel-heading">
                             <div className="pull-left">
-                                <h3 className="panel-title">상품목록 (총&nbsp;
+                                <h3 className="panel-title">
+                                    상품목록 (총&nbsp;
                                     <span className="text-primary">{productTotal}</span>
                                     개)
                                 </h3>
@@ -39,9 +43,8 @@ import "./Product.scss";
                     </div>
                 </div>
             </div>
-        </div>
         </>
     );
-    }
+}
 
 export default Product;

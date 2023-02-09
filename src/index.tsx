@@ -1,17 +1,16 @@
-import React from 'react';
+// import React from 'react';
 import { Provider } from 'react-redux';
-import { Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import ReactDOM from 'react-dom/client';
 import store from './store/store';
-import './index.css';
 import App from './App';
+import ScrollToTop from './components/ScrollToTop';
+
 import Commerce from "./pages/Commerce";
 import Intro from "./pages/Intro";
 import Notfound from "./pages/Notfound";
 import Shop from "./pages/shop/Shop";
 import UserPage from "./pages/user/Userpage";
-import ScrollToTop from './components/ScrollToTop';
-
 
 import { CookiesProvider } from 'react-cookie';
 import { PersistGate } from 'redux-persist/integration/react';

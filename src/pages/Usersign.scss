@@ -142,6 +142,16 @@
         .input-item {
             margin-top: 8px;
         }
+
+        .input-item-mailauth {
+            display: none;
+            margin-top: 8px;
+        }
+
+        .input-item-mailauth-active {
+            display: block;
+            margin-top: 8px;
+        }
         
         .input-area {
             display: flex;

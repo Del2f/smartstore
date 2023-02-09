@@ -1,4 +1,9 @@
-@import './reset.scss';
+@import './scss/reset.scss';
+@import './scss/Home.scss';
+@import './scss/ProductRegister.scss';
+@import './scss/Product.scss';
+@import './scss/SignupIntro.scss';
+// @import './scss/Category.scss';
 
 $mainColor : #00c73c;
 $mainBackGroundColor : #edf0f5;
@@ -14,6 +19,10 @@ body {
   min-height: 100%;
 }
 
+.show {
+  display: block;
+}
+
 .vertical-middle {
   vertical-align: middle;
 }
@@ -21,59 +30,62 @@ body {
 /* 네이버 아이콘 */
 
 @font-face {
-  font-family : Naver Icons;
-  src : url(../public/img/Naver-Icons.woff2) format("woff2");
+  font-family: Naver Icons;
+  src: url(../public/img/Naver-Icons.woff2) format("woff2");
   /* format("woff2"),url(../public/img//Naver-Icons.woff) */
   /* format("woff"),url(../public/img//Naver-Icons.ttf) */
   /* format("truetype"),url(../public/img//Naver-Icons.svg) */
   /* format("svg"); */
-}  
+}
 
 @font-face {
-  font-family : Naver booking Icons;
-  src : url(../public/img/Naver-booking-Icons.woff2) format("woff2");
+  font-family: Naver booking Icons;
+  src: url(../public/img/Naver-booking-Icons.woff2) format("woff2");
   /* format("woff2"),url(../public/img//Naver-Icons.woff) */
   /* format("woff"),url(../public/img//Naver-Icons.ttf) */
   /* format("truetype"),url(../public/img//Naver-Icons.svg) */
   /* format("svg"); */
-}  
+}
 
 @font-face {
-  font-family : Naver shopping Icons;
-  src : url(../public/img/Naver-shopping-Icons.woff2) format("woff2");
+  font-family: Naver shopping Icons;
+  src: url(../public/img/Naver-shopping-Icons.woff2) format("woff2");
   /* format("woff2"),url(../public/img//Naver-Icons.woff) */
   /* format("woff"),url(../public/img//Naver-Icons.ttf) */
   /* format("truetype"),url(../public/img//Naver-Icons.svg) */
   /* format("svg"); */
-}  
+}
 
 /* 나눔스퀘어 폰트 */
 
 @font-face {
   font-family: 'NanumSquare';
-  font-weight: 300; 
-  font-style: normal; 
+  font-weight: 300;
+  font-style: normal;
   src: url(https://cdn.jsdelivr.net/gh/webfontworld/naver/NanumSquare_acL.woff2) format('woff2');
   font-display: swap;
 }
+
 @font-face {
   font-family: 'NanumSquare';
-  font-weight: 400; 
-  font-style: normal; 
+  font-weight: 400;
+  font-style: normal;
   src: url(https://cdn.jsdelivr.net/gh/webfontworld/naver/NanumSquare_acR.woff2) format('woff2');
   font-display: swap;
 }
+
 @font-face {
   font-family: 'NanumSquare';
-  font-weight: 500; 
-  font-style: normal; 
+  font-weight: 500;
+  font-style: normal;
   src: url(https://cdn.jsdelivr.net/gh/webfontworld/naver/NanumSquare_acB.woff2) format('woff2');
   font-display: swap;
 }
+
 @font-face {
   font-family: 'NanumSquare';
-  font-weight: 700; 
-  font-style: normal; 
+  font-weight: 700;
+  font-style: normal;
   src: url(https://cdn.jsdelivr.net/gh/webfontworld/naver/NanumSquare_acEB.woff2) format('woff2');
   font-display: swap;
 }
@@ -98,7 +110,7 @@ body {
   font-size: 15px !important;
   font-weight: 600 !important;
   position: relative;
-  top:-2px;
+  top: -2px;
 }
 
 /* i 아이콘 */
@@ -128,19 +140,19 @@ body {
     color: white;
     min-width: 1200px;
   }
-  
+
   .nav-left {
     margin-left: 25px;
 
     .naver-logo {
-        width: 60px;
-        height: 25px;
-        content: "";
-        display: inline-block;
-        background: url(../public/img/Naver_Logotype.svg) no-repeat;
-        background-position: 0px 8px;
-        vertical-align: middle;
-        background-size: 52px;
+      width: 60px;
+      height: 25px;
+      content: "";
+      display: inline-block;
+      background: url(../public/img/Naver_Logotype.svg) no-repeat;
+      background-position: 0px 8px;
+      vertical-align: middle;
+      background-size: 52px;
     }
 
     .sell-shop {
@@ -169,7 +181,7 @@ body {
       li a:hover {
         opacity: 0.8;
       }
-      
+
       li a:before {
         position: absolute;
         left: 0;
@@ -182,11 +194,7 @@ body {
       }
     }
   }
-  
-  
-  
-  
-  
+
   .quick-link .icon-beta:after {
     position: relative;
     content: '';
@@ -200,35 +208,35 @@ body {
     background-position: -260px -110px;
     margin: -3px 0 0 3px;
   }
-  
+
   .quick-link .nav-dropdown-menu li {
     padding: 4px 15px;
     color: #767a83;
     font-size: 13px;
     opacity: 1;
   }
-  
+
   .quick-link .nav-dropdown-menu li:first-child {
     /* margin-top: 6px; */
   }
-  
+
   .quick-link .arrow {
     position: relative;
     top: 3px;
     margin-left: 3px;
   }
-  
+
   .quick-link .fn-down2:after {
     content: "\EA3E";
     font-size: 13px;
   }
-  
+
   .quick-link .fn-up2:after {
     content: "\EAC3";
     font-size: 13px;
   }
-  
-  .nav-dropdown-menu{
+
+  .nav-dropdown-menu {
     display: none;
     position: absolute;
     top: 50px;
@@ -238,39 +246,39 @@ body {
     color: #2D3539;
     z-index: 10;
     border-radius: 5px;
-    box-shadow: 0 0 5px 0 rgba(0,0,0,.2)!important;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, .2) !important;
     padding: 10px 0px;
   }
-  
+
   .nav-dropdown-menu-active {
     display: block;
   }
-  
+
   .nav-dropdown-menu li:hover {
     color: $mainColor;
     font-weight: 800;
     background-color: #2D3539;
   }
-  
+
   /* 네비 우측 */
-  
+
   .nav-right {
     margin-right: 25px;
     font-size: 12px;
-  
+
     .nav-user {
       margin: 0px;
       padding: 0px;
     }
-  
+
     li {
       padding: 5px;
     }
-  
+
     li a {
       color: #fff;
     }
-  
+
     .my-info {
       margin-left: 4px;
       padding: 2px 8px;
@@ -281,7 +289,7 @@ body {
       line-height: 15px;
       cursor: pointer;
     }
-  
+
     .icon-alarm {
       position: relative;
       width: 20px;
@@ -292,7 +300,7 @@ body {
       background-position: 97.19626168224299% 18.072289156626507%;
       vertical-align: middle;
     }
-  
+
     .icon-alarm-new {
       position: absolute;
       top: -5px;
@@ -305,7 +313,7 @@ body {
       background-position: 93.69369369369369% 62.5%;
       vertical-align: middle;
     }
-  
+
     .nav-talk-btn {
       margin: 15px 0 14px 5px;
       padding: 4px 7px;
@@ -315,7 +323,7 @@ body {
       font-size: 11px;
       color: #fff;
     }
-  
+
     .talktalk-icon:before {
       content: "\EAB2";
       color: $mainColor;
@@ -325,9 +333,9 @@ body {
       cursor: pointer;
     }
   }
-  
+
   /* 메뉴 프로필 */
-  
+
   .main-menu {
     position: absolute;
     background-color: #445163;
@@ -340,27 +348,27 @@ body {
     margin-left: -210px;
     transition: all .4s;
   }
-  
+
   .main-menu-hide {
     left: 0;
     transition: all .4s;
   }
-  
+
   .main-menu-btn {
     position: absolute;
-      top: 0;
-      left: 210px;
-      display: inline-block;
-      width: 26px;
-      height: 60px;
-      margin-bottom: 0;
-      background-color: #edf0f5;
-      border-right: 1px solid #dbdde2;
-      border-bottom: 1px solid #dbdde2;
-      vertical-align: top;
-      text-align: center;
+    top: 0;
+    left: 210px;
+    display: inline-block;
+    width: 26px;
+    height: 60px;
+    margin-bottom: 0;
+    background-color: #edf0f5;
+    border-right: 1px solid #dbdde2;
+    border-bottom: 1px solid #dbdde2;
+    vertical-align: top;
+    text-align: center;
   }
-  
+
   .hide-btn:after {
     position: absolute;
     top: 26px;
@@ -371,7 +379,7 @@ body {
     background: url(../public/img/sp_icon_pc.png);
     background-position: -180px -100px;
   }
-  
+
   .show-btn:after {
     position: absolute;
     top: 26px;
@@ -382,25 +390,25 @@ body {
     background: url(../public/img/sp_icon_pc.png);
     background-position: -190px -100px;
   }
-  
+
   .menu-list {
     padding: 16px 0px 0px;
     border-bottom: 1px solid #3d4858;
   }
-  
+
   .menu-store {
     padding: 20px 25px 28px;
     text-align: center;
     background-color: #3f4b5c;
     color: #fff;
   }
-  
+
   .img-circle {
     border-radius: 50%;
     width: 68px;
     height: 68px;
   }
-  
+
   .shopname {
     display: block;
     margin-top: 7px;
@@ -408,24 +416,24 @@ body {
     line-height: 24px;
     font-weight: 400;
   }
-  
+
   /* 메뉴1 selectize */
-  
+
   .order-check {
     padding: 2px 25px 22px;
     background-color: #3f4b5c;
     font-size: 12px;
-    -ms-user-select: none; 
+    -ms-user-select: none;
     -moz-user-select: -moz-none;
     -khtml-user-select: none;
     -webkit-user-select: none;
     user-select: none;
-  
-    .selectize-control{
+
+    .selectize-control {
       width: 160px;
       height: 30px;
     }
-    
+
     .selectize-dropdown {
       display: none;
       color: #cdced1;
@@ -439,16 +447,16 @@ body {
       overflow-x: hidden;
       font-weight: 400;
     }
-    
+
     .dropdown-active {
       display: block;
     }
-    
-    .selectize-dropdown-content{
+
+    .selectize-dropdown-content {
       padding-bottom: 4px;
     }
-    
-    .selectize-input{
+
+    .selectize-input {
       color: #cdced1;
       background-color: #37404d;
       border: 1px solid #646d7b;
@@ -456,86 +464,85 @@ body {
       cursor: pointer;
       position: relative;
     }
-    
+
     .selectize-input:after {
-        content: " ";
-        display: block;
-        position: absolute;
-        top: 50%;
-        right: 10px;
-        margin-top: -3px;
-        width: 0;
-        height: 0;
-        border-style: solid;
-        border-width: 5px 5px 0;
-        border-color: #8d8d92 transparent transparent;
-        clear: left;
+      content: " ";
+      display: block;
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      margin-top: -3px;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 5px 5px 0;
+      border-color: #8d8d92 transparent transparent;
+      clear: left;
     }
-    
+
     .check:after {
-        content: " ";
-        display: block;
-        position: absolute;
-        top: 50%;
-        right: 10px;
-        margin-top: -4px;
-        width: 0;
-        height: 0;
-        border-color: transparent transparent #767a83;
-        border-style: solid;
-        border-width: 0px 5px 5px;
-        clear: left;
+      content: " ";
+      display: block;
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      margin-top: -4px;
+      width: 0;
+      height: 0;
+      border-color: transparent transparent #767a83;
+      border-style: solid;
+      border-width: 0px 5px 5px;
+      clear: left;
     }
-    
+
     .item {
       display: inline-block;
       padding: 3px 0px;
       font-weight: 400;
     }
-    
+
     .option {
       padding: 2px 10px;
       line-height: 24px;
     }
-    
+
     .selected {
       /* color: #95b7e3; */
     }
-    
+
     .active {
       color: #95b7e3;
     }
-  
+
   }
-  
-  
+
+
   /* 메뉴1 검색창 인풋 */
-  
+
   /* 셀러인풋 감싸고있는거 */
   .seller-input-wrap {
     position: relative;
     padding: 8px 0 0;
     border-bottom: 2px solid #646d7b;
   }
-  
+
   /* 셀러인풋 자체 */
-  .seller-input{
-      width: 100%;
-      height: 26px;
-      padding: 2px 20px 2px 0;
-      background-color: #3f4b5c;
-      color: #e8e8e8;
-      font-size: 14px;
-      line-height: 1;
-      border: none;
+  .seller-input {
+    width: 100%;
+    height: 26px;
+    padding: 2px 20px 2px 0;
+    background-color: #3f4b5c;
+    color: #e8e8e8;
+    font-size: 14px;
+    line-height: 1;
+    border: none;
   }
-  
+
   /* 셀러인풋 클릭했을때 */
   .seller-input:focus {
     outline: none;
   }
-  
-  
+
   /* 돋보기 아이콘 위에 얹은 버튼 */
   .seller-input-Btn {
     position: absolute;
@@ -545,51 +552,52 @@ body {
     border: 0px;
     padding: 0px;
   }
-  
+
   /* 돋보기 아이콘 */
-    .search-icon {
-      font-size: 14px;
-      color: #959BA5;
-    }
-  
+  .search-icon {
+    font-size: 14px;
+    color: #959BA5;
+  }
+
   #menu-list {
-    .contents li{
+    .contents li {
       color: #949ca6;
       padding: 5px 30px 9px 30px;
       display: flex;
     }
+
     .contents li a {
       color: #949ca6;
     }
-  
+
     .contents li:hover {
-      color:$mainColor;
+      color: $mainColor;
     }
-  
+
     .contents li a:hover {
-      color:$mainColor;
+      color: $mainColor;
     }
-  
-    .contents li:first-child{
+
+    .contents li:first-child {
       padding-top: 20px;
     }
-  
-    .contents li:last-child{
+
+    .contents li:last-child {
       padding-bottom: 20px;
     }
-  
+
   }
-  
-  
-  
-  
+
+
+
+
   /* 좌측 메뉴 맨아래 */
-  
+
   .outer_link {
     padding: 30px;
     text-align: left;
   }
-  
+
   .outer_link .title {
     color: #95b7e3;
     font-size: 12px;
@@ -597,12 +605,12 @@ body {
     margin: 7px 0px 7px;
     line-height: 1.6;
   }
-  
-  .outer_link .title:not(:first-child){
+
+  .outer_link .title:not(:first-child) {
     margin-top: 35px;
     margin-bottom: 7px;
   }
-  
+
   .outer_menu .link {
     color: #dedede;
     font-size: 14px;
@@ -611,45 +619,44 @@ body {
     line-height: 20px;
     position: relative;
   }
-  
-  .outer_menu .link:first-child {
-  }
-  
+
+  .outer_menu .link:first-child {}
+
   .outer_menu .link:not(:first-child) {
     padding-top: 12px;
   }
-  
+
   .outer_menu_icon {
     color: #9199a2;
     margin-left: 4px;
     font-size: 12px;
   }
-  
+
   .fn-booking:after {
     font-family: Naver booking Icons;
     font-style: normal;
     font-weight: 400;
     text-align: center;
   }
-  
-  .fn-booking-newlayer{
+
+  .fn-booking-newlayer {
     margin-left: 4px;
     font-size: 12px;
     color: #9199a2;
     position: absolute;
     margin-left: 8px;
   }
-  
-  .fn-booking-newlayer:after{
+
+  .fn-booking-newlayer:after {
     content: "\EA23";
   }
-  
+
   /* 톡톡상담 버튼 */
-  
+
   .talktalk_Btn_wrap {
     padding: 0 30px;
   }
-  
+
   .talktalk_Btn {
     width: 100%;
     color: white;
@@ -660,66 +667,66 @@ body {
     padding: 4px 15px;
     vertical-align: middle;
   }
-  
+
   .talktalk_Btn .talktalk-icon:before {
     color: $mainColor;
     content: "\EAB2";
     font-size: 16px;
   }
-  
+
   // 공지사항
-  
+
   .Notice {
     background-color: white;
     color: black;
-  
+
     .NoticeWrapper {
-        background-color: #fff;
-        border-bottom: 1px solid #dbdde2;
-        padding: 17px 25px 17px 50px;
-        margin-bottom: 0;
-        min-height: 60px;
-        font-size: 15px;
-        line-height: 25px;
-        padding-left: 91px;
+      background-color: #fff;
+      border-bottom: 1px solid #dbdde2;
+      padding: 17px 25px 17px 50px;
+      margin-bottom: 0;
+      min-height: 60px;
+      font-size: 15px;
+      line-height: 25px;
+      padding-left: 91px;
     }
-    
+
     .text-wrap {
-        position: relative;
-        display: inline-block;
+      position: relative;
+      display: inline-block;
     }
-  
+
     .round-icon-area {
-        position: absolute;
-        top: -1px;
-        left: -40px;
-        font-size: 14px;
-        display: inline-block;
-        width: 28px;
-        height: 28px;
-        line-height: 25px;
-        background-color: #00c73c;
-        border-radius: 50px;
-        vertical-align: middle;
-        text-align: center;
-        color: #fff;
+      position: absolute;
+      top: -1px;
+      left: -40px;
+      font-size: 14px;
+      display: inline-block;
+      width: 28px;
+      height: 28px;
+      line-height: 25px;
+      background-color: #00c73c;
+      border-radius: 50px;
+      vertical-align: middle;
+      text-align: center;
+      color: #fff;
     }
-    
+
     .fn-alert2:before {
-        content: "\EA08";
-        font-size: 14px;
-        font-weight: 400;
+      content: "\EA08";
+      font-size: 14px;
+      font-weight: 400;
     }
-    
+
     .notice-title {
-        padding-right: 14px;
-        color: #303236;
+      padding-right: 14px;
+      color: #303236;
     }
-    
+
     .notice-date {
-        color: #767a83;
-        font-size: 13px;
-        line-height: 20px;
+      color: #767a83;
+      font-size: 13px;
+      line-height: 20px;
     }
   }
 }
@@ -753,18 +760,18 @@ body {
   vertical-align: middle;
 }
 
-.footer .provision:nth-child(4){
+.footer .provision:nth-child(4) {
   padding-top: 5px;
 }
 
-.footer .provision li .btn-box{
+.footer .provision li .btn-box {
   border: 1px solid #d6d8dc;
   background-color: #f2f5f8;
   display: inline-block;
   padding: 0 5px;
   font-size: 11px;
   line-height: 19px;
-      
+
 }
 
 .footer .provision li:not(:first-child):before {
@@ -794,10 +801,9 @@ body {
   font-size: 12px;
 }
 
-.footer .talktalk-wrap {
-}
+.footer .talktalk-wrap {}
 
-.talktalk-icon-sm{
+.talktalk-icon-sm {
   display: inline-block;
   position: relative;
   width: 13px;
@@ -810,7 +816,7 @@ body {
 
 .footer .address {
   color: #494949;
-  font-family: verdanan,sans-serif;
+  font-family: verdanan, sans-serif;
   margin: 20px 0 0;
   font-size: 10px;
   line-height: 13px;
@@ -818,7 +824,7 @@ body {
 }
 
 .footer .address strong {
-  color : #666;
+  color: #666;
   font-weight: 700;
 }
 

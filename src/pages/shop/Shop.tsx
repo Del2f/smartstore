@@ -11,7 +11,6 @@ import NotFound from "./NotFound";
 import { selectCurrentUser } from '../../store/userSlice';
 
 import "./Shop.scss";
-import "../../components/flex.css";
 
 let currentPath = "";
 

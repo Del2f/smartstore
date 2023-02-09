@@ -2,12 +2,7 @@
   --ag-border-color: #dbdde2;
   --ag-checkbox-checked-color: #00c73c;
   // --ag-checkbox-unchecked-color: #00ae34;
-  
-  .ag-root-wrapper {
-    font-family: NanumGothic;
-    font-size: 13px;
-    
-  }
+
 
   .ag-checkbox {
 
@@ -20,58 +15,58 @@
     width: 20px;
     height: 20px;
   }
+
+  .ag-root-wrapper {
+    font-family: NanumGothic;
+    font-size: 13px;
+    border: 1px solid #d3d8e1;
+  
+    .ag-cell {
+        color: #555;
+    }
+    
+    .ag-row-selected:before { // 선택된 백그라운드 hover 컬러
+        background-image: none;
+    }
+  
+    .ag-selection-checkbox {
+        margin: 0px;
+    }
+  
+    .ag-checkbox-input-wrapper {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .ag-checkbox-input-wrapper:focus-within {
+        box-shadow: none;
+    }
+    
+    .ag-checkbox-input-wrapper::after {
+        content: "";
+        outline: none;
+        width: 20px;
+        height: 20px;
+        background: url(../../../public/img/sp_icon_pc.png) no-repeat;
+        background-position: -30px -530px;
+    }
+  
+    .ag-checked:after{
+        content: "" !important;
+        width: 20px;
+        height: 20px;
+        background: url(../../../public/img/sp_icon_pc.png) no-repeat;
+        background-position: -0px -530px;
+    }
+  
+    .ag-checkbox-input {
+    }
+  }
+
+
+
 }
 
-.ag-root-wrapper {
-  border: 1px solid #d3d8e1;
-
-  .ag-cell {
-      color: #555;
-  }
-  
-  .ag-row-selected:before { // 선택된 백그라운드 hover 컬러
-      background-image: none;
-  }
-
-  .ag-cell-normal-height {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-  }
-
-  .ag-selection-checkbox {
-      margin: 0px;
-  }
-
-  .ag-checkbox-input-wrapper {
-      width: 20px;
-      height: 20px;
-  }
-  
-  .ag-checkbox-input-wrapper:focus-within {
-      box-shadow: none;
-  }
-  
-  .ag-checkbox-input-wrapper:after {
-      content: "";
-      outline: none;
-      width: 20px;
-      height: 20px;
-      background: url(../../../public/img/sp_icon_pc.png) no-repeat;
-      background-position: -30px -530px;
-  }
-
-  .ag-checked:after{
-      content: "";
-      width: 20px;
-      height: 20px;
-      background: url(../../../public/img/sp_icon_pc.png) no-repeat;
-      background-position: -0px -530px;
-  }
-
-  .ag-checkbox-input {
-  }
-}
 
 .product-list {
   display: flex;
