@@ -534,12 +534,12 @@ function App() {
                     <Route path="/" element={<Home Showmainmenu={showmainmenu} setNotice={setNotice} setNoticeDate={setNoticeDate} setNoticeIcon={setNoticeIcon}/>} />
                     <Route path="/product/:id" element={<ProductRegister setNotice={setNotice} setNoticeDate={setNoticeDate} setNoticeIcon={setNoticeIcon}/>} />
                     <Route path="/productregister" element={<ProductRegister setNotice={setNotice} setNoticeDate={setNoticeDate} setNoticeIcon={setNoticeIcon}/>} />
-                    <Route path="/category" element={<Category />} />
+                    <Route path="/category" element={<Category setNotice={setNotice} setNoticeDate={setNoticeDate} setNoticeIcon={setNoticeIcon}/>} />
                     <Route path="/product" element={<Product setNotice={setNotice} setNoticeDate={setNoticeDate} setNoticeIcon={setNoticeIcon}/>} />
                     {/* <Route path="*" element={<Notfound/>}/> */}
                 </Routes>
             </div>
-            <div className="footer-wrap">
+            <div className="home-footer-wrap">
                 <div className="inner-footer-wrap">
                     <div className="footer">
                         <ul className="provision flex flex-ju-center">

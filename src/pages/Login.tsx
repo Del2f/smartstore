@@ -7,7 +7,7 @@ import { loginUser } from '../store/userSlice';
 import { SET_TOKEN, selectToken } from '../store/authSlice';
 
 import $ from 'jquery';
-import "bootstrap/dist/css/bootstrap.min.css";
+
 import "./Login.scss";
 
     function Login() {

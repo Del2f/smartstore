@@ -1,0 +1,86 @@
+.LR-margin-10 {
+    margin: 0 10px;
+}
+
+.LR-margin-20 {
+    margin: 0 20px;
+}
+
+.input-box {
+    width: 100%;
+    background-color: #fff;
+    
+    #input-inner {
+        position: relative;
+        border-radius: 8px;
+        padding: 1px 15px;
+        border: 1px solid rgba(0,0,0,.15);
+    }
+    
+    #input-inner:hover {
+        border: 1px solid rgb(117, 117, 117);
+    }
+    
+    #input-inner-active {
+        position: relative;
+        padding: 1px 15px;
+        border-radius: 8px;
+        border: 1px solid rgba(0,0,0,.15);
+        margin-right: 8px;
+        border: 1px solid #03c75a;
+        z-index: 20;
+    }
+}
+
+.input { // 인풋
+    outline: transparent;
+    width: 100%;
+    border: none;
+    font-size: 13px;
+    line-height: 34px;
+    color: #000;
+    letter-spacing: -.2px;
+}
+
+.input::placeholder {
+    color: #b9b9b9;
+    font-size: 13px;
+    font-weight: 100;
+}
+
+.normal-btn {
+    display: block;
+    width: 92px;
+    height: 30px;
+    border: none;
+    border-radius: 8px;
+    background-color: #03C75A;
+    margin-top: 10px;
+
+    .text {
+        color: #fff;
+        font-size: 15px;
+        font-weight: 700;
+    }
+}
+
+.error-active {
+    display: inline-block;
+    color: #ff3627;
+    letter-spacing: -.2px;
+}
+
+.error {
+    display: none;
+    margin-top: 8px;
+    color: #ff3627;
+    letter-spacing: -.2px;
+}
+
+.show {
+    display: block;
+}
+
+.hide {
+    display: none;
+}

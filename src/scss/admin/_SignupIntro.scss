@@ -1,0 +1,222 @@
+
+.signup-content {
+    text-align: center;
+    padding: 40px 18px 59px;
+
+    .signup-title {
+        font-weight: bold;
+        letter-spacing: -.8px;
+    }
+    
+    .signup-desc {
+        margin-top: 8px;
+        font-size: 16px;
+        line-height: 21px;
+        letter-spacing: -.5px;
+    }
+    
+    .signup-notice {
+        margin-top: 8px;
+        font-size: 15px;
+        line-height: 20px;
+        color: rgba(0,0,0,.37);
+        letter-spacing: -.2px;
+        text-align: center;
+        word-break: keep-all;   
+    }
+
+    .signup-img-wrap {
+        margin: 32px auto 0;
+        .signup-img {
+            display: inline-block;
+            max-width: 100%;
+            width: 454px;
+            height: 240px;
+            content: "";
+            background: url(../../../public/img/img-business-454x240.svg);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+}
+
+@media (min-width: 664px){
+    .signup-content {
+        padding: 78px 18px 80px;
+
+        .signup-title {
+            font-size: 42px;
+            line-height: 46px;
+        }
+
+        .signup-desc {
+            margin-top: 10px;
+            font-size: 20px;
+            line-height: 26px;
+        }
+
+        .signup-notice {
+            margin-top: 12px;
+        }
+    }
+}
+
+.signup-btn-area {
+    max-width: 453px;
+    margin: 24px auto 0;
+
+    .signup-btn {
+        position: relative;
+        display: block;
+        padding: 19.5px 32px 19.5px 64px;
+        border: 1px solid #03c75a;
+        border-radius: 8px;
+        background-color: #03c75a;
+        letter-spacing: -.2px;
+        text-decoration: none;
+    }
+
+    .signup-btn-icon-wrap {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 64px;
+
+        div {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            margin: auto;
+            width: 33px;
+            height: 32px;
+            content: "";
+            background: url(../../../public/img/logo-naver-32.abe8a6de.svg);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+
+    .signup-btn-title {
+        display: block;
+        font-size: 18px;
+        line-height: 23px;
+        font-weight: 700;
+        color: #fff;
+        float: left;
+    }
+
+    .signup-btn-desc {
+        font-size: 12px;
+        line-height: 16px;
+        color: hsla(0,0%,100%,.93);
+        word-break: keep-all;
+        float: left;
+    }
+
+    .signup-btn-arrow-wrap {
+        position: absolute;
+        top: 32%;
+        right: 16px;
+    }
+
+    .signup-btn-arrow-pc {
+        display: none;
+        width: 24px;
+        height: 24px;
+        content: "";
+        background: url(../../../public/img/icon-arrow-24.0ac349d5.svg);
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+    }
+
+    .signup-subnotice {
+        margin: 16px 0 -8px;
+        font-size: 15px;
+        line-height: 19px;
+        letter-spacing: -.2px;
+        text-align: left;
+    }
+
+    .signup-subnotice-signup-text a {
+        color: #03c75a;
+        display: inline-block;
+        margin-top: -8px;
+        padding: 8px;
+        vertical-align: top;
+        text-decoration: none;
+    }
+}
+
+
+@media (min-width: 664px){
+    .signup-btn-area {
+
+        .signup-btn {
+            padding: 18.5px 48px 18.5px 72px;
+        }
+
+        .signup-btn-icon-wrap {
+            width: 72px;
+        }
+
+        .signup-btn-desc {
+            font-size: 13px;
+            line-height: 18px;
+        }
+
+        .signup-btn-arrow-wrap {
+            right: 24px;
+        }
+
+        .signup-btn-arrow-pc {
+            display: inline-block;
+        }
+
+        .signup-btn-arrow-m {
+            display: none;
+        }
+    }
+}
+
+
+.signup-notice-list {
+    max-width: 628px;
+    margin: 64px auto 0;
+    font-size: 15px;
+    line-height: 19px;
+    color: rgba(0,0,0,.37);
+    letter-spacing: -.2px;
+    word-break: keep-all;
+
+    .signup-notice-list-item {
+        text-align: left;
+        position: relative;
+        padding-left: 9px;
+        margin-top: 6px;
+    }
+
+    .signup-notice-list-item:before {
+        position: absolute;
+        top: 7px;
+        left: 0;
+        width: 3px;
+        height: 3px;
+        border-radius: 50%;
+        background-color: rgba(0,0,0,.53);
+        content: "";
+    }
+}
+
+
+
+@media (min-width: 664px){
+    .signup-notice-list {
+        margin-top: 80px;
+    }
+}

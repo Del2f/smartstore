@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 
 import Login from './Login';
 import Signup from './adminPage/SignupIntro';
-import Usersign from './Usersign';
+import Usersign from './adminPage/Usersign';
 
 import "./Commerce.scss";
 

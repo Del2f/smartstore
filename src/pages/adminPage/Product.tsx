@@ -2,8 +2,6 @@ import { useState, useEffect, SetStateAction } from "react";
 
 import TableProductList from "../../components/admin/TableProductList";
 
-import "bootstrap/dist/css/bootstrap.min.css";
-
 type Props = {
     setNoticeIcon?: React.Dispatch<SetStateAction<any>>;
     setNotice?: React.Dispatch<SetStateAction<string>>;
@@ -22,7 +20,6 @@ function Product(props: Props) {
     return (
         <>
             <div className="SellerSubframe product">
-                <div className="product-list">
                     <div className="panel panel-seller">
                         <div className="panel-heading">
                             <div className="pull-left">
@@ -35,13 +32,12 @@ function Product(props: Props) {
                         </div>
                         <div className="panel-body">
                             <div className="btn-list"></div>
-                            <div className="product-list">
+                            <div className="table-product-list">
                                 <TableProductList setProductTotal={setProductTotal}></TableProductList>
                             </div>
                         </div>
                         <div className="panel-footer"></div>
                     </div>
-                </div>
             </div>
         </>
     );

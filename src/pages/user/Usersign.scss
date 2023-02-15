@@ -1,6 +1,5 @@
 
 .user-usersign-layout-wrap {
-
     background-color: #F5F6F7;
 
     .error-active {
@@ -15,10 +14,6 @@
         margin-top: 8px;
         color: #ff3627;
         letter-spacing: -.2px;
-    }
-
-    .layout-inner {
-
     }
 
     .content {
@@ -145,7 +140,12 @@
         
         .input-area {
             display: flex;
-            flex-direction: row;
+            margin: 0px;
+        }
+
+        .input-area2 {
+            display: flex;
+            flex-basis: 100%;
             margin: 0px;
         }
 
@@ -197,14 +197,8 @@
         }
 
         .input-number-box {
-            flex-grow: 1;
+            width: 100%;
         }
-
-        .input::placeholder {
-            color: #a1a1a1;
-            font-weight: 100;
-        }
-
 
     }
     
@@ -246,10 +240,9 @@
             position: relative;
             
             .selectize-control{
-                flex-basis: 195px;
-                margin-right: 8px;
+                flex-basis: 300px;
                 flex-wrap: wrap;
-                // height: 48px;
+                margin-right: 8px;
                 line-height: 46px;
             }
             
@@ -337,13 +330,13 @@
                 
                 .input-area {
                     flex-wrap: wrap;
-                    
+
                     .selectize-control {
                         flex-basis: 100%;
                         margin-right: 0px;
                     }
                     .input-number-box {
-                        flex-grow: 1;
+                        flex-basis: 100%;
                         margin-top: 8px;
                     }
                     .input-btn-wrap {

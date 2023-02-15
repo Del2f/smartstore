@@ -440,6 +440,8 @@ function Usersign() {
                                                                 <input
                                                                     type="text"
                                                                     name="id"
+                                                                    autoComplete="new-password"
+
                                                                     placeholder="로그인 아이디"
                                                                     className="input"
                                                                     onClick={() => {
@@ -473,6 +475,8 @@ function Usersign() {
                                                                 <input
                                                                     type="password"
                                                                     name="password"
+                                                                    autoComplete="new-password"
+
                                                                     placeholder="비밀번호"
                                                                     className="input"
                                                                     onClick={() => {
@@ -816,6 +820,7 @@ function Usersign() {
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                    <div className="input-area2">
                                                         <div className="input-number-box" ref={inputRefNum}>
                                                             <div id={inputClick && inputClickNumber === 5 ? "input-inner-active" : "input-inner"}>
                                                                 <input
@@ -836,6 +841,7 @@ function Usersign() {
                                                                 <span className="text">인증</span>
                                                             </button>
                                                         </div>
+                                                    </div>
                                                     </div>
                                                 </div>
                                                 <div className={isPhone ? "error" : "error-active"}>{PhoneMessage}</div>
@@ -938,7 +944,7 @@ function Usersign() {
                             <div className="agree-area">
                                 <h3 className="agree-title">약관 동의</h3>
                                 <ul className="agree-check-list">
-                                    <li className="agree-check-item">
+                                    <li className="agree-check-item flex">
                                         <input type="checkbox" className="blind" id="checkbox01" onChange={agree} />
                                         <label className="agree-check-box" htmlFor="checkbox01">
                                             <span className="agree-ico-box"></span>

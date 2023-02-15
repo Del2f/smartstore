@@ -1,0 +1,114 @@
+@charset "UTF-8";
+.Swiper_Intro {
+  /* width: 463px; */
+  padding-top: 180px;
+  padding-bottom: 60px;
+  /* 퀵슬롯 */
+}
+.Swiper_Intro .carousel_img {
+  max-width: 100%;
+  height: auto;
+}
+.Swiper_Intro .carousel-item {
+  padding: 0px;
+}
+.Swiper_Intro .carousel-control-prev {
+  padding: 10px !important;
+}
+.Swiper_Intro .carousel-control-prev-icon {
+  position: relative !important;
+  width: 23px !important;
+  top: -3px !important;
+  left: -5px !important;
+}
+.Swiper_Intro .carousel-control-next-icon {
+  position: relative !important;
+  width: 23px !important;
+  top: -3px !important;
+  right: -5px !important;
+}
+.Swiper_Intro .carousel-caption {
+  text-align: center;
+}
+.Swiper_Intro .carousel-indicators {
+  top: 25px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+}
+.Swiper_Intro .carousel-indicators button {
+  display: inline-block;
+  background-color: #f6f7f9;
+  border: 1px solid #f6f7f9;
+  border-radius: 50px;
+  margin: 0 30px !important;
+  width: 70px !important;
+  height: 70px !important;
+}
+.Swiper_Intro .carousel-indicators button:nth-child(1) {
+  content: "";
+  background: url(../../../public/img/home/sp_about_pc_sizeset.png) no-repeat;
+  background-position: 15px -79px;
+}
+.Swiper_Intro .carousel-indicators button:nth-child(1).active {
+  background-position: 15px -4px;
+}
+.Swiper_Intro .carousel-indicators button:nth-child(2) {
+  content: "";
+  background: url(../../../public/img/home/sp_about_pc_sizeset.png) no-repeat;
+  background-position: -45px -82px;
+}
+.Swiper_Intro .carousel-indicators button:nth-child(2).active {
+  background-position: -45px -7px;
+}
+.Swiper_Intro .carousel-indicators button:nth-child(3) {
+  content: "";
+  background: url(../../../public/img/home/sp_about_pc_sizeset.png) no-repeat;
+  background-position: -165px -80px;
+}
+.Swiper_Intro .carousel-indicators button:nth-child(3).active {
+  background-position: -165px -5px;
+}
+.Swiper_Intro .carousel-indicators button:nth-child(4) {
+  content: "";
+  background: url(../../../public/img/home/sp_about_pc_sizeset.png) no-repeat;
+  background-position: -228px -80px;
+}
+.Swiper_Intro .carousel-indicators button:nth-child(4).active {
+  background-position: -228px -5px;
+}
+.Swiper_Intro .carousel-indicators button:nth-child(5) {
+  content: "";
+  background: url(../../../public/img/home/sp_about_pc_sizeset.png) no-repeat;
+  background-position: -285px -80px;
+}
+.Swiper_Intro .carousel-indicators button:nth-child(5).active {
+  background-position: -285px -5px;
+}
+.Swiper_Intro .carousel-indicators button:nth-child(6) {
+  content: "";
+  background: url(../../../public/img/home/sp_about_pc_sizeset.png) no-repeat;
+  background-position: -346px -80px;
+}
+.Swiper_Intro .carousel-indicators button:nth-child(6).active {
+  background-position: -346px -5px;
+}
+.Swiper_Intro .carousel-indicators button:nth-child(7) {
+  content: "";
+  background: url(../../../public/img/home/sp_about_pc_sizeset.png) no-repeat;
+  background-position: -405px -80px;
+}
+.Swiper_Intro .carousel-indicators button:nth-child(7).active {
+  background-position: -405px -5px;
+}
+.Swiper_Intro .carousel-indicators button:nth-child(8) {
+  content: "";
+  background: url(../../../public/img/home/sp_about_pc_sizeset.png) no-repeat;
+  background-position: -465px -80px;
+}
+.Swiper_Intro .carousel-indicators button:nth-child(8).active {
+  background-position: -465px -5px;
+}
+.Swiper_Intro .carousel-indicators .active {
+  background-color: #00C73C !important;
+}/*# sourceMappingURL=Swiper_lntro.css.map */

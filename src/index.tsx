@@ -7,7 +7,7 @@ import App from './App';
 import ScrollToTop from './components/ScrollToTop';
 
 import Commerce from "./pages/Commerce";
-import Intro from "./pages/Intro";
+import Intro from "./pages/adminPage/Intro";
 import Notfound from "./pages/Notfound";
 import Shop from "./pages/shop/Shop";
 import UserPage from "./pages/user/Userpage";

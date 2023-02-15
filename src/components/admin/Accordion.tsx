@@ -1,7 +1,5 @@
-import * as React from 'react'
+import { useRef, useState } from 'react'
 import styled from "styled-components";
-import "./Accordion.css";
-
 
 type Props = {
   title?: string | React.ReactNode;
@@ -11,33 +9,32 @@ type Props = {
 
 function Accordion(props: Props) {
   
-  const parentRef = React.useRef<HTMLDivElement>(null);
-  const childRef = React.useRef<HTMLDivElement>(null);
-  const [isCollapse, setIsCollapse] = React.useState(false);
+  const parentRef = useRef<HTMLUListElement>(null);
+  const childRef = useRef<HTMLLIElement>(null);
+  const [isCollapse, setIsCollapse] = useState(false);
+
+  // const parentRefHeight = parentRef.current?.style.height ?? "0px";
+  const buttonArrow = isCollapse ? "buttonArrow Down" : "buttonArrow Up";
   
-  const handleButtonClick = React.useCallback(
-    (event: any) => {
-      event.stopPropagation();
+  const handleButtonClick = ((e: any) => {
+      e.stopPropagation();
+      
       if (parentRef.current === null || childRef.current === null) {
-        return;
+        return
       }
+
       if (parentRef.current.clientHeight > 0) {
-        parentRef.current.style.height = "0";
-        // console.log('접었다')
+        parentRef.current.style.height = "0px";
       } else {
         parentRef.current.style.height = `${childRef.current.clientHeight}px`;
-        // console.log('폈다')
       }
+
       setIsCollapse(!isCollapse);
-    },
-    [isCollapse]
+    }
   );
 
-  const parentRefHeight = parentRef.current?.style.height ?? "0px";
-  const buttonArrow = parentRefHeight === "0px" ? "buttonArrow Up" : "buttonArrow Down";
-
   return (
-    <Container>
+    <Container className='admin-leftMenu-Container'>
       <Header onClick={handleButtonClick}>
         <span>
         {props.title}
@@ -45,9 +42,9 @@ function Accordion(props: Props) {
         <span className={props.className}><i className='icon-beta'></i></span>
         <Button className={buttonArrow}></Button>
       </Header>
-      <ContentsWrapper ref={parentRef}>
-        <Contents ref={childRef}>{props.contents}</Contents>
-      </ContentsWrapper>
+      <ul className='ContentsWrapper' ref={parentRef}>
+        <li className='Contents' ref={childRef}>{props.contents}</li>
+      </ul>
     </Container>
   );
 }
@@ -75,17 +72,6 @@ const Button = styled.div`
   font-size: 14px;
   margin: 0 32px 0 8px;
 `;
-
-const ContentsWrapper = styled.div`
-  height: 0;
-  overflow: hidden;
-  transition: height 0.35s ease, background 0.35s ease;
-`;
   
-const Contents = styled.div`
-  background-color: #414958;
-  font-size: 13px;
-  font-weight: 500;
-`;
 
 export default Accordion;

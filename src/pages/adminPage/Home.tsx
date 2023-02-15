@@ -13,8 +13,6 @@ import StoreChart from "../../components/StoreChart";
 import Btn from "../../components/Btn";
 import QAtabs from "../../components/QAtabs";
 
-import "bootstrap/dist/css/bootstrap.min.css";
-
 import { Gift, ArrowClockwise, Truck, ExclamationCircle } from "react-bootstrap-icons";
 import { selectToken } from "../../store/authSlice";
 import { selectShowMenu } from "../../store/menuSlice";

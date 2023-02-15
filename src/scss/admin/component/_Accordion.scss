@@ -1,0 +1,77 @@
+.admin-leftMenu-Container {
+    
+}
+
+
+.buttonArrow {
+    position: absolute;
+    top: 25px;
+    right: -27px;
+    width: 9px;
+    height: 5px;
+    background: url(../../../../public/img/sp_icon_pc.png);
+    content: "";
+}
+
+.Up {
+    background-position: -200px -100px;
+}
+
+.Down {
+    background-position: -210px -100px;
+}
+
+.list:after {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.icon-npay:after {
+    content: "";
+    width: 38px;
+    height: 15px;
+    margin: -3px 0 1px;
+    background: url(../../../../public/img/sp_icon_pc.png);
+    background-position: -360px -230px;
+}
+
+.menu-list .talktalk-icon:after {
+    content: "\EAB2";
+    font-size: 14px;
+    height: 14px;
+    top: -4px;
+}
+
+.label-new:after {
+    content: "N";
+    font-size: 10px;
+    padding: 1px 2px;
+    vertical-align: 1px;
+    display: inline;
+    background-color: #ff545c;
+}
+
+.list-10 .icon-beta:after {
+    position: relative;
+    content: '';
+    top: -3px;
+    display: inline-block;
+    width: 20px;
+    height: 10px;
+    margin-left: 2px;
+    margin-right: 4px;
+    background: url(../../../../public/img/sp_common.png);
+    background-position: -260px -110px;
+}
+
+.ContentsWrapper {
+    height: 0;
+    overflow: hidden;
+    transition: height 0.35s ease, background 0.35s ease;
+
+    .Contents {
+        background-color: $menuListInnerColor;
+        font-size: 13px;
+        font-weight: 500;
+    }
+}

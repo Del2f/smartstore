@@ -2,26 +2,29 @@
 body {
     margin: 0;
     height: 100%;
+
+    a {
+        text-decoration: none;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0px;
+        margin: 0px;
+    }
+
+    p {
+        font-size: 13px;
+    }
+    
+    div {
+        box-sizing: border-box;
+    }
+    
+    li {
+        list-style: none;
+    }
 }
 
-p {
-    font-size: 13px;
-}
 
-div {
-    box-sizing: border-box;
-}
 
-ul {
-    list-style: none;
-    padding: 0px;
-    margin: 0px;
-}
-
-li {
-    list-style: none;
-}
-
-a {
-    text-decoration: none;
-}

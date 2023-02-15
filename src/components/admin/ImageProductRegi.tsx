@@ -1,10 +1,6 @@
-import { useState, useEffect } from "react";
 import axios from "../../api/axios";
+import { useState, useEffect } from "react";
 import "./ImageProductRegi.scss";
-
-
-
-
 
 function ImagePreview({ image, deleteFunc }:any) {
   return (
@@ -13,7 +9,6 @@ function ImagePreview({ image, deleteFunc }:any) {
     </div>
   );
 }
-
 
 function ImageUploadBox(props:any) {
 

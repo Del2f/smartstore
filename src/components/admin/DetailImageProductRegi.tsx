@@ -1,6 +1,6 @@
+import axios from "../../api/axios";
 import { useState, useEffect, useRef } from "react";
 import "./DetailImageProductRegi.scss";
-import axios from "../../api/axios";
 
   type Props = {
     image?: any;

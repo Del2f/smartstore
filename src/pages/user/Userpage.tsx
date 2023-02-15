@@ -12,7 +12,7 @@ function Userpage() {
         <Route path="usersign" element={<Usersign />} />
         <Route path="*" element={<Notfound />} />
       </Routes>
-      <div className="footer">
+      <div className="user-footer">
         <div className="footer-top flex flex-ju-center">
           <ul>
             <li>

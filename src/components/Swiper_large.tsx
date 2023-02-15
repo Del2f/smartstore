@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Carousel from "react-bootstrap/Carousel";
-// import styled from "styled-components";
 import './Swiper_large.css';
 
 function Swiper_large() {

@@ -21,18 +21,23 @@ type Props = {
 
 function ProductRegister(props: Props) {
     const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
+    const [category, setCategory] = useState([]);
 
-    // useEffect(() => {
-    //     const userObjectID = async (params?: any) => {
-    //         try {
-    //             const db = await axios.get( "/smartstore/home/productregister")
-    //             console.log(db)
-    //           } catch (err) {
-    //             console.log(err)
-    //           }
-    //     };
-    //     userObjectID();
-    // })
+
+    useEffect(() => {
+        const userObjectID = async (params: any) => {
+            try {
+                const res = await axios.post( "/smartstore/home/productregister/get", cookies, { withCredentials:true })
+                const defaultCategory = res.data.category.category;
+                const allProduct = defaultCategory.filter((list: any) => list.name == "전체상품")
+                console.log(allProduct)
+                setCategory(allProduct)
+              } catch (err) {
+                console.log(err)
+              }
+        };
+        userObjectID('');
+    },[])
 
     const menu = useSelector(selectShowMenu);
     const navigate = useNavigate();
@@ -1422,10 +1427,10 @@ function ProductRegister(props: Props) {
         subImage: SubImage,
         detailImage: DetailImage,
         delivery: Delivery,
+        category: category
     };
 
-    // console.log(productdata);
-    console.log(OptionResult);
+    console.log(productdata);
 
     // 등록 버튼
     const handleSubmit = async (e: any) => {
@@ -1580,7 +1585,6 @@ function ProductRegister(props: Props) {
                                             </div>
                                         </li>
                                         <li className="product-register-item">
-                                            {" "}
                                             {/* 상품명 */}
                                             <div className="title flex flex-ju-bt flex-align-center" onClick={() => setProductDrop((e) => !e)}>
                                                 <div className="text-wrap">

@@ -1,26 +1,30 @@
 @import './scss/reset.scss';
-@import './scss/Home.scss';
-@import './scss/ProductRegister.scss';
-@import './scss/Product.scss';
-@import './scss/SignupIntro.scss';
-// @import './scss/Category.scss';
+@import './scss/flex.scss';
+@import './scss/color.scss';
+@import './scss/layout.scss';
+@import './scss/font.scss';
 
-$mainColor : #00c73c;
-$mainBackGroundColor : #edf0f5;
+@import './scss/admin/ProductRegister.scss';
+@import './scss/admin/Product.scss';
+@import './scss/admin/SignupIntro.scss';
+@import './scss/admin/Category.scss';
+@import './scss/admin/Usersign.scss';
+@import './scss/admin/Intro.scss';
+@import './scss/admin/Home.scss';
+
+// 컴포넌트
+@import './scss/admin/component/Accordion';
+
+
 
 .App {
   position: relative;
-  font-family: 나눔고딕;
   box-sizing: border-box;
   min-width: 1200px;
 }
 
 body {
   min-height: 100%;
-}
-
-.show {
-  display: block;
 }
 
 .vertical-middle {
@@ -56,39 +60,7 @@ body {
   /* format("svg"); */
 }
 
-/* 나눔스퀘어 폰트 */
 
-@font-face {
-  font-family: 'NanumSquare';
-  font-weight: 300;
-  font-style: normal;
-  src: url(https://cdn.jsdelivr.net/gh/webfontworld/naver/NanumSquare_acL.woff2) format('woff2');
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'NanumSquare';
-  font-weight: 400;
-  font-style: normal;
-  src: url(https://cdn.jsdelivr.net/gh/webfontworld/naver/NanumSquare_acR.woff2) format('woff2');
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'NanumSquare';
-  font-weight: 500;
-  font-style: normal;
-  src: url(https://cdn.jsdelivr.net/gh/webfontworld/naver/NanumSquare_acB.woff2) format('woff2');
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'NanumSquare';
-  font-weight: 700;
-  font-style: normal;
-  src: url(https://cdn.jsdelivr.net/gh/webfontworld/naver/NanumSquare_acEB.woff2) format('woff2');
-  font-display: swap;
-}
 
 .fn:before {
   font-family: Naver Icons;
@@ -135,9 +107,9 @@ body {
 
   .navi {
     align-items: center;
-    background-color: #2D3539;
+    background-color: $naviBGColor;
+    color: $naviTextColor !important;
     height: 55px;
-    color: white;
     min-width: 1200px;
   }
 
@@ -157,10 +129,7 @@ body {
 
     .sell-shop {
       font-size: 22px;
-      font-weight: 500;
-      font-family: NanumSquare;
-      letter-spacing: 1.5px;
-      color: white;
+      font-weight: 700;
     }
 
     .quick-link {
@@ -170,7 +139,6 @@ body {
       /* line-height: 27px; */
 
       li a {
-        color: #fff;
         /* border-left: 1px solid black; */
         position: relative;
         padding: 0 10px 0 11px;
@@ -275,16 +243,12 @@ body {
       padding: 5px;
     }
 
-    li a {
-      color: #fff;
-    }
 
     .my-info {
       margin-left: 4px;
       padding: 2px 8px;
       border-radius: 20px;
       border: 1px solid #dedede;
-      color: #fff;
       font-size: 10px;
       line-height: 15px;
       cursor: pointer;
@@ -338,7 +302,7 @@ body {
 
   .main-menu {
     position: absolute;
-    background-color: #445163;
+    background-color: $menuTopColor;
     width: 210px;
     left: 210px;
     height: 98.27%;
@@ -399,7 +363,7 @@ body {
   .menu-store {
     padding: 20px 25px 28px;
     text-align: center;
-    background-color: #3f4b5c;
+    background-color: $menuTopColor;
     color: #fff;
   }
 
@@ -733,105 +697,112 @@ body {
 
 /* footer */
 
-.footer-wrap {
+.home-footer-wrap {
   background-color: #edf0f5;
   padding-left: 210px;
   margin: 0px;
+
+  .inner-footer-wrap {
+    color: #303236;
+    border-top: 1px solid #dddfe0;
+    font-family: NanumGothic;
+    padding: 35px 0 40px;
+    font-size: 12px;
+
+    .talktalk-icon-sm {
+      display: inline-block;
+      position: relative;
+      width: 13px;
+      height: 13px;
+      background: url(../public/img/sp_icon_pc.png) -80px 17px;
+      background-size: 160px;
+      top: 3px;
+      left: -2px;
+    }
+    
+    .address {
+      color: #494949;
+      font-family: verdanan, sans-serif;
+      margin: 20px 0 0;
+      font-size: 10px;
+      line-height: 13px;
+      text-align: center;
+
+      strong {
+        color: #666;
+        font-weight: 700;
+      }
+    }
+    
+    .logo {
+      margin-bottom: 0px;
+      margin-right: 3px;
+      width: 60px;
+      height: 11px;
+      background: url(../public/img/sp_common.png) -200px -40px;
+    }
+
+    .dsc {
+      color: #767a83;
+      margin: 12px 0;
+      line-height: 1.5;
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .provision:nth-child(4) {
+      padding-top: 5px;
+    }
+
+    .provision {
+      margin: 0px;
+      padding: 0px;
+      text-align: center;
+    
+      li {
+        position: relative;
+        padding: 0 7px 0 11px;
+        line-height: 14px;
+        vertical-align: middle;
+
+        a {
+          color: #303236;
+
+          .strong {
+            font-weight: 600;
+          }
+        }
+
+        .btn-box {
+          border: 1px solid #d6d8dc;
+          background-color: #f2f5f8;
+          display: inline-block;
+          padding: 0 5px;
+          font-size: 11px;
+          line-height: 19px;
+        }
+        
+      }
+
+      li:not(:first-child):before {
+        background-color: #dadde2;
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 1px;
+        height: 11px;
+        margin-top: -5px;
+        content: "";
+      }
+    }
+
+  }
 }
 
-.inner-footer-wrap {
-  color: #303236;
-  border-top: 1px solid #dddfe0;
-  font-family: NanumGothic;
-  padding: 35px 0 40px;
-  font-size: 12px;
-}
 
-.provision {
-  margin: 0px;
-  padding: 0px;
-  text-align: center;
-}
 
-.footer .provision li {
-  position: relative;
-  padding: 0 7px 0 11px;
-  line-height: 14px;
-  vertical-align: middle;
-}
 
-.footer .provision:nth-child(4) {
-  padding-top: 5px;
-}
 
-.footer .provision li .btn-box {
-  border: 1px solid #d6d8dc;
-  background-color: #f2f5f8;
-  display: inline-block;
-  padding: 0 5px;
-  font-size: 11px;
-  line-height: 19px;
 
-}
 
-.footer .provision li:not(:first-child):before {
-  background-color: #dadde2;
-  position: absolute;
-  top: 50%;
-  left: 0;
-  width: 1px;
-  height: 11px;
-  margin-top: -5px;
-  content: "";
-}
 
-.footer .provision li a {
-  color: #303236;
-}
-
-.footer .provision li a .strong {
-  font-weight: 600;
-}
-
-.footer .dsc {
-  color: #767a83;
-  margin: 12px 0;
-  line-height: 1.5;
-  text-align: center;
-  font-size: 12px;
-}
-
-.footer .talktalk-wrap {}
-
-.talktalk-icon-sm {
-  display: inline-block;
-  position: relative;
-  width: 13px;
-  height: 13px;
-  background: url(../public/img/sp_icon_pc.png) -80px 17px;
-  background-size: 160px;
-  top: 3px;
-  left: -2px;
-}
-
-.footer .address {
-  color: #494949;
-  font-family: verdanan, sans-serif;
-  margin: 20px 0 0;
-  font-size: 10px;
-  line-height: 13px;
-  text-align: center;
-}
-
-.footer .address strong {
-  color: #666;
-  font-weight: 700;
-}
-
-.footer .logo {
-  margin-bottom: 0px;
-  margin-right: 3px;
-  width: 60px;
-  height: 11px;
-  background: url(../public/img/sp_common.png) -200px -40px;
-}
