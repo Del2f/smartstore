@@ -180,6 +180,7 @@ function Usersign() {
         email: Email,
     };
 
+    // 아이디 인증 버튼
     const idAuthBtn = async (e: any) => {
         e.preventDefault();
 
@@ -218,7 +219,6 @@ function Usersign() {
             email: Email,
             auth: code,
         };
-        console.log(emailData);
 
         try {
             const res = await axios.post("/smartstore/user/usersign/sendEmail", emailData, { withCredentials: true })
@@ -355,9 +355,9 @@ function Usersign() {
         setShowdrop(false);
     };
 
+    // 메뉴 파트1 옵션 마우스 올렸을때
     useEffect(() => {
         showdropmenu === false ? $(".selectize-dropdown-content").children(".option").removeClass("active") : $(".selectize-dropdown-content").children(".selected").addClass("active");
-        // 메뉴 파트1 옵션 마우스 올렸을때
         $(".selectize-dropdown-content").on("mouseover", function (e) {
             $(".option").removeClass("active");
             $(e.target).addClass("active");
