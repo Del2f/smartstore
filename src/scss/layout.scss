@@ -6,9 +6,38 @@
     margin: 0 20px;
 }
 
+.LR-margin-40 {
+    margin: 0 40px;
+}
+
+.TB-margin-10 {
+    margin: 10px 0;
+}
+
+.TB-margin-20 {
+    margin: 20px 0;
+}
+
+.TB-margin-40 {
+    margin: 40px 0;
+}
+
+.All-margin-10 {
+    margin: 10px;
+}
+
+.All-margin-20 {
+    margin: 20px;
+}
+
+.All-margin-40 {
+    margin: 40px;
+}
+
 .input-box {
     width: 100%;
     background-color: #fff;
+    border-radius: 8px;
     
     #input-inner {
         position: relative;

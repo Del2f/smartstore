@@ -152,10 +152,6 @@ function Usersign() {
         name: Name,
         phone: Phone,
         email: Email,
-        category: [
-            { name: "베스트" },
-            { name: "전체상품" },
-        ],
     };
 
     // 아이디 인증 버튼
@@ -231,9 +227,6 @@ function Usersign() {
 
     const AuthCodeCheck = (e: any) => {
         e.preventDefault();
-
-        console.log(AuthCode);
-        console.log(AuthCodeInput);
 
         if (AuthCodeInput === AuthCode) {
             setIsEmail2(true);

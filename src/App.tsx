@@ -469,7 +469,7 @@ function App() {
                         {/* <Accordion title="물류 관리 " className="list list-17 label-new" contents={contents17} /> */}
                         {/* <Accordion title="공지사항" className="list list-18" contents={contents18} /> */}
                     </div>
-                    <div className="outer_link">
+                    {/* <div className="outer_link">
                         <h2 className="title">교육 프로그램 바로가기</h2>
                         <div className="outer_menu">
                             <a className="link">
@@ -511,7 +511,7 @@ function App() {
                                 <i className="fn-booking fn-booking-newlayer" aria-hidden="true"></i>
                             </a>
                         </div>
-                    </div>
+                    </div> */}
                     <div className="talktalk_Btn_wrap">
                         <button className="talktalk_Btn">
                             <i className="fn talktalk-icon"></i>

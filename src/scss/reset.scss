@@ -1,26 +1,36 @@
 
+* {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
     height: 100%;
 
-    a {
-        text-decoration: none;
+    div {
+        box-sizing: border-box;
     }
 
+    a {
+        color: #fff;
+        text-decoration: none;
+    }
+    
+    a:hover {
+        color: #fff;
+    }
+    
+    p {
+        color: #353535;
+        font-size: 13px;
+    }
+    
     ul {
         list-style: none;
         padding: 0px;
         margin: 0px;
     }
 
-    p {
-        font-size: 13px;
-    }
-    
-    div {
-        box-sizing: border-box;
-    }
-    
     li {
         list-style: none;
     }

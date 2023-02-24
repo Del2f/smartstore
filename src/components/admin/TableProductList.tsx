@@ -13,11 +13,12 @@ import "./TableProductList.scss";
 
 type Props = {
     setProductTotal?: Dispatch<SetStateAction<number>>;
+    isCategory?: boolean;
 };
 
 function TableProductList(props: Props) {
-    const token = useSelector(selectToken);
 
+    const token = useSelector(selectToken);
     const gridRef = useRef<any>();
 
     // const containerStyle = useMemo(() => ({ width: '100%', height: '100%' }), []);
@@ -25,30 +26,64 @@ function TableProductList(props: Props) {
 
     const [rowData, setRowData] = useState();
     const [selectedRows, setSelectedRows] = useState<any>([]);
-    console.log(selectedRows);
+    // console.log(selectedRows);
 
     const [columnDefs] = useState([
-        { width: 100, checkboxSelection: true, headerCheckboxSelection: true, resizable: true },
+        { width: 50, checkboxSelection: true, headerCheckboxSelection: true },
+        {
+            headerName: "메인사진",
+            width: 100,
+            resizable: false,
+            cellRendererFramework: (params: any) => {
+                return (
+                    <div className="edit flex flex-ju-center flex-align-center">
+                        <img src={params.data.mainImage[0]} style={{ width: "50px" }}></img>
+                    </div>
+                );
+            },
+        },
         {
             headerName: "수정",
             width: 80,
             resizable: false,
             cellRendererFramework: (params: any) => {
                 return (
-                    <div className="edit">
                         <Link to={params.data._id}>
-                            <button className="editBtn flex flex-align-center" data-action="edit">
-                                <span>수정</span>
+                            <button className="editBtn" data-action="edit">
+                                <p>수정</p>
                             </button>
                         </Link>
+                );
+            },
+        },
+        { field: "_id", headerName: "상품코드", width: 100, resizable: true },
+        { field: "name", headerName: "상품명", width: 150, resizable: true },
+        { field: "price", headerName: "가격", width: 200, resizable: true },
+        // { field: "option", headerName: "옵션", width: 200, resizable: true },
+        { field: "delivery", headerName: "배송비", width: 200, resizable: true },
+        { field: "category1.name", headerName: "카테고리1", width: 250, resizable: true },
+        { field: "category2.name", headerName: "카테고리2", width: 200, resizable: true },
+        { field: "category3.name", headerName: "카테고리3", width: 200, resizable: true },
+        { field: "category4.name", headerName: "카테고리4", width: 200, resizable: true },
+    ]);
+
+    const [category] = useState([
+        { width: 50, checkboxSelection: true, headerCheckboxSelection: true },
+        {
+            headerName: "메인사진",
+            width: 100,
+            resizable: false,
+            cellRendererFramework: (params: any) => {
+                return (
+                    <div className="edit flex flex-ju-center flex-align-center">
+                        <img src={params.data.mainImage[0]} style={{ width: "50px" }}></img>
                     </div>
                 );
             },
         },
-        { field: "_id", headerName: "상품코드", width: 200, resizable: true },
-        { field: "name", headerName: "상품명", width: 200, resizable: true },
+        { field: "name", headerName: "상품명", width: 150, resizable: true },
+        { field: "_id", headerName: "상품코드", width: 100, resizable: true },
         { field: "price", headerName: "가격", width: 200, resizable: true },
-        // { field: "option", headerName: "옵션", width: 200, resizable: true },
         { field: "delivery", headerName: "배송비", width: 200, resizable: true },
         { field: "category1.name", headerName: "카테고리1", width: 250, resizable: true },
         { field: "category2.name", headerName: "카테고리2", width: 200, resizable: true },
@@ -63,7 +98,6 @@ function TableProductList(props: Props) {
     const onGridReady = async (params?: any) => {
         try {
             const db = await axios.post("/smartstore/home/product", token, { withCredentials: true });
-            console.log(db.data.productList);
             setRowData(db.data.productList);
             props.setProductTotal && props.setProductTotal(db.data.productList.length);
         } catch (err) {
@@ -166,51 +200,67 @@ function TableProductList(props: Props) {
 
     return (
         <>
-            <div className="flex flex-ju-bt flex-align-center">
-                <div className="left">
-                    <button className="delete-btn" onClick={selectedDelete}>
-                        <span>선택삭제</span>
-                    </button>
-                    <span className="unselectedErr">{unselectedErr}</span>
-                    <div className={deleteAgreeModal ? "delete-agree show" : "delete-agree"} ref={dropmenu}>
-                        <span>
-                            상품을 삭제하시겠습니까? <br></br>삭제를 원하신다면 <strong>'삭제'</strong> 를 입력 해주세요.
-                        </span>
-                        <div id={inputClick ? "input-inner-active" : "input-inner"}>
-                            <input
-                                type="text"
-                                placeholder=""
-                                className="input"
-                                onClick={() => {
-                                    setInputClick(true);
-                                }}
-                                onChange={deleteOnChange}
-                            />
-                        </div>
-                        <span className="err">{deleteAgreeErr}</span>
-                        <button className="delete-btn" onClick={deleteBtn}>
-                            <span>확인</span>
+            {props.isCategory ? (
+
+                    <div className="right">
+                        <span>페이지 노출 </span>
+                        <select onChange={onPageSizeChanged} id="page-size">
+                            <option value="10" selected={true}>
+                                10
+                            </option>
+                            <option value="100">100</option>
+                            <option value="500">500</option>
+                            <option value="1000">1000</option>
+                        </select>
+                    </div>
+
+            ) : (
+                <div className="flex flex-ju-bt flex-align-center">
+                    <div className="left">
+                        <button className="delete-btn" onClick={selectedDelete}>
+                            <span>선택삭제</span>
                         </button>
+                        <span className="unselectedErr">{unselectedErr}</span>
+                        <div className={deleteAgreeModal ? "delete-agree show" : "delete-agree"} ref={dropmenu}>
+                            <span>
+                                상품을 삭제하시겠습니까? <br></br>삭제를 원하신다면 <strong>'삭제'</strong> 를 입력 해주세요.
+                            </span>
+                            <div id={inputClick ? "input-inner-active" : "input-inner"}>
+                                <input
+                                    type="text"
+                                    placeholder=""
+                                    className="input"
+                                    onClick={() => {
+                                        setInputClick(true);
+                                    }}
+                                    onChange={deleteOnChange}
+                                />
+                            </div>
+                            <span className="err">{deleteAgreeErr}</span>
+                            <button className="delete-btn" onClick={deleteBtn}>
+                                <span>확인</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div className="right">
+                        <span>페이지 노출 </span>
+                        <select onChange={onPageSizeChanged} id="page-size">
+                            <option value="10" selected={true}>
+                                10
+                            </option>
+                            <option value="100">100</option>
+                            <option value="500">500</option>
+                            <option value="1000">1000</option>
+                        </select>
                     </div>
                 </div>
-                <div className="right">
-                    <span>페이지 노출 </span>
-                    <select onChange={onPageSizeChanged} id="page-size">
-                        <option value="10" selected={true}>
-                            10
-                        </option>
-                        <option value="100">100</option>
-                        <option value="500">500</option>
-                        <option value="1000">1000</option>
-                    </select>
-                </div>
-            </div>
+            )}
 
             <div style={{ height: "400px", width: "100%", marginTop: "10px" }} className="ag-theme-alpine">
                 <AgGridReact
                     ref={gridRef}
                     rowData={rowData}
-                    columnDefs={columnDefs}
+                    columnDefs={props.isCategory ? category : columnDefs}
                     // autoGroupColumnDef={autoGroupColumnDef}
                     // defaultColDef={defaultColDef}
                     // suppressRowClickSelection={true}

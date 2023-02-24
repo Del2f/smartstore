@@ -47,6 +47,7 @@
     "redux-persist": "^6.0.0",
     "redux-promise": "^0.6.0",
     "redux-thunk": "^2.4.1",
+    "sass": "^1.58.3",
     "styled-components": "^5.3.6",
     "styled-reset": "^4.4.2",
     "typesafe-actions": "^5.1.0",

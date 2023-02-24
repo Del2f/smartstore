@@ -15,8 +15,6 @@
 // 컴포넌트
 @import './scss/admin/component/Accordion';
 
-
-
 .App {
   position: relative;
   box-sizing: border-box;
@@ -305,7 +303,7 @@ body {
     background-color: $menuTopColor;
     width: 210px;
     left: 210px;
-    height: 98.27%;
+    height: 95%;
     color: white;
     font-size: 15px;
     font-weight: 500;
@@ -357,13 +355,11 @@ body {
 
   .menu-list {
     padding: 16px 0px 0px;
-    border-bottom: 1px solid #3d4858;
   }
 
   .menu-store {
     padding: 20px 25px 28px;
     text-align: center;
-    background-color: $menuTopColor;
     color: #fff;
   }
 
@@ -385,12 +381,7 @@ body {
 
   .order-check {
     padding: 2px 25px 22px;
-    background-color: #3f4b5c;
     font-size: 12px;
-    -ms-user-select: none;
-    -moz-user-select: -moz-none;
-    -khtml-user-select: none;
-    -webkit-user-select: none;
     user-select: none;
 
     .selectize-control {
@@ -400,9 +391,9 @@ body {
 
     .selectize-dropdown {
       display: none;
-      color: #cdced1;
-      background-color: #37404d;
-      border: 1px solid #646d7b;
+      color: $menu-search-dropMenu-Text;
+      border: 1px solid $menu-search-dropMenu-Border;
+      background-color: $menu-search-dropMenu-BG;
       width: 160px;
       max-height: 201px;
       border-top: 0px;
@@ -421,9 +412,9 @@ body {
     }
 
     .selectize-input {
-      color: #cdced1;
-      background-color: #37404d;
-      border: 1px solid #646d7b;
+      color: $menu-search-Selector-Text;
+      border: 1px solid $menu-search-Selector-Border;
+      background-color: $menu-search-Selector-BG;
       padding: 2px 30px 2px 10px;
       cursor: pointer;
       position: relative;
@@ -475,7 +466,7 @@ body {
     }
 
     .active {
-      color: #95b7e3;
+      color: $menu-search-dropMenu-hover;
     }
 
   }
@@ -487,16 +478,16 @@ body {
   .seller-input-wrap {
     position: relative;
     padding: 8px 0 0;
-    border-bottom: 2px solid #646d7b;
+    border-bottom: 1px solid $menu-search-Input-Border;
   }
 
   /* 셀러인풋 자체 */
   .seller-input {
+    color: $menu-search-Input-Text;
+    background-color: $menu-search-Input-BG;
     width: 100%;
     height: 26px;
     padding: 2px 20px 2px 0;
-    background-color: #3f4b5c;
-    color: #e8e8e8;
     font-size: 14px;
     line-height: 1;
     border: none;
@@ -618,14 +609,15 @@ body {
   /* 톡톡상담 버튼 */
 
   .talktalk_Btn_wrap {
+    margin: 10px 0;
     padding: 0 30px;
   }
 
   .talktalk_Btn {
     width: 100%;
     color: white;
-    border: 1px solid #3e4859;
-    background-color: #525e6f;
+    border: 1px solid $menu-talkBtn-Border;
+    background-color: $menu-talkBtn-BG;
     font-size: 12px;
     line-height: 24px;
     padding: 4px 15px;
@@ -636,6 +628,7 @@ body {
     color: $mainColor;
     content: "\EAB2";
     font-size: 16px;
+    margin-right: 3px;
   }
 
   // 공지사항

@@ -18,7 +18,6 @@ import { persistStore } from 'redux-persist';
 
 // import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
-// import 'bootstrap/dist/css/bootstrap.css';
 
 let persistor = persistStore(store);
 

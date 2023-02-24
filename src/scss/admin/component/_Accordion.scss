@@ -1,10 +1,24 @@
 .admin-leftMenu-Container {
-    
-}
+    border-radius: 4px;
 
+    &:last-child div {
+        border-bottom: 0px;
+    }
+
+    .inner {
+        position: relative;
+        padding: 16px 15px 16px 5px;
+        margin: 0 25px;
+        font-size: 14px;
+        font-weight: 500;
+        border-bottom: 1px solid $menu-List-Border;
+    }
+}
 
 .buttonArrow {
     position: absolute;
+    font-size: 14px;
+    margin: 0 32px 0 8px;
     top: 25px;
     right: -27px;
     width: 9px;
@@ -67,7 +81,7 @@
 .ContentsWrapper {
     height: 0;
     overflow: hidden;
-    transition: height 0.35s ease, background 0.35s ease;
+    transition: height 0.35s ease;
 
     .Contents {
         background-color: $menuListInnerColor;

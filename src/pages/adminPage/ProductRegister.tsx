@@ -23,14 +23,13 @@ function ProductRegister(props: Props) {
     const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
     const [category, setCategory] = useState([]);
 
-
+    // 해당 유저의 전체상품 id를 불러옴
     useEffect(() => {
         const userObjectID = async (params: any) => {
             try {
                 const res = await axios.post( "/smartstore/home/productregister/get", cookies, { withCredentials:true })
                 const defaultCategory = res.data.category.category;
                 const allProduct = defaultCategory.filter((list: any) => list.name == "전체상품")
-                console.log(allProduct)
                 setCategory(allProduct)
               } catch (err) {
                 console.log(err)
@@ -1621,7 +1620,6 @@ function ProductRegister(props: Props) {
                                             </div>
                                         </li>
                                         <li className="product-register-item">
-                                            {" "}
                                             {/* 판매가 */}
                                             <div className="title flex flex-ju-bt flex-align-center" onClick={() => setPriceDrop((e) => !e)}>
                                                 <div className="text-wrap">
@@ -1662,7 +1660,6 @@ function ProductRegister(props: Props) {
                                             </div>
                                         </li>
                                         <li className="product-register-item">
-                                            {" "}
                                             {/* 옵션 */}
                                             <div className="title flex flex-ju-bt flex-align-center" onClick={() => setOptionDrop((e) => !e)}>
                                                 <div className="text-wrap">
@@ -1681,7 +1678,6 @@ function ProductRegister(props: Props) {
                                                     </div>
                                                     <div className="menu-right">
                                                         <div className="input-item input-item-name">
-                                                            {" "}
                                                             {/* 옵션명 */}
                                                             <div className="input-area">
                                                                 <div className="input-box" ref={inputRefOptionName}>
@@ -1708,7 +1704,6 @@ function ProductRegister(props: Props) {
                                                             </div>
                                                         </div>
                                                         <div className="input-item input-item-value">
-                                                            {" "}
                                                             {/* 옵션값 */}
                                                             <div className="input-area">
                                                                 <div className="input-box" ref={inputRefOptionValue}>
@@ -1759,7 +1754,6 @@ function ProductRegister(props: Props) {
                                             </div>
                                         </li>
                                         <li className="product-register-item">
-                                            {" "}
                                             {/* 메인사진 */}
                                             <div className="title flex flex-ju-bt flex-align-center" onClick={() => setImageDrop((e) => !e)}>
                                                 <div className="text-wrap">
@@ -1778,7 +1772,6 @@ function ProductRegister(props: Props) {
                                                     </div>
                                                     <div className="menu-right">
                                                         <div className="input-item">
-                                                            {" "}
                                                             {/* 메인 사진*/}
                                                             <ImageProductRegi setIsImage={setIsImage} setMainImage={setMainImage} MainImage={MainImage} SubImage={SubImage} DetailImage={DetailImage} />
                                                         </div>
@@ -1790,7 +1783,6 @@ function ProductRegister(props: Props) {
                                                     </div>
                                                     <div className="menu-right">
                                                         <div className="input-item">
-                                                            {" "}
                                                             {/* 추가 사진 */}
                                                             <div className="input-area">
                                                                 <div className="input-box" ref={inputRefImage}>
@@ -1804,7 +1796,6 @@ function ProductRegister(props: Props) {
                                             </div>
                                         </li>
                                         <li className="product-register-item">
-                                            {" "}
                                             {/* 상세 사진 */}
                                             <div className="title flex flex-ju-bt flex-align-center" onClick={() => setDetailDrop((e) => !e)}>
                                                 <div className="text-wrap">
@@ -1837,7 +1828,6 @@ function ProductRegister(props: Props) {
                                             </div>
                                         </li>
                                         <li className="product-register-item">
-                                            {" "}
                                             {/* 배송비 */}
                                             <div className="title flex flex-ju-bt flex-align-center" onClick={() => setDeliveryDrop((e) => !e)}>
                                                 <div className="text-wrap">
