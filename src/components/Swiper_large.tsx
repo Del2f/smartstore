@@ -2,6 +2,11 @@ import React, { useState } from "react";
 import Carousel from "react-bootstrap/Carousel";
 import './Swiper_large.css';
 
+import img1 from '@img/bottom-banner-1.png';
+import img2 from '@img/bottom-banner-2.png';
+import img3 from '@img/bottom-banner-3.png';
+import img4 from '@img/bottom-banner-4.jpg';
+
 function Swiper_large() {
   const [index, setIndex] = useState(0);
 
@@ -14,7 +19,7 @@ function Swiper_large() {
       <Carousel.Item>
         <img
           className="carousel_img" 
-          src="/img/bottom-banner-1.png"
+          src={img1}
           alt="First slide"
         />
         <Carousel.Caption>
@@ -23,7 +28,7 @@ function Swiper_large() {
       <Carousel.Item>
         <img
           className="carousel_img"
-          src="/img/bottom-banner-2.png"
+          src={img2}
           alt="Second slide"
         />
 
@@ -33,7 +38,7 @@ function Swiper_large() {
       <Carousel.Item>
         <img
           className="carousel_img"
-          src="/img/bottom-banner-3.png"
+          src={img3}
           alt="Third slide"
         />
         <Carousel.Caption>
@@ -42,7 +47,7 @@ function Swiper_large() {
       <Carousel.Item>
         <img
           className="carousel_img"
-          src="/img/bottom-banner-4.jpg"
+          src={img4}
           alt="Fourth slide"
         />
         <Carousel.Caption>

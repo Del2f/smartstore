@@ -10,6 +10,7 @@ import Commerce from "./pages/Commerce";
 import Intro from "./pages/adminPage/Intro";
 import Notfound from "./pages/Notfound";
 import Shop from "./pages/shop/Shop";
+import Cart from "./pages/shop/Cart";
 import UserPage from "./pages/user/Userpage";
 
 import { CookiesProvider } from 'react-cookie';
@@ -39,6 +40,7 @@ root.render(
               <Route path="/home/*" element={<App />} />
               <Route path="/user/*" element={<UserPage />} />
               <Route path="/shop/*" element={<Shop />} />
+              <Route path="/cart" element={<Cart />} />
               <Route path="*" element={<Notfound />} />
             </Routes> 
           </PersistGate>

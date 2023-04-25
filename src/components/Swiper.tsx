@@ -2,6 +2,11 @@ import React, { useState } from "react";
 import Carousel from "react-bootstrap/Carousel";
 import './Swiper.css';
 
+import img1 from "@img/top-banner-left1-pc.png";
+import img2 from "@img/top-banner-left2-pc.png";
+import img3 from "@img/top-banner-left3-pc.png";
+
+
 function Swiper() {
   const [index, setIndex] = useState(0);
 
@@ -14,7 +19,7 @@ function Swiper() {
       <Carousel.Item>
         <img
           className="carousel_img" 
-          src="/img/top-banner-left1-pc.png"
+          src={img1}
           alt="First slide"
         />
         <Carousel.Caption>
@@ -23,7 +28,7 @@ function Swiper() {
       <Carousel.Item>
         <img
           className="carousel_img"
-          src="/img/top-banner-left2-pc.png"
+          src={img2}
           alt="Second slide"
         />
 
@@ -33,7 +38,7 @@ function Swiper() {
       <Carousel.Item>
         <img
           className="carousel_img"
-          src="/img/top-banner-left3-pc.png"
+          src={img3}
           alt="Third slide"
         />
 

@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useCookies } from "react-cookie";
-import { loginUser } from '../store/userSlice';
+import { AdminLogin } from '../store/adminSlice';
 import { SET_TOKEN, selectToken } from '../store/authSlice';
 
 import $ from 'jquery';
@@ -16,7 +16,6 @@ import "./Login.scss";
         const dispatch = useDispatch();
         const navigate = useNavigate(); // 다른 페이지로 이동하게 해주는 Hook.
         const token = useSelector(selectToken)
-        console.log(token)
 
         const [Id, setId] = useState("");
         const [Password, setPassword] = useState("");
@@ -49,6 +48,8 @@ import "./Login.scss";
         // 로그인 버튼
         const handleSubmit = async (e : any) => {
             e.preventDefault();
+
+            console.log('로그인 입니다.')
             try {
             const data = await axios.post( "/smartstore/commerce/login", userdata, { withCredentials: true })
                 .then((res) => {
@@ -57,7 +58,7 @@ import "./Login.scss";
                         setIsError(false)
                     } else if (res.data.status == true){
                         console.log(res.data)
-                        dispatch(loginUser( res.data.user ));
+                        dispatch(AdminLogin( res.data.user ));
                         dispatch(SET_TOKEN( res.data.token ));
                         navigate("/home");
                     }

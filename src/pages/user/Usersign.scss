@@ -29,12 +29,11 @@
             width: 155px;
             height: 30px;
             content: "";
-            background: url(../../../public/img/Naver_Logotype.svg) no-repeat;
+            background: url(/img/Naver_Logotype.svg) no-repeat;
             background-position: 0px 0px;
             background-size: 155px;
         }
     }
-
 
     .signup-area {
         margin-top: 8px;
@@ -291,7 +290,7 @@
                 width: 16px;
                 height: 16px;
                 content: "";
-                background: url(../../../public/img/icon-fold-16.f93fa38d.svg) 0px 0px no-repeat;
+                background: url(/img/icon-fold-16.f93fa38d.svg) 0px 0px no-repeat;
             }
             
             .check:after {
@@ -301,7 +300,7 @@
                 width: 16px;
                 height: 16px;
                 content: "";
-                background: url(../../../public/img/icon-fold-16.f93fa38d.svg) 0px 0px no-repeat;
+                background: url(/img/icon-fold-16.f93fa38d.svg) 0px 0px no-repeat;
                 transform: rotate(180deg);
             }
             

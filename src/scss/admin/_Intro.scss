@@ -37,7 +37,7 @@
             height: 25px;
             content: "";
             display: inline-block;
-            background: url(../../../public/img/Naver_Logotype.svg) no-repeat;
+            background: url(/img/Naver_Logotype.svg) no-repeat;
             background-position: 0px 8px;
             vertical-align: middle;
             background-size: 52px;
@@ -98,7 +98,7 @@
         height: 10px;
         margin-left: 2px;
         margin-right: 4px;
-        background: url(../../../public/img/sp_common.png);
+        background: url(/img/sp_common.png);
         background-position: -260px -110px;
         margin: -3px 0 0 3px;
         }
@@ -165,7 +165,7 @@
             background-repeat: no-repeat;
             background-position: 50% 0;
             background-size: cover;
-            background-image: url(../../../public/img/home/about_bg.jpg);
+            background-image: url(/img/home/about_bg.jpg);
 
             .info-area {
                 position: relative;
@@ -294,7 +294,7 @@
                         background-size: 100% auto;
                         width: 296px;
                         height: 110px;
-                        background-image: url(../../../public/img/home/intro-banner.png);
+                        background-image: url(/img/home/intro-banner.png);
                     }
 
                     .info {
@@ -360,7 +360,7 @@
                                 height: 22px;
                                 content: "";
                                 display: inline-block;
-                                background: url(../../../public/img/home/sp_main.svg) no-repeat;
+                                background: url(/img/home/sp_main.svg) no-repeat;
                                 background-position: 0px 0px;
                                 vertical-align: middle;
                             }
@@ -410,7 +410,7 @@
             margin: 80px auto 50px;
             width: 670px;
             height: 142px;
-            background: url(../../../public/img/home/sp_about_pc_220823.png) no-repeat;
+            background: url(/img/home/sp_about_pc_220823.png) no-repeat;
             background-position: 0 -620px;
         }
 
@@ -445,7 +445,7 @@
                     left: 140px;
                     width: 58px;
                     height: 50px;
-                    background: url(../../../public/img/home/sp_about_pc_220823.png) no-repeat;
+                    background: url(/img/home/sp_about_pc_220823.png) no-repeat;
                 }
 
                 .sub-title {
@@ -453,14 +453,14 @@
                     display: inline-block;
                     width: 78px;
                     height: 22px;
-                    background: url(../../../public/img/home/sp_about_pc_220823.png) no-repeat;
+                    background: url(/img/home/sp_about_pc_220823.png) no-repeat;
                 }
     
                 .detail {
                     margin: 0 auto;
                     width: 262px;
                     height: 38px;
-                    background: url(../../../public/img/home/sp_about_pc_220823.png) no-repeat;
+                    background: url(/img/home/sp_about_pc_220823.png) no-repeat;
                 }
             }
 
@@ -546,7 +546,7 @@
             margin: 80px auto 50px;
             width: 670px;
             height: 142px;
-            background: url(../../../public/img/home/sp_about_pc_220823.png) no-repeat;
+            background: url(/img/home/sp_about_pc_220823.png) no-repeat;
             background-position: 0 -470px;
         }
 

@@ -1,7 +1,7 @@
 // import $ from "jquery";
 import axios from "../../api/axios";
 import styled from "styled-components";
-import { useState, useRef, useEffect, SetStateAction, useCallback } from "react";
+import React, { useState, useRef, useEffect, SetStateAction, useCallback } from "react";
 import { useSelector } from "react-redux";
 
 // import { useCookies } from "react-cookie";
@@ -53,13 +53,27 @@ function Category(props: Props) {
     // 카테고리 페이지 접속시 true로 반환.
     const [isCategory, setIsCategory] = useState<boolean>(false);
 
+    // 우측 상품목록
+    const [selectedProductList, setSelectedProductList] = useState<any>([]);
+    console.log(selectedProductList);
+
+    // 중앙 카테고리에 등록된 상품 목록
+    const [addedProductList, setAddedProductList] = useState<any>([]);
+    console.log(addedProductList);
+
+    const [addedErrMessage, setAddedErrMessage] = useState<string>("");
+    const [addedSelected, setAddedSelected] = useState<any>([]);
+    const [addedSelectedName, setAddedSelectedName] = useState<string | null>();
+    const [isAddedSelected, setIsAddedSelected] = useState<boolean>(false);
+
     const [categoryList, setCategoryList] = useState<any>([]);
     const [subCategoryList, setSubCategoryList] = useState<any>([]);
 
     const [selectedList, setSelectedList] = useState<any>([]);
+    console.log(selectedList);
 
     const [selectedName, setSelectedName] = useState<string>();
-    const [selectedId, setSelectedId] = useState<string>();
+    const [selectedId, setSelectedId] = useState<string | null>(null);
     const [addColumn, setAddColumn] = useState<string>("");
 
     // 오류 메세지
@@ -78,11 +92,15 @@ function Category(props: Props) {
     // Ref
     const inputRef = useRef<any>();
     const inputRef2 = useRef<any>();
+    const inputRef3 = useRef<any>();
     const listRef = useRef<any>(null);
+
+    // 카테고리 등록된 상품
+    const addedRefs = useRef<any>(null);
+    const addedBtnArea = useRef<any>(null);
 
     // 카테고리 DND로 전송할 데이터
     const [dnd, setDnd] = useState<any>([]);
-    console.log(dnd);
 
     // 유저 카테고리 가져오기
     useEffect(() => {
@@ -90,15 +108,13 @@ function Category(props: Props) {
             try {
                 const res = await axios.post("/smartstore/home/category", token, { withCredentials: true });
 
-                console.log(res)
-
                 const columnOrder: any = new Array();
                 const columns: any = new Array();
                 const tasks: any = new Array();
 
                 res.data.category.map((list: any) => {
                     columnOrder.push(list._id);
-                    columns.push({ _id: list._id, name: list.name, taskIds: list.taskIds });
+                    columns.push({ type: "column", _id: list._id, name: list.name, taskIds: list.taskIds, user: list.user });
                 });
                 tasks.push(...res.data.subCategory);
 
@@ -123,9 +139,8 @@ function Category(props: Props) {
     // 카테고리 추가
     const inputValue = (e: React.ChangeEvent<HTMLInputElement>) => {
         const input = e.target.value;
-        const regex = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|]+$/;
+        const regex = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]+$/;
         if (regex.test(input)) {
-            console.log("적합한 카테고리 명 입니다.");
             setAddColumn(e.target.value);
         } else {
             // console.log("적합하지 않은 카테고리 명 입니다.");
@@ -138,85 +153,171 @@ function Category(props: Props) {
     };
 
     const addSubCategory = {
-        ParentID: selectedList._id,
+        beforeData: dnd,
+        parentID: selectedList._id,
         name: addColumn,
     };
 
     const plus = async () => {
-        console.log(dnd)
         if (addColumn === "") {
             setAddMessage("카테고리 이름을 입력해주세요.");
             return;
         }
-        setAddColumn("");
+        // setAddColumn('');
+        setSelectedName("");
+
+        if (isSelectedTask) {
+            setAddMessage("세부 카테고리는 추가 할수 없습니다.");
+            return;
+        }
 
         if (isSelected) {
             console.log("서브카테고리 추가");
-            console.log(selectedList)
-            // const newTaskIds = Array.from(selectedList.taskIds);
-            // console.log(newTaskIds)
-            // newTaskIds.splice(source.index, 1);
-            // newTaskIds.splice(selectedList.taskIds.length, 0, ...finishDraggableTask);
-
-            // const newData = { ...dnd };
-            // newData.columns[startIndex].taskIds = newTaskIds;
-
-            // setDnd(newData);
-
             try {
                 const res = await axios.post("/smartstore/home/category/subplus", addSubCategory, { withCredentials: true });
-                console.log(res);
-                // setSubCategoryList((enters: any) => [...enters, addSubCategory]);
+
+                const newColumnIndex = dnd.columns.findIndex((list: any) => list._id == res.data.newTask._id);
+
+                dnd.columns.splice(newColumnIndex, 1, res.data.newTask);
+
+                const sendingDND = {
+                    columnOrder: dnd.columnOrder,
+                    columns: dnd.columns,
+                    tasks: res.data.sub,
+                };
+
+                setDnd(sendingDND);
+                setAddColumn("");
+                setRendering(true);
             } catch (err) {
                 console.log(err);
             }
         } else {
-            
             try {
                 const res = await axios.post("/smartstore/home/category/plus", addCategory, { withCredentials: true });
-                console.log(res.data);
 
-                // const newColumnOrder = res.data.map((list: any) => list._id);
-                // const newColumns = res.data;
-                // console.log(newColumnOrder);
+                const newColumnOrder = res.data.map((list: any) => list._id);
+                const newColumns = res.data;
 
-                // const sendingDND = {
-                //     columnOrder: newColumnOrder,
-                //     columns: newColumns,
-                //     tasks: dnd.tasks,
-                // };
+                const sendingDND = {
+                    columnOrder: newColumnOrder,
+                    columns: newColumns,
+                    tasks: dnd.tasks,
+                };
 
-                // setDnd(sendingDND);
-                // setRendering(true);
-                // setCategoryList((enters: any) => [...enters, addCategory]);
+                setDnd(sendingDND);
+                setAddColumn("");
+                setRendering(true);
             } catch (err) {
                 console.log(err);
             }
         }
     };
 
-    const minus = () => {};
+    const minus = async () => {
+        if (isSelected) {
+            console.log("메인 카테고리 삭제");
+
+            const deletedColumnOrder = dnd.columnOrder.filter((list: any) => list != selectedList._id);
+            const deletedColumns = dnd.columns.filter((list: any) => list._id != selectedList._id);
+
+            const findDeleteColumn = dnd.columns.filter((list: any) => list._id == selectedList._id);
+            const deleteList = findDeleteColumn[0].taskIds.map((list: any) => list._id);
+            const deletedTasks = dnd.tasks.filter((list: any) => !deleteList.includes(list._id));
+
+            const deleteDnd = {
+                columnOrder: deletedColumnOrder,
+                columns: deletedColumns,
+                tasks: deletedTasks,
+            };
+
+            try {
+                const res = await axios.post("/smartstore/home/category/edit", deleteDnd, { withCredentials: true });
+
+                const sendingDND = {
+                    columnOrder: dnd.columnOrder,
+                    columns: res.data.category,
+                    tasks: res.data.subcategory,
+                };
+
+                setDnd(sendingDND);
+                setRendering(true);
+            } catch (err) {
+                console.log(err);
+            }
+        } else if (isSelectedTask) {
+            console.log("서브 카테고리 삭제");
+
+            const deleteTask = dnd.tasks.filter((list: any) => list._id != selectedList._id);
+
+            console.log(deleteTask);
+
+            const findColumn = dnd.columns.filter((list: any) => list._id == selectedList.parentID);
+
+            console.log(findColumn);
+
+            const deleteColumnInTask = findColumn[0].taskIds.filter((list: any) => list._id != selectedList._id);
+
+            console.log(deleteColumnInTask);
+
+            findColumn[0].taskIds = deleteColumnInTask;
+
+            const deleteDnd = {
+                columnOrder: dnd.columnOrder,
+                columns: dnd.columns,
+                tasks: deleteTask,
+            };
+
+            setSelectedName("");
+            setIsSelected(false);
+            setIsSelectedTask(false);
+
+            try {
+                const res = await axios.post("/smartstore/home/category/edit", deleteDnd, { withCredentials: true });
+
+                // const newColumnOrder = res.data.map((list: any) => list._id);
+                // const newColumns = res.data;
+
+                const sendingDND = {
+                    columnOrder: dnd.columnOrder,
+                    columns: res.data.category,
+                    tasks: res.data.subcategory,
+                };
+
+                setDnd(sendingDND);
+                setRendering(true);
+            } catch (err) {
+                console.log(err);
+            }
+        } else {
+            setAddMessage("삭제할 카테고리를 선택 해주세요.");
+        }
+    };
 
     // 카테고리 이름
     const onChange = (e: any) => {
-        setSelectedName(e.target.value);
+        if (isSelected || isSelectedTask) {
+            setSelectedName(e.target.value);
+        }
     };
 
     const selectedColumn = {
+        type: "column",
         _id: selectedList._id,
         name: selectedName,
         taskIds: selectedList.taskIds,
+        user: selectedList.user,
     };
 
     const selectedTask = {
-        _id: selectedList._id,
+        type: "task",
+        parentID: selectedList.user,
         name: selectedName,
+        user: selectedList.user,
+        _id: selectedList._id,
     };
 
-    // console.log(selectedColumn);
-    // console.log(selectedTask);
-
-    // 확인 버튼
+    // 저장 버튼
     const CategoryEdit = async (e: any) => {
         e.preventDefault();
 
@@ -230,22 +331,19 @@ function Category(props: Props) {
         //     return;
         // }
 
-        if (selectedName == "") {
-            setNameMessage("카테고리 이름을 입력해 주세요.");
-            return;
-        }
-
         if (isSelected) {
-            console.log("컬럼실행");
+            if (selectedName == "") {
+                setNameMessage("카테고리 이름을 입력해 주세요.");
+                return;
+            }
+            console.log("컬럼을 선택했을때 저장");
             setNameMessage("");
-            console.log(dnd.columns);
 
             const index = dnd.columns.findIndex((list: any, index: any) => list._id == selectedList._id);
             dnd.columns.splice(index, 1, selectedColumn);
 
             try {
                 const res = await axios.post("/smartstore/home/category/edit", dnd, { withCredentials: true });
-                console.log(res.data.category.category);
 
                 const editDnd = {
                     columnOrder: dnd.columnOrder,
@@ -254,30 +352,51 @@ function Category(props: Props) {
                 };
 
                 setDnd(editDnd);
+                setRendering(true);
             } catch (err) {
                 console.log(err);
             }
         } else if (isSelectedTask) {
-            console.log("테스크실행");
+            if (selectedName == "") {
+                setNameMessage("카테고리 이름을 입력해 주세요.");
+                return;
+            }
+            console.log("테스크를 선택했을때 저장");
             setNameMessage("");
-            // const test = dnd.columns.map((list: any) => {
-            //     list.taskIds._id ==
-            // })
-            const index = dnd.tasks.findIndex((list: any, index: any) => list._id == selectedList._id);
-            dnd.tasks.splice(index, 1, selectedTask);
-            console.log(dnd.tasks);
+
+            const findTask = dnd.tasks.filter((list: any) => list._id == selectedList._id);
+            const findColumn = dnd.columns.filter((list: any) => list._id == selectedList.parentID);
+            const editColumnInTask = findColumn[0].taskIds.filter((list: any) => list._id == selectedList._id);
+
+            findTask[0].name = selectedName;
+            editColumnInTask[0].name = selectedName;
+
+            console.log(findTask);
+            console.log(findColumn);
+            console.log(editColumnInTask);
 
             try {
-                const res = await axios.post("/smartstore/home/category/edit", dnd, { withCredentials: true });
-                console.log(res.data.category.category);
+                const res = await axios.post("/smartstore/home/category/edit", {dnd, selectedList}, { withCredentials: true });
+                console.log(res.data.category);
+                console.log(res.data.subcategory);
 
                 const editDnd = {
                     columnOrder: dnd.columnOrder,
-                    columns: res.data.category.category,
-                    tasks: dnd.tasks,
+                    columns: res.data.category,
+                    tasks: res.data.subcategory,
                 };
 
                 setDnd(editDnd);
+                setRendering(true);
+            } catch (err) {
+                console.log(err);
+            }
+        } else {
+            console.log("아무것도 선택하지 않았을때 저장");
+            setNameMessage("");
+            try {
+                const res = await axios.post("/smartstore/home/category/edit", dnd, { withCredentials: true });
+                setRendering(true);
             } catch (err) {
                 console.log(err);
             }
@@ -292,15 +411,106 @@ function Category(props: Props) {
         // }
     };
 
-    // 카테고리 리스트 바깥 클릭시 셀렉트 해제
+    // 등록된 상품 클릭시
+    const AddedProductClick = (name: string, e: React.MouseEvent<HTMLLIElement>) => {
+        const select = e.currentTarget.textContent;
+        const data = addedProductList.filter((list: any) => list.name == select);
+        setIsAddedSelected(true);
+        setAddedSelected(data);
+        setAddedSelectedName(name);
+    };
+
+    // 적용 버튼
+    const ProductAdd = async (e: any) => {
+        e.preventDefault();
+
+        const productCategoryAdd = {
+            selectedProduct: selectedProductList,
+            selectedCategory: selectedList,
+        };
+
+        if (!selectedProductList[0]) {
+            console.log("상품선택이 안됨");
+            return;
+        } else if (!selectedList) {
+            console.log("카테고리 선택이 안됨");
+            return;
+        }
+
+        try {
+            const res = await axios.post("/smartstore/home/category/productcategoryadd", productCategoryAdd, { withCredentials: true });
+            console.log(res.data);
+
+            // if (res.data.error == "카테고리중복") {
+            //     setAddedErrMessage("선택된 카테고리에는 이미 등록 되어있는 상품입니다.");
+            //     return;
+            // }
+
+            setAddedProductList(res.data);
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    // 삭제 버튼
+    const ProductDelete = async (e: any) => {
+        e.preventDefault();
+
+        if (!addedSelected[0]) {
+            console.log("카테고리가 등록된 상품이 선택되지 않았습니다.");
+            return;
+        }
+
+        console.log(addedSelected[0].category);
+        console.log(selectedList._id);
+        const copy = selectedList._id;
+        console.log(copy);
+        const addedDelete = addedSelected[0].category.filter((list: any) => list._id != selectedList._id);
+        console.log(addedDelete);
+
+        const data = {
+            selectedCategory: selectedList,
+            addedSelected: addedSelected,
+            addedDelete: addedDelete,
+        };
+
+        try {
+            const res = await axios.post("/smartstore/home/category/productcategorydelete", data, { withCredentials: true });
+            console.log(res.data);
+            setAddedProductList(res.data);
+            // if(res.data.error == "카테고리중복"){
+            //     setAddedErrMessage('선택된 카테고리에는 이미 등록 되어있는 상품입니다.')
+            //     return
+            // }
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    // 카테고리 리스트 바깥 클릭시 선택 해제
     useEffect(() => {
         const clickOutside = (e: any) => {
-            if (!inputRef.current.contains(e.target) && !inputRef2.current.contains(e.target) && listRef.current && !listRef.current.contains(e.target)) {
+            if (!inputRef.current.contains(e.target) && !inputRef2.current.contains(e.target) && !inputRef3.current.contains(e.target) && listRef.current && !listRef.current.contains(e.target)) {
                 setIsSelected(false);
                 setIsSelectedTask(false);
-                // setSelectedName("");
-                // setSelectedId("");
-                setSelectedList("");
+                setSelectedId(null);
+            }
+        };
+        document.addEventListener("mousedown", clickOutside);
+        return () => {
+            // Cleanup the event listener
+            document.removeEventListener("mousedown", clickOutside);
+        };
+    }, [selectedList]);
+
+    // 카테고리 등록된 상품 리스트 선택 해제
+    useEffect(() => {
+        const clickOutside = (e: any) => {
+            if (!addedBtnArea.current.contains(e.target) && addedRefs.current && !addedRefs.current.contains(e.target)) {
+                setAddedSelectedName(null);
+                setIsAddedSelected(false);
+                setAddedSelected("");
             }
         };
 
@@ -310,7 +520,7 @@ function Category(props: Props) {
             // Cleanup the event listener
             document.removeEventListener("mousedown", clickOutside);
         };
-    }, [selectedList]);
+    }, [addedBtnArea]);
 
     const onDragEnd = useCallback(
         (result: DropResult) => {
@@ -350,6 +560,14 @@ function Category(props: Props) {
             const finishIndex = dnd.columns && dnd.columns.findIndex((list: any) => list._id == destination.droppableId);
 
             const finishDraggableTask = startColumn[0].taskIds && startColumn[0].taskIds.filter((list: any) => list._id == draggableId);
+            finishDraggableTask[0].parentID = finishColumn[0]._id;
+
+            const tasksIndex = dnd.tasks && dnd.tasks.findIndex((list: any) => list._id == finishDraggableTask[0]._id);
+            dnd.tasks && dnd.tasks.splice(tasksIndex, 1, finishDraggableTask[0]);
+
+            // task의 parentID는 항상 도착지의 _id로 바꿔준다.
+            console.log(finishDraggableTask[0]);
+            console.log(destination);
 
             // 같은 카테고리에서 서브 카테고리 이동 했을때
             if (startColumn[0]._id == finishColumn[0]._id) {
@@ -365,18 +583,26 @@ function Category(props: Props) {
                 // 다른 카테고리로 서브 카테고리 이동 했을때
                 const startTaskIds = Array.from(startColumn[0].taskIds);
                 startTaskIds.splice(source.index, 1);
-                const newStartColumn = { _id: startColumn[0]._id, name: startColumn[0].name, taskIds: startTaskIds };
+                const newStartColumn = { _id: startColumn[0]._id, name: startColumn[0].name, taskIds: startTaskIds, user: startColumn[0].user };
 
                 const finishTaskIds = Array.from(finishColumn[0].taskIds);
                 finishTaskIds.splice(destination.index, 0, ...finishDraggableTask);
-                const newFinishColumn = { _id: finishColumn[0]._id, name: finishColumn[0].name, taskIds: finishTaskIds };
+                const newFinishColumn = { _id: finishColumn[0]._id, name: finishColumn[0].name, taskIds: finishTaskIds, user: startColumn[0].user };
 
                 const newData = { ...dnd };
 
                 newData.columns[startIndex] = newStartColumn;
                 newData.columns[finishIndex] = newFinishColumn;
+                // newData.tasks =
 
                 setDnd(newData);
+            }
+
+            try {
+                const res = axios.post("/smartstore/home/category/edit", dnd, { withCredentials: true });
+                setRendering(true);
+            } catch (err) {
+                console.log(err);
             }
         },
         [dnd]
@@ -390,6 +616,7 @@ function Category(props: Props) {
                         <div className="panel-heading">
                             <div className="pull-left">
                                 <h3 className="panel-title">
+                                    카테고리 등록
                                     <span className="text-primary"></span>
                                 </h3>
                             </div>
@@ -412,13 +639,17 @@ function Category(props: Props) {
                                                                         key={list._id}
                                                                         index={index}
                                                                         isSelected={isSelected}
+                                                                        isSelectedTask={isSelectedTask}
                                                                         setIsSelected={setIsSelected}
+                                                                        setIsSelectedTask={setIsSelectedTask}
                                                                         selectedList={selectedList}
                                                                         setSelectedList={setSelectedList}
                                                                         categoryList={categoryList}
                                                                         subCategoryList={subCategoryList}
-                                                                        setIsSelectedTask={setIsSelectedTask}
                                                                         setSelectedName={setSelectedName}
+                                                                        selectedId={selectedId}
+                                                                        setSelectedId={setSelectedId}
+                                                                        setAddedProductList={setAddedProductList}
                                                                     />
                                                                 );
                                                             })}
@@ -435,10 +666,10 @@ function Category(props: Props) {
                                             </div>
                                         </div>
                                         <div className={isAdd ? "error" : "error-active"}>{AddMessage}</div>
-                                        <button className="normal-btn" onClick={plus}>
+                                        <button className="normal-btn edit" onClick={plus}>
                                             <span className="text">+</span>
                                         </button>
-                                        <button className="normal-btn" onClick={minus}>
+                                        <button className="normal-btn edit" onClick={minus}>
                                             <span className="text">-</span>
                                         </button>
                                     </div>
@@ -452,20 +683,51 @@ function Category(props: Props) {
                                                     <input type="text" value={selectedName} placeholder="카테고리 이름" className="input" onChange={onChange} />
                                                 </div>
                                             </div>
+                                            <button className="normal-btn edit2" onClick={CategoryEdit}>
+                                                <span className="text">저장</span>
+                                            </button>
                                             <div className={isName ? "error" : "error-active"}>{NameMessage}</div>
                                         </div>
+                                        <div className="middle">
+                                            <h5 className="box-name">등록된 상품</h5>
+                                            <ul className="category-list-wrap" ref={addedRefs}>
+                                                {addedProductList.map((list: any, index: any) => {
+                                                    return (
+                                                        <li
+                                                            key={index}
+                                                            value={list.name}
+                                                            className="category-list"
+                                                            style={{ backgroundColor: list.name == addedSelectedName && isAddedSelected ? "#e0e0e0" : "#fff", marginBottom: "10px" }}
+                                                            onClick={(e) => AddedProductClick(list.name, e)}
+                                                        >
+                                                            <div className="edit flex flex-ju-center flex-align-center">
+                                                                <img src={list.mainImage[0]} style={{ width: "40px", marginRight: "5px", padding: "5px" }}></img>
+                                                                <span>{list.name}</span>
+                                                            </div>
+                                                        </li>
+                                                    );
+                                                })}
+                                            </ul>
+                                            <div ref={addedBtnArea} style={{ display: "flex" }}>
+                                                <button className="normal-btn edit2" style={{ marginRight: "5px" }} onClick={ProductAdd}>
+                                                    <span className="text">적용</span>
+                                                </button>
+                                                <button className="normal-btn edit2" onClick={ProductDelete}>
+                                                    <span className="text">삭제</span>
+                                                </button>
+                                            </div>
+                                            <div style={{ marginTop: "10px", color: "#ff3627" }}>
+                                                <span>{addedErrMessage}</span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <button className="normal-btn" onClick={CategoryEdit}>
-                                        <span className="text">저장</span>
-                                    </button>
                                 </div>
-                                <div className="box third flex flex-wrap flex-align-center flex-ju-bt">
+                                <div className="box third" ref={inputRef3}>
                                     <h5 className="box-name">상품 목록</h5>
-                                    <TableProductList isCategory={isCategory}></TableProductList>
+                                    <TableProductList isCategory={isCategory} setSelectedProductList={setSelectedProductList}></TableProductList>
                                 </div>
                             </div>
                         </div>
-
                         <div className="panel-footer"></div>
                     </div>
                 </div>

@@ -1,66 +1,148 @@
-import { useEffect } from "react";
+import axios from "../../api/axios";
+import styled from "styled-components";
+import { useEffect, useState } from "react";
 import { Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
 import { useCookies } from "react-cookie";
 
 import Home from "./Home";
 import Category from "./Category";
 import Products from "./Products";
 import NotFound from "./NotFound";
+import Qna from "./Qna";
 
-import { selectCurrentUser } from '../../store/userSlice';
+import { selectCurrentUser } from "../../store/userSlice";
 
 import "./Shop.scss";
 
 let currentPath = "";
 
-function Shop () {
+const ContainerUl = styled.ul`
+    display: flex;
+    flex-wrap: wrap;
+    color: #808080;
+`;
+
+const List = styled.li`
+    margin: 20px;
+    position: relative;
+    
+    & > a {
+        color: #808080;
+    }
+`;
+
+interface SubCategoryUl {
+    isSubCateShow: boolean;
+}
+
+const SubCategoryUl = styled.ul<SubCategoryUl>`
+    display: ${(props) => (props.isSubCateShow ? "flex" : "none")};
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    left: -30px;
+    top: 35px;
+    width: 100px;
+    background-color: white;
+    z-index: 100;
+    padding: 5px;
+`;
+
+const SubList = styled.li`
+    & > a {
+        color: #474747;
+
+    }
+`;
+
+export interface categoryListType {
+    type: 'column' | 'task';
+    name: string;
+    taskIds?: any[];
+    user: string;
+    _id: string;
+    parentID?: string;
+}
+
+export interface GmId {
+    id: string;
+}
+
+function Shop() {
+    const location = useLocation();
+
+    useEffect(() => {
+        if (currentPath === location.pathname) window.location.reload();
+        currentPath = location.pathname;
+    }, [location]);
 
     const user = useSelector(selectCurrentUser);
+    console.log(user)
+
     const navigate = useNavigate();
-    const [cookies, setCookie, removeCookie] = useCookies(['userjwt']);
 
-    // useEffect(() => {
-    //     const verifyUser = async () => {
-    //       if (!cookies.userjwt) { // 토큰이 없으면 로그인 페이지로 이동.
-    //         // navigate("/user/login");
-    //         console.log('유저가 로그인을 하지 않았습니다')
+    // 카테고리 클릭시 퀵메뉴
+    const [selectedColumn, setSelectedColumn] = useState<categoryListType | null | undefined>();
+    const [selectedTask, setSelectedTask] = useState<categoryListType | null | undefined>();
 
-    //       } else {
-    //         const { data } = await axios.post(
-    //           "http://localhost:8080/smartstore/shop",
-    //           {},
-    //           {
-    //             withCredentials: true,
-    //           }
-    //         );
-    //         if (!data.status) {
-    //           removeCookie("userjwt");
-    //           navigate("/shop");
-    //         } else
-    //           console.log(`Hi ${data.user} `);
-    //           console.log(data);
-    //       }
-    //     };
-    //     verifyUser();
-    //   }, [cookies, navigate, removeCookie]);
-    
-    const location = useLocation();
-    
+    // 암호화된 id를 입력.
+    const [gmId, setGmId] = useState<GmId>({id: "thanks6"});
+
     useEffect(() => {
-        if(currentPath === location.pathname) window.location.reload();
-        currentPath = location.pathname;
-      }, [location]);
+        const userData = async () => {
+            try {
+                const res = await axios.post("/smartstore/shop", gmId, { withCredentials: true });
+                setCategoryList(res.data);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        userData();
+    }, []);
+
+    const [cookies, setCookie, removeCookie] = useCookies(["userjwt"]);
+
+    // 카테고리 클릭시 해당 카테고리의 id가 저장되어 중복클릭을 방지
+    const [isCategoryClick, setIsCategoryClick] = useState<boolean>(false);
+    const [clickedLinkId, setClickedLinkId] = useState(null);
+
+    useEffect(() => {
+        const categoryReset = async () => {
+            if (!isCategoryClick) {
+                await setClickedLinkId(null);
+                // console.log("카테고리 영역이 아니므로 초기화를 진행합니다.");
+            }
+            setIsCategoryClick(false);
+        };
+        categoryReset();
+    }, [location]);
+
+    const [categoryList, setCategoryList] = useState<Array<{
+        type: string,
+        name: string,
+        taskIds: any[],
+        user: string,
+        _id: string
+    }>>([]);
+
+    const [isSubCateShow, setIsSubCateShow] = useState<boolean>(false);
+
+    const SubCategoryShow = () => {
+        setIsSubCateShow(true);
+    };
+
+    const SubCategoryHide = () => {
+        setIsSubCateShow(false);
+    };
 
     //   로그인 관련
-
     const logOut = () => {
-        console.log('로그아웃')
-        removeCookie("userjwt", { path: '/' });
+        removeCookie("userjwt", { path: "/" });
         navigate("/shop");
     };
 
-    return(
+    return (
         <>
             <div className="shop-main-wrap">
                 <div className="header-middle-wrap">
@@ -72,7 +154,7 @@ function Shop () {
                                     <a href="{() => false}" className="naver-shopping"></a>
                                 </div>
                                 <div className="right">
-                                    <div className={ cookies.userjwt ? "user-loginbtn-wrap display-none" : "user-loginbtn-wrap"}>
+                                    <div className={cookies.userjwt ? "user-loginbtn-wrap display-none" : "user-loginbtn-wrap"}>
                                         <button className="user-loginbtn">
                                             <Link to="../">
                                                 <span>관리자 페이지</span>
@@ -84,11 +166,17 @@ function Shop () {
                                             </Link>
                                         </button>
                                     </div>
-                                    <div className={ !cookies.userjwt ? "user-logged-wrap display-none" : "user-logged-wrap"}>
-                                        <a href="{() => false}">마이페이지</a>
-                                        <a href="{() => false}">장바구니</a>
-                                        <a href="{() => false}">{user.name}</a>
-                                        <button className="user-loginbtn" onClick={ logOut }>
+                                    <div className={!cookies.userjwt ? "user-logged-wrap display-none" : "user-logged-wrap"}>
+                                        <button className="user-loginbtn">    
+                                            <Link to={""}>마이페이지</Link>
+                                        </button>
+                                        <button className="user-loginbtn">    
+                                            <Link to={"/cart"}>장바구니</Link>
+                                        </button>
+                                        <span className="user-name">    
+                                            <Link to={""}>{user.name}</Link>
+                                        </span>
+                                        <button className="user-loginbtn" onClick={logOut}>
                                             <span>로그아웃</span>
                                         </button>
                                     </div>
@@ -100,8 +188,8 @@ function Shop () {
                                         <span className="alarm-logo"></span>
                                         <span className="btn-text">알림받기</span>
                                     </button>
-                                    <span className="alarm-customer flex flex-ju-center flex-align-center">관심고객수 0
-                                        <button className="alarm-customer-icon"></button>
+                                    <span className="alarm-customer flex flex-ju-center flex-align-center">
+                                        관심고객수 0<button className="alarm-customer-icon"></button>
                                     </span>
                                 </div>
                                 <Link to="/shop">
@@ -109,7 +197,7 @@ function Shop () {
                                 </Link>
                                 <div className="right">
                                     <div className="search-wrap">
-                                        <input type="text" className="input" placeholder="검색어를 입력해보세요."/>
+                                        <input type="text" className="input" placeholder="검색어를 입력해보세요." />
                                         <button className="search-btn">
                                             <span className="search-btn-icon"></span>
                                         </button>
@@ -118,49 +206,73 @@ function Shop () {
                             </div>
                             <div className="line-bottom-menulist flex flex-ju-bt flex-align-center">
                                 <div className="menulist-wrap flex flex-ju-sa flex-align-center">
-                                    <a href="{() => false}" className="menu">
-                                        <Link to="category">
-                                        베스트
-                                        </Link>
-                                        <span className="menu-icon"></span>
-                                    </a>
-                                    <a href="{() => false}" className="menu">
-                                        Mac
-                                        <span className="menu-icon"></span>
-                                    </a>
-                                    <a href="{() => false}" className="menu">
-                                        iPad
-                                        <span className="menu-icon"></span>
-                                    </a>
-                                    <a href="{() => false}" className="menu">
-                                        iPhone
-                                        <span className="menu-icon"></span>
-                                    </a>
-                                    <a href="{() => false}" className="menu">
-                                        Watch
-                                        <span className="menu-icon"></span>
-                                    </a>
-                                    <a href="{() => false}" className="menu">
-                                        AirPods
-                                        <span className="menu-icon"></span>
-                                    </a>
-                                    <a href="{() => false}" className="menu">
-                                        Apple TV
-                                        <span className="menu-icon"></span>
-                                    </a>
-                                    <a href="{() => false}" className="menu">
-                                        액세서리
-                                        <span className="menu-icon"></span>
-                                    </a>
-                                    <a href="{() => false}" className="menu">
-                                        전체상품
-                                        <span className="menu-icon"></span>
-                                    </a>
+                                    <ContainerUl>
+                                        {categoryList.map((list: any, index: any) => {
+                                            if (list.taskIds.length > 0) {
+                                                return (
+                                                    <List onMouseLeave={SubCategoryHide} key={index}>
+                                                        <Link
+                                                            to={`./${list._id}`}
+                                                            onMouseEnter={SubCategoryShow}
+                                                            onClick={(e) => {
+                                                                if (list._id == clickedLinkId) {
+                                                                    e.preventDefault();
+                                                                } else {
+                                                                    setClickedLinkId(list._id);
+                                                                    setIsCategoryClick(true);
+                                                                }
+                                                            }}
+                                                        >
+                                                            {list.name}
+                                                        </Link>
+                                                        <SubCategoryUl isSubCateShow={isSubCateShow}>
+                                                            {list.taskIds.map((taskIds: any, index: any) => {
+                                                                return (
+                                                                    <SubList key={index}>
+                                                                        <Link
+                                                                            to={`./${taskIds._id}`}
+                                                                            onClick={(e) => {
+                                                                                if (taskIds._id == clickedLinkId) {
+                                                                                    e.preventDefault();
+                                                                                } else {
+                                                                                    setClickedLinkId(taskIds._id);
+                                                                                    setIsCategoryClick(true);
+                                                                                }
+                                                                            }}
+                                                                        >
+                                                                            {taskIds.name}
+                                                                        </Link>
+                                                                    </SubList>
+                                                                );
+                                                            })}
+                                                        </SubCategoryUl>
+                                                    </List>
+                                                );
+                                            } else {
+                                                return (
+                                                    <List>
+                                                        <Link
+                                                            to={`./${list._id}`}
+                                                            onClick={(e) => {
+                                                                if (list._id == clickedLinkId) {
+                                                                    e.preventDefault();
+                                                                } else {
+                                                                    setClickedLinkId(list._id);
+                                                                    setIsCategoryClick(true);
+                                                                }
+                                                            }}
+                                                        >
+                                                            {list.name}
+                                                        </Link>
+                                                        <span className="menu-icon"></span>
+                                                    </List>
+                                                );
+                                            }
+                                        })}
+                                    </ContainerUl>
                                 </div>
                                 <div className="seller-menu-wrap flex flex-ju-sa flex-align-center">
-                                    <a href="{() => false}" className="menu">
-                                        묻고 답하기
-                                    </a>
+                                    <Link to={"qna"} className="menu">묻고 답하기</Link>
                                     <a href="{() => false}" className="menu">
                                         공지사항
                                     </a>
@@ -172,10 +284,11 @@ function Shop () {
                         </div>
                     </div>
                     <Routes>
-                        <Route path="*" element={<NotFound/>}/>
-                        <Route path="/products" element={<Products/>}/>
-                        <Route path="/category" element={<Category/>}/>
-                        <Route path="/" element={<Home/>}/>
+                        <Route path="*" element={<NotFound />} />
+                        <Route path="/products/:id" element={<Products gmId={gmId} categoryList={categoryList} selectedColumn={selectedColumn} setSelectedColumn={setSelectedColumn} selectedTask={selectedTask} setSelectedTask={setSelectedTask} />} />
+                        <Route path="/:id" element={<Category gmId={gmId} categoryList={categoryList} selectedColumn={selectedColumn} setSelectedColumn={setSelectedColumn} selectedTask={selectedTask} setSelectedTask={setSelectedTask} />} />
+                        <Route path="/" element={<Home />} />
+                        <Route path="/qna" element={<Qna />} />
                     </Routes>
                 </div>
 
@@ -192,12 +305,14 @@ function Shop () {
                             <div className="third flex flex-align-center">
                                 <span className="seller-number">02-000-0000</span>
                                 <span className="seller-auth">인증</span>
-                                <button>잘못된 번호 신고
+                                <button>
+                                    잘못된 번호 신고
                                     <span className="icon"></span>
                                 </button>
                             </div>
                             <div className="fourth flex flex-align-center">
-                                <button>판매자정보
+                                <button>
+                                    판매자정보
                                     <span className="icon"></span>
                                 </button>
                             </div>
@@ -217,26 +332,40 @@ function Shop () {
                             <div className="second flex">
                                 <div className="naver-info">
                                     <h2>네이버㈜</h2>
-                                    <div>사업자등록번호 220-81-62517</div><span className="bar"></span>
-                                    <div>통신판매업신고번호 2006-경기성남-0692호</div><br></br>
-                                    <div>대표이사 최수연</div><span className="bar"></span>
-                                    <div>경기도 성남시 분당구 정자일로 95, NAVER 1784, 13561</div><br></br>
-                                    <div>전화 1588-3819</div><span className="bar"></span>
-                                    <div>이메일 helpcustomer@naver.com</div><span className="bar"></span>
-                                    <div>사업자등록정보 확인</div><br></br>
+                                    <div>사업자등록번호 220-81-62517</div>
+                                    <span className="bar"></span>
+                                    <div>통신판매업신고번호 2006-경기성남-0692호</div>
+                                    <br></br>
+                                    <div>대표이사 최수연</div>
+                                    <span className="bar"></span>
+                                    <div>경기도 성남시 분당구 정자일로 95, NAVER 1784, 13561</div>
+                                    <br></br>
+                                    <div>전화 1588-3819</div>
+                                    <span className="bar"></span>
+                                    <div>이메일 helpcustomer@naver.com</div>
+                                    <span className="bar"></span>
+                                    <div>사업자등록정보 확인</div>
+                                    <br></br>
                                     <div>호스팅 서비스 제공 : NAVER Cloud</div>
                                 </div>
                                 <div className="customer-service">
                                     <h2>고객센터</h2>
-                                    <div>강원도 춘천시 퇴계로 89 강원전문건설회관</div><br></br>
-                                    <div>전화 1588-3819</div><button>전화전클릭</button><br></br>
-                                    <div>결제도용신고 1588-3816</div><br></br>
-                                    <strong>1:1문의 바로가기</strong><br></br>
+                                    <div>강원도 춘천시 퇴계로 89 강원전문건설회관</div>
+                                    <br></br>
+                                    <div>전화 1588-3819</div>
+                                    <button>전화전클릭</button>
+                                    <br></br>
+                                    <div>결제도용신고 1588-3816</div>
+                                    <br></br>
+                                    <strong>1:1문의 바로가기</strong>
+                                    <br></br>
                                 </div>
                                 <div className="report">
                                     <h2>전자금융거래 분쟁처리</h2>
-                                    <div>전화 1588-3819</div><br></br>
-                                    <strong>1:1문의 바로가기</strong><br></br>
+                                    <div>전화 1588-3819</div>
+                                    <br></br>
+                                    <strong>1:1문의 바로가기</strong>
+                                    <br></br>
                                 </div>
                             </div>
                             <div className="third">
@@ -245,14 +374,16 @@ function Shop () {
                             </div>
                             <div className="fourth">
                                 <a href="{() => false}" className="naver-logo"></a>
-                                <span>Copyright © <strong>NAVER Corp</strong>.All Rights Reserved.</span>
+                                <span>
+                                    Copyright © <strong>NAVER Corp</strong>.All Rights Reserved.
+                                </span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </>
-    )
+    );
 }
 
 export default Shop;

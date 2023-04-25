@@ -3,18 +3,13 @@
     position: relative;
     min-width: 1280px;
     background-color: #010101;
-    color: white;
-    font-family: Helvetica, '나눔고딕', 'Nanum Gothic', '나눔스퀘어', 'Nanum Square', 'Apple SD Gothic Neo', 'Malgun Gothic', '맑은 고딕', Dotum, '돋움', sans-serif;
+    font-family: GmarketSansMedium;
     
     .header-wrap {
         position: absolute;
         z-index: 2;
         left: 0;
         right: 0;
-        
-        a {
-            color:white;
-        }
     }
 
     .header-inner:before {
@@ -40,7 +35,7 @@
                     height: 25px;
                     content: "";
                     display: inline-block;
-                    background: url(../../../public/img/Naver_Logotype.svg) no-repeat;
+                    background: url(/img/Naver_Logotype.svg) no-repeat;
                     background-position: 0px 8px;
                     vertical-align: middle;
                     background-size: 45px;
@@ -51,7 +46,7 @@
                     height: 13px;
                     content: "";
                     display: inline-block;
-                    background-image: url(../../../public/img/shop/spText_svg.svg);
+                    background-image: url(/img/shop/spText_svg.svg);
                     background-position: -302px -124px;
                     background-size: 404px 403px;
                     margin-top: 10px;
@@ -77,6 +72,10 @@
                     .user-loginbtn {
                         color: white;
                         background-color: rgb(39, 39, 39);
+
+                        a {
+                            color: white;
+                        }
                     }
                 }
 
@@ -84,6 +83,17 @@
                     .user-loginbtn {
                         color: white;
                         background-color: rgb(39, 39, 39);
+
+                        a {
+                            color: white;
+                        }
+                    }
+
+                }
+
+                .user-name {
+                    a {
+                        color: white;
                     }
                 }
             }
@@ -97,7 +107,7 @@
                 width: 30px;
                 height: 36px;
                 display: inline-block;
-                background-image: url(../../../public/img/shop/Apple_logo.png);
+                background-image: url(/img/shop/Apple_logo.png);
                 background-size: 30px;
                 margin: 0px;
             }
@@ -122,7 +132,7 @@
                         width: 18px;
                         height: 15px;
                         margin: 0px;
-                        background-image: url(../../../public/img/shop/spIcon_svg.svg);
+                        background-image: url(/img/shop/spIcon_svg.svg);
                         background-size: 726px 688px;
                         background-position: -515px -414px;
                     }
@@ -149,7 +159,7 @@
                         width: 15px;
                         height: 15px;
                         content: "";
-                        background-image: url(../../../public/img/shop/spBs_icon_svg.svg);
+                        background-image: url(/img/shop/spBs_icon_svg.svg);
                         background-position: -164px -292px;
                         background-size: 333px 313px;
                         background-color: black;
@@ -202,7 +212,7 @@
                             height: 16px;
                             display: inline-block;
                             background-color: transparent;
-                            background-image: url(../../../public/img/shop/spIcon_svg.svg);
+                            background-image: url(/img/shop/spIcon_svg.svg);
                             background-size: 726px 688px;
                             background-position: -684px -399px;
                         }
@@ -230,7 +240,7 @@
                         width: 7px;
                         height: 4px;
                         content: "";
-                        background-image: url(../../../public/img/shop/spArrow_svg.svg);
+                        background-image: url(/img/shop/spArrow_svg.svg);
                         background-size: 216px 212px;
                         background-position: -178px -176px;
                     }
@@ -281,7 +291,7 @@
                         display: inline-block;
                         content: "";
                         margin-right: 5px;
-                        background-image: url(../../../public/img/shop/spIcon_svg.svg);
+                        background-image: url(/img/shop/spIcon_svg.svg);
                         background-size: 726px 688px;
                         background-position: -684px -95px;
                     }
@@ -332,7 +342,7 @@
                             height: 11px;
                             margin-top: -6px;
                             content: "";
-                            background-image: url(../../../public/img/shop/spIcon_svg.svg);
+                            background-image: url(/img/shop/spIcon_svg.svg);
                             background-size: 726px 688px;
                             background-position: -708px -436px;
                         }
@@ -359,7 +369,7 @@
                             height: 3px;
                             display: inline-block;
                             content: "";
-                            background-image: url(../../../public/img/shop/spArrow_svg.svg);
+                            background-image: url(/img/shop/spArrow_svg.svg);
                             background-size: 216px 212px;
                             background-position: -206px -184px;
                         }
@@ -494,7 +504,7 @@
                         width: 64px;
                         height: 11px;
                         margin-right: 6px;
-                        background-image: url(../../../public/img/shop/spText_svg.svg);
+                        background-image: url(/img/shop/spText_svg.svg);
                         background-size: 404px 403px;
                         background-position: -302px -167px;
                     }

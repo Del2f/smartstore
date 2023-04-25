@@ -1,4 +1,6 @@
+import axios from "../../../api/axios";
 import React, { SetStateAction } from "react";
+
 import styled from "styled-components";
 
 import { Draggable } from "react-beautiful-dnd";
@@ -11,6 +13,7 @@ interface IContainer {
         name: string;
     };
     selectedList: any;
+    selectedId: string | null;
 }
 
 const Container = styled.div<IContainer>`
@@ -24,7 +27,6 @@ const Container = styled.div<IContainer>`
     background-color: ${(props) => (props.isDragDisabled ? "black" : props.isDragging ? "#b0b5c0" : "#f1f1f1")};
     background-color: ${(props) => (props.task._id == props.selectedList._id ? "#7986a0" : "f0f0f0")};
     transition: background-color 0.3s ease;
-
 `;
 
 interface ITaskProps {
@@ -33,25 +35,46 @@ interface ITaskProps {
         name: string;
     };
     index: number;
+    isSelectedTask: boolean;
+    setIsSelected: React.Dispatch<SetStateAction<boolean>>;
+    setIsSelectedTask: React.Dispatch<any>;
     categoryList: any;
     subCategoryList: any;
-    setIsSelected: React.Dispatch<SetStateAction<boolean>>;
     selectedList: any;
+    selectedId: string | null;
+    setSelectedId: React.Dispatch<SetStateAction<string | null>>;
     setSelectedList: React.Dispatch<any>;
-    setIsSelectedTask: React.Dispatch<any>;
     setSelectedName: React.Dispatch<SetStateAction<string | undefined>>;
+    setAddedProductList: React.Dispatch<any>;
+
 }
 
-const Task = ({ task, index, categoryList, selectedList, subCategoryList, setIsSelected, setSelectedList, setIsSelectedTask, setSelectedName}: ITaskProps) => {
+const Task = ({ task, index, isSelectedTask, categoryList, selectedList, selectedId, setSelectedId, subCategoryList, setIsSelected, setSelectedList, setIsSelectedTask, setSelectedName, setAddedProductList }: ITaskProps) => {
     const isDragDisabled = task._id === "";
 
-    const Selected = (e: any) => {
+    const Selected = async (e: any) => {
         const select = e.target.textContent;
         const data = subCategoryList.filter((list: any) => list.name == select);
         setIsSelected(false);
         setIsSelectedTask(true);
         setSelectedList(data[0]);
         setSelectedName(data[0].name);
+        setSelectedId(data[0]._id);
+
+        if (selectedList.name == e.target.textContent) {
+            setIsSelected(false);
+            setIsSelectedTask(false);
+            setSelectedList("");
+            setSelectedName("");
+        }
+
+        try {
+            const res = await axios.post("/smartstore/home/category/productcategorylist", data[0], { withCredentials: true });
+            console.log(res.data.productList);
+            setAddedProductList(res.data.productList);
+        } catch (err) {
+            console.log(err);
+        }
     };
 
     return (
@@ -65,6 +88,7 @@ const Task = ({ task, index, categoryList, selectedList, subCategoryList, setIsS
                     isDragDisabled={isDragDisabled}
                     task={task}
                     selectedList={selectedList}
+                    selectedId={selectedId}
                     onClick={Selected}
                 >
                     {task.name}

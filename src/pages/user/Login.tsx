@@ -2,7 +2,7 @@ import axios from "../../api/axios";
 import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { loginUser } from '../../store/userSlice';
+import { UserLogin } from '../../store/userSlice';
 import "./Login.scss";
 // import $ from 'jquery';
 // import Signup from '../Signup';
@@ -10,6 +10,7 @@ import "./Login.scss";
 
     function Login() {
         
+        console.log(UserLogin)
         const dispatch = useDispatch();
         const navigate = useNavigate(); // 다른 페이지로 이동히게 해주는 Hook.
         const [Id, setId] = useState("");
@@ -87,7 +88,7 @@ import "./Login.scss";
                         setErrorMessage('아이디 혹은 비밀번호가 틀렸습니다.')
                         setIsError(false)
                     } else if (res.data.status == true){
-                        dispatch(loginUser( res.data.user ));
+                        dispatch(UserLogin( res.data.user ));
                         navigate("/shop");
                     }
                 })

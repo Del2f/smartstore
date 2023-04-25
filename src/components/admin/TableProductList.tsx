@@ -14,10 +14,10 @@ import "./TableProductList.scss";
 type Props = {
     setProductTotal?: Dispatch<SetStateAction<number>>;
     isCategory?: boolean;
+    setSelectedProductList?: Dispatch<any>;
 };
 
 function TableProductList(props: Props) {
-
     const token = useSelector(selectToken);
     const gridRef = useRef<any>();
 
@@ -48,11 +48,11 @@ function TableProductList(props: Props) {
             resizable: false,
             cellRendererFramework: (params: any) => {
                 return (
-                        <Link to={params.data._id}>
-                            <button className="editBtn" data-action="edit">
-                                <p>수정</p>
-                            </button>
-                        </Link>
+                    <Link to={params.data._id}>
+                        <button className="editBtn" data-action="edit">
+                            <p>수정</p>
+                        </button>
+                    </Link>
                 );
             },
         },
@@ -116,6 +116,7 @@ function TableProductList(props: Props) {
 
     const onSelectionChanged = () => {
         setSelectedRows(gridRef.current.api.getSelectedRows());
+        props.setSelectedProductList && props.setSelectedProductList(gridRef.current.api.getSelectedRows());
     };
 
     const [inputClickNumber, setInputClickNumber] = useState(0);
@@ -201,19 +202,17 @@ function TableProductList(props: Props) {
     return (
         <>
             {props.isCategory ? (
-
-                    <div className="right">
-                        <span>페이지 노출 </span>
-                        <select onChange={onPageSizeChanged} id="page-size">
-                            <option value="10" selected={true}>
-                                10
-                            </option>
-                            <option value="100">100</option>
-                            <option value="500">500</option>
-                            <option value="1000">1000</option>
-                        </select>
-                    </div>
-
+                <div className="tableright">
+                    <span>페이지 노출 </span>
+                    <select onChange={onPageSizeChanged} id="page-size">
+                        <option value="10" selected={true}>
+                            10
+                        </option>
+                        <option value="100">100</option>
+                        <option value="500">500</option>
+                        <option value="1000">1000</option>
+                    </select>
+                </div>
             ) : (
                 <div className="flex flex-ju-bt flex-align-center">
                     <div className="left">
@@ -242,7 +241,7 @@ function TableProductList(props: Props) {
                             </button>
                         </div>
                     </div>
-                    <div className="right">
+                    <div className="tableright">
                         <span>페이지 노출 </span>
                         <select onChange={onPageSizeChanged} id="page-size">
                             <option value="10" selected={true}>

@@ -33,28 +33,28 @@ body {
 
 @font-face {
   font-family: Naver Icons;
-  src: url(../public/img/Naver-Icons.woff2) format("woff2");
-  /* format("woff2"),url(../public/img//Naver-Icons.woff) */
-  /* format("woff"),url(../public/img//Naver-Icons.ttf) */
-  /* format("truetype"),url(../public/img//Naver-Icons.svg) */
+  src: url(/img/Naver-Icons.woff2) format("woff2");
+  /* format("woff2"),url(/img//Naver-Icons.woff) */
+  /* format("woff"),url(/img//Naver-Icons.ttf) */
+  /* format("truetype"),url(/img//Naver-Icons.svg) */
   /* format("svg"); */
 }
 
 @font-face {
   font-family: Naver booking Icons;
-  src: url(../public/img/Naver-booking-Icons.woff2) format("woff2");
-  /* format("woff2"),url(../public/img//Naver-Icons.woff) */
-  /* format("woff"),url(../public/img//Naver-Icons.ttf) */
-  /* format("truetype"),url(../public/img//Naver-Icons.svg) */
+  src: url(/img/Naver-booking-Icons.woff2) format("woff2");
+  /* format("woff2"),url(/img//Naver-Icons.woff) */
+  /* format("woff"),url(/img//Naver-Icons.ttf) */
+  /* format("truetype"),url(/img//Naver-Icons.svg) */
   /* format("svg"); */
 }
 
 @font-face {
   font-family: Naver shopping Icons;
-  src: url(../public/img/Naver-shopping-Icons.woff2) format("woff2");
-  /* format("woff2"),url(../public/img//Naver-Icons.woff) */
-  /* format("woff"),url(../public/img//Naver-Icons.ttf) */
-  /* format("truetype"),url(../public/img//Naver-Icons.svg) */
+  src: url(/img/Naver-shopping-Icons.woff2) format("woff2");
+  /* format("woff2"),url(/img//Naver-Icons.woff) */
+  /* format("woff"),url(/img//Naver-Icons.ttf) */
+  /* format("truetype"),url(/img//Naver-Icons.svg) */
   /* format("svg"); */
 }
 
@@ -104,9 +104,9 @@ body {
 .App {
 
   .navi {
+    color: $naviTextColor;
     align-items: center;
     background-color: $naviBGColor;
-    color: $naviTextColor !important;
     height: 55px;
     min-width: 1200px;
   }
@@ -119,33 +119,32 @@ body {
       height: 25px;
       content: "";
       display: inline-block;
-      background: url(../public/img/Naver_Logotype.svg) no-repeat;
+      background: url(/img/Naver_Logotype.svg) no-repeat;
       background-position: 0px 8px;
       vertical-align: middle;
       background-size: 52px;
     }
 
     .sell-shop {
+      color: $naviTextColor;
       font-size: 22px;
       font-weight: 700;
+      cursor: pointer;
     }
 
     .quick-link {
+
+
       padding: 0px;
       margin: 0px;
       margin-left: 10px;
-      /* line-height: 27px; */
-
+      
       li a {
-        /* border-left: 1px solid black; */
+        color: $naviTextColor;
+
         position: relative;
         padding: 0 10px 0 11px;
         font-size: 16px;
-        opacity: 0.5;
-      }
-
-      li a:hover {
-        opacity: 0.8;
       }
 
       li a:before {
@@ -170,7 +169,7 @@ body {
     height: 10px;
     margin-left: 2px;
     margin-right: 4px;
-    background: url(../public/img/sp_common.png);
+    background: url(/img/sp_common.png);
     background-position: -260px -110px;
     margin: -3px 0 0 3px;
   }
@@ -258,7 +257,7 @@ body {
       height: 21px;
       content: "";
       display: inline-block;
-      background: url(../public/img/sp_alarm-mini.svg) no-repeat;
+      background: url(/img/sp_alarm-mini.svg) no-repeat;
       background-position: 97.19626168224299% 18.072289156626507%;
       vertical-align: middle;
     }
@@ -271,7 +270,7 @@ body {
       height: 16px;
       content: "";
       display: inline-block;
-      background: url(../public/img/sp_alarm-mini.svg) no-repeat;
+      background: url(/img/sp_alarm-mini.svg) no-repeat;
       background-position: 93.69369369369369% 62.5%;
       vertical-align: middle;
     }
@@ -293,6 +292,8 @@ body {
 
     .logout {
       cursor: pointer;
+      color: $naviTextColor !important;
+
     }
   }
 
@@ -338,7 +339,7 @@ body {
     width: 5px;
     height: 9px;
     content: "";
-    background: url(../public/img/sp_icon_pc.png);
+    background: url(/img/sp_icon_pc.png);
     background-position: -180px -100px;
   }
 
@@ -349,7 +350,7 @@ body {
     width: 5px;
     height: 9px;
     content: "";
-    background: url(../public/img/sp_icon_pc.png);
+    background: url(/img/sp_icon_pc.png);
     background-position: -190px -100px;
   }
 
@@ -707,7 +708,7 @@ body {
       position: relative;
       width: 13px;
       height: 13px;
-      background: url(../public/img/sp_icon_pc.png) -80px 17px;
+      background: url(/img/sp_icon_pc.png) -80px 17px;
       background-size: 160px;
       top: 3px;
       left: -2px;
@@ -732,7 +733,7 @@ body {
       margin-right: 3px;
       width: 60px;
       height: 11px;
-      background: url(../public/img/sp_common.png) -200px -40px;
+      background: url(/img/sp_common.png) -200px -40px;
     }
 
     .dsc {

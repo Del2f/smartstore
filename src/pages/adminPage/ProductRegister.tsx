@@ -24,24 +24,26 @@ function ProductRegister(props: Props) {
     const [category, setCategory] = useState([]);
 
     // 해당 유저의 전체상품 id를 불러옴
+    // 
     useEffect(() => {
         const userObjectID = async (params: any) => {
             try {
-                const res = await axios.post( "/smartstore/home/productregister/get", cookies, { withCredentials:true })
+                const res = await axios.post("/smartstore/home/productregister/get", cookies, { withCredentials: true });
                 const defaultCategory = res.data.category.category;
-                const allProduct = defaultCategory.filter((list: any) => list.name == "전체상품")
-                setCategory(allProduct)
-              } catch (err) {
-                console.log(err)
-              }
+                const allProduct = defaultCategory.filter((list: any) => list.name == "전체상품");
+                setCategory(allProduct);
+            } catch (err) {
+                console.log(err);
+            }
         };
-        userObjectID('');
-    },[])
+        userObjectID("");
+    }, []);
 
     const menu = useSelector(selectShowMenu);
     const navigate = useNavigate();
 
     const [Name, setName] = useState("");
+    const [Cost, setCost] = useState("");
     const [Price, setPrice] = useState("");
     const [OptionID, setOptionID] = useState<any>(0);
     const [OptionName, setOptionName] = useState<any>("");
@@ -66,16 +68,13 @@ function ProductRegister(props: Props) {
     const [MainImage, setMainImage] = useState<any>([]);
     const [SubImage, setSubImage] = useState<any>([]);
     const [DetailImage, setDetailImage] = useState<any>([]);
-    // console.log(MainImage)
-    // console.log(SubImage)
-    // console.log(DetailImage)
-
     const [Delivery, setDelivery] = useState("");
 
     // 상품 수정
     const [isEdit, setIsEdit] = useState(false);
     const { id } = useParams();
 
+    // 상품 수정시 실행됩니다.
     useEffect(() => {
         if (id) {
             setIsEdit(true);
@@ -90,6 +89,7 @@ function ProductRegister(props: Props) {
 
                     setCategoryType(1);
                     setName(product.name);
+                    setCost(product.cost);
                     setPrice(product.price);
                     setOptionName(product.option[0].optionName);
                     setMainImage(product.mainImage);
@@ -106,6 +106,7 @@ function ProductRegister(props: Props) {
                     //유효성 검사 true
                     setIsCategory(true);
                     setIsName(true);
+                    setIsCost(true);
                     setIsPrice(true);
                     setIsOptionName(true);
                     setIsOptionValue(true);
@@ -139,7 +140,6 @@ function ProductRegister(props: Props) {
                     }
 
                     if (product.category4.name) {
-                        console.log("실행");
                         setSelectedCategory04(product.category4);
                         setOnCategory04(true);
                         setOnCategoryText04(true);
@@ -187,6 +187,7 @@ function ProductRegister(props: Props) {
 
     //오류메시지 상태저장
     const [NameMessage, setNameMessage] = useState<string>("");
+    const [CostMessage, setCostMessage] = useState<string>("");
     const [PriceMessage, setPriceMessage] = useState<string>("");
     const [OptionNameMessage, setOptionNameMessage] = useState<string>("");
     const [OptionValueMessage, setOptionValueMessage] = useState<string>("");
@@ -197,6 +198,7 @@ function ProductRegister(props: Props) {
     // 유효성 검사
     const [isCategory, setIsCategory] = useState<boolean>(false);
     const [isName, setIsName] = useState<boolean>(false);
+    const [isCost, setIsCost] = useState<boolean>(false);
     const [isPrice, setIsPrice] = useState<boolean>(false);
     const [isOptionName, setIsOptionName] = useState<boolean>(false);
     const [isOptionValue, setIsOptionValue] = useState<boolean>(false);
@@ -206,16 +208,7 @@ function ProductRegister(props: Props) {
     const [isDelivery, setIsDelivery] = useState<boolean>(false);
     const [Submit, setSubmit] = useState<boolean>(false);
 
-    // console.log('카테고리'+isCategory)
-    // console.log('상품명'+isName)
-    // console.log('가격'+isPrice)
-    // console.log('옵션명'+isOptionName)
-    // console.log('옵션값'+isOptionValue)
-    // console.log('옵션재고'+isOptionList)
-    // console.log('메인사진'+isImage)
-    // console.log('상세사진'+isDetail)
-    // console.log('배송비'+isDelivery)
-
+    // 상품명
     const NameHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         setName(e.target.value);
         if (e.target.value == "") {
@@ -229,6 +222,44 @@ function ProductRegister(props: Props) {
         }
     };
 
+    // 원가
+    const CostHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.target.value = e.target.value.replace(/[^0-9.]/g, "").replace(/(\..*)\./g, "$1");
+
+        const priceRegex = /^d[1-9]$/;
+        const passwordCurrent = e.target.value;
+        setCost(passwordCurrent);
+
+        if (e.target.value == "") {
+            setCostMessage("필수 정보입니다.");
+            setIsCost(false);
+            return;
+        }
+
+        console.log(e.target.value.length);
+        if (e.target.value.length === 1) {
+            setCostMessage("최소 10원 이상 입력해주세요.");
+            setIsCost(false);
+            return;
+        }
+
+        if (e.target.value.length === 10) {
+            setCostMessage("최대 999,999,990원 이하로 입력해주세요.");
+            setIsCost(false);
+            return;
+        }
+
+        if (priceRegex.test(e.target.value)) {
+            setCostMessage("10원 단위로 입력해주세요.");
+            setIsPrice(false);
+            return;
+        } else {
+            setCostMessage("");
+            setIsCost(true);
+        }
+    };
+
+    // 가격
     const PriceHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.target.value = e.target.value.replace(/[^0-9.]/g, "").replace(/(\..*)\./g, "$1");
 
@@ -242,7 +273,12 @@ function ProductRegister(props: Props) {
             return;
         }
 
-        console.log(e.target.value.length);
+        if (e.target.value == Cost || e.target.value > Cost) {
+            setPriceMessage("상품의 원가와 같거나 높은 금액을 설정 할수 없습니다.");
+            setIsPrice(false); 
+            return;
+        }
+
         if (e.target.value.length === 1) {
             setPriceMessage("최소 10원 이상 입력해주세요.");
             setIsPrice(false);
@@ -265,6 +301,7 @@ function ProductRegister(props: Props) {
         }
     };
 
+    // 옵션명
     const OptionNameHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         setOptionName(e.target.value);
 
@@ -371,6 +408,7 @@ function ProductRegister(props: Props) {
     const [inputClickNumber, setInputClickNumber] = useState(0);
     const [inputClick, setInputClick] = useState(false);
     const inputRefName = useRef<HTMLDivElement>(null);
+    const inputRefCost = useRef<HTMLDivElement>(null);
     const inputRefPrice = useRef<HTMLDivElement>(null);
     const inputRefOptionName = useRef<HTMLDivElement>(null);
     const inputRefOptionValue = useRef<HTMLDivElement>(null);
@@ -405,10 +443,10 @@ function ProductRegister(props: Props) {
                 setInputClick(false);
                 setInputClickNumber(0);
             }
-            // if (inputClickNumber == 6 && inputRefEmail.current && !inputRefEmail.current.contains(e.target)) {
-            //     setInputClick(false);
-            //     setInputClickNumber(0);
-            // }
+            if (inputClickNumber == 6 && inputRefCost.current && !inputRefCost.current.contains(e.target)) {
+                setInputClick(false);
+                setInputClickNumber(0);
+            }
         };
 
         document.addEventListener("mousedown", clickOutside);
@@ -1405,7 +1443,7 @@ function ProductRegister(props: Props) {
 
     // 최종 상품 등록 체크
     useEffect(() => {
-        if (isCategory && isName && isPrice && isOptionName && isOptionValue && isOptionList && isImage && isDetail && isDelivery) {
+        if (isCategory && isName && isPrice && isOptionName && isOptionValue && isOptionList && isImage && isDelivery) {
             setSubmit(true);
         } else {
             setSubmit(false);
@@ -1420,16 +1458,15 @@ function ProductRegister(props: Props) {
         category3: selectedCategory03,
         category4: selectedCategory04,
         name: Name,
+        cost: Cost,
         price: Price,
         option: OptionResult,
         mainImage: MainImage,
         subImage: SubImage,
         detailImage: DetailImage,
         delivery: Delivery,
-        category: category
+        category: category,
     };
-
-    console.log(productdata);
 
     // 등록 버튼
     const handleSubmit = async (e: any) => {
@@ -1459,424 +1496,451 @@ function ProductRegister(props: Props) {
             console.log(errors);
         }
     };
-    
+
     // 공지사항
     useEffect(() => {
         props.setNotice && props.setNotice(isEdit ? <a>상품 수정</a> : <a>상품 등록</a>);
-        props.setNoticeDate && props.setNoticeDate('');
-    },[isEdit]);
+        props.setNoticeDate && props.setNoticeDate("");
+    }, [isEdit]);
 
     return (
         <>
             <form method="post" onSubmit={(e) => handleSubmit(e)}>
-                    <div className="ProductRegister-layout-wrap">
-                        {/* <div className="Notice">
+                <div className="ProductRegister-layout-wrap">
+                    {/* <div className="Notice">
                             <div className="NoticeWrapper">{isEdit ? <a>상품 수정</a> : <a>상품 등록</a>}</div>
                         </div> */}
-                        <div className="layout-inner">
-                            <div className="content">
-                                <div className="product-register-area">
-                                    <ul className="product-register-list">
-                                        <li className="product-register-item">
-                                            {/* 카테고리 */}
-                                            <div className="title flex flex-ju-bt flex-align-center" onClick={() => setCategoryDrop((e) => !e)}>
-                                                <div className="text-wrap">
-                                                    <label className="text">카테고리</label>
-                                                </div>
-                                                <div className="btn-wrap">
-                                                    <button className="showdropmenu">
-                                                        <span className={CategoryDrop == true ? "icon-arrow reverse" : "icon-arrow"}></span>
+                    <div className="layout-inner">
+                        <div className="content">
+                            <div className="product-register-area">
+                                <ul className="product-register-list">
+                                    <li className="product-register-item">
+                                        {/* 카테고리 */}
+                                        <div className="title flex flex-ju-bt flex-align-center" onClick={() => setCategoryDrop((e) => !e)}>
+                                            <div className="text-wrap">
+                                                <label className="text">카테고리</label>
+                                            </div>
+                                            <div className="btn-wrap">
+                                                <button className="showdropmenu">
+                                                    <span className={CategoryDrop == true ? "icon-arrow reverse" : "icon-arrow"}></span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div className={CategoryDrop == true ? "info showmenu" : "info"}>
+                                            <div className="input-item">
+                                                <div className="select-category-type">
+                                                    <button className={categoryType == 0 ? "search selected" : "search"} onClick={() => setCategoryType(0)}>
+                                                        <span>카테고리명 검색</span>
+                                                    </button>
+                                                    <button className={categoryType == 1 ? "select selected" : "select"} onClick={() => setCategoryType(1)}>
+                                                        <span>카테고리명 선택</span>
                                                     </button>
                                                 </div>
-                                            </div>
-                                            <div className={CategoryDrop == true ? "info showmenu" : "info"}>
-                                                <div className="input-item">
-                                                    <div className="select-category-type">
-                                                        <button className={categoryType == 0 ? "search selected" : "search"} onClick={() => setCategoryType(0)}>
-                                                            <span>카테고리명 검색</span>
-                                                        </button>
-                                                        <button className={categoryType == 1 ? "select selected" : "select"} onClick={() => setCategoryType(1)}>
-                                                            <span>카테고리명 선택</span>
-                                                        </button>
+                                                <div className={categoryType == 0 ? "search-type show" : "search-type hide"}>
+                                                    <input className="input" type="text" />
+                                                </div>
+                                                <div className={categoryType == 1 ? "select-type flex flex-wrap" : "select-type hide"}>
+                                                    <div className="select-type-category-wrap">
+                                                        <ul className="category first">
+                                                            {first.map((list: any, index: any) => {
+                                                                const result = second.some((element: any) => element.parentcode == list.code);
+                                                                return (
+                                                                    <li key={index} className="category-list" onClick={() => onFirstClick(list)}>
+                                                                        <span>{list.name}</span>
+                                                                        <span className={result == true ? "show-arrow" : "none-arrow"}></span>
+                                                                    </li>
+                                                                );
+                                                            })}
+                                                        </ul>
                                                     </div>
-                                                    <div className={categoryType == 0 ? "search-type show" : "search-type hide"}>
-                                                        <input className="input" type="text" />
-                                                    </div>
-                                                    <div className={categoryType == 1 ? "select-type flex flex-wrap" : "select-type hide"}>
-                                                        <div className="select-type-category-wrap">
-                                                            <ul className="category first">
-                                                                {first.map((list: any, index: any) => {
-                                                                    const result = second.some((element: any) => element.parentcode == list.code);
+                                                    <div className="select-type-category-wrap">
+                                                        <ul className="category second">
+                                                            {onCategory02 == true ? (
+                                                                showSecond.map((list: any, index: any) => {
+                                                                    const result = third.some((element: any) => element.parentcode == list.code);
                                                                     return (
-                                                                        <li key={index} className="category-list" onClick={() => onFirstClick(list)}>
+                                                                        <li key={index} className="category-list" onClick={() => onSecondClick(list)}>
                                                                             <span>{list.name}</span>
                                                                             <span className={result == true ? "show-arrow" : "none-arrow"}></span>
                                                                         </li>
                                                                     );
-                                                                })}
-                                                            </ul>
-                                                        </div>
-                                                        <div className="select-type-category-wrap">
-                                                            <ul className="category second">
-                                                                {onCategory02 == true ? (
-                                                                    showSecond.map((list: any, index: any) => {
-                                                                        const result = third.some((element: any) => element.parentcode == list.code);
-                                                                        return (
-                                                                            <li key={index} className="category-list" onClick={() => onSecondClick(list)}>
-                                                                                <span>{list.name}</span>
-                                                                                <span className={result == true ? "show-arrow" : "none-arrow"}></span>
-                                                                            </li>
-                                                                        );
-                                                                    })
-                                                                ) : (
-                                                                    <li className="category-list">
-                                                                        <span>중분류</span>
-                                                                    </li>
-                                                                )}
-                                                            </ul>
-                                                        </div>
-                                                        <div className="select-type-category-wrap">
-                                                            <ul className="category third">
-                                                                {onCategory03 == true ? (
-                                                                    showThird.map((list: any, index: any) => {
-                                                                        const result = fourth.some((element: any) => element.parentcode == list.code);
-                                                                        return (
-                                                                            <li key={index} className="category-list" onClick={() => onThirdClick(list)}>
-                                                                                <span>{list.name}</span>
-                                                                                <span className={result == true ? "show-arrow" : "none-arrow"}></span>
-                                                                            </li>
-                                                                        );
-                                                                    })
-                                                                ) : (
-                                                                    <li className="category-list">
-                                                                        <span>소분류</span>
-                                                                    </li>
-                                                                )}
-                                                            </ul>
-                                                        </div>
-                                                        <div className="select-type-category-wrap">
-                                                            <ul className="category fourth">
-                                                                {onCategory04 == true ? (
-                                                                    showFourth.map((list: any, index: any) => {
-                                                                        return (
-                                                                            <li key={index} className="category-list" onClick={() => onFourthClick(list)}>
-                                                                                <span>{list.name}</span>
-                                                                            </li>
-                                                                        );
-                                                                    })
-                                                                ) : (
-                                                                    <li className="category-list">
-                                                                        <span>세분류</span>
-                                                                    </li>
-                                                                )}
-                                                            </ul>
+                                                                })
+                                                            ) : (
+                                                                <li className="category-list">
+                                                                    <span>중분류</span>
+                                                                </li>
+                                                            )}
+                                                        </ul>
+                                                    </div>
+                                                    <div className="select-type-category-wrap">
+                                                        <ul className="category third">
+                                                            {onCategory03 == true ? (
+                                                                showThird.map((list: any, index: any) => {
+                                                                    const result = fourth.some((element: any) => element.parentcode == list.code);
+                                                                    return (
+                                                                        <li key={index} className="category-list" onClick={() => onThirdClick(list)}>
+                                                                            <span>{list.name}</span>
+                                                                            <span className={result == true ? "show-arrow" : "none-arrow"}></span>
+                                                                        </li>
+                                                                    );
+                                                                })
+                                                            ) : (
+                                                                <li className="category-list">
+                                                                    <span>소분류</span>
+                                                                </li>
+                                                            )}
+                                                        </ul>
+                                                    </div>
+                                                    <div className="select-type-category-wrap">
+                                                        <ul className="category fourth">
+                                                            {onCategory04 == true ? (
+                                                                showFourth.map((list: any, index: any) => {
+                                                                    return (
+                                                                        <li key={index} className="category-list" onClick={() => onFourthClick(list)}>
+                                                                            <span>{list.name}</span>
+                                                                        </li>
+                                                                    );
+                                                                })
+                                                            ) : (
+                                                                <li className="category-list">
+                                                                    <span>세분류</span>
+                                                                </li>
+                                                            )}
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {/* <div className={isName ? "error" : "error-active" }>{NameMessage}</div> */}
+                                            <div className={isCategory == true ? "selected-category-show selected-category" : "selected-category"}>
+                                                <span className="text">선택한 카테고리 : </span>
+                                                <strong className={onCategoryText01 == false ? "text-hide text" : "text"}>{selectedCategory01.name}</strong>
+                                                <strong className={onCategoryText02 == false ? "text-hide text" : "text"}>{" > " + selectedCategory02.name}</strong>
+                                                <strong className={onCategoryText03 == false ? "text-hide text" : "text"}>{" > " + selectedCategory03.name}</strong>
+                                                <strong className={onCategoryText04 == false ? "text-hide text" : "text"}>{" > " + selectedCategory04.name}</strong>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li className="product-register-item">
+                                        {/* 상품명 */}
+                                        <div className="title flex flex-ju-bt flex-align-center" onClick={() => setProductDrop((e) => !e)}>
+                                            <div className="text-wrap">
+                                                <label className="text">상품명</label>
+                                            </div>
+                                            <div className="btn-wrap">
+                                                <button className="showdropmenu">
+                                                    <span className={ProductDrop == true ? "icon-arrow reverse" : "icon-arrow"}></span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div className={ProductDrop == true ? "info showmenu" : "info"}>
+                                            <div className="input-item">
+                                                <div className="input-area">
+                                                    <div className="input-box" ref={inputRefName}>
+                                                        <div id={inputClick && inputClickNumber == 1 ? "input-inner-active" : "input-inner"}>
+                                                            <input
+                                                                type="text"
+                                                                name="name"
+                                                                placeholder="상품명"
+                                                                className="input"
+                                                                value={Name}
+                                                                onClick={() => {
+                                                                    setInputClick(true);
+                                                                    setInputClickNumber(1);
+                                                                }}
+                                                                onChange={NameHandler}
+                                                            />
                                                         </div>
                                                     </div>
                                                 </div>
-                                                {/* <div className={isName ? "error" : "error-active" }>{NameMessage}</div> */}
-                                                <div className={isCategory == true ? "selected-category-show selected-category" : "selected-category"}>
-                                                    <span className="text">선택한 카테고리 : </span>
-                                                    <strong className={onCategoryText01 == false ? "text-hide text" : "text"}>{selectedCategory01.name}</strong>
-                                                    <strong className={onCategoryText02 == false ? "text-hide text" : "text"}>{" > " + selectedCategory02.name}</strong>
-                                                    <strong className={onCategoryText03 == false ? "text-hide text" : "text"}>{" > " + selectedCategory03.name}</strong>
-                                                    <strong className={onCategoryText04 == false ? "text-hide text" : "text"}>{" > " + selectedCategory04.name}</strong>
-                                                </div>
                                             </div>
-                                        </li>
-                                        <li className="product-register-item">
-                                            {/* 상품명 */}
-                                            <div className="title flex flex-ju-bt flex-align-center" onClick={() => setProductDrop((e) => !e)}>
-                                                <div className="text-wrap">
-                                                    <label className="text">상품명</label>
-                                                </div>
-                                                <div className="btn-wrap">
-                                                    <button className="showdropmenu">
-                                                        <span className={ProductDrop == true ? "icon-arrow reverse" : "icon-arrow"}></span>
-                                                    </button>
-                                                </div>
+                                            <div className={isName ? "error" : "error-active"}>{NameMessage}</div>
+                                        </div>
+                                    </li>
+                                    <li className="product-register-item">
+                                        {/* 판매가 */}
+                                        <div className="title flex flex-ju-bt flex-align-center" onClick={() => setPriceDrop((e) => !e)}>
+                                            <div className="text-wrap">
+                                                <label className="text">판매가</label>
                                             </div>
-                                            <div className={ProductDrop == true ? "info showmenu" : "info"}>
-                                                <div className="input-item">
-                                                    <div className="input-area">
-                                                        <div className="input-box" ref={inputRefName}>
-                                                            <div id={inputClick && inputClickNumber == 1 ? "input-inner-active" : "input-inner"}>
-                                                                <input
-                                                                    type="text"
-                                                                    name="name"
-                                                                    placeholder="상품명"
-                                                                    className="input"
-                                                                    value={Name}
-                                                                    onClick={() => {
-                                                                        setInputClick(true);
-                                                                        setInputClickNumber(1);
-                                                                    }}
-                                                                    onChange={NameHandler}
-                                                                />
-                                                            </div>
+                                            <div className="btn-wrap">
+                                                <button className="showdropmenu">
+                                                    <span className={PriceDrop == true ? "icon-arrow reverse" : "icon-arrow"}></span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div className={PriceDrop == true ? "menu flex flex-align-center" : "menu hide"}>
+                                            <div className="menu-left">
+                                                <span>원가</span>
+                                            </div>
+                                            <div className="input-item">
+                                                <div className="input-area">
+                                                    <div className="input-box" ref={inputRefCost}>
+                                                        <div id={inputClick && inputClickNumber == 6 ? "input-inner-active" : "input-inner"}>
+                                                            <input
+                                                                type="text"
+                                                                maxLength={10}
+                                                                name="productprice"
+                                                                placeholder="숫자만 입력"
+                                                                className="input"
+                                                                value={Cost}
+                                                                onClick={() => {
+                                                                    setInputClick(true);
+                                                                    setInputClickNumber(6);
+                                                                }}
+                                                                onChange={CostHandler}
+                                                            />
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className={isName ? "error" : "error-active"}>{NameMessage}</div>
                                             </div>
-                                        </li>
-                                        <li className="product-register-item">
-                                            {/* 판매가 */}
-                                            <div className="title flex flex-ju-bt flex-align-center" onClick={() => setPriceDrop((e) => !e)}>
-                                                <div className="text-wrap">
-                                                    <label className="text">판매가</label>
-                                                </div>
-                                                <div className="btn-wrap">
-                                                    <button className="showdropmenu">
-                                                        <span className={PriceDrop == true ? "icon-arrow reverse" : "icon-arrow"}></span>
-                                                    </button>
+                                            <div className={isCost == false ? "error-active" : "error-active"}>{CostMessage}</div>
+                                        </div>
+                                        <div className={PriceDrop == true ? "menu flex flex-align-center" : "menu hide"}>
+                                            <div className="menu-left">
+                                                <span>판매가</span>
+                                            </div>
+                                            <div className="input-item">
+                                                <div className="input-area">
+                                                    <div className="input-box" ref={inputRefPrice}>
+                                                        <div id={inputClick && inputClickNumber == 2 ? "input-inner-active" : "input-inner"}>
+                                                            <input
+                                                                type="text"
+                                                                maxLength={10}
+                                                                name="productprice"
+                                                                placeholder="숫자만 입력"
+                                                                className="input"
+                                                                value={Price}
+                                                                onClick={() => {
+                                                                    setInputClick(true);
+                                                                    setInputClickNumber(2);
+                                                                }}
+                                                                onChange={PriceHandler}
+                                                            />
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div className={PriceDrop == true ? "menu flex flex-align-center" : "menu hide"}>
+                                            <div className={isPrice == false ? "error-active" : "error-active"}>{PriceMessage}</div>
+                                        </div>
+                                    </li>
+                                    <li className="product-register-item">
+                                        {/* 옵션 */}
+                                        <div className="title flex flex-ju-bt flex-align-center" onClick={() => setOptionDrop((e) => !e)}>
+                                            <div className="text-wrap">
+                                                <label className="text">옵션</label>
+                                            </div>
+                                            <div className="btn-wrap">
+                                                <button className="showdropmenu">
+                                                    <span className={OptionDrop === true ? "icon-arrow reverse" : "icon-arrow"}></span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div className={OptionDrop === true ? "menu show" : "menu hide"}>
+                                            <div className="inner-menu-list flex flex-align-center">
                                                 <div className="menu-left">
-                                                    <span>판매가</span>
+                                                    <span>옵션입력</span>
                                                 </div>
-                                                <div className="input-item">
-                                                    <div className="input-area">
-                                                        <div className="input-box" ref={inputRefPrice}>
-                                                            <div id={inputClick && inputClickNumber == 2 ? "input-inner-active" : "input-inner"}>
-                                                                <input
-                                                                    type="text"
-                                                                    maxLength={10}
-                                                                    name="productprice"
-                                                                    placeholder="숫자만 입력"
-                                                                    className="input"
-                                                                    value={Price}
-                                                                    onClick={() => {
-                                                                        setInputClick(true);
-                                                                        setInputClickNumber(2);
-                                                                    }}
-                                                                    onChange={PriceHandler}
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className={isPrice == false ? "error-active" : "error-active"}>{PriceMessage}</div>
-                                            </div>
-                                        </li>
-                                        <li className="product-register-item">
-                                            {/* 옵션 */}
-                                            <div className="title flex flex-ju-bt flex-align-center" onClick={() => setOptionDrop((e) => !e)}>
-                                                <div className="text-wrap">
-                                                    <label className="text">옵션</label>
-                                                </div>
-                                                <div className="btn-wrap">
-                                                    <button className="showdropmenu">
-                                                        <span className={OptionDrop === true ? "icon-arrow reverse" : "icon-arrow"}></span>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div className={OptionDrop === true ? "menu show" : "menu hide"}>
-                                                <div className="inner-menu-list flex flex-align-center">
-                                                    <div className="menu-left">
-                                                        <span>옵션입력</span>
-                                                    </div>
-                                                    <div className="menu-right">
-                                                        <div className="input-item input-item-name">
-                                                            {/* 옵션명 */}
-                                                            <div className="input-area">
-                                                                <div className="input-box" ref={inputRefOptionName}>
-                                                                    <div className="input-box-title">
-                                                                        <span>옵션명</span>
-                                                                    </div>
-                                                                    <div id={inputClick && inputClickNumber === 3 ? "input-inner-active" : "input-inner"}>
-                                                                        <input
-                                                                            type="text"
-                                                                            maxLength={10}
-                                                                            name="productOptionName"
-                                                                            placeholder="예시 : 컬러"
-                                                                            className="input"
-                                                                            value={OptionName}
-                                                                            onClick={() => {
-                                                                                setInputClick(true);
-                                                                                setInputClickNumber(3);
-                                                                            }}
-                                                                            onChange={OptionNameHandler}
-                                                                        />
-                                                                    </div>
-                                                                    <div className={isOptionName === false ? "error-active name" : "error"}>{OptionNameMessage}</div>
+                                                <div className="menu-right">
+                                                    <div className="input-item input-item-name">
+                                                        {/* 옵션명 */}
+                                                        <div className="input-area">
+                                                            <div className="input-box" ref={inputRefOptionName}>
+                                                                <div className="input-box-title">
+                                                                    <span>옵션명</span>
                                                                 </div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="input-item input-item-value">
-                                                            {/* 옵션값 */}
-                                                            <div className="input-area">
-                                                                <div className="input-box" ref={inputRefOptionValue}>
-                                                                    <div className="input-box-title">
-                                                                        <span>옵션값</span>
-                                                                    </div>
-                                                                    <div id={inputClick && inputClickNumber === 4 ? "input-inner-active" : "input-inner"}>
-                                                                        <input
-                                                                            type="text"
-                                                                            name="productOptionValue"
-                                                                            placeholder="예시 : 빨강,노랑 ( ,로 구분 )"
-                                                                            className="input"
-                                                                            id="OptionInputValue"
-                                                                            value={OptionValue}
-                                                                            onClick={() => {
-                                                                                setInputClick(true);
-                                                                                setInputClickNumber(4);
-                                                                            }}
-                                                                            onChange={OptionValueHandler}
-                                                                        />
-                                                                    </div>
-                                                                    <div className={isOptionValue === false ? "error-active value" : "error"}>{OptionValueMessage}</div>
+                                                                <div id={inputClick && inputClickNumber === 3 ? "input-inner-active" : "input-inner"}>
+                                                                    <input
+                                                                        type="text"
+                                                                        maxLength={10}
+                                                                        name="productOptionName"
+                                                                        placeholder="예시 : 컬러"
+                                                                        className="input"
+                                                                        value={OptionName}
+                                                                        onClick={() => {
+                                                                            setInputClick(true);
+                                                                            setInputClickNumber(3);
+                                                                        }}
+                                                                        onChange={OptionNameHandler}
+                                                                    />
                                                                 </div>
+                                                                <div className={isOptionName === false ? "error-active name" : "error"}>{OptionNameMessage}</div>
                                                             </div>
                                                         </div>
-                                                        <div className="apply-btn-wrap">
-                                                            <button className={isOptionName && isOptionValue ? "apply-btn-active" : "apply-btn"} onClick={optionSubmit}>
-                                                                <span className="apply-btn-text">옵션목록으로 적용</span>
-                                                                <span className="apply-btn-icon"></span>
-                                                            </button>
-                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div className="inner-menu-list">
-                                                    <div className="menu-left">
-                                                        <span>옵션목록</span>
-                                                    </div>
-                                                    <div className="menu-bottom">
-                                                        <div className="info"></div>
-                                                        <TableProduct
-                                                            optionResult={OptionResult}
-                                                            setOptionResult={setOptionResult}
-                                                            optionSubmit={optionSubmit}
-                                                            setOptionValue={setOptionValue}
-                                                        ></TableProduct>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li className="product-register-item">
-                                            {/* 메인사진 */}
-                                            <div className="title flex flex-ju-bt flex-align-center" onClick={() => setImageDrop((e) => !e)}>
-                                                <div className="text-wrap">
-                                                    <label className="text">메인 사진</label>
-                                                </div>
-                                                <div className="btn-wrap">
-                                                    <button className="showdropmenu">
-                                                        <span className={ImageDrop === true ? "icon-arrow reverse" : "icon-arrow"}></span>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div className={ImageDrop === true ? "menu show" : "menu hide"}>
-                                                <div className="inner-menu-list flex flex-align-center">
-                                                    <div className="menu-left">
-                                                        <span>메인 사진</span>
-                                                    </div>
-                                                    <div className="menu-right">
-                                                        <div className="input-item">
-                                                            {/* 메인 사진*/}
-                                                            <ImageProductRegi setIsImage={setIsImage} setMainImage={setMainImage} MainImage={MainImage} SubImage={SubImage} DetailImage={DetailImage} />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="inner-menu-list flex flex-align-center">
-                                                    <div className="menu-left">
-                                                        <span>추가 사진</span>
-                                                    </div>
-                                                    <div className="menu-right">
-                                                        <div className="input-item">
-                                                            {/* 추가 사진 */}
-                                                            <div className="input-area">
-                                                                <div className="input-box" ref={inputRefImage}>
-                                                                    <div className="Image-box"></div>
-                                                                    <SubImageProductRegi SubImage={SubImage} setSubImage={setSubImage} />
+                                                    <div className="input-item input-item-value">
+                                                        {/* 옵션값 */}
+                                                        <div className="input-area">
+                                                            <div className="input-box" ref={inputRefOptionValue}>
+                                                                <div className="input-box-title">
+                                                                    <span>옵션값</span>
                                                                 </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li className="product-register-item">
-                                            {/* 상세 사진 */}
-                                            <div className="title flex flex-ju-bt flex-align-center" onClick={() => setDetailDrop((e) => !e)}>
-                                                <div className="text-wrap">
-                                                    <label className="text">상세 사진</label>
-                                                </div>
-                                                <div className="btn-wrap">
-                                                    <button className="showdropmenu">
-                                                        <span className={DetailDrop === true ? "icon-arrow reverse" : "icon-arrow"}></span>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div className={DetailDrop === true ? "menu show" : "menu hide"}>
-                                                <div className="inner-menu-list flex flex-align-center">
-                                                    <div className="menu-left">
-                                                        <span>상세 사진</span>
-                                                    </div>
-                                                    <div className="menu-right">
-                                                        <div className="input-item">
-                                                            {" "}
-                                                            {/* 추가 사진 */}
-                                                            <div className="input-area">
-                                                                <div className="input-box" ref={inputRefDetail}>
-                                                                    <div className="Image-box"></div>
-                                                                    <DetailImageProductRegi setIsDetail={setIsDetail} DetailImage={DetailImage} setDetailImage={setDetailImage} />
+                                                                <div id={inputClick && inputClickNumber === 4 ? "input-inner-active" : "input-inner"}>
+                                                                    <input
+                                                                        type="text"
+                                                                        name="productOptionValue"
+                                                                        placeholder="예시 : 빨강,노랑 ( ,로 구분 )"
+                                                                        className="input"
+                                                                        id="OptionInputValue"
+                                                                        value={OptionValue}
+                                                                        onClick={() => {
+                                                                            setInputClick(true);
+                                                                            setInputClickNumber(4);
+                                                                        }}
+                                                                        onChange={OptionValueHandler}
+                                                                    />
                                                                 </div>
+                                                                <div className={isOptionValue === false ? "error-active value" : "error"}>{OptionValueMessage}</div>
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <div className="apply-btn-wrap">
+                                                        <button className={isOptionName && isOptionValue ? "apply-btn-active" : "apply-btn"} onClick={optionSubmit}>
+                                                            <span className="apply-btn-text">옵션목록으로 적용</span>
+                                                            <span className="apply-btn-icon"></span>
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </li>
-                                        <li className="product-register-item">
-                                            {/* 배송비 */}
-                                            <div className="title flex flex-ju-bt flex-align-center" onClick={() => setDeliveryDrop((e) => !e)}>
-                                                <div className="text-wrap">
-                                                    <label className="text">배송비</label>
-                                                </div>
-                                                <div className="btn-wrap">
-                                                    <button className="showdropmenu">
-                                                        <span className={DeliveryDrop == true ? "icon-arrow reverse" : "icon-arrow"}></span>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div className={DeliveryDrop == true ? "menu flex flex-align-center" : "menu hide"}>
+                                            <div className="inner-menu-list">
                                                 <div className="menu-left">
-                                                    <span>배송비</span>
+                                                    <span>옵션목록</span>
                                                 </div>
-                                                <div className="input-item">
-                                                    <div className="input-area">
-                                                        <div className="input-box" ref={inputRefDelivery}>
-                                                            <div id={inputClick && inputClickNumber == 3 ? "input-inner-active" : "input-inner"}>
-                                                                <input
-                                                                    type="text"
-                                                                    maxLength={10}
-                                                                    name="productDelivery"
-                                                                    placeholder="숫자만 입력"
-                                                                    className="input"
-                                                                    value={Delivery}
-                                                                    onClick={() => {
-                                                                        setInputClick(true);
-                                                                        setInputClickNumber(3);
-                                                                    }}
-                                                                    onChange={DeliveryHandler}
-                                                                />
+                                                <div className="menu-bottom">
+                                                    <div className="info"></div>
+                                                    <TableProduct
+                                                        optionResult={OptionResult}
+                                                        setOptionResult={setOptionResult}
+                                                        optionSubmit={optionSubmit}
+                                                        setOptionValue={setOptionValue}
+                                                    ></TableProduct>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li className="product-register-item">
+                                        {/* 메인사진 */}
+                                        <div className="title flex flex-ju-bt flex-align-center" onClick={() => setImageDrop((e) => !e)}>
+                                            <div className="text-wrap">
+                                                <label className="text">메인 사진</label>
+                                            </div>
+                                            <div className="btn-wrap">
+                                                <button className="showdropmenu">
+                                                    <span className={ImageDrop === true ? "icon-arrow reverse" : "icon-arrow"}></span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div className={ImageDrop === true ? "menu show" : "menu hide"}>
+                                            <div className="inner-menu-list flex flex-align-center">
+                                                <div className="menu-left">
+                                                    <span>메인 사진</span>
+                                                </div>
+                                                <div className="menu-right">
+                                                    <div className="input-item">
+                                                        {/* 메인 사진*/}
+                                                        <ImageProductRegi setIsImage={setIsImage} setMainImage={setMainImage} MainImage={MainImage} SubImage={SubImage} DetailImage={DetailImage} />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="inner-menu-list flex flex-align-center">
+                                                <div className="menu-left">
+                                                    <span>추가 사진</span>
+                                                </div>
+                                                <div className="menu-right">
+                                                    <div className="input-item">
+                                                        {/* 추가 사진 */}
+                                                        <div className="input-area">
+                                                            <div className="input-box" ref={inputRefImage}>
+                                                                <div className="Image-box"></div>
+                                                                <SubImageProductRegi SubImage={SubImage} setSubImage={setSubImage} />
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className={isDelivery == false ? "error-active" : "error-active"}>{DeliveryMessage}</div>
                                             </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div className="btn-area">
-                                    <button type="submit" className={Submit ? "btn-area-btn btn-area-btn-active" : "btn-area-btn"}>
-                                        {isEdit ? <span className="btn-txt">상품 수정</span> : <span className="btn-txt">상품 등록</span>}
-                                    </button>
-                                </div>
+                                        </div>
+                                    </li>
+                                    <li className="product-register-item">
+                                        {/* 상세 사진 */}
+                                        <div className="title flex flex-ju-bt flex-align-center" onClick={() => setDetailDrop((e) => !e)}>
+                                            <div className="text-wrap">
+                                                <label className="text">상세 사진</label>
+                                            </div>
+                                            <div className="btn-wrap">
+                                                <button className="showdropmenu">
+                                                    <span className={DetailDrop === true ? "icon-arrow reverse" : "icon-arrow"}></span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div className={DetailDrop === true ? "menu show" : "menu hide"}>
+                                            <div className="inner-menu-list flex flex-align-center">
+                                                <div className="menu-left">
+                                                    <span>상세 사진</span>
+                                                </div>
+                                                <div className="menu-right">
+                                                    <div className="input-item">
+                                                        {" "}
+                                                        {/* 추가 사진 */}
+                                                        <div className="input-area">
+                                                            <div className="input-box" ref={inputRefDetail}>
+                                                                <div className="Image-box"></div>
+                                                                <DetailImageProductRegi setIsDetail={setIsDetail} DetailImage={DetailImage} setDetailImage={setDetailImage} />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li className="product-register-item">
+                                        {/* 배송비 */}
+                                        <div className="title flex flex-ju-bt flex-align-center" onClick={() => setDeliveryDrop((e) => !e)}>
+                                            <div className="text-wrap">
+                                                <label className="text">배송비</label>
+                                            </div>
+                                            <div className="btn-wrap">
+                                                <button className="showdropmenu">
+                                                    <span className={DeliveryDrop == true ? "icon-arrow reverse" : "icon-arrow"}></span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div className={DeliveryDrop == true ? "menu flex flex-align-center" : "menu hide"}>
+                                            <div className="menu-left">
+                                                <span>배송비</span>
+                                            </div>
+                                            <div className="input-item">
+                                                <div className="input-area">
+                                                    <div className="input-box" ref={inputRefDelivery}>
+                                                        <div id={inputClick && inputClickNumber == 3 ? "input-inner-active" : "input-inner"}>
+                                                            <input
+                                                                type="text"
+                                                                maxLength={10}
+                                                                name="productDelivery"
+                                                                placeholder="숫자만 입력"
+                                                                className="input"
+                                                                value={Delivery}
+                                                                onClick={() => {
+                                                                    setInputClick(true);
+                                                                    setInputClickNumber(3);
+                                                                }}
+                                                                onChange={DeliveryHandler}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className={isDelivery == false ? "error-active" : "error-active"}>{DeliveryMessage}</div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div className="btn-area">
+                                <button type="submit" className={Submit ? "btn-area-btn btn-area-btn-active" : "btn-area-btn"}>
+                                    {isEdit ? <span className="btn-txt">상품 수정</span> : <span className="btn-txt">상품 등록</span>}
+                                </button>
                             </div>
                         </div>
                     </div>
+                </div>
             </form>
         </>
     );

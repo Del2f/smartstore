@@ -437,7 +437,7 @@
         display: inline-block;
         margin: -1px 0 1px;
         vertical-align: middle;
-        background: url(../../../public/img/sp_icon_pc.png);
+        background: url(/img/sp_icon_pc.png);
     }
 
     /* 신규주문 지연 아이콘 */
@@ -493,7 +493,7 @@
         width: 19px;
         height: 19px;
         content: "";
-        background: url(../../../public/img/sp_icon_pc.png) -180px -75px;
+        background: url(/img/sp_icon_pc.png) -180px -75px;
     }
 
     /* 스토어 고객 현황, 상품, 리뷰, 판매자등급 */
@@ -605,7 +605,7 @@
     .icon-seller2 {
         display: inline-block;
         vertical-align: middle;
-        background: url(../../../public/img/sp_dashboard.svg);
+        background: url(/img/sp_dashboard.svg);
     }
 
     .manual-icon {
@@ -624,7 +624,7 @@
     #panel-quick-menu .talktalk-icon {
         width: 30px;
         height: 30px;
-        background: url(../../../public/img/sp_icon_pc.png) -117px 33px;
+        background: url(/img/sp_icon_pc.png) -117px 33px;
         background-size: 300px 495px;
         filter: brightness(2);
     }

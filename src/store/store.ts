@@ -4,11 +4,13 @@ import storage from 'redux-persist/lib/storage';
 import thunk from 'redux-thunk';
 
 import userSlice from './userSlice';
+import adminSlice from './adminSlice';
 import menuSlice from './menuSlice';
 import authSlice from './authSlice';
 
 const reducers = combineReducers({
   user: userSlice,
+  admin: adminSlice,
   menu: menuSlice,
   token: authSlice,
 });

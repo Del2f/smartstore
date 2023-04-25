@@ -18,6 +18,8 @@ import $ from "jquery";
 
 import "./App.scss";
 
+import cat from "@img/cat.jpeg";
+
 let currentPath = "";
 
 function App() {
@@ -397,7 +399,7 @@ function App() {
                 <div className="menu-store">
                     <a>
                         <span className="thumb">
-                            <img src="/img/cat.jpeg" alt="abc" className="img-circle" />
+                            <img src={cat} alt="abc" className="img-circle" />
                         </span>
                         <span className="shopname">포트폴리오</span>
                     </a>

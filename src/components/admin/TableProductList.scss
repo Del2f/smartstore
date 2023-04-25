@@ -48,7 +48,7 @@
       outline: none;
       width: 20px;
       height: 20px;
-      background: url(../../../public/img/sp_icon_pc.png) no-repeat;
+      background: url(/img/sp_icon_pc.png) no-repeat;
       background-position: -30px -530px;
     }
 
@@ -56,7 +56,7 @@
       content: "" !important;
       width: 20px;
       height: 20px;
-      background: url(../../../public/img/sp_icon_pc.png) no-repeat;
+      background: url(/img/sp_icon_pc.png) no-repeat;
       background-position: -0px -530px;
     }
 
@@ -146,8 +146,12 @@
   }
 }
 
-.right {
+.tableright {
   display: inline-block;
+  position: absolute;
+  right: 0px;
+  margin-top: 10px;
+  margin-right: 20px;
 }
 
 .editBtn {
