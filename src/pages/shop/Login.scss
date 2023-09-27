@@ -1,0 +1,213 @@
+
+// Error
+
+.error-active {
+    display: block;
+    margin-top: 8px;
+    color: #ff3627;
+    letter-spacing: -.2px;
+}
+
+.error {
+    display: none;
+    margin-top: 8px;
+    color: #ff3627;
+    letter-spacing: -.2px;
+}
+
+/* 미들 레이아웃 */
+
+.userlogin-layout-wrap {
+    background-color: #fff;
+
+    .bold {
+        font-weight: 400;
+        color: #00c73c;
+    }
+
+    .login-area {
+
+        .login-type-item {
+            width: 100%;
+            padding: 13px 0 15px;
+            border: 1px solid #e3e3e3;
+            border-bottom-color: #d9d9d9;
+            border-radius: 7px 7px 0 0;
+            background-color: #f4f4f4;
+            text-align: center;
+
+        }
+
+        .login-content-box {
+            color: rgba(0, 0, 0, .69);
+
+            .pw-icon {
+                position: absolute;
+                top: 50%;
+                left: 17px;
+                margin-top: -8px;
+                width: 16px;
+                height: 16px;
+                background-image: url(/img/user/m_sp_01_login.png);
+                background-position: -129px -203px;
+                background-size: 266px 225px;
+            }
+
+            .pw-icon-active {
+                background-position: -111px -203px;
+            }
+
+            .delete-icon-none {
+                display: none;
+            }
+
+            .delete-icon {
+                position: absolute;
+                margin-top: -8px;
+                top: 50%;
+                right: 50px;
+                cursor: pointer;
+
+                width: 18px;
+                height: 18px;
+                background-image: url(/img/user/m_sp_01_login.png);
+                background-position: -244px -187px;
+                background-size: 266px 225px;
+            }
+
+            .login-item+.login-item {
+                margin-top: -1px;
+            }
+
+            #login-item-id-active {
+                position: relative;
+                padding: 5px 16px;
+                border: 1px solid #03c75a;
+                border-radius: 6px 6px 0 0;
+                z-index: 9;
+            }
+
+            #login-item-pw-active {
+                position: relative;
+                padding: 5px 16px;
+                border: 1px solid #03c75a;
+                border-radius: 0 0 6px 6px;
+                z-index: 9;
+            }
+
+            #login-item-id {
+
+            }
+
+            #login-item-pw {
+                position: relative;
+                padding: 5px 16px;
+                border: 1px solid #d9d9d9;
+                border-radius: 0 0 6px 6px;
+            }
+
+            #login-item-id:hover,
+            #login-item-pw:hover {
+                position: relative;
+                border: 1px solid rgb(131, 131, 131);
+                z-index: 10;
+            }
+
+            /* 로그인 버튼 */
+            .login-btn-wrap {
+                margin-top: 16px;
+
+                .login-btn {
+                    width: 100%;
+                    padding: 15px;
+                    border-radius: 8px;
+                    background-color: #03c75a;
+                    display: block;
+                    text-align: center;
+                    line-height: 18px;
+                    border: none;
+                }
+
+                .login-btn:hover {
+                    background-color: #00bc3a;
+                }
+
+                .login-btn-text {
+                    color: #fff;
+                    display: block;
+                    font-size: 15px;
+                    line-height: 18px;
+                    font-weight: 700;
+                }
+            }
+
+            /* 에러 */
+            .login-error {
+                margin-top: 16px;
+                font-size: 15px;
+                line-height: 20px;
+                color: #ff3627;
+                letter-spacing: -.2px;
+            }
+        }
+
+
+        /* 아이디 비밀번호 찾기 */
+
+        .login-help {
+            padding: 0px;
+            margin: 7px -8px 0;
+
+            .login-help-item {
+                display: inline-block;
+                font-size: 14px;
+                padding: 16px;
+
+                .login-help-text {
+                    color: #888;
+                }
+            }
+
+            .login-help-item+.login-help-item {
+                position: relative;
+                margin-left: 1px;
+            }
+
+            .login-help-item+.login-help-item:before {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: -1px;
+                height: 14px;
+                margin: auto 0;
+                border-left: 1px solid #dadada;
+                content: "";
+            }
+
+        }
+    }
+
+
+
+    @media (min-width: 664px) {
+        .login-title {
+            font-size: 42px;
+            line-height: 46px;
+        }
+
+        .login-desc {
+            margin-top: 10px;
+            font-size: 20px;
+            line-height: 26px;
+        }
+
+        .login-notice {
+            margin-top: 12px;
+        }
+
+        .n-commerce-find {
+            margin-top: 12px;
+        }
+
+    }
+}

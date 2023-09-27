@@ -1,17 +1,123 @@
-import Swiper_Shop from "../../components/shop/Swiper_Shop";
+import styled from "styled-components";
+import { Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
+
 import "./Home.scss";
 
-function Home () {
-    return (
-        <>
-        <div className="middle-wrap">
-            <div className="middle-inner">
-                <Swiper_Shop/>
-            </div>
-        </div>
-        {/* <div className="middle-cover"></div> */}
-        </>
-    )
+import mainImg from "@img/shop/hero_wwdc23_apple__f6s4xvm9mk2u_largetall.jpg";
+import mainText from "@img/shop/hero_logo_wwdc23__bgfcj40dxkpe_largetall.png";
+
+const LineMiddle = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: auto;
+  margin-left: auto;
+  font-size: 13px;
+  padding: 12px 0;
+  width: 100%;
+  height: 50px;
+  background-color: white;
+
+  & > span {
+    font-weight: 300;
+  }
+
+  & > sup {
+    font-weight: 300;
+    top: -0.5em;
+    position: relative;
+    font-size: 0.6em;
+    vertical-align: baseline;
+  }
+
+  & > a {
+    font-weight: 300;
+    color: #06c;
+  }
+`;
+
+const HomeImgWrap = styled.div`
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 692px;
+
+  & > img {
+    position: absolute;
+    left: calc(50% + 0px);
+    right: 0px;
+    bottom: 0px;
+    width: 3008px;
+    height: 736px;
+    background-size: 3008px 736px;
+    background-image: url(${mainImg});
+    background-repeat: no-repeat;
+    transform: translatex(-50%);
+    z-index: -1;
+  }
+`;
+
+const TextWrap = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 55px 0;
+`;
+const MainText = styled.h2`
+  display: block;
+  width: 100%;
+  height: 53px;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  background-size: 292px 53px;
+  background-image: url(${mainText});
+  background-repeat: no-repeat;
+  background-position: center;
+`;
+const MiddleText = styled.p`
+  font-size: 25px;
+  font-weight: 500;
+  margin-top: 10px;
+  line-height: 1.1;
+  color: white;
+`;
+
+const LinkWrap = styled.div`
+  margin-top: 10px;
+  & > a {
+    color: #2997ff;
+    font-size: 20px;
+    font-weight: 400;
+  }
+`;
+
+function Home() {
+  return (
+    <>
+      <LineMiddle>
+        <span>
+          iPhone&nbsp;11 이후 모델을 보상 판매하면 iPhone&nbsp;14 또는 iPhone&nbsp;14&nbsp;Pro 구입&nbsp;시 사용할&nbsp;수 있는 ₩250,000-₩790,000
+          상당의 크레딧이.
+        </span>
+        <sup>1</sup>
+        <a href="">&nbsp;iPhone&nbsp;쇼핑하기</a>
+      </LineMiddle>
+      <HomeImgWrap>
+        <TextWrap className="TextWrap">
+          <MainText></MainText>
+          <MiddleText>한국 시간 6월 6일 새벽 2시, 온라인 생중계.</MiddleText>
+          <MiddleText>촬영: 앤드류 주커만</MiddleText>
+          <LinkWrap>
+            <Link to={""}>더 알아보기</Link>
+          </LinkWrap>
+        </TextWrap>
+        <img />
+      </HomeImgWrap>
+    </>
+  );
 }
 
 export default Home;

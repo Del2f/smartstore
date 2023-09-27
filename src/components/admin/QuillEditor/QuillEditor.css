@@ -1,0 +1,25 @@
+.ql-container
+, .ql-editor {
+    height: 500px;
+}
+
+*[quill__html]{
+  display: none;
+  width: 100%;
+  margin: 0;
+  background: rgb(29, 29, 29);
+  box-sizing: border-box;
+  color: rgb(204, 204, 204);
+  outline: none;
+  padding: 12px 15px;
+  line-height: 24px;
+  font-family: Consolas, Menlo, Monaco, "Courier New", monospace;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border: none;
+}
+
+*[quill__html *= '-active-']{
+  display: initial;
+}

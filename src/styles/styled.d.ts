@@ -1,37 +1,54 @@
 // import original module declarations
 import 'styled-components'
+import { theme } from '@styles/theme';
 
 // and extend them!
 declare module 'styled-components' {
 
  // ThemeProvider theme에 적용할 타입으로, theme의 속성과 동일하게 작성
-  export interface DefaultTheme {
-    dark: {
-      mainBackground: string;
-      // neutral color
-      title: string;
-      primaryText: string;
-      secondaryText: string;
-      disable: string;
-      border: string;
-      divider: string;
-      background: string;
-      tableHeader: string;
-    };
-    light: {
-      mainBackground: string;
-      // neutral color
-      title: string;
-      primaryText: string;
-      secondaryText: string;
-      disable: string;
-      border: string;
-      divider: string;
-      background: string;
-      tableHeader: string;
-      // point-color
-      // point-color
-    };
-    response: {};
+  export interface DefaultTheme extends theme {
+      navMain: string;
+      navMainHover: string;
+      navBG: string;
+      navSubBG: string;
+      navSubHeader: string;
+      navSub: string;
+      navCartBtnBG: string;
+      navCartBtnBGHover: string;
+      navCartBtn: string;
+      navCartBadgeBG: string;
+      navCartBadge: string;
+      chapterNavBG: string;
+      chapterNavText: string;
+      chapterNavTextHover: string;
+
+      footerBG: string;
+      footerTextColor: string;
+      footerDirectoryTitleColor: string;
+      footerDirectoryTitleColorHover: string;
+      footerPipeColor: string;
+      footerLinkColor: string;
+      footerShopLinkColor: string;
+      footerBorderColor: string;
+
+
+      background1: string;
+      background2: string;
+      text: string;
+      textHover: string;
+      keyBg1: string;
+      keyBg2: string;
+      boardBg: string;
+      boardBorder1: string;
+      boardBorder2: string;
+      button1: string;
+      button2: string;
+      color: {
+        correct: string;
+        present: string;
+        absent: string;
+      };
+      navrate: string;
+      navColorRate: string;
   }
 }

@@ -28,9 +28,6 @@ function Intro() {
                         <div className="nav-left flex flex-align-center">
                             <ul className="nav-logo flex flex-wrap flex-align-center">
                                 <li>
-                                    <a className="naver-logo"></a>
-                                </li>
-                                <li>
                                     <a
                                         className="sell-shop"
                                         onClick={() => {

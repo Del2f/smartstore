@@ -3,116 +3,134 @@ import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useCookies } from "react-cookie";
-import { AdminLogin } from '../store/adminSlice';
-import { SET_TOKEN, selectToken } from '../store/authSlice';
+import { AdminLogin } from "../store/adminSlice";
+import { SET_TOKEN, selectToken } from "../store/authSlice";
 
-import $ from 'jquery';
+import $ from "jquery";
 
 import "./Login.scss";
 
-    function Login() {
+function Login() {
 
-        const cookies = useCookies();
-        const dispatch = useDispatch();
-        const navigate = useNavigate(); // 다른 페이지로 이동하게 해주는 Hook.
-        const token = useSelector(selectToken)
+    const cookies = useCookies();
+    const dispatch = useDispatch();
+    const navigate = useNavigate(); // 다른 페이지로 이동하게 해주는 Hook.
+    const token = useSelector(selectToken);
 
-        const [Id, setId] = useState("");
-        const [Password, setPassword] = useState("");
-        
-        //오류메시지 상태저장
-        const [ErrorMessage, setErrorMessage] = useState<string>('');
+    const [Id, setId] = useState("");
+    const [Password, setPassword] = useState("");
 
-        // 유효성 검사
-        const [isError, setIsError] = useState<boolean>(false);
+    //오류메시지 상태저장
+    const [ErrorMessage, setErrorMessage] = useState<string>("");
 
-        const IdHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-            setId(e.target.value)
-        }
+    // 유효성 검사
+    const [isError, setIsError] = useState<boolean>(false);
 
-        const PasswordHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-            setPassword(e.target.value)
-        }
-
-        //     useEffect(() => {
-        //     if (cookies[0].jwt) {
-        //     navigate("/home");
-        //     }
-        // }, [cookies, navigate]);
-
-        const userdata = {
-            id: Id,
-            password: Password,
-        };
-
-        // 로그인 버튼
-        const handleSubmit = async (e : any) => {
-            e.preventDefault();
-
-            console.log('로그인 입니다.')
+    // 유저의 로그인 상태를 확인.
+    // 뒤로가기 키 입력했을때 cookie가 필요한 페이지로 진입해 무한루프하는것을 방지합니다.
+    useEffect(() => {
+        const verifyUser = async () => {
             try {
-            const data = await axios.post( "/smartstore/commerce/login", userdata, { withCredentials: true })
-                .then((res) => {
-                    if (res.data.error == '아이디및비밀번호오류'){
-                        setErrorMessage('아이디 혹은 비밀번호가 틀렸습니다.')
-                        setIsError(false)
-                    } else if (res.data.status == true){
-                        console.log(res.data)
-                        dispatch(AdminLogin( res.data.user ));
-                        dispatch(SET_TOKEN( res.data.token ));
-                        navigate("/home");
-                    }
-                })
-            } catch (err) {
-                console.log(err)
+                const res = await axios.post("/smartstore/commerce/login", {}, { withCredentials: true });
+                console.log(res);
+                if (res.data.status == false) {
+                    window.onpopstate = function (event) {
+                        if (event) {
+                            event.preventDefault();
+                        }
+                        navigate(-2);
+                    };
+                }
+            } catch (errors) {
+                console.log(errors);
+            }
+        };
+        verifyUser();
+    }, [cookies, navigate]);
+
+    const IdHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setId(e.target.value);
+    };
+
+    const PasswordHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setPassword(e.target.value);
+    };
+
+    const userdata = {
+        id: Id,
+        password: Password,
+    };
+
+    // 로그인 버튼
+    const handleSubmit = async (e: any) => {
+        e.preventDefault();
+
+        console.log("로그인 입니다.");
+        try {
+            const data = await axios.post("/smartstore/commerce/loginbtn", userdata, { withCredentials: true }).then((res) => {
+                if (res.data.error == "아이디및비밀번호오류") {
+                    setErrorMessage("아이디 혹은 비밀번호가 틀렸습니다.");
+                    setIsError(false);
+                } else if (res.data.status == true) {
+                    console.log(res.data);
+                    dispatch(AdminLogin(res.data.user));
+                    dispatch(SET_TOKEN(res.data.token));
+                    navigate("/home");
+                }
+            });
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const [inputClickNumber, setInputClickNumber] = useState(0);
+    const [inputClick, setInputClick] = useState(false);
+    const inputRef = useRef<HTMLUListElement>(null);
+
+    const mouseEnter = (e: any) => {
+        $(e.target).addClass("login-item-hover");
+    };
+
+    const mouseLeave = (e: any) => {
+        $(".login-item").removeClass("login-item-hover");
+    };
+
+    useEffect(() => {
+        const clickOutside = (e: any) => {
+            // 모달이 열려 있고 모달의 바깥쪽을 눌렀을 때 창 닫기
+            // useRef의 current 값은 선택한 DOM을 말함.
+            // 드롭메뉴를 제외한 나머지 공간을 클릭하면 닫히게된다.
+
+            if (inputClick && inputRef.current && !inputRef.current.contains(e.target)) {
+                setInputClick(false);
+                setInputClickNumber(0);
             }
         };
 
-            const [inputClickNumber, setInputClickNumber] = useState(0);
-            const [inputClick, setInputClick] = useState(false);
-            const inputRef = useRef<HTMLUListElement>(null);
-            
-            const mouseEnter = (e:any) => {
-                $(e.target).addClass('login-item-hover')
-            }
+        document.addEventListener("mousedown", clickOutside);
 
-            const mouseLeave = (e:any) => {
-                $('.login-item').removeClass('login-item-hover');
-            }
+        return () => {
+            // Cleanup the event listener
+            document.removeEventListener("mousedown", clickOutside);
+        };
+    }, [inputClick]);
 
-            useEffect(() => {
-                    const clickOutside = (e : any) => {
-            
-                    // 모달이 열려 있고 모달의 바깥쪽을 눌렀을 때 창 닫기
-                    // useRef의 current 값은 선택한 DOM을 말함.
-                    // 드롭메뉴를 제외한 나머지 공간을 클릭하면 닫히게된다.
-            
-                    if (inputClick && inputRef.current && !inputRef.current.contains(e.target)) {
-                        setInputClick(false);
-                        setInputClickNumber(0);
-                    } 
-                    };
-                
-                    document.addEventListener("mousedown", clickOutside);
-                
-                    return () => {
-                    // Cleanup the event listener
-                    document.removeEventListener("mousedown", clickOutside);
-                    };
-            }, [inputClick]);
-
-        return (
-            <>
-            <form method="POST" onSubmit={(e) => handleSubmit(e)} >
+    return (
+        <>
+            <form method="POST" onSubmit={(e) => handleSubmit(e)}>
                 <div className="layout-wrap">
                     <div className="layout-inner">
                         <div className="login-content">
                             <h2 className="login-title">로그인</h2>
                             <div className="login-desc">네이버 커머스 ID로 로그인해 주세요.</div>
-                            <div className="login-notice">기존 스마트스토어센터 회원님은 <strong className="bold">사용 중인 아이디로 로그인</strong>해 주세요.<br></br>
-                            이미 네이버 커머스 ID 회원 전환을 하신 회원님은 <strong className="bold">전환한 아이디로 로그인</strong>해 주세요.</div>
+                            <div className="login-notice">
+                                기존 스마트스토어센터 회원님은 <strong className="bold">사용 중인 아이디로 로그인</strong>해 주세요.<br></br>
+                                이미 네이버 커머스 ID 회원 전환을 하신 회원님은 <strong className="bold">전환한 아이디로 로그인</strong>해 주세요.
+                            </div>
                             <div className="n-commerce-find">
-                                <a href="{() => false}" className="n-commerce-text">네이버 커머스 ID 알아보기</a>
+                                <a href="{() => false}" className="n-commerce-text">
+                                    네이버 커머스 ID 알아보기
+                                </a>
                             </div>
                             <div className="login-area">
                                 <div className="login-login-content">
@@ -121,14 +139,34 @@ import "./Login.scss";
                                     </ul>
                                     <div className="login-content-box">
                                         <ul className="login-list" ref={inputRef}>
-                                            <li className={ inputClick && inputClickNumber === 1 ? "login-item login-item-active" : "login-item"}  onMouseEnter={ mouseEnter } onMouseLeave={ mouseLeave } >
-                                                <input type="text" name="id" placeholder="아이디" className="login-input" onClick={() => { setInputClick(true); setInputClickNumber(1);}} onChange={IdHandler}/>
+                                            <li className={inputClick && inputClickNumber === 1 ? "login-item login-item-active" : "login-item"} onMouseEnter={mouseEnter} onMouseLeave={mouseLeave}>
+                                                <input
+                                                    type="text"
+                                                    name="id"
+                                                    placeholder="아이디"
+                                                    className="login-input"
+                                                    onClick={() => {
+                                                        setInputClick(true);
+                                                        setInputClickNumber(1);
+                                                    }}
+                                                    onChange={IdHandler}
+                                                />
                                             </li>
-                                            <li className={ inputClick && inputClickNumber === 2 ? "login-item login-item-active" : "login-item"} onMouseEnter={ mouseEnter } onMouseLeave={ mouseLeave } >
-                                                <input type="password" name="password" placeholder="비밀번호" className="login-input" onClick={() => { setInputClick(true); setInputClickNumber(2);}} onChange={PasswordHandler}/>
+                                            <li className={inputClick && inputClickNumber === 2 ? "login-item login-item-active" : "login-item"} onMouseEnter={mouseEnter} onMouseLeave={mouseLeave}>
+                                                <input
+                                                    type="password"
+                                                    name="password"
+                                                    placeholder="비밀번호"
+                                                    className="login-input"
+                                                    onClick={() => {
+                                                        setInputClick(true);
+                                                        setInputClickNumber(2);
+                                                    }}
+                                                    onChange={PasswordHandler}
+                                                />
                                             </li>
                                         </ul>
-                                            <div className={isError ? "error" : "error-active" }>{ErrorMessage}</div>
+                                        <div className={isError ? "error" : "error-active"}>{ErrorMessage}</div>
                                         <div className="login-btn-wrap">
                                             <button type="submit" className="login-btn">
                                                 <span className="login-btn-text">로그인</span>
@@ -153,12 +191,13 @@ import "./Login.scss";
                                     <button type="button" className="login-help-btn">
                                         <i className="login-help-btn-icon"></i>
                                     </button>
-
                                 </div>
                                 <div className="login-subnotice">
                                     <span className="login-subnotice-text">아직 네이버 커머스 ID 회원이 아니신가요?</span>
                                     <a href="{() => false}" className="login-subnotice-signup">
-                                        <span className="login-subnotice-signup-text"><Link to="../usersign">회원가입하기</Link></span>
+                                        <span className="login-subnotice-signup-text">
+                                            <Link to="../usersign">회원가입하기</Link>
+                                        </span>
                                     </a>
                                 </div>
                                 <ul className="login-notice-list">
@@ -182,8 +221,8 @@ import "./Login.scss";
                     </div>
                 </div>
             </form>
-            </>
-        );
-        }
+        </>
+    );
+}
 
-    export default Login;
+export default Login;

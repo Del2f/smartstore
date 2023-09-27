@@ -1,3 +1,10 @@
+// 상세사진 파레트
+#rbgcp-wrapper {
+    position: absolute;
+    width: 294px;
+    left: -300px;
+}
+
 .seller-content {
 
     .show-block {
@@ -75,7 +82,7 @@
                     .showdropmenu {
                         width: 34px;
                         height: 34px;
-                        border: 1px solid #adadad;
+                        border: none;
                         background-color: #fff;
 
                         .icon-arrow {
@@ -116,6 +123,7 @@
                         display: inline-block;
                         color: #303236;
                         font-size: 13px;
+                        width: 100%;
 
                         .apply-btn-wrap {
                             margin-top: 15px;
@@ -326,13 +334,16 @@
             .input-item {
                 display: inline-block;
                 margin-top: 8px;
-
+                width: 100%;
+                
                 .input-area {
                     display: inline-block;
+                    width: 100%;
                     margin: 0px;
 
                     .input-box {
                         display: inline-block;
+                        position: relative;
 
                         .input-box-title {
                             margin-bottom: 10px;
@@ -384,6 +395,9 @@
 
         // 상품 등록 버튼
         .btn-area {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
             margin-top: 40px;
 
             .btn-area-btn {
@@ -401,7 +415,7 @@
             }
 
             .btn-txt {
-                display: block;
+                display: inline-block;
                 font-size: 15px;
                 line-height: 18px;
                 font-weight: 700;

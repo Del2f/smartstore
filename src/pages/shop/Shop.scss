@@ -1,517 +1,246 @@
+.footer-wrap {
+    background-color: #fafafa;
+    color: black;
+    width: 100%;
 
-.shop-main-wrap {
-    position: relative;
-    min-width: 1280px;
-    background-color: #010101;
-    font-family: GmarketSansMedium;
-    
-    .header-wrap {
-        position: absolute;
-        z-index: 2;
-        left: 0;
-        right: 0;
-    }
-
-    .header-inner:before {
-        position: absolute;
-        top: 36px;
-        right: 0;
-        left: 0;
-        content: "";
-        height: 1px;
-        background-color: rgba(255,255,255,.1);
-    }
-
-    .header-inner {
+    .footer-inner {
         width: 1280px;
         margin: 0 auto;
+        padding-bottom: 100px;
 
-        .line-top-naver-user {
-            height: 37px;
+        .footer-top {
 
-            .left {
-                .naver-logo{ 
-                    width: 60px;
-                    height: 25px;
-                    content: "";
+            .first {
+                margin-right: 14px;
+
+                .icon {
+                    width: 16px;
+                    height: 16px;
                     display: inline-block;
-                    background: url(/img/Naver_Logotype.svg) no-repeat;
-                    background-position: 0px 8px;
-                    vertical-align: middle;
-                    background-size: 45px;
-                    filter: brightness(10);
-                }
-                .naver-shopping:before {
-                    width: 66px;
-                    height: 13px;
                     content: "";
-                    display: inline-block;
-                    background-image: url(/img/shop/spText_svg.svg);
-                    background-position: -302px -124px;
-                    background-size: 404px 403px;
-                    margin-top: 10px;
+                    margin-right: 5px;
+                    background-image: url(/img/shop/spIcon_svg.svg);
+                    background-size: 726px 688px;
+                    background-position: -684px -95px;
+                }
+
+                .text {
+                    font-size: 13px;
+                    color: #888;
                 }
             }
 
-            .right {
-                display: inline-block;
-                padding: 5px;
-                font-size: 11px;
-                vertical-align: top;
+            .second {
+                margin-right: 3px;
 
-                a {
-                    padding: 5px;
-                }
-
-                .display-none {
-                    display: none;
-                }
-
-                .user-loginbtn-wrap {
-
-                    .user-loginbtn {
-                        color: white;
-                        background-color: rgb(39, 39, 39);
-
-                        a {
-                            color: white;
-                        }
-                    }
-                }
-
-                .user-logged-wrap {
-                    .user-loginbtn {
-                        color: white;
-                        background-color: rgb(39, 39, 39);
-
-                        a {
-                            color: white;
-                        }
-                    }
-
-                }
-
-                .user-name {
-                    a {
-                        color: white;
-                    }
+                .seller-name {
+                    font-size: 13px;
+                    color: #000;
                 }
             }
-        }
 
-        .line-middle-shoplogo {
-            position: relative;
-            padding: 50px 0 22px;
+            .third {
 
-            .shoplogo {
-                width: 30px;
-                height: 36px;
-                display: inline-block;
-                background-image: url(/img/shop/Apple_logo.png);
-                background-size: 30px;
-                margin: 0px;
-            }
+                .seller-number {
+                    font-size: 13px;
+                    margin-right: 3px;
+                }
 
-            .left {
+                .seller-auth {
+                    font-size: 13px;
+                    color: #3097b4;
+                    margin-right: 3px;
+                }
 
-                .alarm-btn {
-                    display: flex;
+                button {
                     position: relative;
-                    height: 34px;
-                    border: 1px solid rgba(255,255,255,.2);
-                    border-radius: 20px;
-                    font-size: 12px;
-                    line-height: 34px;
-                    background-color: transparent;
-                    padding: 5px;
-                    width: 100px;
-                    
-                    .alarm-logo {
-                        display: inline-block;
-                        content: "";
-                        width: 18px;
-                        height: 15px;
-                        margin: 0px;
-                        background-image: url(/img/shop/spIcon_svg.svg);
-                        background-size: 726px 688px;
-                        background-position: -515px -414px;
-                    }
+                    padding: 0 6px 0 23px;
+                    border: 1px solid #dbdbdb;
+                    background-color: #fff;
+                    font-size: 11px;
+                    color: #4a4a4a;
+                    line-height: 22px;
+                    letter-spacing: -0.3px;
 
-                    .btn-text {
-                        margin-left: 5px;
-                        color: rgb(255, 255, 255);
-                    }
-                }
-
-                .alarm-customer {
-                    position: relative;
-                    margin-left: 14px;
-                    font-size: 12px;
-                    font-weight: 500;
-                    line-height: 34px;
-                    color: rgb(255, 255, 255);
-                    vertical-align: top;
-
-                    .alarm-customer-icon {
-                        border:0px;
-                        margin-left: 4px;
-                        display: inline-block;
-                        width: 15px;
-                        height: 15px;
-                        content: "";
-                        background-image: url(/img/shop/spBs_icon_svg.svg);
-                        background-position: -164px -292px;
-                        background-size: 333px 313px;
-                        background-color: black;
-                    }
-                }
-            }
-
-            .right {
-
-                .search-wrap {
-                    position: relative;
-                    width: 218px;
-                    border: 1px solid rgba(0,0,0,.2);
-                    background-color: rgba(0,0,0,.05);
-                    border-color: rgba(255,255,255,.5);
-                    border-radius: 20px;
-                    height: 40px;
-                    padding: 2px 40px 0 20px;
-                    -webkit-box-sizing: border-box;
-
-                    .input {
-                        width: 100%;
-                        height: 36px;
-                        background-color: transparent;
-                        display: inline-block;
-                        border: none;
-                        line-height: 36px;
-                        font-size: 12px;
-                        color: #000;
-                        outline: none;
-                    }
-
-                    .input::placeholder {
-                        font-size: 12px;
-                        font-weight: 700;
-                    }
-
-                    .search-btn {
-                        position: absolute;
-                        top: 0;
-                        right: 0;
-                        padding: 12px 20px 10px 4px;
-                        line-height: 10px;
-                        outline: none;
-                        background-color: transparent;
-                        border: 0px;
-
-                        .search-btn-icon { 
-                            width: 16px;
-                            height: 16px;
-                            display: inline-block;
-                            background-color: transparent;
-                            background-image: url(/img/shop/spIcon_svg.svg);
-                            background-size: 726px 688px;
-                            background-position: -684px -399px;
-                        }
-                    }
-                }
-            }
-        }
-
-        .line-bottom-menulist {
-            font-size: 14px;
-            line-height: 38px;
-            height: 72px;
-
-            .menulist-wrap {
-
-                .menu {
-                    position: relative;
-                    padding: 0 25px;
-    
-                    .menu-icon {
+                    .icon {
                         position: absolute;
                         top: 50%;
-                        right: 11px;
-                        margin-top: -2px;
-                        width: 7px;
-                        height: 4px;
+                        left: 8px;
+                        width: 11px;
+                        height: 11px;
+                        margin-top: -6px;
+                        content: "";
+                        background-image: url(/img/shop/spIcon_svg.svg);
+                        background-size: 726px 688px;
+                        background-position: -708px -436px;
+                    }
+                }
+            }
+
+            .fourth {
+
+                button {
+                    display: block;
+                    position: relative;
+                    font-size: 13px;
+                    line-height: 28px;
+                    color: #000;
+                    border: none;
+                    background-color: transparent;
+                    cursor: pointer;
+
+                    .icon {
+                        position: absolute;
+                        top: 13px;
+                        right: -2px;
+                        width: 5px;
+                        height: 3px;
+                        display: inline-block;
                         content: "";
                         background-image: url(/img/shop/spArrow_svg.svg);
                         background-size: 216px 212px;
-                        background-position: -178px -176px;
+                        background-position: -206px -184px;
                     }
-                }
-
-                .menu:first-child {
-                    padding: 0 25px 0 0;
-                }
-            }
-
-            .seller-menu-wrap {
-
-                .menu {
-                    padding: 0 23px;
-                    color : #808080;
                 }
             }
         }
-    }
 
-    .header-middle-wrap {
-        position: relative;
-    }
+        .footer-main {
+            margin-top: 26px;
 
-    .middle-cover {
-        margin-top: 225px;
-        height: 643px;
-    }
+            .first {
+                color: #444;
+                font-size: 13px;
 
-    .footer-wrap {
-        background-color: #fafafa;
-        color: black;
-        width: 100%;
-        
-        .footer-inner {
-            width: 1280px;
-            margin: 0 auto;
-            padding-bottom: 100px;
-
-            .footer-top {
-
-                .first {
-                    margin-right: 14px;
-
-                    .icon {
-                        width: 16px;
-                        height: 16px;
-                        display: inline-block;
-                        content: "";
-                        margin-right: 5px;
-                        background-image: url(/img/shop/spIcon_svg.svg);
-                        background-size: 726px 688px;
-                        background-position: -684px -95px;
-                    }
-
-                    .text {
-                        font-size: 13px;
-                        color: #888;
-                    }
+                span:first-child {
+                    padding-right: 10px;
                 }
 
-                .second {
-                    margin-right: 3px;
-
-                    .seller-name {
-                        font-size: 13px;
-                        color: #000;
-                    }
+                span:not(:first-child) {
+                    position: relative;
+                    padding: 0 10px;
                 }
 
-                .third {
-
-                    .seller-number {
-                        font-size: 13px;
-                        margin-right: 3px;
-                    }
-
-                    .seller-auth {
-                        font-size: 13px;
-                        color: #3097b4;
-                        margin-right: 3px;
-                    }
-
-                    button {
-                        position: relative;
-                        padding: 0 6px 0 23px;
-                        border: 1px solid #dbdbdb;
-                        background-color: #fff;
-                        font-size: 11px;
-                        color: #4a4a4a;
-                        line-height: 22px;
-                        letter-spacing: -0.3px;
-
-                        .icon {
-                            position: absolute;
-                            top: 50%;
-                            left: 8px;
-                            width: 11px;
-                            height: 11px;
-                            margin-top: -6px;
-                            content: "";
-                            background-image: url(/img/shop/spIcon_svg.svg);
-                            background-size: 726px 688px;
-                            background-position: -708px -436px;
-                        }
-                    }
-                }
-
-                .fourth {
-
-                    button {
-                        display: block;
-                        position: relative;
-                        font-size: 13px;
-                        line-height: 28px;
-                        color: #000;
-                        border: none;
-                        background-color: transparent;
-                        cursor: pointer;
-
-                        .icon {
-                            position: absolute;
-                            top: 13px;
-                            right: -2px;
-                            width: 5px;
-                            height: 3px;
-                            display: inline-block;
-                            content: "";
-                            background-image: url(/img/shop/spArrow_svg.svg);
-                            background-size: 216px 212px;
-                            background-position: -206px -184px;
-                        }
-                    }
+                span:after {
+                    position: absolute;
+                    top: 0;
+                    bottom: 0;
+                    left: 0;
+                    width: 1px;
+                    height: 11px;
+                    margin: auto 0;
+                    background-color: #c2c2c2;
+                    opacity: .4;
+                    content: "";
                 }
             }
 
-            .footer-main {
-                margin-top: 26px;
+            .second {
+                margin-top: 20px;
 
-                .first {
-                    color: #444;
-                    font-size: 13px;
-                    
-                    span:first-child {
-                        padding-right: 10px;
-                    }
-
-                    span:not(:first-child) {
-                        position: relative;
-                        padding: 0 10px;
-                    }
-
-                    span:after {
-                        position: absolute;
-                        top: 0;
-                        bottom: 0;
-                        left: 0;
-                        width: 1px;
-                        height: 11px;
-                        margin: auto 0;
-                        background-color: #c2c2c2;
-                        opacity: .4;
-                        content: "";
-                    }
+                .customer-service,
+                .report {
+                    margin-left: 100px;
                 }
 
-                .second {
-                    margin-top: 20px;
+                .naver-info,
+                .customer-service,
+                .report {
+                    font-size: 12px;
+                    margin-top: 5px;
 
-                    .customer-service, .report {
-                        margin-left: 100px;
-                    }
-
-                    .naver-info, .customer-service, .report {
+                    h2 {
                         font-size: 12px;
-                        margin-top: 5px;
-
-                        h2 {
-                            font-size: 12px;
-                            font-weight: bold;
-                        }
-
-                        div {
-                            display: inline-block;
-                            line-height: 22px;
-                            color: #888;
-                        }
-
-                        .bar {
-                            display: inline-block;
-                            width: 1px;
-                            height: 10px;
-                            margin: 6px 10px 0;
-                            opacity: .4;
-                            background-color: #c2c2c2;
-                            vertical-align: top;
-                        }
-
-                        button {
-                            display: inline-block;
-                            margin-left: 5px;
-                            padding: 0 4px;
-                            border: 1px solid #e7e7e7;
-                            line-height: 17px;
-                            font-size: 11px;
-                            color: #888;
-                            vertical-align: top;
-                        }
-
-                        strong {
-                            color: #888;
-                            font-weight: bold;
-                        }
+                        font-weight: bold;
                     }
-                }
-
-                .third {
-                    margin-top: 36px;
-                    color: #888;
-                    font-size: 13px;
 
                     div {
                         display: inline-block;
+                        line-height: 22px;
+                        color: #888;
                     }
 
-                    a {
+                    .bar {
                         display: inline-block;
-                        position: relative;
-                        margin-left: 4px;
-                        padding-right: 12px;
-                        color: #555;
+                        width: 1px;
+                        height: 10px;
+                        margin: 6px 10px 0;
+                        opacity: .4;
+                        background-color: #c2c2c2;
                         vertical-align: top;
                     }
 
-                    a:after {
-                        position: absolute;
-                        top: 50%;
-                        right: 0;
-                        width: 7px;
-                        height: 7px;
-                        border-top: 1px solid #8f8f8f;
-                        border-right: 1px solid #8f8f8f;
-                        -webkit-transform: translate(-50%, -50%) rotate(45deg);
-                        -ms-transform: translate(-50%, -50%) rotate(45deg);
-                        transform: translate(-50%, -50%) rotate(45deg);
-                        content: "";
+                    button {
+                        display: inline-block;
+                        margin-left: 5px;
+                        padding: 0 4px;
+                        border: 1px solid #e7e7e7;
+                        line-height: 17px;
+                        font-size: 11px;
+                        color: #888;
+                        vertical-align: top;
+                    }
+
+                    strong {
+                        color: #888;
+                        font-weight: bold;
                     }
                 }
+            }
 
-                .fourth {
-                    margin-top: 15px;
-                    line-height: 11px;
-                    font-size: 11px;
-                    color: #9b9b9b;
-                    span {
-                        vertical-align: top;
-                    }
+            .third {
+                margin-top: 36px;
+                color: #888;
+                font-size: 13px;
 
-                    .naver-logo {
-                        display: inline-block;
-                        width: 64px;
-                        height: 11px;
-                        margin-right: 6px;
-                        background-image: url(/img/shop/spText_svg.svg);
-                        background-size: 404px 403px;
-                        background-position: -302px -167px;
-                    }
+                div {
+                    display: inline-block;
+                }
+
+                a {
+                    display: inline-block;
+                    position: relative;
+                    margin-left: 4px;
+                    padding-right: 12px;
+                    color: #555;
+                    vertical-align: top;
+                }
+
+                a:after {
+                    position: absolute;
+                    top: 50%;
+                    right: 0;
+                    width: 7px;
+                    height: 7px;
+                    border-top: 1px solid #8f8f8f;
+                    border-right: 1px solid #8f8f8f;
+                    -webkit-transform: translate(-50%, -50%) rotate(45deg);
+                    -ms-transform: translate(-50%, -50%) rotate(45deg);
+                    transform: translate(-50%, -50%) rotate(45deg);
+                    content: "";
+                }
+            }
+
+            .fourth {
+                margin-top: 15px;
+                line-height: 11px;
+                font-size: 11px;
+                color: #9b9b9b;
+
+                span {
+                    vertical-align: top;
+                }
+
+                .naver-logo {
+                    display: inline-block;
+                    width: 64px;
+                    height: 11px;
+                    margin-right: 6px;
+                    background-image: url(/img/shop/spText_svg.svg);
+                    background-size: 404px 403px;
+                    background-position: -302px -167px;
                 }
             }
         }
     }
-
-    
 }

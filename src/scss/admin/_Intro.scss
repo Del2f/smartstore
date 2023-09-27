@@ -1,8 +1,4 @@
 
-    p {
-        margin: 0px;
-    }
-
     .intro-main-wrap {
         min-width: 1230px;
         width: 100%;
@@ -32,21 +28,9 @@
         padding: 0px;
         }
         
-        .nav-left .naver-logo {
-            width: 60px;
-            height: 25px;
-            content: "";
-            display: inline-block;
-            background: url(/img/Naver_Logotype.svg) no-repeat;
-            background-position: 0px 8px;
-            vertical-align: middle;
-            background-size: 52px;
-        }
-        
         .nav-left .sell-shop {
         font-size: 22px;
         font-weight: 500;
-        font-family: NanumSquare;
         letter-spacing: 1.5px;
         color: white;
         }
@@ -55,16 +39,10 @@
         padding: 0px;
         margin: 0px;
         margin-left: 10px;
-        /* line-height: 27px; */
-        }
-        
-        .nav-left .quick-link li {
-        
         }
         
         .nav-left .quick-link li a {
         color: #fff;
-        /* border-left: 1px solid black; */
         position: relative;
         padding: 0 10px 0 11px;
         font-size: 16px;

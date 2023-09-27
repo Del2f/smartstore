@@ -1,6 +1,7 @@
 import axios from "../../api/axios";
 import { useState, useEffect, useRef } from "react";
 import "./DetailImageProductRegi.scss";
+import Editor from "./Editor";
 
   type Props = {
     image?: any;
@@ -30,8 +31,6 @@ import "./DetailImageProductRegi.scss";
   
     const [max, setMax] = useState<any>(10); // 이미지 최대 개수
     const [uploadedImages, setUploadedImages] = useState<any>([]);
-    // console.log(uploadedImages)
-
     const [previewImages, setPreviewImages] = useState<any>([]);
     const uploadBoxRef = useRef<any>();
     const inputRef = useRef<any>();
@@ -50,21 +49,6 @@ import "./DetailImageProductRegi.scss";
         }
 
         try {
-
-          // for (const file of files) {
-          //   await timer(1000);
-          //   if (!file.type.startsWith("image/")) continue;
-          //   const reader = new FileReader();
-          //   reader.onloadend = (e:any) => {
-          //     const result = e.target!.result;
-          //     if (result) {
-          //       setUploadedImages((state:any) => [...state, result].slice(0, max));
-          //       // props.setDetailImage((state:any) => [...state, file].slice(0, max));
-          //     }
-          //   };
-          //   reader.readAsDataURL(file);
-          // }
-          
           const URL = await axios.post('/smartstore/home/productregister/img2', formData);
           URL.data.location.DetailImage.map((list:any, index:any) => {
             console.log(list.location)
@@ -80,7 +64,6 @@ import "./DetailImageProductRegi.scss";
       const changeHandler = (event:any) => {
         const files = event.target.files;
         handleFiles(files);
-        // event.target.value = '';
       };
       
       const dropHandler = (event:any) => {
@@ -106,77 +89,8 @@ import "./DetailImageProductRegi.scss";
       };
     }, [max]);
     
-    // useEffect(() => {
-
-    //   const imageJSXs = uploadedImages.map((image:any, index:any) => {
-
-    //     const isDeleteImage = (element:any) => {
-    //       return element === image;
-    //     };
-
-    //     const addIndex = (element:any) => {
-    //       return element === image;
-    //     };
-
-    //     const addImg = async (event:any) => {
-    //       const files = event.target.files;
-
-    //       const formData = new FormData();
-
-    //       for(let i=0; i < files.length; i++){
-    //         formData.append('DetailImage', files[i]);
-    //       }
-
-    //       // for (const file of files) {
-    //       //   if (!file.type.startsWith("image/")) continue;
-    //       //   const reader = new FileReader();
-    //       //   reader.onloadend = (e:any) => {
-    //       //     const result = e.target!.result;
-    //       //     if (result) {
-    //       //       const index = uploadedImages.findIndex(addIndex) + 1
-    //       //       uploadedImages.splice(index, 0, result);
-    //       //       setUploadedImages([...uploadedImages]);
-    //       //     }
-    //       //   };
-    //       //   reader.readAsDataURL(file);
-    //       // }
-
-    //       const URL = await axios.post('/smartstore/home/productregister/img2', formData);
-          
-    //       // console.log(URL.data.location.SubImage)
-    //       URL.data.location.DetailImage.map((list:any, index:any) => {
-    //         console.log(list.location)
-
-    //         const index1 = uploadedImages.findIndex(addIndex) + 1
-    //         props.DetailImage.splice(index1, 0, list.location)
-    //         // props.setDetailImage([...props.DetailImage]);
-    //         props.setDetailImage((data:any) => [...data, list.location]);
-    //       })
-    //     };
-
-    //     const deleteImg = () => {
-    //       const index = uploadedImages.findIndex(isDeleteImage);
-    //       uploadedImages.splice(index, 1);
-    //       setUploadedImages([...uploadedImages]);
-
-    //       props.DetailImage.splice(index, 1);
-    //       props.setDetailImage([...props.DetailImage]);
-
-    //       if(uploadedImages.length == 0){
-    //         props.setIsDetail(false);
-    //       }
-    //     };
-
-    //     return <ImagePreview image={image} deleteImg={deleteImg} addImg={addImg} key={index} />;
-    //   });
-
-    //   setPreviewImages(imageJSXs);
-    // }, [uploadedImages]);
-
     useEffect(() => {
-
       const editImg = props.DetailImage;
-      
       const imageJSXs = editImg.map((image:any, index:any) => {
 
         const isDeleteImage = (element:any) => {
@@ -189,38 +103,17 @@ import "./DetailImageProductRegi.scss";
 
         const addImg = async (event:any) => {
           const files = event.target.files;
-
           const formData = new FormData();
 
           for(let i=0; i < files.length; i++){
             formData.append('DetailImage', files[i]);
           }
 
-          // for (const file of files) {
-          //   if (!file.type.startsWith("image/")) continue;
-          //   const reader = new FileReader();
-          //   reader.onloadend = (e:any) => {
-          //     const result = e.target!.result;
-          //     if (result) {
-          //       const index = editImg.findIndex(addIndex) + 1
-          //       editImg.splice(index, 0, result);
-          //       setUploadedImages([...editImg]);
-
-          //     }
-          //   };
-          //   reader.readAsDataURL(file);
-          // }
-
           const URL = await axios.post('/smartstore/home/productregister/img2', formData);
-          
-            // console.log(URL.data.location.SubImage)
             URL.data.location.DetailImage.map((list:any, index:any) => {
-            console.log(list.location)
 
             const index1 = editImg.findIndex(addIndex) + 1
             props.DetailImage.splice(index1, 0, list.location)
-            // console.log(test)
-            // props.setDetailImage([...props.DetailImage]);
             props.setDetailImage((data:any) => [...data]);
           })
         };
@@ -244,7 +137,6 @@ import "./DetailImageProductRegi.scss";
       setPreviewImages(imageJSXs);
     }, [props.DetailImage]);
   
-
   return (
     <>
       <div className="DetailImageUploadBox">
@@ -265,10 +157,8 @@ import "./DetailImageProductRegi.scss";
           <span>이미지 우측 상단에 있는 X 버튼을 누르면 해당 사진이 삭제 됩니다.</span>
         </div>
       </div>
-    </>
+      </>
   );
   }
 
   export default DetailImageUploadBox;
-
-

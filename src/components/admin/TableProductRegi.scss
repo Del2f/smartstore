@@ -4,6 +4,14 @@
     --ag-selected-row-background-color: rgb(224, 224, 224);
 }
 
+.ag-theme-alpine .ag-header {
+    background-color: transparent;
+}
+
+.ag-theme-alpine .ag-root-wrapper {
+    border: none;
+}
+
 .delete-btn-wrap {
     
     .delete-btn {
@@ -157,8 +165,10 @@
         }
     }
 
+
+
     .ag-root-wrapper {
-        border: 1px solid #d3d8e1;
+        border: none;
 
         .ag-cell {
             color: #555;

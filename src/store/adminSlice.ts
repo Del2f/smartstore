@@ -26,4 +26,4 @@ export const { AdminLogin } = adminSlice.actions;
 //reducer
 export default adminSlice.reducer;
 
-export const selectCurrentUser = (state:any) => state.user
+export const selectCurrentAdmin = (state:any) => state.admin;

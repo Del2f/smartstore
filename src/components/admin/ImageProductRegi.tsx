@@ -10,7 +10,7 @@ function ImagePreview({ image, deleteFunc }:any) {
   );
 }
 
-function ImageUploadBox(props:any) {
+function ImageUploadBox( props: any ) {
 
   const [max, setMax] = useState<any>(1); // 이미지 최대 개수
   const [uploadedImages, setUploadedImages] = useState<any>([]);
@@ -22,7 +22,7 @@ function ImageUploadBox(props:any) {
 
   const handleFiles = async (files: any) => {
 
-    if(!validFileTypes.find((type:any) => type === files[0].type)) {
+    if(!validFileTypes.find(( type: any ) => type === files[0].type)) {
       setErrorMessage('이미지 파일을 업로드 해주세요.');
       return
     }

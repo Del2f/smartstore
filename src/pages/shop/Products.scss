@@ -2,9 +2,8 @@
 // ../../../public/img/shop/
 
 .products-wrap {
-    padding-top: 225px;
 
-    .icon-question-mark{
+    .icon-question-mark {
         position: relative;
         vertical-align: middle;
         margin-left: 4px;
@@ -17,10 +16,10 @@
         box-sizing: border-box;
     }
 
-    .icon-question-mark:before{
+    .icon-question-mark:before {
         position: absolute;
         display: inline-block;
-        top:3px;
+        top: 3px;
         left: 4px;
         width: 6px;
         height: 8px;
@@ -40,58 +39,13 @@
             .top-menu {
                 margin: 10px 0;
 
-
-
-                .send-wrap {
-                    .send {
-                        margin-right: -5px;
-                        
-                        li {
-                            position: relative;
-                            float: left;
-                            height: 29px;
-                            width: 30px;
-                            margin: 0 5px 0 0;
-                            padding: 0;
-                            
-                            a {
-                                position: absolute;
-                                width: 29px;
-                                height: 29px;
-                                background-image: url(/img/shop/sp_spi_pc.png);
-                            }
-                                
-                            .blog {
-                                background-position: -10px -127px;
-                            }
-                            .cafe {
-                                background-position: -44px -127px;
-                            }
-                            .keep {
-                                background-position: -49px -216px;
-                            }
-                            .release {
-                                top: 5px;
-                                left: 7px;
-                                width: 16px;
-                                height: 16px;
-                                background-position: -114px -160px;
-                            }
-                        }
-
-                        .release-list {
-                            border: 1px solid #d6d6d6;
-                        }
-                    }
-                }
-
                 .quick-menu {
                     a {
                         color: #8f8f8f;
                         font-size: 12px;
                     }
 
-                    .type-first{
+                    .type-first {
                         position: relative;
                     }
 
@@ -102,7 +56,7 @@
                         vertical-align: top;
                         content: ">";
                     }
-    
+
                     .type-first:after {
                         display: inline-block;
                         margin: 7px 0 0 4px;
@@ -111,14 +65,14 @@
                         vertical-align: top;
                         content: "";
                     }
-    
+
                     .type-second {
                         position: relative;
 
                         color: #5f5f5f;
                         font-weight: bold;
                     }
-    
+
                     .type-second:before {
                         display: inline-block;
                         margin: 0 6px;
@@ -126,7 +80,7 @@
                         vertical-align: top;
                         content: ">";
                     }
-    
+
                     .type-second:after {
                         display: inline-block;
                         margin: 7px 0 0 4px;
@@ -230,7 +184,6 @@
                             }
 
                             .number {
-                                font-family: tahoma,helvetica,"\B098\B214\ACE0\B515","Nanum Gothic","\B098\B214\C2A4\D018\C5B4","Nanum Square","Apple SD Gothic Neo","Malgun Gothic","\B9D1\C740\ACE0\B515",dotum,"\B3CB\C6C0",sans-serif;
                                 font-size: 20px;
                                 font-weight: bold;
                                 color: #000;
@@ -261,7 +214,8 @@
                                 background-position: -213px -683px;
                             }
 
-                            .review-count, .review-min-score {
+                            .review-count,
+                            .review-min-score {
                                 margin-right: 3px;
                             }
 
@@ -306,7 +260,7 @@
 
                                 .sale-percent {
                                     color: #5f5f5f;
-                                    
+
                                 }
 
                                 .origin-sale-wrap {
@@ -366,7 +320,7 @@
                             .icon-quest:before {
                                 position: absolute;
                                 display: inline-block;
-                                top:3px;
+                                top: 3px;
                                 left: 4px;
                                 width: 6px;
                                 height: 8px;
@@ -391,14 +345,12 @@
                                     font-size: 16px;
                                     color: #000;
                                     font-weight: bold;
-                                    
-                                    .username {
-                                    }
 
-                                    .text {
+                                    .username {}
 
-                                    }
+                                    .text {}
                                 }
+
                                 .top-right {
 
                                     .coupon-wrap {
@@ -469,7 +421,6 @@
                                             position: relative;
                                             top: -1px;
                                             display: inline-block;
-                                            font-family: tahoma,helvetica,"\B098\B214\ACE0\B515","Nanum Gothic","\B098\B214\C2A4\D018\C5B4","Nanum Square","Apple SD Gothic Neo","Malgun Gothic","\B9D1\C740\ACE0\B515",dotum,"\B3CB\C6C0",sans-serif;
                                             font-weight: 1000;
                                             font-size: 22px;
                                             color: #e2232b;
@@ -482,6 +433,7 @@
                                         }
                                     }
                                 }
+
                                 .middle-middle {
                                     overflow: hidden;
                                     position: relative;
@@ -494,7 +446,7 @@
                                         padding-left: 17px;
                                         margin-bottom: 2px;
                                     }
-                                    
+
                                     li:before {
                                         position: absolute;
                                         top: 3px;
@@ -518,7 +470,7 @@
                                     padding-left: 17px;
                                     margin-bottom: 2px;
                                 }
-                                
+
                                 li:before {
                                     position: absolute;
                                     top: 3px;
@@ -548,9 +500,7 @@
                                             font-weight: bold;
                                         }
 
-                                        .point-max-unit {
-
-                                        }
+                                        .point-max-unit {}
 
                                         .point-max-icon {
                                             position: relative;
@@ -561,7 +511,7 @@
                                             background-color: #fff;
                                             cursor: pointer;
                                         }
-        
+
                                         .point-max-icon:before {
                                             position: absolute;
                                             top: 3px;
@@ -581,9 +531,9 @@
                                     position: relative;
                                     font-size: 12px;
                                     color: #999;
-                                    
+
                                     li {
-                                        
+
                                         a {
                                             color: #999;
                                             text-decoration: underline;
@@ -642,8 +592,8 @@
                                 margin-left: 3px;
                                 text-align: center;
                                 vertical-align: middle;
-                                
-                                
+
+
                                 .icon-quest {
                                     display: inline-block;
                                     position: absolute;
@@ -680,12 +630,12 @@
                                     background-color: #e9e9e9;
                                     content: "";
                                 }
-        
+
                                 .delivery-company {
                                     margin-left: 10px;
                                     position: relative;
                                 }
-        
+
                                 .delivery-company:before {
                                     display: inline-block;
                                     position: absolute;
@@ -771,9 +721,8 @@
 
                             .cart-wrap {
 
-                                li:first-child {
-                                }
-                                
+                                li:first-child {}
+
                                 li:not(:first-child) {
                                     border-top: 1px solid rgb(233, 233, 233);
                                     margin-top: -1px;
@@ -837,7 +786,7 @@
                                                     content: "";
                                                 }
 
-                                                .plus:after{
+                                                .plus:after {
                                                     position: absolute;
                                                     top: 50%;
                                                     left: 50%;
@@ -854,7 +803,6 @@
                                                     border: solid #eff1f5;
                                                     border-width: 0 1px;
                                                     vertical-align: top;
-                                                    font-family: tahoma, helvetica, "\B098\B214\ACE0\B515", "Nanum Gothic", "\B098\B214\C2A4\D018\C5B4", "Nanum Square", "Apple SD Gothic Neo", "Malgun Gothic", "\B9D1\C740\ACE0\B515", dotum, "\B3CB\C6C0", sans-serif;
                                                     color: #333333;
                                                     font-size: 12px;
                                                     font-weight: bold;
@@ -863,7 +811,6 @@
                                                 }
 
                                                 .number {
-                                                    font-family: tahoma, helvetica, "\B098\B214\ACE0\B515", "Nanum Gothic", "\B098\B214\C2A4\D018\C5B4", "Nanum Square", "Apple SD Gothic Neo", "Malgun Gothic", "\B9D1\C740\ACE0\B515", dotum, "\B3CB\C6C0", sans-serif;
                                                     color: #333333;
                                                     flex: 0 0 33.3333%;
                                                     font-size: 12px;
@@ -878,7 +825,6 @@
 
                                                 .price {
                                                     margin-top: -3px;
-                                                    font-family: tahoma, helvetica, "\B098\B214\ACE0\B515", "Nanum Gothic", "\B098\B214\C2A4\D018\C5B4", "Nanum Square", "Apple SD Gothic Neo", "Malgun Gothic", "\B9D1\C740\ACE0\B515", dotum, "\B3CB\C6C0", sans-serif;
                                                     font-weight: bold;
                                                     color: #222222;
                                                     vertical-align: middle;
@@ -910,9 +856,7 @@
                             .sum-left {
                                 display: inline-block;
 
-                                .sum-left-text {
-
-                                }
+                                .sum-left-text {}
                             }
 
                             .sum-right {
@@ -938,7 +882,7 @@
                                     .sum-price {
                                         font-size: 24px;
                                     }
-                                    
+
                                     .sum-unit {
                                         font-size: 17px;
 
@@ -1014,6 +958,7 @@
                                                 background-size: 731px 703px;
                                                 background-position: -120px -651px;
                                             }
+
                                             .btn-keep-icon2 {
                                                 display: inline-block;
                                                 margin-right: 3px;
@@ -1025,10 +970,9 @@
                                                 background-size: 487px 412px;
                                                 background-position: -146px -265px;
                                             }
-                
+
                                             .btn-keep-number {
                                                 line-height: 19px;
-                                                font-family: tahoma,helvetica,"\B098\B214\ACE0\B515","Nanum Gothic","\B098\B214\C2A4\D018\C5B4","Nanum Square","Apple SD Gothic Neo","Malgun Gothic","\B9D1\C740\ACE0\B515",dotum,"\B3CB\C6C0",sans-serif;
                                                 font-size: 15px;
                                                 color: #a5a5a5;
                                             }
@@ -1041,14 +985,14 @@
                                 }
 
                             }
-                            
+
                             .btn-cart-wrap {
                                 display: inline-block;
                                 width: 50%;
                                 border: 1px solid #03c75a;
                                 border-radius: 5px;
                                 background-color: #fff;
-                                
+
                                 .btn-cart {
                                     position: relative;
                                     height: 50px;
@@ -1077,20 +1021,20 @@
                             font-size: 12px;
                             margin-top: 15px;
 
-                                .tip-icon {
-                                    display: inline-block;
-                                    width: 14px;
-                                    height: 14px;
-                                    margin-right: 4px;
-                                    content: "";
-                                    background-image: url(/img/shop/spIcon_png.png);
-                                    background-size: 217px 130px;
-                                    background-position: -158px -67px;
-                                }
+                            .tip-icon {
+                                display: inline-block;
+                                width: 14px;
+                                height: 14px;
+                                margin-right: 4px;
+                                content: "";
+                                background-image: url(/img/shop/spIcon_png.png);
+                                background-size: 217px 130px;
+                                background-position: -158px -67px;
+                            }
 
-                                .tip-text {
-                                    color: #999;
-                                }
+                            .tip-text {
+                                color: #999;
+                            }
 
                             .tip-right {
 
@@ -1124,18 +1068,18 @@
                         padding: 30px 0 2px;
                         border: solid #ededed;
                         border-width: 0 1px 1px 1px;
-                        
+
                         .top-review-text-wrap {
                             font-size: 12px;
                             font-weight: bold;
                             padding: 0 40px;
-                            
+
                             .top-review-left {
-                                
+
                                 .top-review-text {
                                     color: #313131;
                                 }
-                                
+
                                 .top-review-number {
                                     font-size: 14px;
                                     color: #6b90dc;
@@ -1143,15 +1087,15 @@
                             }
 
                             .top-review-right {
-                                
-                                
+
+
                                 button {
                                     border: 0;
                                     background: transparent;
                                     vertical-align: top;
 
                                 }
-                                
+
                                 .moreview-btn {
                                     color: #8f8f8f;
 
@@ -1180,18 +1124,20 @@
                         .top-review-list-wrap {
                             margin-top: 10px;
 
-                            .review-list:nth-child(1){
-                                a{
-                                    border-top: 0px solid #f2f2f2;
-                                }
-                            }
-                            .review-list:nth-child(2){
-                                a{
+                            .review-list:nth-child(1) {
+                                a {
                                     border-top: 0px solid #f2f2f2;
                                 }
                             }
 
-                            .review-list { // li
+                            .review-list:nth-child(2) {
+                                a {
+                                    border-top: 0px solid #f2f2f2;
+                                }
+                            }
+
+                            .review-list {
+                                // li
                                 flex: 0 0 50%;
                                 background-color: #ffffff;
                                 padding: 0 39px;
@@ -1199,7 +1145,7 @@
 
                                 .review-list-link {
                                     border-top: 1px solid #f2f2f2;
-                                    padding: 15px 0 ;
+                                    padding: 15px 0;
 
                                     .review-list-left {
                                         display: inline-block;
@@ -1232,15 +1178,19 @@
                                                     .score1 {
                                                         width: 20%;
                                                     }
+
                                                     .score2 {
                                                         width: 40%;
                                                     }
+
                                                     .score3 {
                                                         width: 60%;
                                                     }
+
                                                     .score4 {
                                                         width: 80%;
                                                     }
+
                                                     .score5 {
                                                         width: 100%;
                                                     }
@@ -1256,7 +1206,6 @@
                                                     font-size: 14px;
                                                     line-height: 15px;
                                                     color: #000;
-                                                    font-family: tahoma,helvetica,"\B098\B214\ACE0\B515","Nanum Gothic","\B098\B214\C2A4\D018\C5B4","Nanum Square","Apple SD Gothic Neo","Malgun Gothic","\B9D1\C740\ACE0\B515",dotum,"\B3CB\C6C0",sans-serif;
                                                 }
                                             }
 
@@ -1275,16 +1224,11 @@
                                                 font-size: 12px;
                                                 color: #aaa;
 
-                                                .username {
-                                                }
-                                                
-                                                .review-date {
-                                                    
-                                                }
-                                                
-                                                .selected-option {
+                                                .username {}
 
-                                                }
+                                                .review-date {}
+
+                                                .selected-option {}
 
                                                 .circle {
                                                     display: inline-block;
@@ -1347,8 +1291,7 @@
                             content: "";
                         }
 
-                        .menu-number {
-                        }
+                        .menu-number {}
                     }
 
                     .scroll-fixed-active {
@@ -1364,7 +1307,7 @@
                         z-index: 10000;
                         border-bottom: 1px solid #3a3b4e;
                         background-color: #fff;
-                        
+
                         .wrap {
                             position: relative;
                             width: 1020px;
@@ -1383,7 +1326,7 @@
                                     left: 0;
                                     width: 50px;
                                     height: 50px;
-                                    border: 1px solid rgba(0,0,0,.04);
+                                    border: 1px solid rgba(0, 0, 0, .04);
                                     box-sizing: content-box;
 
                                     img {
@@ -1395,23 +1338,22 @@
                                     color: #333;
                                     font-weight: bold;
                                 }
-    
+
                                 .product-price {
-                                    font-family: tahoma,helvetica,"\B098\B214\ACE0\B515","Nanum Gothic","\B098\B214\C2A4\D018\C5B4","Nanum Square","Apple SD Gothic Neo","Malgun Gothic","\B9D1\C740\ACE0\B515",dotum,"\B3CB\C6C0",sans-serif;
-                                    
+
                                     .sale-price {
                                         font-size: 16px;
                                         font-weight: bold;
                                         color: #6b90dc;
                                     }
-    
+
                                     .sale-unit {
                                         font-size: 14px;
                                         font-weight: 500;
                                         color: #6b90dc;
                                         margin-bottom: 2px;
                                     }
-                                    
+
                                     .origin-price {
                                         margin-left: 5px;
                                         font-size: 14px;
@@ -1462,7 +1404,7 @@
                                 font-size: 13px;
                                 font-weight: 600;
                                 background-color: #f3f5f7;
-        
+
                                 .selected {
                                     background-color: #3d3d4f;
                                     color: #fff;
@@ -1475,7 +1417,7 @@
                                     text-align: center;
                                     line-height: 43px;
                                 }
-        
+
                                 .menu:not(:first-child):before {
                                     position: absolute;
                                     top: 50%;
@@ -1486,59 +1428,8 @@
                                     background-color: #dbdddf;
                                     content: "";
                                 }
-        
-                                .menu-number {
-                                }
-                            }
-                        }
-                    }
 
-                    .caution {
-                        background-color: #fff8f8;
-                        color: #333;
-                        text-align: center;
-                        padding: 22px 16px;
-                        margin-bottom: 24px;
-                        
-
-                        .caution-top-wrap {
-                            margin-bottom: 12px;
-                            
-                            .caution-top {
-                                display: inline-block;
-                                position: relative;
-
-                                .caution-icon {
-                                    position: absolute;
-                                    top: 2px;
-                                    left: -23px;
-                                    width: 19px;
-                                    height: 19px;
-                                    content: "";
-                                    background-image: url(/img/shop/spIcon_svg-2.svg);
-                                    background-size: 731px 703px;
-                                    background-position: -684px -243px;
-                                }
-    
-                                .caution-title {
-                                    color: #ec000e;
-                                    font-size: 16px;
-                                    font-weight: bold;
-                                }
-                            }
-                        }
-
-                        .caution-bottom {
-                            font-size: 13px;
-                            font-weight: bold;
-
-                            .text2 {
-                                background-color: #fff4ac;
-                            }
-
-                            .text3 {
-                                color: #811515;
-                                text-decoration: underline;
+                                .menu-number {}
                             }
                         }
                     }
@@ -1549,5 +1440,267 @@
                 }
             }
         }
+    }
+}
+
+footer {
+    --footer-background: #f5f5f7;
+    --footer-border-color: #d2d2d7;
+    --footer-text-color: #6e6e73;
+    --footer-link-color: #424245;
+    --footer-pipe-color: #86868b;
+    --footer-directory-title-color: #1d1d1f;
+    --footer-directory-title-color-hover: #000;
+    font-size: 12px;
+    line-height: 1.33337;
+    font-weight: 400;
+    letter-spacing: -.01em;
+    background: var(--footer-background);
+    color: var(--footer-text-color);
+    min-width: 1024px;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+
+    a {
+        color: var(--footer-link-color);
+    }
+
+    h3 {
+        color: var(--footer-directory-title-color);
+    }
+
+
+
+    .ac-gf-block {
+        color: inherit;
+    }
+
+    .ac-gf-content {
+        box-sizing: content-box;
+        margin: 0 auto;
+        max-width: 980px;
+        padding: 0 22px;
+        padding-left: max(22px,env(safe-area-inset-left));
+        padding-right: max(22px,env(safe-area-inset-right));
+    }
+
+    .ac-gf-buystrip {
+        --buystrip-background: #f5f5f7;
+        --buystrip-border-color: #d2d2d7;
+        --buystrip-text-color: #1d1d1f;
+        --buystrip-link-color: #06c;
+        --buystrip-icon-color: #6e6e73;
+        --buystrip-content-maxwidth: 980px;
+        --buystrip-content-padding: 22px;
+        --buystrip-items-padding-top: 0;
+        --buystrip-items-padding-bottom: 56px;
+        color: var(--buystrip-text-color);
+    }
+
+    .ac-gf-buystrip-info {
+        font-size: 14px;
+        line-height: 1.42859;
+        font-weight: 400;
+        letter-spacing: -.016em;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding-top: var(--buystrip-items-padding-top);
+        padding-bottom: var(--buystrip-items-padding-bottom);
+        text-align: center;
+    }
+
+    .ac-gf-buystrip-info-column {
+        flex: 1 25%;
+        max-width: 410px;
+    }
+
+    .ac-gf-buystrip-info-content {
+        margin: 0 auto;
+        padding-top: 56px;
+        position: relative;
+        text-align: center;
+        width: 216px;
+        z-index: 1;
+    }
+
+    .ac-gf-buystrip-info-content {
+        margin: 0 auto;
+        padding-top: 56px;
+        position: relative;
+        text-align: center;
+        width: 216px;
+        z-index: 1;
+    }
+
+    // 제목
+    .ac-gf-buystrip-info-title {
+        font-size: 19px;
+        line-height: 1.31579;
+        font-weight: 600;
+        letter-spacing: .012em;
+        margin-top: 0.525em;
+    }
+
+    // 내용
+
+    .ac-gf-buystrip-info-copy {
+        display: block;
+        margin-top: 0.4em;
+    }
+
+
+    // 할부 방식 아이콘
+    .ac-gf-buystrip-info-icon-financing {
+        width: 100%;
+        height: 56px;
+        background-size: 100% 56px;
+        background-repeat: no-repeat;
+        background-image: url(/img/shop/products/Mac/macbook-air-m2/icon-pay.svg);
+    }
+
+    // 업무일 기준 무료 익일 배송 아이콘 
+    .ac-gf-buystrip-info-icon-shipping {
+        width: 100%;
+        height: 56px;
+        background-size: 100% 56px;
+        background-repeat: no-repeat;
+        background-image: url(/img/shop/products/Mac/macbook-air-m2/icon-delivery.svg);
+    }
+
+    // 도움이 필요하다면 아이콘
+    .ac-gf-buystrip-info-icon-help {
+        width: 100%;
+        height: 56px;
+        background-size: 100% 56px;
+        background-repeat: no-repeat;
+        background-image: url(/img/shop/products/Mac/macbook-air-m2/icon-inquiry.svg);
+    }
+
+    // 링크
+    .ac-gf-buystrip-info-cta {
+        color: var(--buystrip-link-color);
+        margin-top: 0.8em;
+        display: block;
+    }
+
+    // 화살표 아이콘
+    .ac-gf-icon::before, .ac-gf-icon::after, .ac-gf-more::before, .ac-gf-more::after {
+        font-family: "SF Pro Icons";
+        color: inherit;
+        display: inline-block;
+        font-style: normal;
+        font-weight: inherit;
+        font-size: inherit;
+        line-height: 1;
+        position: relative;
+        z-index: 1;
+        alt: '';
+    }
+
+    .ac-gf-more::after {
+        content: "";
+        top: -1px;
+        padding-left: 4px;
+    }
+
+    // 가로바
+    .ac-gf-buystrip-info {
+        border-bottom: 1px solid var(--buystrip-border-color);
+    }
+
+    .ac-gf-sosumi {
+        border-bottom: 1px solid var(--footer-border-color);
+        padding: 17px 0 11px;
+    }
+
+    .ac-gf-sosumi a {
+        text-decoration: underline;
+    }
+
+
+    // footnote
+    .ac-gf-sosumi li {
+        font-size: 12px;
+        line-height: 1.33337;
+        font-weight: 400;
+        letter-spacing: 0em;
+        padding-bottom: 0.8em;
+        counter-increment: my-counter;
+    }
+
+    .ac-gf-sosumi {
+        border-bottom: 1px solid var(--footer-border-color);
+        padding: 17px 0 11px;
+
+        li::marker {
+            content: counter(my-counter) ". ";
+        }
+    }
+
+    .ac-gf-breadcrumbs {
+        padding: 17px 0;
+        position: relative;
+        z-index: 1;
+        color: var(--footer-link-color);
+    }
+
+    .ac-gf-breadcrumbs::before, .ac-gf-breadcrumbs::after {
+        content: ' ';
+        display: table;
+    }
+
+    .ac-gf-breadcrumbs-path {
+        font-size: 12px;
+        line-height: 1.33337;
+        font-weight: 400;
+        letter-spacing: -.01em;
+        z-index: 1;
+    }
+
+    .ac-gf-breadcrumbs-list {
+        padding-left: 25px;
+    }
+
+    .ac-gf-breadcrumbs-home {
+        left: 0;
+        display: block;
+        position: absolute;
+        z-index: 2;
+        top: 19px;
+    }
+
+    .ac-gf-breadcrumbs-home-icon {
+        width: 14px;
+        background-size: 14px 72px;
+        background-repeat: no-repeat;
+        background-image: url(/img/shop/icon_apple.svg);
+        height: 18px;
+        z-index: 2;
+        color: transparent;
+    }
+
+    .ac-gf-breadcrumbs-item {
+        margin-right: 7px;
+        float: left;
+        padding: 3px 4px 3px 0;
+        max-width: 100%;
+        overflow: hidden;
+    }
+    
+    .ac-gf-breadcrumbs-item:before {
+        width: 8px;
+        height: 36px;
+        background-size: 8px 36px;
+        background-repeat: no-repeat;
+        background-image: url(/img/shop/icon_arrow.svg);
+        margin-right: 11px;
+        content: '';
+        display: inline-block;
+        vertical-align: middle;
+        margin-top: -1px;
+        height: 18px;
+        background-position-y: 100%;
     }
 }

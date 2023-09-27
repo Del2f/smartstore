@@ -1,101 +1,252 @@
 import axios from "../../../api/axios";
 import React, { SetStateAction } from "react";
-
 import styled from "styled-components";
+import { DndState } from "../Category"
+import { Draggable, Droppable } from "react-beautiful-dnd";
+import { ColumnType, TaskType, SubTaskType } from "../Category";
+import SubTask from "./SubTask";
 
-import { Draggable } from "react-beautiful-dnd";
+interface Title {
+  column: ColumnType;
+  task: TaskType;
+  selectedList: any;
+}
+
+const Title = styled.h3<Title>`
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 13px;
+  margin: 2px;
+  transition: background-color 0.3s ease;
+  
+  /* ${({column, task, selectedList}) => (column.darkMode ? `
+  color: rgba(255,255,255,.8);
+  background-color: ${(task._id === selectedList._id ? "black" : "black")};
+  `:`
+  color: rgba(0,0,0,.8);
+  background-color: ${(task._id === selectedList._id ? "#b8b8b8" : "#f3f3f3")};
+  `)}; */
+
+  & img, span {
+    pointer-events: none;
+  }
+`;
+
+interface ISubTaskList {
+  isDraggingOver: boolean;
+}
+
+const SubTaskList = styled.div<ISubTaskList>`
+  flex-grow: 1;
+  margin: 5px 7px;
+`;
 
 interface IContainer {
-    isDragDisabled: boolean;
-    isDragging: boolean;
-    task: {
-        _id: string;
-        name: string;
-    };
-    selectedList: any;
-    selectedId: string | null;
+  isDragging: boolean;
+  column: ColumnType;
+  task: TaskType;
+  selectedList: any;
+  selectedId: string | null;
 }
 
 const Container = styled.div<IContainer>`
-    border: 1px solid #f1f1f1;
-    border-color: ${(props) => (props.isDragging ? "#c1c7d3" : "f0f0f0")};
-    font-size: 12px;
-    border-radius: 8px;
-    padding: 8px;
-    margin-bottom: 8px;
+  font-size: 12px;
+  border-radius: 15px;
+  padding: 8px;
+  margin-bottom: 8px;
 
-    background-color: ${(props) => (props.isDragDisabled ? "black" : props.isDragging ? "#b0b5c0" : "#f1f1f1")};
-    background-color: ${(props) => (props.task._id == props.selectedList._id ? "#7986a0" : "f0f0f0")};
-    transition: background-color 0.3s ease;
+  ${({column, task, selectedList}) => (column.darkMode ? `
+  color: rgba(255,255,255,.8);
+  background-color: ${task._id === selectedList._id ? "#1d1d1d" : "#2c2c2c"};
+  `:`
+  color: rgba(0,0,0,.8);
+  background-color: ${task._id === selectedList._id ? "#dddddd" : "#ececec"};
+  `)};
+
+  transition: background-color 0.3s ease;
 `;
 
 interface ITaskProps {
-    task: {
-        _id: string;
-        name: string;
-    };
-    index: number;
-    isSelectedTask: boolean;
-    setIsSelected: React.Dispatch<SetStateAction<boolean>>;
-    setIsSelectedTask: React.Dispatch<any>;
-    categoryList: any;
-    subCategoryList: any;
-    selectedList: any;
-    selectedId: string | null;
-    setSelectedId: React.Dispatch<SetStateAction<string | null>>;
-    setSelectedList: React.Dispatch<any>;
-    setSelectedName: React.Dispatch<SetStateAction<string | undefined>>;
-    setAddedProductList: React.Dispatch<any>;
-
+  dnd: DndState;
+  index: number;
+  task: TaskType;
+  column: ColumnType;
+  subtasks: any;
+  selectedList: any;
+  isSelectedTask: boolean;
+  setIsSelected: React.Dispatch<SetStateAction<boolean>>;
+  setIsSelectedTask: React.Dispatch<SetStateAction<boolean>>;
+  setIsSelectedSubTask: React.Dispatch<SetStateAction<boolean>>;
+  selectedId: string | null;
+  setSelectedId: React.Dispatch<SetStateAction<string | null>>;
+  setSelectedList: React.Dispatch<any>;
+  setSelectedName: React.Dispatch<SetStateAction<string | undefined>>;
+  setSelectedURL: React.Dispatch<SetStateAction<string | undefined>>;
+  setAddedProductList: React.Dispatch<any>;
+  setIconImg: React.Dispatch<React.SetStateAction<string>>;
+  setInitialName: React.Dispatch<React.SetStateAction<string | undefined>>;
+  setSelectedNavHide: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectedChapNavHide: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectedDarkMode: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Task = ({ task, index, isSelectedTask, categoryList, selectedList, selectedId, setSelectedId, subCategoryList, setIsSelected, setSelectedList, setIsSelectedTask, setSelectedName, setAddedProductList }: ITaskProps) => {
-    const isDragDisabled = task._id === "";
+const Task = ({
+  dnd,
+  task,
+  column,
+  subtasks,
+  index,
+  isSelectedTask,
+  selectedList,
+  selectedId,
+  setSelectedId,
+  setIsSelected,
+  setSelectedList,
+  setIsSelectedTask,
+  setIsSelectedSubTask,
+  setSelectedName,
+  setSelectedURL,
+  setAddedProductList,
+  setIconImg,
+  setSelectedNavHide,
+  setSelectedChapNavHide,
+  setSelectedDarkMode,
+  setInitialName
+}: ITaskProps) => {
 
-    const Selected = async (e: any) => {
-        const select = e.target.textContent;
-        const data = subCategoryList.filter((list: any) => list.name == select);
+  const taskSelected = async (e: any) => {
+
+    const draggableId = e.target.getAttribute('data-rbd-drag-handle-draggable-id');
+    const selectedTask = dnd.tasks.find((list: any) => list._id === draggableId);
+    console.log(selectedTask);
+
+    if(selectedTask){
+      setSelectedList(selectedTask);
+      setSelectedName(selectedTask.name);
+      setSelectedURL(selectedTask.url);
+      setInitialName(selectedTask.name);
+  
+      setSelectedId(selectedTask._id);
+      
+      if(selectedTask.icon){
+        setIconImg(selectedTask.icon);
+      } else {
+        setIconImg("");
+      }
+  
+      if(selectedTask.navHide){
+        setSelectedNavHide(true);
+      } else {
+        setSelectedNavHide(false);
+      }
+  
+      if(selectedTask.chapterNavHide){
+        setSelectedChapNavHide(true);
+      } else {
+        setSelectedChapNavHide(false);
+      }
+  
+      if(selectedTask.darkMode){
+        setSelectedDarkMode(true);
+      } else {
+        setSelectedDarkMode(false);
+      }
+
+      if (selectedList._id === selectedTask._id) {
         setIsSelected(false);
-        setIsSelectedTask(true);
-        setSelectedList(data[0]);
-        setSelectedName(data[0].name);
-        setSelectedId(data[0]._id);
+        setIsSelectedTask(false);
+        setIsSelectedSubTask(false);
+        setAddedProductList([]);
+        setSelectedList("");
+        setSelectedName("");
+        setSelectedURL("");
+        setInitialName("");
+        setIconImg("");
+        setSelectedNavHide(false);
+        setSelectedChapNavHide(false);
+        setSelectedDarkMode(false);
+        return;
+      }
+    }
 
-        if (selectedList.name == e.target.textContent) {
-            setIsSelected(false);
-            setIsSelectedTask(false);
-            setSelectedList("");
-            setSelectedName("");
-        }
+    setIsSelected(false);
+    setIsSelectedTask(true);
+    setIsSelectedSubTask(false);
 
-        try {
-            const res = await axios.post("/smartstore/home/category/productcategorylist", data[0], { withCredentials: true });
-            console.log(res.data.productList);
-            setAddedProductList(res.data.productList);
-        } catch (err) {
-            console.log(err);
-        }
-    };
+    try {
+      const res = await axios.post("/smartstore/home/category/productcategorylist", selectedTask, { withCredentials: true });
+      setAddedProductList(res.data.productList);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-    return (
-        <Draggable draggableId={task._id} index={index} isDragDisabled={isDragDisabled}>
+  return (
+    <Draggable draggableId={task._id} index={index}>
+      {(provided, snapshot) => (
+        <Container
+          {...provided.draggableProps}
+          ref={provided.innerRef}
+          isDragging={snapshot.isDragging}
+          column={column}
+          task={task}
+          selectedList={selectedList}
+          selectedId={selectedId}
+        >
+          <Title {...provided.dragHandleProps} onClick={taskSelected} task={task} selectedList={selectedList} column={column}>
+            {task.icon ? (
+              <img src={task.icon} style={{height: "20px", marginRight: "8px"}} alt="" />
+            ) : ""}
+            <span style={{ display: "inline-block" }}>
+              {task.name}
+            </span>
+          </Title>
+          <Droppable droppableId={task._id} type="subtask">
             {(provided, snapshot) => (
-                <Container
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                    ref={provided.innerRef}
-                    isDragging={snapshot.isDragging}
-                    isDragDisabled={isDragDisabled}
-                    task={task}
-                    selectedList={selectedList}
-                    selectedId={selectedId}
-                    onClick={Selected}
-                >
-                    {task.name}
-                </Container>
+              <SubTaskList {...provided.droppableProps} ref={provided.innerRef} isDraggingOver={snapshot.isDraggingOver}>
+                <>
+                  {subtasks &&
+                    subtasks.map((subtask, subtaskidx) => {
+                      return (
+                      <SubTask
+                        key={subtask._id}
+                        subtask={subtask}
+                        subtasks={subtasks}
+                        index={subtaskidx}
+                        column={column}
+                        dnd={dnd}
+                        isSelectedTask={isSelectedTask}
+                        setIsSelected={setIsSelected}
+                        selectedList={selectedList}
+                        selectedId={selectedId}
+                        setSelectedId={setSelectedId}
+                        setSelectedList={setSelectedList}
+                        setIsSelectedTask={setIsSelectedTask}
+                        setIsSelectedSubTask={setIsSelectedSubTask}
+                        setSelectedName={setSelectedName}
+                        setSelectedURL={setSelectedURL}
+                        setAddedProductList={setAddedProductList}
+                        setIconImg={setIconImg}
+                        setSelectedNavHide={setSelectedNavHide}
+                        setSelectedChapNavHide={setSelectedChapNavHide}
+                        setSelectedDarkMode={setSelectedDarkMode}
+                        setInitialName={setInitialName}
+                      />
+                    )
+                    })}
+                      {provided.placeholder}
+                </>
+
+              </SubTaskList>
             )}
-        </Draggable>
-    );
+          </Droppable>
+        </Container>
+      )}
+    </Draggable>
+  );
 };
 
 export default React.memo(Task);

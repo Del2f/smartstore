@@ -1,17 +1,78 @@
 .seller-content {
     width: 100%;
-    min-height: 800px;
-    background-color: #edf0f5;
+    height: 100%;
+    background-color: #f5f5f7;
     display: block;
-    padding: 0 0 0 210px;
     transition: all .4s;
+
+  // 공지사항
+
+  .Notice {
+    background-color: white;
+    color: black;
+
+    .NoticeWrapper {
+      background-color: #fff;
+      padding: 20px;
+      margin-bottom: 0;
+      min-height: 60px;
+      font-size: 15px;
+      line-height: 25px;
+      padding-left: 100px;
+    }
+
+    .text-wrap {
+      position: relative;
+      display: inline-block;
+    }
+
+    .round-icon-area {
+      position: absolute;
+      top: -1px;
+      left: -40px;
+      font-size: 14px;
+      display: inline-block;
+      width: 28px;
+      height: 28px;
+      line-height: 25px;
+      background-color: #00c73c;
+      border-radius: 50px;
+      vertical-align: middle;
+      text-align: center;
+      color: #fff;
+    }
+
+    .fn-alert2:before {
+      content: "\EA08";
+      font-size: 14px;
+      font-weight: 400;
+    }
+
+    .notice-title {
+      padding-right: 14px;
+      color: #303236;
+    }
+
+    .notice-date {
+      color: #767a83;
+      font-size: 13px;
+      line-height: 20px;
+    }
+  }
 
     .Sellerdashboard {
         position: relative;
     }
 
     .SellerSubframe {
-        padding: 10px 25px 8px;
+        display: flex;
+        justify-content: center;
+        padding: 25px;
+    }
+
+    .product-list {
+        width: 1300px;
+        transition: max-width 0.3s ease, min-width 0.3s ease;
     }
 
     .panel-top-banner {
@@ -128,32 +189,8 @@
         padding-right: 25px;
     }
 
-    .panel-neworder {}
-
 
     /* 오늘출발 예약구매 정기구독 */
-
-    .panel-icon-area-gifticon {
-        position: absolute;
-        top: 0px;
-        left: 0px;
-        font-size: 42px;
-        color: white;
-        background-color: #4dc089;
-        padding: 7px;
-    }
-
-    .delivery-list .panel-icon-area-gifticon {
-        background-color: #d390e6;
-    }
-
-    .return-list .panel-icon-area-gifticon {
-        background-color: #69c6ce;
-    }
-
-    .settlement-list .panel-icon-area-gifticon {
-        background-color: #628ca6;
-    }
 
     .deposit-list .panel-list {
         padding: 3px 0 0 57px;
@@ -222,7 +259,6 @@
         font-size: 20px;
         font-weight: 500;
         color: #4dc089;
-        font-family: tahoma, HelveticaNeue-Medium, Helvetica, Arial, 나눔고딕, NanumGothic, 맑은고딕, malgun gothic, "\B3CB\C6C0", dotum, sans-serif;
     }
 
     .delivery-list .number {
@@ -548,7 +584,6 @@
     }
 
     .text-number {
-        font-family: tahoma, HelveticaNeue, Helvetica, Arial, 나눔고딕, NanumGothic, 맑은고딕, malgun gothic, "\B3CB\C6C0", dotum, sans-serif;
     }
 
     .panel-border-list li .number-area span {
