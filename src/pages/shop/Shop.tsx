@@ -781,7 +781,6 @@ function Shop() {
 
   // 다크 모드
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
-  console.log(isDarkMode);
 
   // 암호화된 id를 입력.
   const [gmId, setGmId] = useState<GmIdType>({ id: "thanks6" });
@@ -827,7 +826,7 @@ function Shop() {
     const savedCategoryList = sessionStorage.getItem("categoryList");
     return savedCategoryList ? JSON.parse(savedCategoryList) : [];
   });
-  
+
   console.log(categoryList);
   console.log(selectedColumn);
   console.log(selectedTask);
@@ -843,23 +842,6 @@ function Shop() {
     if (currentPath === location.pathname) window.location.reload();
     currentPath = location.pathname;
   }, [location]);
-
-  // useEffect(() => {
-  //   const userData = async () => {
-  //     try {
-  //       const res = await axios.post("/smartstore/shop", gmId, {
-  //         withCredentials: true,
-  //       });
-  //       console.log(res.data);
-
-  //       setCategoryList(res.data.category);
-  //       setNavCart(res.data.cart);
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   };
-  //   userData();
-  // }, [gmId]);
 
   const updateCategoryList = (newCategoryList: any) => {
     setCategoryList(newCategoryList);
@@ -1554,26 +1536,11 @@ function Shop() {
             </NavInner>
           </NavWrap>
           <Routes>
-            <Route path="/products/:id"
-              element={
-                <Products
-                  gmId={gmId}
-                  categoryList={categoryList}
-                  setNavCart={setNavCart}
-                />
-              }
-            />
-            <Route path="/products/*"
-              element={
-                <NotFound/>
-              }
-            />
-            <Route path="/*"
-              element={
-                <NotFound/>
-              }
-            />
-            <Route path="/:id"
+            <Route path="/products/:id" element={<Products gmId={gmId} categoryList={categoryList} setNavCart={setNavCart} />} />
+            <Route path="/products/*" element={<NotFound />} />
+            <Route path="/*" element={<NotFound />} />
+            <Route
+              path="/:id"
               element={
                 <Category
                   gmId={gmId}

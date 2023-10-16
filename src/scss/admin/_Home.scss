@@ -71,7 +71,8 @@
     }
 
     .product-list {
-        width: 1300px;
+        max-width: 1920px;
+        min-width: 1200px;
         transition: max-width 0.3s ease, min-width 0.3s ease;
     }
 

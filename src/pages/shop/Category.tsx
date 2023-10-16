@@ -1,15 +1,11 @@
 import axios from "../../api/axios";
-import styled, { css } from "styled-components";
-import { Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
+import styled from "styled-components";
+import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { ObjectId } from "mongodb";
 import { GmIdType } from "./Shop";
-
-import { ColumnType, TaskType, SubTaskType } from "../adminPage/Category";
-
-// import CategorySubTasks from "./CategorySubTasks";
-import NotFound from "./NotFound";
+import { ColumnType, TaskType, SubTaskType, Advertise } from "../adminPage/Category";
 import "./Category.scss";
 
 interface Column {
@@ -45,61 +41,113 @@ const List = styled.li`
 `;
 
 // 카테고리 클릭후 나오는 상품 메인사진
-const Products = styled.div`
-  position: relative;
+
+const AdverWrap = styled.div`
+
+  padding-bottom: 30px;
+&:first-child {
+  padding: 30px 0;
+}
 `;
 
-const ProductWrap = styled.div`
-  background-color: #fbfbfd;
-  border-bottom: 10px solid #fff;
-  padding: 59px 0;
-  display: flex;
-  flex-direction: column;
-`;
-
-const Product = styled.div`
+const Adver = styled.div`
   margin-left: auto;
   margin-right: auto;
 `;
 
-const ProductInner = styled.div`
+interface AdverInner {
+  backcolor: string;
+}
+
+interface Type {
+  type: number;
+}
+
+interface AdverInnerType extends AdverInner, Type {}
+
+const AdverInner = styled.div<AdverInnerType>`
   min-height: 672px;
   display: flex;
   flex-direction: column;
   overflow: visible;
   text-align: center;
+  background-color: ${props => props.backcolor};
+
+  ${props => props.type === 0 && `
+  padding: 60px 0;
+  `}
+  ${props => props.type === 1 && `
+  padding: 60px 0;
+  `}
+  ${props => props.type === 2 && `
+    justify-content: space-between;
+    flex-direction: row;
+    max-width: 1440px;
+    min-height: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 30px;
+    border-radius: 18px;
+  `}
 `;
 
-const ProductImageWrap = styled.div`
-  margin-top: 200px;
+const AdverImageWrap = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
-const ProductImage = styled.img`
+const AdverImage = styled.img`
   position: relative;
 `;
 
-const ProductTitle = styled.h2`
+const AdverMainTitle = styled.h2<Type>`
   font-size: 56px;
   font-weight: 600;
   color: #1d1d1f;
-  margin-bottom: 10px;
+  margin-top: 4px;
+
+  ${props => props.type === 2 && `
+    font-size: 80px;
+    text-align: left;
+  `}
 `;
 
-const ProductSubTitle = styled.span`
-  font-size: 30px;
-  font-weight: 700;
+const AdverSubTitle = styled.span<Type>`
+  margin-top: 8px;
+  font-size: 17px;
+  font-weight: 500;
+
+  ${props => props.type === 2 && `
+    text-align: left;
+  `}
 `;
 
-const PriceWrap = styled.div`
-  color: #353535;
-  margin-top: 30px;
-`;
-
-const Price = styled.span`
+const AdverSubDetail = styled.span<Type>`
   display: block;
   font-size: 17px;
-  font-weight: 400;
+  font-weight: 300;
   color: #1d1d1f;
+  margin-top: 30px;
+  line-height: 1.58824;
+
+  ${props => props.type === 2 && `
+    text-align: left;
+
+  `}
+`;
+
+const AdverDetail = styled.span<Type>`
+  display: block;
+  margin-top: 4px;
+  font-size: 31px;
+  font-weight: 700;
+  color: #1d1d1f;
+  line-height: 1.21875;
+  ${props => props.type === 2 && `
+  text-align: left;
+  font-size: 28px;
+  max-width: 460px;
+  `}
 `;
 
 const Links = styled.div`
@@ -242,7 +290,8 @@ const ChapterNavWrap = styled.div`
   z-index: 1;
 `;
 
-const ChapterNavItems = styled.ul``;
+const ChapterNavItems = styled.ul`
+`;
 
 interface ChapterNavItem {
   columnName: string | undefined;
@@ -254,7 +303,6 @@ const ChapterNavItem = styled.li<ChapterNavItem>`
   opacity: ${(props) => (props.chapterNavRender ? "0" : "1")};
   transform: ${(props) => (props.chapterNavRender ? "translateX(160px);" : "translateX(0);")};
   transition: transform 0.28s cubic-bezier(0.4, 0, 0.6, 1);
-
   display: inline-block;
   vertical-align: top;
   margin: 0 -0.1176470588em;
@@ -271,16 +319,18 @@ const ChapterNavItem = styled.li<ChapterNavItem>`
   }
 
   // Watch
-  ${(props) =>
-    props.columnName === "Watch"
-      ? `
+  ${(props) => {
+    if(props.columnName === "Watch"){
+      return `
       padding: 0 9px;
       &:last-child {
         margin-right: 0;
         padding: 0 4px 0 9px;
       }
       `
-      : ""};
+    }
+  }
+}
 
   ${(props) => {
     if (props.taskName === "비교하기") {
@@ -306,7 +356,7 @@ const ChapterNavItem = styled.li<ChapterNavItem>`
   }}
 
   // 엔터테인먼트
-    ${(props) =>
+  ${(props) =>
     props.columnName === "엔터테인먼트"
       ? `
       padding: 0 15px;
@@ -332,12 +382,12 @@ const ChapterNavItem = styled.li<ChapterNavItem>`
       : ""};
 `;
 
-interface ChapterNavIcon {
+interface ChapterNavLink {
   columnName: string | undefined;
   taskName: string;
 }
 
-const ChapterNavLink = styled(Link)<ChapterNavIcon>`
+const ChapterNavLink = styled(Link)<ChapterNavLink>`
   color: #1d1d1f;
   display: block;
   padding: 0;
@@ -372,6 +422,7 @@ interface ChapterNavIcon {
   icon?: string;
   width?: number;
   height?: number;
+  parentID: string;
 }
 
 const ChapterNavIcon = styled.figure<ChapterNavIcon>`
@@ -386,216 +437,206 @@ const ChapterNavIcon = styled.figure<ChapterNavIcon>`
 
   // Mac
   ${(props) => {
-    if (props.taskName === "Mac Pro") {
-      return `
-    width: 35px;
-    height: 54px;
-    background-size: 35px 54px;
-    `;
+  if (props.parentID === '64ff1ccbe3ac394d8361dae7') {
+    switch (props.taskName) {
+      case "Mac Pro":
+      case "Sonoma":
+        return `
+          width: 35px;
+          height: 54px;
+          background-size: 35px 54px;
+        `;
+      case "Mac mini":
+      case "Mac Studio":
+        return `
+          width: 28px;
+          height: 54px;
+          background-size: 28px 54px;
+        `;
+      case "MacBook Pro 13":
+        return `
+          width: 54px;
+          height: 54px;
+          background-size: 54px 54px;
+        `;
+      default:
+        return "";
     }
-    if (props.taskName === "Mac mini") {
-      return `
-    width: 28px;
-    height: 54px;
-    background-size: 28px 54px;
-    `;
+  }
+}}
+
+  // MacBook Air
+  ${(props) => {
+  if (props.parentID === '64ff27d33c9faa3d2f6fbb9f') {
+    switch (props.taskName) {
+      case "Sonoma":
+        return `
+          width: 35px;
+          height: 54px;
+          background-size: 35px 54px;
+        `;
+      default:
+        return "";
     }
-    if (props.taskName === "Mac Studio") {
-      return `
-    width: 28px;
-    height: 54px;
-    background-size: 28px 54px;
-    `;
-    }
-    if (props.taskName === "Sonoma") {
-      return `
-    width: 35px;
-    height: 54px;
-    background-size: 35px 54px;
-    `;
-    }
-    if (props.taskName === "MacBook Pro 13") {
-      return `
-    width: 54px;
-    height: 54px;
-    background-size: 54px 54px;
-    `;
-    }
-  }}
+  }
+}}
 
   // iPad
   ${(props) => {
-    if (props.taskName === "iPad Pro") {
-      return `
-    width: 41px;
-    height: 54px;
-    background-size: 41px 54px;
-    `;
+  if (props.parentID === '64ff1cd6e3ac394d8361dc68') {
+    switch (props.taskName) {
+      case "iPad Pro":
+        return `
+          width: 41px;
+          height: 54px;
+          background-size: 41px 54px;
+        `;
+      case "iPad Air":
+      case "액세서리":
+      case "iPadOS 17":
+        return `
+          width: 30px;
+          height: 54px;
+          background-size: 30px 54px;
+        `;
+      case "Apple Pencil":
+        return `
+          width: 3px;
+          height: 54px;
+          background-size: 3px 54px;
+        `;
+      case "키보드":
+        return `
+          width: 63px;
+          height: 54px;
+          background-size: 63px 54px;
+        `;
+      default:
+        return "";
     }
-    if (props.taskName === "iPad Air") {
-      return `
-    width: 30px;
-    height: 54px;
-    background-size: 30px 54px;
-    `;
-    }
-    if (props.taskName === "Apple Pencil") {
-      return `
-    width: 3px;
-    height: 54px;
-    background-size: 3px 54px;
-    `;
-    }
-    if (props.taskName === "키보드") {
-      return `
-    width: 63px;
-    height: 54px;
-    background-size: 63px 54px;
-    `;
-    }
-    if (props.taskName === "액세서리") {
-      return `
-    width: 31px;
-    height: 54px;
-    background-size: 31px 54px;
-    `;
-    }
-    if (props.taskName === "iPadOS 17") {
-      return `
-    width: 32px;
-    height: 54px;
-    background-size: 32px 54px;
-    `;
-    }
-  }}
+  }
+}}
 
-  // iPhone
-  ${(props) => {
-    if (props.taskName === "iPhone SE") {
-      return `
-    width: 19px;
-    height: 54px;
-    background-size: 19px 54px;
+// 다른 방법 기록용
+${(props) => {
+  const sizes = {
+    "iPhone SE": { width: 19, height: 54 },
+    "AirTag": { width: 30, height: 54 },
+    "iOS 17": { width: 32, height: 54 },
+  };
+
+  const { taskName, parentID } = props;
+
+  if (parentID === '64ff1cdfe3ac394d8361ddee' && sizes[taskName]) {
+    const { width, height } = sizes[taskName];
+    return `
+      width: ${width}px;
+      height: ${height}px;
+      background-size: ${width}px ${height}px;
     `;
-    }
-    if (props.taskName === "AirTag") {
-      return `
-    width: 30px;
-    height: 54px;
-    background-size: 30px 54px;
-    `;
-    }
-    if (props.taskName === "iOS 17") {
-      return `
-    width: 32px;
-    height: 54px;
-    background-size: 32px 54px;
-    `;
-    }
-  }}
+  }
+}}
 
   // Watch
   ${(props) => {
-    if (props.taskName === "밴드") {
-      return `
-    width: 17px;
-    height: 54px;
-    background-size: 17px 54px;
-    `;
-    }
-    if (props.taskName === "watchOS 10") {
-      return `
-    width: 35px;
-    height: 54px;
-    background-size: 35px 54px;
-    `;
+    if(props.parentID === '64ff1d19e3ac394d8361df79'){
+      switch(props.taskName){
+        case("밴드"):
+        return`
+        width: 17px;
+        height: 54px;
+        background-size: 17px 54px;
+        `
+        case("watchOS 10"):
+        return`
+        width: 35px;
+        height: 54px;
+        background-size: 35px 54px;
+        `
+        default:
+        return "";
+      }
     }
   }}
 
   // TV 및 홈
   ${(props) => {
-    if (props.taskName === "Apple TV 앱") {
-      return `
-    width: 50px;
-    height: 54px;
-    background-size: 50px 54px;
-    `;
-    }
-    if (props.taskName === "Apple TV+") {
-      return `
-    width: 47px;
-    height: 54px;
-    background-size: 47px 54px;
-    `;
+    if(props.parentID === '64ff1d24e3ac394d8361e29e'){
+      switch(props.taskName){
+        case ("Apple TV 앱"):
+        return`
+        width: 50px;
+        height: 54px;
+        background-size: 50px 54px;
+        `
+        case ("Apple TV+"):
+        return`
+        width: 47px;
+        height: 54px;
+        background-size: 47px 54px;
+        `
+      }
     }
   }}
 
+// 액세서리
   ${(props) => {
-    if (props.columnName === "고객지원") {
+    if (props.taskName === "iPad" && props.parentID === '64ff1d2fe3ac394d8361e5d7') {
       return `
-      margin: 0;
+      width: 47px;
+      height: 54px;
+      background-size: 47px 54px;
     `;
     }
   }}
 
   // 고객지원
   ${(props) => {
-    if (props.columnName === "고객지원") {
-      if (props.taskName === "iPhone") {
-        return `
-        width: 34px;
-        height: 68px;
-        background-size: 34px 68px;
-      `;
-      }
-
-      if (props.taskName === "Mac") {
-        return `
-        width: 96px;
-        height: 68px;
-        background-size: 96px 68px;
-      `;
-      }
-
-      if (props.taskName === "iPad") {
-        return `
-        width: 80px;
-        height: 68px;
-        background-size: 80px 68px;
-      `;
-      }
-
-      if (props.taskName === "Watch") {
-        return `
-        width: 42px;
-        height: 68px;
-        background-size: 42px 68px;
-      `;
-      }
-
-      if (props.taskName === "AirPods") {
-        return `
-        margin-top: 8px;
-        width: 66px;
-        height: 60px;
-        background-size: 66px 60px;
-      `;
-      }
-
-      if (props.taskName === "Music") {
-        return `
-        width: 68px;
-        height: 68px;
-        background-size: 68px 68px;
-      `;
-      }
-
-      if (props.taskName === "TV") {
-        return `
-        width: 72px;
-        height: 68px;
-        background-size: 72px 68px;
-      `;
+    if (props.parentID === "64ff1d34e3ac394d8361e77b") {
+      switch(props.taskName){
+        case ('iPhone'):
+          return`
+          width: 34px;
+          height: 68px;
+          background-size: 34px 68px;
+          `
+        case ('Mac'):
+          return`
+          width: 96px;
+          height: 68px;
+          background-size: 96px 68px;
+          `
+        case ('iPad'):
+          return`
+          width: 80px;
+          height: 68px;
+          background-size: 80px 68px;
+          `
+        case ('Watch'):
+          return`
+          width: 42px;
+          height: 68px;
+          background-size: 42px 68px;
+          `
+        case ('AirPods'):
+          return`
+          margin-top: 8px;
+          width: 66px;
+          height: 60px;
+          background-size: 66px 60px;
+          `
+        case ('Music'):
+          return`
+          width: 68px;
+          height: 68px;
+          background-size: 68px 68px;
+          `
+        case ('TV'):
+          return`
+          width: 72px;
+          height: 68px;
+          background-size: 72px 68px;
+          `
       }
     }
   }}
@@ -646,20 +687,16 @@ interface Props {
 function Category({ gmId, categoryList, selectedColumn, setSelectedColumn, selectedTask, setSelectedTask, setIsDarkMode }: Props) {
   const { id } = useParams();
   const navigate = useNavigate();
-  console.log(id);
-
-  const [productList, setProductList] = useState<productList[] | null>([]);
-  console.log(productList);
+  console.log(selectedTask);
 
   const [chapterNavRender, setRerender] = useState<boolean>(false);
   const [isIdNotFound, setIsIdNotFound] = useState<boolean>(false);
-
-  const [subTaskId, setSubTaskId] = useState<string>();
-  const [selectedType, setSelectedType] = useState<string | null>(null);
+  const [advertise, setAdvertise] = useState<Advertise[]>([]);
+  console.log(advertise);
 
   useEffect(() => {
     setRerender(true);
-    setTimeout(() => setRerender(false), 300);
+    setTimeout(() => setRerender(false), 200);
   }, [selectedColumn && selectedColumn.taskIds && selectedColumn.taskIds.length]);
 
   useEffect(() => {
@@ -681,7 +718,7 @@ function Category({ gmId, categoryList, selectedColumn, setSelectedColumn, selec
 
           setSelectedColumn(adminColumn);
           setSelectedTask(null);
-          setProductList(res.data.productList);
+          setAdvertise(res.data.Advertises);
         } else if (res.data.findTask) {
           const adminTask = res.data.findTask;
           console.log(adminTask);
@@ -692,7 +729,8 @@ function Category({ gmId, categoryList, selectedColumn, setSelectedColumn, selec
 
           setSelectedColumn(null);
           setSelectedTask(adminTask);
-          setProductList(res.data.productList);
+          setAdvertise(res.data.Advertises);
+
         } else {
           if (!res.data.status) {
             setIsIdNotFound(true);
@@ -761,7 +799,6 @@ function Category({ gmId, categoryList, selectedColumn, setSelectedColumn, selec
                 {selectedColumn?.taskIds?.map((taskId: any) => {
                   if (taskId.chapterNavHide) return null;
                   const iconItem = iconSize.find((item) => item.name === taskId.name);
-                  console.log(taskId.name);
                   // taskId.subTaskIds 배열이 비어있지 않으면
                   if (taskId.subTaskIds && taskId.subTaskIds.length > 0) {
                     return (
@@ -783,6 +820,7 @@ function Category({ gmId, categoryList, selectedColumn, setSelectedColumn, selec
                               className="ChapterNavIcon"
                               columnName={selectedColumn.name}
                               taskName={taskId.name}
+                              parentID={taskId.parentID}
                               icon={iconItem?.icon}
                               width={iconItem?.width}
                               height={iconItem?.height}
@@ -816,6 +854,7 @@ function Category({ gmId, categoryList, selectedColumn, setSelectedColumn, selec
                               className="ChapterNavIcon"
                               columnName={selectedColumn.name}
                               taskName={taskId.name}
+                              parentID={taskId.parentID}
                               icon={iconItem?.icon}
                               width={iconItem?.width}
                               height={iconItem?.height}
@@ -847,6 +886,7 @@ function Category({ gmId, categoryList, selectedColumn, setSelectedColumn, selec
                             className="ChapterNavIcon"
                             columnName={selectedTask.name}
                             taskName={taskId.name}
+                            parentID={taskId.parentID}
                             icon={iconItem?.icon}
                             width={iconItem?.width}
                             height={iconItem?.height}
@@ -863,36 +903,67 @@ function Category({ gmId, categoryList, selectedColumn, setSelectedColumn, selec
               </ChapterNavItems>
             </ChapterNavWrap>
           </ChapterNav>
-          <Products className="ProductsWrap">
-            {productList?.map((product: any) => {
+          <Adver className="ProductsWrap">
+            {advertise?.map((advertise: any, index: any) => {
               return (
-                <ProductWrap className="ProductWrap">
-                  <Product className="Product">
-                    <ProductInner className="ProductInner">
-                      <ProductTitle>{product.name}</ProductTitle>
-                      <ProductSubTitle>{product.subtitle}</ProductSubTitle>
-                      <PriceWrap>
-                        <Price>₩{Number(product.price).toLocaleString()}원 부터</Price>
-                      </PriceWrap>
-                      <ScoreWrap></ScoreWrap>
+                <AdverWrap key={index}>
+                {advertise.type === 0 && 
+                    <AdverInner backcolor={advertise.backcolor} type={0}>
+                      <AdverSubTitle type={0}>{advertise.subtitle}</AdverSubTitle>
+                      <AdverMainTitle type={0}>{advertise.maintitle}</AdverMainTitle>
+                      <AdverDetail type={0}>{advertise.detail}</AdverDetail>
+                      <AdverSubDetail type={0}>{advertise.subdetail}</AdverSubDetail>
                       <Links>
-                        <BuyLink to={`/shop/products/${product.url}`}>구매하기</BuyLink>
-                        <DetailLink to={`/shop/products/${product.url}`}>더 알아보기</DetailLink>
+                        <BuyLink to={`/shop/products/${advertise.url}`}>구입하기</BuyLink>
+                        <DetailLink to={`/shop/products/${advertise.url}`}>더 알아보기</DetailLink>
                       </Links>
                       <ShippingWrap></ShippingWrap>
-                      <ProductImageWrap>
-                        <ProductImage src={product.mainImage} alt="" />
-                      </ProductImageWrap>
-                    </ProductInner>
-                  </Product>
-                </ProductWrap>
+                      <AdverImageWrap>
+                        <AdverImage src={advertise.image} alt="" />
+                      </AdverImageWrap>
+                    </AdverInner>
+                }
+                {advertise.type === 1 && 
+                    <AdverInner backcolor={advertise.backcolor} type={1}>
+                      <AdverSubTitle type={1}>{advertise.subtitle}</AdverSubTitle>
+                      <AdverMainTitle type={1}>{advertise.maintitle}</AdverMainTitle>
+                      <AdverDetail type={1}>{advertise.detail}</AdverDetail>
+                      <AdverSubDetail type={1}>{advertise.subdetail}</AdverSubDetail>
+                      <Links>
+                        <BuyLink to={`/shop/products/${advertise.url}`}>구입하기</BuyLink>
+                        <DetailLink to={`/shop/products/${advertise.url}`}>더 알아보기</DetailLink>
+                      </Links>
+                      <ShippingWrap></ShippingWrap>
+                      <AdverImageWrap>
+                        <AdverImage src={advertise.image} alt="" />
+                      </AdverImageWrap>
+                    </AdverInner>
+                }
+                {advertise.type === 2 && 
+                <div style={{ padding: "0 30px" }}>
+
+                    <AdverInner backcolor={advertise.backcolor} type={2}>
+                      <div style={{display: "flex", flexDirection:"column", alignItems: "flex-start", justifyContent: "center", marginLeft: "100px"}}>
+                        <AdverSubTitle type={2}>{advertise.subtitle}</AdverSubTitle>
+                        <AdverMainTitle type={2}>{advertise.maintitle}</AdverMainTitle>
+                        <AdverDetail type={2}>{advertise.detail}</AdverDetail>
+                        <AdverSubDetail type={2}>{advertise.subdetail}</AdverSubDetail>
+                        <Links>
+                          <BuyLink to={`/shop/products/${advertise.url}`}>구입하기</BuyLink>
+                          <DetailLink to={`/shop/products/${advertise.url}`}>더 알아보기</DetailLink>
+                        </Links>
+                      </div>
+                      <AdverImageWrap>
+                        <AdverImage src={advertise.image} alt="" />
+                      </AdverImageWrap>
+                    </AdverInner>
+                </div>
+
+                }
+                </AdverWrap>
               );
             })}
-            {/* <Routes>
-            <Route path="*" element={<NotFound />} />
-
-          </Routes> */}
-          </Products>
+          </Adver>
         </>
       ) : (
         <>

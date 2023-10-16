@@ -32,7 +32,6 @@ function Login() {
         const verifyUser = async () => {
             try {
                 const res = await axios.post("/smartstore/commerce/login", {}, { withCredentials: true });
-                console.log(res);
                 if (res.data.status == false) {
                     window.onpopstate = function (event) {
                         if (event) {

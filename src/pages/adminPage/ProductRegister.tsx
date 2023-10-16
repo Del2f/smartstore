@@ -7,6 +7,7 @@ import TableProduct from "../../components/admin/TableProductRegi";
 import ImageProductRegi from "../../components/admin/ImageProductRegi";
 import SubImageProductRegi from "../../components/admin/SubImageProductRegi";
 import { relative } from "path";
+import { addProductModel } from "../../../../server/Models/ProductModel";
 
 type Props = {
   setNoticeIcon?: React.Dispatch<SetStateAction<any>>;
@@ -19,7 +20,6 @@ interface DropWrap {
 }
 
 const DropWrap = styled.div<DropWrap>`
-
   &::after {
     content: "";
     display: block;
@@ -33,7 +33,6 @@ const DropWrap = styled.div<DropWrap>`
     border-width: ${(props) => (props.isAddProDrop ? "0 5px 5px" : "5px 5px 0")};
     border-color: ${(props) => (props.isAddProDrop ? "transparent transparent #767a83" : "#8d8d92 transparent transparent")};
     clear: left;
-
   }
 `;
 
@@ -50,6 +49,7 @@ const DropMenu = styled.div<DropMenu>`
   left: 0;
   border-radius: 12px;
   padding: 5px;
+  z-index: 2;
 
   & div {
     width: 100%;
@@ -60,11 +60,11 @@ const DropMenu = styled.div<DropMenu>`
     &:hover {
       color: white;
       background-color: #0071e3;
-
     }
   }
-
 `;
+
+interface addProductResult {}
 
 function ProductRegister(props: Props) {
   const navigate = useNavigate();
@@ -72,7 +72,6 @@ function ProductRegister(props: Props) {
 
   // 상품 수정
   const [isEdit, setIsEdit] = useState(false);
-  console.log(isEdit);
 
   const { id } = useParams();
   const [category, setCategory] = useState<any>([]);
@@ -81,9 +80,8 @@ function ProductRegister(props: Props) {
   const [Cost, setCost] = useState<Number | null>(null);
   const [Price, setPrice] = useState<Number | null>(null);
 
-  const [OptionAdd, setOptionAdd] = useState<number>(0);
+  const [OptionType, setOptionType] = useState<number>(0);
   const [OptionList, setOptionList] = useState<any[]>([]);
-  console.log(OptionList);
 
   const [OptionName1, setOptionName1] = useState<string>("");
   const [OptionName2, setOptionName2] = useState<string>("");
@@ -97,6 +95,9 @@ function ProductRegister(props: Props) {
   const [OptionValue5, setOptionValue5] = useState<string[]>([]);
 
   const [OptionResult, setOptionResult] = useState<any>([]);
+  const [addProductResult, setAddProductResult] = useState<InstanceType<typeof addProductModel>[]>([]);
+  // const [addProductResult, setAddProductResult] = useState<addProductResult[]>([]);
+
   console.log(OptionResult);
 
   const [URL, setURL] = useState<string>("");
@@ -116,14 +117,12 @@ function ProductRegister(props: Props) {
   useEffect(() => {
     // 재고가 있으면서 사용여부가 Y인 경우에만 판매승인
     const use = OptionResult.some((list: any) => {
-      return list.optionUse === "Y" && list.optionStock >= 0;
+      return list.optionUse === "Y" && list.optionStock > 0;
     });
 
     if (use) {
-      // console.log('판매 가능')
       setIsOptionList(true);
     } else {
-      // console.log('판매 불가능')
       setIsOptionList(false);
     }
   }, [OptionResult]);
@@ -138,26 +137,390 @@ function ProductRegister(props: Props) {
         try {
           console.log(`${id}의 db 정보를 가져옵니다.`);
           const product = db.data.productEdit;
+          console.log(product);
+          console.log(product.optionList);
 
           setCategory(product.category);
           setName(product.name);
           setSubTitle(product.subtitle);
           setCost(product.cost);
           setPrice(product.price);
-          setOptionName1(product.option[0].optionName1);
+
+          setOptionList(product.optionList);
+            setOptionType(product.optionList.length - 1);
+
+            if(product.optionList.length === 1){
+              console.log("product.optionList.length === 1");
+
+              product.optionList[0].forEach((option, index) => {
+                setOptionValue1(prevValues => {
+                  const updatedValues = [...prevValues];
+                  updatedValues[index] = option.optionValue1;
+                  return updatedValues;
+                });
+              });
+
+              setOptionName1(product.optionList[0][0].optionName1);
+              // setOptionValue1(product.option[0].optionValue1);
+              setIsOptionName1(true);
+              setIsOptionValue1(true);
+            } else if (product.optionList.length === 2) {
+              product.optionList[0].forEach((option, index) => {
+                setOptionValue1(prevValues => {
+                  const updatedValues = [...prevValues];
+                  updatedValues[index] = option.optionValue1;
+                  return updatedValues;
+                });
+              });
+              product.optionList[1].forEach((option, index) => {
+                setOptionValue2(prevValues => {
+                  const updatedValues = [...prevValues];
+                  updatedValues[index] = option.optionValue2;
+                  return updatedValues;
+                });
+              });
+              
+              setOptionName1(product.optionList[0][0].optionName1);
+              setOptionName2(product.optionList[1][0].optionName2);
+
+              setIsOptionName1(true);
+              setIsOptionValue1(true);
+              setIsOptionName2(true);
+              setIsOptionValue2(true);
+            } else if (product.optionList.length === 3) {
+              product.optionList[0].forEach((option, index) => {
+                setOptionValue1(prevValues => {
+                  const updatedValues = [...prevValues];
+                  updatedValues[index] = option.optionValue1;
+                  return updatedValues;
+                });
+              });
+              product.optionList[1].forEach((option, index) => {
+                setOptionValue2(prevValues => {
+                  const updatedValues = [...prevValues];
+                  updatedValues[index] = option.optionValue2;
+                  return updatedValues;
+                });
+              });
+              product.optionList[2].forEach((option, index) => {
+                setOptionValue3(prevValues => {
+                  const updatedValues = [...prevValues];
+                  updatedValues[index] = option.optionValue3;
+                  return updatedValues;
+                });
+              });
+
+              setOptionName1(product.optionList[0][0].optionName1);
+              setOptionName2(product.optionList[1][0].optionName2);
+              setOptionName3(product.optionList[2][0].optionName3);
+
+              setIsOptionName1(true);
+              setIsOptionValue1(true);
+              setIsOptionName2(true);
+              setIsOptionValue2(true);
+              setIsOptionName3(true);
+              setIsOptionValue3(true);
+            } else if (product.optionList.length === 4) {
+              product.optionList[0].forEach((option, index) => {
+                setOptionValue1(prevValues => {
+                  const updatedValues = [...prevValues];
+                  updatedValues[index] = option.optionValue1;
+                  return updatedValues;
+                });
+              });
+              product.optionList[1].forEach((option, index) => {
+                setOptionValue2(prevValues => {
+                  const updatedValues = [...prevValues];
+                  updatedValues[index] = option.optionValue2;
+                  return updatedValues;
+                });
+              });
+              product.optionList[2].forEach((option, index) => {
+                setOptionValue3(prevValues => {
+                  const updatedValues = [...prevValues];
+                  updatedValues[index] = option.optionValue3;
+                  return updatedValues;
+                });
+              });
+              product.optionList[3].forEach((option, index) => {
+                setOptionValue3(prevValues => {
+                  const updatedValues = [...prevValues];
+                  updatedValues[index] = option.optionValue4;
+                  return updatedValues;
+                });
+              });
+
+              setOptionName1(product.optionList[0][0].optionName1);
+              setOptionName2(product.optionList[1][0].optionName2);
+              setOptionName3(product.optionList[2][0].optionName3);
+              setOptionName4(product.optionList[3][0].optionName4);
+
+              setIsOptionName1(true);
+              setIsOptionValue1(true);
+              setIsOptionName2(true);
+              setIsOptionValue2(true);
+              setIsOptionName3(true);
+              setIsOptionValue3(true);
+              setIsOptionName4(true);
+              setIsOptionValue4(true);
+            } else if (product.optionList.length === 5) {
+              product.optionList[0].forEach((option, index) => {
+                setOptionValue1(prevValues => {
+                  const updatedValues = [...prevValues];
+                  updatedValues[index] = option.optionValue1;
+                  return updatedValues;
+                });
+              });
+              product.optionList[1].forEach((option, index) => {
+                setOptionValue2(prevValues => {
+                  const updatedValues = [...prevValues];
+                  updatedValues[index] = option.optionValue2;
+                  return updatedValues;
+                });
+              });
+              product.optionList[2].forEach((option, index) => {
+                setOptionValue3(prevValues => {
+                  const updatedValues = [...prevValues];
+                  updatedValues[index] = option.optionValue3;
+                  return updatedValues;
+                });
+              });
+              product.optionList[3].forEach((option, index) => {
+                setOptionValue3(prevValues => {
+                  const updatedValues = [...prevValues];
+                  updatedValues[index] = option.optionValue4;
+                  return updatedValues;
+                });
+              });
+              product.optionList[4].forEach((option, index) => {
+                setOptionValue3(prevValues => {
+                  const updatedValues = [...prevValues];
+                  updatedValues[index] = option.optionValue5;
+                  return updatedValues;
+                });
+              });
+
+              setOptionName1(product.optionList[0][0].optionName1);
+              setOptionName2(product.optionList[1][0].optionName2);
+              setOptionName3(product.optionList[2][0].optionName3);
+              setOptionName4(product.optionList[3][0].optionName4);
+              setOptionName5(product.optionList[4][0].optionName5);
+
+              setIsOptionName1(true);
+              setIsOptionValue1(true);
+              setIsOptionName2(true);
+              setIsOptionValue2(true);
+              setIsOptionName3(true);
+              setIsOptionValue3(true);
+              setIsOptionName4(true);
+              setIsOptionValue4(true);
+              setIsOptionName5(true);
+              setIsOptionValue5(true);
+            }
+
+            if(product.addProduct.length === 0){
+              setAddListType(product.addProduct.length);
+            } else {
+              setAddListType(product.addProduct.length - 1);
+            }
+            
+            setAddProductResult(product.addProduct);
+            if(product.addProduct.length === 1){
+              console.log('addProduct.length 0')
+              if(product.addProduct[0]){
+                console.log('product.addProduct[0]')
+
+                setAddName1(product.addProduct[0].name);
+                setAddPrice1(product.addProduct[0].price);
+                setAddStock1(product.addProduct[0].stock);
+                setAddUse1(product.addProduct[0].use);
+
+                setIsAddName1(true);
+                setIsAddPrice1(true);
+                setIsAddStock1(true);
+                setIsAddProductFinish1(true);
+              }
+
+            } else if (product.addProduct.length === 2) {
+              console.log('addProduct.length 1')
+
+              if(product.addProduct[0]){
+                console.log('product.addProduct[0]')
+
+                setAddName1(product.addProduct[0].name);
+                setAddPrice1(product.addProduct[0].price);
+                setAddStock1(product.addProduct[0].stock);
+                setAddUse1(product.addProduct[0].use);
+
+                setIsAddName1(true);
+                setIsAddPrice1(true);
+                setIsAddStock1(true);
+                setIsAddProductFinish1(true);
+                setIsAddProductFinishEnd(true);
+
+              }
+              if(product.addProduct[1]){
+                setAddName2(product.addProduct[1].name);
+                setAddPrice2(product.addProduct[1].price);
+                setAddStock2(product.addProduct[1].stock);
+                setAddUse2(product.addProduct[1].use);
+
+                setIsAddName2(true);
+                setIsAddPrice2(true);
+                setIsAddStock2(true);
+                setIsAddProductFinish2(true);
+              }
+
+            } else if (product.addProduct.length === 3) {
+              if(product.addProduct[0]){
+                setAddName1(product.addProduct[0].name);
+                setAddPrice1(product.addProduct[0].price);
+                setAddStock1(product.addProduct[0].stock);
+                setAddUse1(product.addProduct[0].use);
+
+                setIsAddName1(true);
+                setIsAddPrice1(true);
+                setIsAddStock1(true);
+                setIsAddProductFinish1(true);
+              }
+              if(product.addProduct[1]){
+                setAddName2(product.addProduct[1].name);
+                setAddPrice2(product.addProduct[1].price);
+                setAddStock2(product.addProduct[1].stock);
+                setAddUse2(product.addProduct[1].use);
+
+                setIsAddName2(true);
+                setIsAddPrice2(true);
+                setIsAddStock2(true);
+                setIsAddProductFinish2(true);
+              }
+              if(product.addProduct[2]){
+                setAddName3(product.addProduct[2].name);
+                setAddPrice3(product.addProduct[2].price);
+                setAddStock3(product.addProduct[2].stock);
+                setAddUse3(product.addProduct[2].use);
+
+                setIsAddName3(true);
+                setIsAddPrice3(true);
+                setIsAddStock3(true);
+                setIsAddProductFinish3(true);
+              }
+              setIsAddProductFinishEnd(true);
+
+            } else if (product.addProduct.length === 4) {
+              if(product.addProduct[0]){
+                setAddName1(product.addProduct[0].name);
+                setAddPrice1(product.addProduct[0].price);
+                setAddStock1(product.addProduct[0].stock);
+                setAddUse1(product.addProduct[0].use);
+
+                setIsAddName1(true);
+                setIsAddPrice1(true);
+                setIsAddStock1(true);
+                setIsAddProductFinish1(true);
+              }
+              if(product.addProduct[1]){
+                setAddName2(product.addProduct[1].name);
+                setAddPrice2(product.addProduct[1].price);
+                setAddStock2(product.addProduct[1].stock);
+                setAddUse2(product.addProduct[1].use);
+
+                setIsAddName2(true);
+                setIsAddPrice2(true);
+                setIsAddStock2(true);
+                setIsAddProductFinish2(true);
+              }
+              if(product.addProduct[2]){
+                setAddName3(product.addProduct[2].name);
+                setAddPrice3(product.addProduct[2].price);
+                setAddStock3(product.addProduct[2].stock);
+                setAddUse3(product.addProduct[2].use);
+
+                setIsAddName3(true);
+                setIsAddPrice3(true);
+                setIsAddStock3(true);
+                setIsAddProductFinish3(true);
+              }
+              if(product.addProduct[3]){
+                setAddName4(product.addProduct[3].name);
+                setAddPrice4(product.addProduct[3].price);
+                setAddStock4(product.addProduct[3].stock);
+                setAddUse4(product.addProduct[3].use);
+
+                setIsAddName4(true);
+                setIsAddPrice4(true);
+                setIsAddStock4(true);
+                setIsAddProductFinish4(true);
+              }
+              setIsAddProductFinishEnd(true);
+
+            } else if (product.addProduct.length === 5) {
+              if(product.addProduct[0]){
+                setAddName1(product.addProduct[0].name);
+                setAddPrice1(product.addProduct[0].price);
+                setAddStock1(product.addProduct[0].stock);
+                setAddUse1(product.addProduct[0].use);
+
+                setIsAddName1(true);
+                setIsAddPrice1(true);
+                setIsAddStock1(true);
+                setIsAddProductFinish1(true);
+              }
+              if(product.addProduct[1]){
+                setAddName2(product.addProduct[1].name);
+                setAddPrice2(product.addProduct[1].price);
+                setAddStock2(product.addProduct[1].stock);
+                setAddUse2(product.addProduct[1].use);
+
+                setIsAddName2(true);
+                setIsAddPrice2(true);
+                setIsAddStock2(true);
+                setIsAddProductFinish2(true);
+              }
+              if(product.addProduct[2]){
+                setAddName3(product.addProduct[2].name);
+                setAddPrice3(product.addProduct[2].price);
+                setAddStock3(product.addProduct[2].stock);
+                setAddUse3(product.addProduct[2].use);
+                
+                setIsAddName3(true);
+                setIsAddPrice3(true);
+                setIsAddStock3(true);
+                setIsAddProductFinish3(true);
+              }
+              if(product.addProduct[3]){
+                setAddName4(product.addProduct[3].name);
+                setAddPrice4(product.addProduct[3].price);
+                setAddStock4(product.addProduct[3].stock);
+                setAddUse4(product.addProduct[3].use);
+
+                setIsAddName4(true);
+                setIsAddPrice4(true);
+                setIsAddStock4(true);
+                setIsAddProductFinish4(true);
+              }
+              if(product.addProduct[4]){
+                setAddName5(product.addProduct[4].name);
+                setAddPrice5(product.addProduct[4].price);
+                setAddStock5(product.addProduct[4].stock);
+                setAddUse5(product.addProduct[4].use);
+
+                setIsAddName5(true);
+                setIsAddPrice5(true);
+                setIsAddStock5(true);
+                setIsAddProductFinish5(true);
+              }
+              setIsAddProductFinishEnd(true);
+
+          }
+          setOptionResult(product.option);
+
           setURL(product.url);
           setMainImage(product.mainImage);
           setSubImage(product.subImage);
           setDetailImage(product.detailImage);
           setMainSpec(product.mainspec);
           setSpec(product.spec);
-
-          const valueString = product.option.map((list: any) => {
-            return list.optionValue1;
-          });
-
-          setOptionValue1(valueString);
-          setOptionResult(product.option);
           setDelivery(product.delivery);
 
           //유효성 검사 true
@@ -165,12 +528,9 @@ function ProductRegister(props: Props) {
           setIsSubTitle(true);
           setIsCost(true);
           setIsPrice(true);
-          setIsOptionNameFin(true);
-          setIsOptionValueFin(true);
           setIsOptionList(true);
           setIsURL(true);
           setIsImage(true);
-          setIsDetail(true);
           setIsDelivery(true);
           setSubmit(true);
         } catch (error) {
@@ -235,8 +595,6 @@ function ProductRegister(props: Props) {
   const [OptionValue4Message, setOptionValue4Message] = useState<string>("");
   const [OptionValue5Message, setOptionValue5Message] = useState<string>("");
   const [URLMessage, setURLMessage] = useState<string>("");
-  const [ImageMessage, setImageMessage] = useState<string>("");
-  const [DetailMessage, setDetailMessage] = useState<string>("");
   const [DeliveryMessage, setDeliveryMessage] = useState<string>("");
 
   // 유효성 검사
@@ -260,14 +618,11 @@ function ProductRegister(props: Props) {
   const [isOptionList, setIsOptionList] = useState<boolean>(false);
   const [isURL, setIsURL] = useState<boolean>(false);
   const [isImage, setIsImage] = useState<boolean>(false);
-  const [isDetail, setIsDetail] = useState<boolean>(false);
   const [isDelivery, setIsDelivery] = useState<boolean>(false);
   const [Submit, setSubmit] = useState<boolean>(false);
 
   const [inputClickNumber, setInputClickNumber] = useState<number>(0);
   const [inputClick, setInputClick] = useState<boolean>(false);
-  console.log(inputClickNumber);
-  console.log(inputClick);
 
   // 드롭 메뉴 접기
   const [CategoryDrop, setCategoryDrop] = useState<boolean>(true);
@@ -279,9 +634,6 @@ function ProductRegister(props: Props) {
   const [DeliveryDrop, setDeliveryDrop] = useState<boolean>(true);
   const [AddDrop, setAddDrop] = useState<boolean>(true);
   const [SpecDrop, setSpecDrop] = useState<boolean>(true);
-
-  // 추가 상품 사용여부 드롭 메뉴
-  const [isAddProDrop, setIsAddProDrop] = useState<boolean>(false);
 
   // 추가상품 리스트 추가
   const [addListType, setAddListType] = useState<number>(0);
@@ -308,6 +660,12 @@ function ProductRegister(props: Props) {
   const [addUse4, setAddUse4] = useState<boolean>(true);
   const [addUse5, setAddUse5] = useState<boolean>(true);
 
+  // 추가 상품 사용여부 드롭 메뉴
+  const [isAddProDrop1, setIsAddProDrop1] = useState<boolean>(false);
+  const [isAddProDrop2, setIsAddProDrop2] = useState<boolean>(false);
+  const [isAddProDrop3, setIsAddProDrop3] = useState<boolean>(false);
+  const [isAddProDrop4, setIsAddProDrop4] = useState<boolean>(false);
+  const [isAddProDrop5, setIsAddProDrop5] = useState<boolean>(false);
 
   const [isAddName1, setIsAddName1] = useState<boolean>(false);
   const [isAddName2, setIsAddName2] = useState<boolean>(false);
@@ -325,7 +683,19 @@ function ProductRegister(props: Props) {
   const [isAddStock4, setIsAddStock4] = useState<boolean>(false);
   const [isAddStock5, setIsAddStock5] = useState<boolean>(false);
 
-  const [isAddProductFinish, setIsAddProductFinish] = useState<boolean>(true);
+  const [isAddProductFinish1, setIsAddProductFinish1] = useState<boolean>(false);
+  const [isAddProductFinish2, setIsAddProductFinish2] = useState<boolean>(false);
+  const [isAddProductFinish3, setIsAddProductFinish3] = useState<boolean>(false);
+  const [isAddProductFinish4, setIsAddProductFinish4] = useState<boolean>(false);
+  const [isAddProductFinish5, setIsAddProductFinish5] = useState<boolean>(false);
+  const [isAddProductFinishEnd, setIsAddProductFinishEnd] = useState<boolean>(false);
+
+  console.log(isAddName1);
+  console.log(isAddPrice1);
+  console.log(isAddStock1);
+  console.log(addListType);
+  console.log(isAddProductFinish1);
+  console.log(isAddProductFinishEnd);
 
   const [addName1Err, setAddName1Err] = useState<string>("");
   const [addName2Err, setAddName2Err] = useState<string>("");
@@ -345,6 +715,8 @@ function ProductRegister(props: Props) {
   const [addStock4Err, setAddStock4Err] = useState<string>("");
   const [addStock5Err, setAddStock5Err] = useState<string>("");
 
+  const [addSubmitErr, setAddSubmitErr] = useState<string>("");
+  console.log(addSubmitErr);
 
   // Ref
   const inputRefName = useRef<HTMLDivElement>(null);
@@ -363,15 +735,31 @@ function ProductRegister(props: Props) {
   const inputRefOptionValue5 = useRef<HTMLDivElement>(null);
   const inputRefURL = useRef<HTMLDivElement>(null);
   const inputRefImage = useRef<HTMLDivElement>(null);
-  const inputRefDetail = useRef<HTMLDivElement>(null);
+  // const inputRefDetail = useRef<HTMLDivElement>(null);
   const inputRefDelivery = useRef<HTMLDivElement>(null);
   const inputRefMainSpec = useRef<HTMLDivElement>(null);
   const inputRefSpec = useRef<HTMLDivElement>(null);
 
-  const addRefName = useRef<HTMLDivElement>(null);
-  const addRefPrice = useRef<HTMLDivElement>(null);
-  const addRefStock = useRef<HTMLDivElement>(null);
-  const addRefUse = useRef<HTMLDivElement>(null);
+  const addRefName1 = useRef<HTMLDivElement>(null);
+  const addRefName2 = useRef<HTMLDivElement>(null);
+  const addRefName3 = useRef<HTMLDivElement>(null);
+  const addRefName4 = useRef<HTMLDivElement>(null);
+  const addRefName5 = useRef<HTMLDivElement>(null);
+  const addRefPrice1 = useRef<HTMLDivElement>(null);
+  const addRefPrice2 = useRef<HTMLDivElement>(null);
+  const addRefPrice3 = useRef<HTMLDivElement>(null);
+  const addRefPrice4 = useRef<HTMLDivElement>(null);
+  const addRefPrice5 = useRef<HTMLDivElement>(null);
+  const addRefStock1 = useRef<HTMLDivElement>(null);
+  const addRefStock2 = useRef<HTMLDivElement>(null);
+  const addRefStock3 = useRef<HTMLDivElement>(null);
+  const addRefStock4 = useRef<HTMLDivElement>(null);
+  const addRefStock5 = useRef<HTMLDivElement>(null);
+  const addRefUse1 = useRef<HTMLDivElement>(null);
+  const addRefUse2 = useRef<HTMLDivElement>(null);
+  const addRefUse3 = useRef<HTMLDivElement>(null);
+  const addRefUse4 = useRef<HTMLDivElement>(null);
+  const addRefUse5 = useRef<HTMLDivElement>(null);
 
   const addCommasToNumber = (number: any) => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -384,7 +772,7 @@ function ProductRegister(props: Props) {
   const NameHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     // 상품명
     setName(e.target.value);
-    if (e.target.value == "") {
+    if (e.target.value === "") {
       setNameMessage("상품명을 입력해 주세요.");
       setIsName(false);
     } else if (e.target.value.length > 100) {
@@ -414,7 +802,7 @@ function ProductRegister(props: Props) {
     const passwordCurrent = e.target.value;
     setCost(Number(passwordCurrent));
 
-    if (e.target.value == "") {
+    if (e.target.value === "") {
       setCostMessage("필수 정보입니다.");
       setIsCost(false);
       return;
@@ -451,7 +839,7 @@ function ProductRegister(props: Props) {
     const passwordCurrent = e.target.value;
     setPrice(Number(passwordCurrent));
 
-    if (e.target.value == "") {
+    if (e.target.value === "") {
       setPriceMessage("필수 정보입니다.");
       setIsPrice(false);
       return;
@@ -490,7 +878,7 @@ function ProductRegister(props: Props) {
   const URLHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     // URL
     setURL(e.target.value);
-    if (e.target.value == "") {
+    if (e.target.value === "") {
       setURLMessage("URL 주소를 입력해 주세요.");
       setIsURL(false);
     } else if (e.target.value.length > 20) {
@@ -525,7 +913,7 @@ function ProductRegister(props: Props) {
     const passwordCurrent = e.target.value;
     setDelivery(Number(passwordCurrent));
 
-    if (e.target.value == "") {
+    if (e.target.value === "") {
       setDeliveryMessage("필수 정보입니다.");
       setIsDelivery(false);
       return;
@@ -561,6 +949,7 @@ function ProductRegister(props: Props) {
     price: Price,
     option: OptionResult,
     optionList: OptionList,
+    addProduct: addProductResult,
     url: URL,
     mainImage: MainImage,
     subImage: SubImage,
@@ -622,18 +1011,18 @@ function ProductRegister(props: Props) {
   const option = {
     // 옵션 추가
     PlusHandler: () => {
-      if (OptionAdd === 4) {
+      if (OptionType === 4) {
         return;
       } else {
-        setOptionAdd((e) => e + 1);
+        setOptionType((e) => e + 1);
       }
     },
     // 옵션 삭제
     MinusHandler: () => {
-      if (OptionAdd === 0) {
+      if (OptionType === 0) {
         return;
       } else {
-        setOptionAdd((e) => e - 1);
+        setOptionType((e) => e - 1);
       }
     },
     // 옵션명- 01
@@ -782,18 +1171,17 @@ function ProductRegister(props: Props) {
           setOptionValue1Message("옵션값을 입력 해주세요.");
         } else if (list.length > 11) {
           setOptionValue1Message("하나의 옵션값은 최대 10자로 입력해주세요.");
-          return;
         } else {
           setIsOptionValue1(true);
         }
       });
+
       OptionValue2?.map((list: any, index: any) => {
         if (list === "") {
           setIsOptionValue2(false);
           setOptionValue2Message("옵션값을 입력 해주세요.");
         } else if (list.length > 11) {
           setOptionValue2Message("하나의 옵션값은 최대 10자로 입력해주세요.");
-          return;
         } else {
           setIsOptionValue2(true);
         }
@@ -804,7 +1192,6 @@ function ProductRegister(props: Props) {
           setOptionValue3Message("옵션값을 입력 해주세요.");
         } else if (list.length > 11) {
           setOptionValue3Message("하나의 옵션값은 최대 10자로 입력해주세요.");
-          return;
         } else {
           setIsOptionValue3(true);
         }
@@ -815,7 +1202,6 @@ function ProductRegister(props: Props) {
           setOptionValue4Message("옵션값을 입력 해주세요.");
         } else if (list.length > 11) {
           setOptionValue4Message("하나의 옵션값은 최대 10자로 입력해주세요.");
-          return;
         } else {
           setIsOptionValue4(true);
         }
@@ -826,7 +1212,6 @@ function ProductRegister(props: Props) {
           setOptionValue5Message("옵션값을 입력 해주세요.");
         } else if (list.length > 11) {
           setOptionValue5Message("하나의 옵션값은 최대 10자로 입력해주세요.");
-          return;
         } else {
           setIsOptionValue5(true);
         }
@@ -849,7 +1234,7 @@ function ProductRegister(props: Props) {
       // setOptionValue5([]);
       setOptionList([]);
 
-      if (OptionAdd === 0) {
+      if (OptionType === 0) {
         OptionValue1.forEach((value1, index) => {
           result.push({
             ...optiondata,
@@ -860,12 +1245,12 @@ function ProductRegister(props: Props) {
         });
         const list = [
           OptionValue1.map((value, index) => ({
-            optionname1: OptionName1,
-            optionvalue1: value,
+            optionName1: OptionName1,
+            optionValue1: value,
           })),
         ];
         setOptionList(list);
-      } else if (OptionAdd === 1) {
+      } else if (OptionType === 1) {
         OptionValue1.forEach((value1) => {
           OptionValue2.forEach((value2) => {
             result.push({
@@ -878,18 +1263,18 @@ function ProductRegister(props: Props) {
             });
             const list = [
               OptionValue1.map((value, index) => ({
-                optionname1: OptionName1,
-                optionvalue1: value,
+                optionName1: OptionName1,
+                optionValue1: value,
               })),
               OptionValue2.map((value, index) => ({
-                optionname2: OptionName2,
-                optionvalue2: value,
+                optionName2: OptionName2,
+                optionValue2: value,
               })),
             ];
             setOptionList(list);
           });
         });
-      } else if (OptionAdd === 2) {
+      } else if (OptionType === 2) {
         OptionValue1.forEach((value1) => {
           OptionValue2.forEach((value2) => {
             OptionValue3.forEach((value3) => {
@@ -908,20 +1293,20 @@ function ProductRegister(props: Props) {
         });
         const list = [
           OptionValue1.map((value, index) => ({
-            optionname1: OptionName1,
-            optionvalue1: value,
+            optionName1: OptionName1,
+            optionValue1: value,
           })),
           OptionValue2.map((value, index) => ({
-            optionname2: OptionName2,
-            optionvalue2: value,
+            optionName2: OptionName2,
+            optionValue2: value,
           })),
           OptionValue3.map((value, index) => ({
-            optionname3: OptionName3,
-            optionvalue3: value,
+            optionName3: OptionName3,
+            optionValue3: value,
           })),
         ];
         setOptionList(list);
-      } else if (OptionAdd === 3) {
+      } else if (OptionType === 3) {
         OptionValue1.forEach((value1) => {
           OptionValue2.forEach((value2) => {
             OptionValue3.forEach((value3) => {
@@ -944,24 +1329,24 @@ function ProductRegister(props: Props) {
         });
         const list = [
           OptionValue1.map((value, index) => ({
-            optionname1: OptionName1,
-            optionvalue1: value,
+            optionName1: OptionName1,
+            optionValue1: value,
           })),
           OptionValue2.map((value, index) => ({
-            optionname2: OptionName2,
-            optionvalue2: value,
+            optionName2: OptionName2,
+            optionValue2: value,
           })),
           OptionValue3.map((value, index) => ({
-            optionname3: OptionName3,
-            optionvalue3: value,
+            optionName3: OptionName3,
+            optionValue3: value,
           })),
           OptionValue4.map((value, index) => ({
-            optionname4: OptionName4,
-            optionvalue4: value,
+            optionName4: OptionName4,
+            optionValue4: value,
           })),
         ];
         setOptionList(list);
-      } else if (OptionAdd === 4) {
+      } else if (OptionType === 4) {
         OptionValue1.forEach((value1) => {
           OptionValue2.forEach((value2) => {
             OptionValue3.forEach((value3) => {
@@ -988,24 +1373,24 @@ function ProductRegister(props: Props) {
         });
         const list = [
           OptionValue1.map((value, index) => ({
-            optionname1: OptionName1,
-            optionvalue1: value,
+            optionName1: OptionName1,
+            optionValue1: value,
           })),
           OptionValue2.map((value, index) => ({
-            optionname2: OptionName2,
-            optionvalue2: value,
+            optionName2: OptionName2,
+            optionValue2: value,
           })),
           OptionValue3.map((value, index) => ({
-            optionname3: OptionName3,
-            optionvalue3: value,
+            optionName3: OptionName3,
+            optionValue3: value,
           })),
           OptionValue4.map((value, index) => ({
-            optionname4: OptionName4,
-            optionvalue4: value,
+            optionName4: OptionName4,
+            optionValue4: value,
           })),
           OptionValue5.map((value, index) => ({
-            optionname5: OptionName5,
-            optionvalue5: value,
+            optionName5: OptionName5,
+            optionValue5: value,
           })),
         ];
         setOptionList(list);
@@ -1021,8 +1406,12 @@ function ProductRegister(props: Props) {
 
   // 추가 상품 함수모음
   const addProducts = {
-
-    NameChange: (e: React.ChangeEvent<HTMLInputElement>, setAddName: React.Dispatch<React.SetStateAction<string>>, setIsAddName: React.Dispatch<React.SetStateAction<boolean>>, setAddNameErr: React.Dispatch<React.SetStateAction<string>>) => {
+    NameChange: (
+      e: React.ChangeEvent<HTMLInputElement>,
+      setAddName: React.Dispatch<React.SetStateAction<string>>,
+      setIsAddName: React.Dispatch<React.SetStateAction<boolean>>,
+      setAddNameErr: React.Dispatch<React.SetStateAction<string>>
+    ) => {
       setAddName(e.target.value);
 
       if (e.target.value === "") {
@@ -1035,40 +1424,52 @@ function ProductRegister(props: Props) {
         setIsAddName(true);
       }
     },
-    PriceChange: (e: React.ChangeEvent<HTMLInputElement>, setAddPrice: React.Dispatch<React.SetStateAction<number>>, setIsAddPrice: React.Dispatch<React.SetStateAction<boolean>>, setAddPriceErr: React.Dispatch<React.SetStateAction<string>>) => {
+    PriceChange: (
+      e: React.ChangeEvent<HTMLInputElement>,
+      setAddPrice: React.Dispatch<React.SetStateAction<number>>,
+      setIsAddPrice: React.Dispatch<React.SetStateAction<boolean>>,
+      setAddPriceErr: React.Dispatch<React.SetStateAction<string>>
+    ) => {
       const price = e.target.value;
       const regex = /^[0-9]+$/;
 
-      if(price === ""){
+      if (price === "") {
         setAddPrice(0);
+        setIsAddPrice(false);
       }
 
-      if(!regex.test(price)){
+      if (!regex.test(price)) {
         setAddPriceErr("숫자만 입력해주세요.");
+        setIsAddPrice(false);
       } else {
         setAddPrice(Number(price));
         setIsAddPrice(true);
       }
-
     },
-    StockChange: (e: React.ChangeEvent<HTMLInputElement>, setAddStock: React.Dispatch<React.SetStateAction<number>>, setAddStockErr: React.Dispatch<React.SetStateAction<string>>) => {
+    StockChange: (
+      e: React.ChangeEvent<HTMLInputElement>,
+      setAddStock: React.Dispatch<React.SetStateAction<number>>,
+      setIsAddStock: React.Dispatch<React.SetStateAction<boolean>>,
+      setAddStockErr: React.Dispatch<React.SetStateAction<string>>
+    ) => {
       const stock = e.target.value;
       const regex = /^[0-9]+$/;
 
-      if(stock === ""){
+      if (stock === "") {
         setAddStock(0);
+        setIsAddStock(false);
       }
 
-      if(!regex.test(stock)){
+      if (!regex.test(stock)) {
         setAddStockErr("숫자만 입력해주세요.");
+        setIsAddStock(false);
       } else {
         setAddStock(Number(stock));
+        setIsAddStock(true);
       }
-      
     },
-    UseChange: (e: React.ChangeEvent<HTMLInputElement>, setAddUse: React.Dispatch<React.SetStateAction<boolean>>) => {
-      console.log(e);
-      // setAddStock(dataSlice);
+    UseChange: (e: boolean, setAddUse: React.Dispatch<React.SetStateAction<boolean>>) => {
+      setAddUse(e);
     },
 
     // 옵션 추가
@@ -1121,35 +1522,133 @@ function ProductRegister(props: Props) {
     },
     // 재고
     Stock1Handler: (e: React.ChangeEvent<HTMLInputElement>) => {
-      addProducts.PriceChange(e, setAddStock1, setIsAddStock1, setAddStock1Err);
+      addProducts.StockChange(e, setAddStock1, setIsAddStock1, setAddStock1Err);
     },
     Stock2Handler: (e: React.ChangeEvent<HTMLInputElement>) => {
-      addProducts.PriceChange(e, setAddStock2, setIsAddStock2, setAddStock2Err);
+      addProducts.StockChange(e, setAddStock2, setIsAddStock2, setAddStock2Err);
     },
     Stock3Handler: (e: React.ChangeEvent<HTMLInputElement>) => {
-      addProducts.PriceChange(e, setAddStock3, setIsAddStock3, setAddStock3Err);
+      addProducts.StockChange(e, setAddStock3, setIsAddStock3, setAddStock3Err);
     },
     Stock4Handler: (e: React.ChangeEvent<HTMLInputElement>) => {
-      addProducts.PriceChange(e, setAddStock4, setIsAddStock4, setAddStock4Err);
+      addProducts.StockChange(e, setAddStock4, setIsAddStock4, setAddStock4Err);
     },
     Stock5Handler: (e: React.ChangeEvent<HTMLInputElement>) => {
-      addProducts.PriceChange(e, setAddStock5, setIsAddStock5, setAddStock5Err);
+      addProducts.StockChange(e, setAddStock5, setIsAddStock5, setAddStock5Err);
     },
+    // 사용여부
+    Use1Handler: (e: boolean) => {
+      addProducts.UseChange(e, setAddUse1);
+    },
+    Use2Handler: (e: boolean) => {
+      addProducts.UseChange(e, setAddUse2);
+    },
+    Use3Handler: (e: boolean) => {
+      addProducts.UseChange(e, setAddUse3);
+    },
+    Use4Handler: (e: boolean) => {
+      addProducts.UseChange(e, setAddUse4);
+    },
+    Use5Handler: (e: boolean) => {
+      addProducts.UseChange(e, setAddUse5);
+    },
+    Submit: (e: any) => {
+      e.preventDefault();
 
+      if (addListType === 0) {
+        if (isAddProductFinish1) {
+          setIsAddProductFinishEnd(true);
+        } else {
+          setIsAddProductFinishEnd(false);
+          setAddSubmitErr('상품 내용을 전부 입력 해주세요.');
+        }
+      } else if (addListType === 1) {
+        if (isAddProductFinish1 && isAddProductFinish2) {
+          setIsAddProductFinishEnd(true);
+        } else {
+          setIsAddProductFinishEnd(false);
+          setAddSubmitErr('상품 내용을 전부 입력 해주세요.');
+
+        }
+      } else if (addListType === 2) {
+        if (isAddProductFinish1 && isAddProductFinish2 && isAddProductFinish3) {
+          setIsAddProductFinishEnd(true);
+        } else {
+          setIsAddProductFinishEnd(false);
+          setAddSubmitErr('상품 내용을 전부 입력 해주세요.');
+
+        }
+      } else if (addListType === 3) {
+        if (isAddProductFinish1 && isAddProductFinish2 && isAddProductFinish3 && isAddProductFinish4) {
+          setIsAddProductFinishEnd(true);
+        } else {
+          setIsAddProductFinishEnd(false);
+          setAddSubmitErr('상품 내용을 전부 입력 해주세요.');
+
+        }
+      } else if (addListType === 4) {
+        if (isAddProductFinish1 && isAddProductFinish2 && isAddProductFinish3 && isAddProductFinish4 && isAddProductFinish5) {
+          setIsAddProductFinishEnd(true);
+        } else {
+          setIsAddProductFinishEnd(false);
+          setAddSubmitErr('상품 내용을 전부 입력 해주세요.');
+
+        }
+      }
+
+
+      const addProductObject: InstanceType<typeof addProductModel>[] = [];
+
+      const addData = (name, price, stock, use) => {
+        if (name === "" && price === 0 && stock === 0) {
+          return;
+        }
+
+        addProductObject.push({
+          name,
+          price,
+          stock,
+          use,
+        });
+      };
+
+      if (addListType >= 0) {
+        addData(addName1, addPrice1, addStock1, addUse1);
+      }
+
+      if (addListType >= 1) {
+        addData(addName2, addPrice2, addStock2, addUse2);
+      }
+
+      if (addListType >= 2) {
+        addData(addName3, addPrice3, addStock3, addUse3);
+      }
+
+      if (addListType >= 3) {
+        addData(addName4, addPrice4, addStock4, addUse4);
+      }
+
+      if (addListType >= 4) {
+        addData(addName5, addPrice5, addStock5, addUse5);
+      }
+
+      setAddProductResult(addProductObject);
+    },
   };
 
   // 추가 옵션 유효성 검사
   useEffect(() => {
-    if (OptionAdd === 0) {
+    if (OptionType === 0) {
       if (isOptionName1 && isOptionValue1) {
         setIsOptionNameFin(true);
         setIsOptionValueFin(true);
       } else {
+        console.log('false');
         setIsOptionNameFin(false);
         setIsOptionValueFin(false);
       }
     }
-    if (OptionAdd === 1) {
+    if (OptionType === 1) {
       if (isOptionName1 && isOptionValue1 && isOptionName2 && isOptionValue2) {
         setIsOptionNameFin(true);
         setIsOptionValueFin(true);
@@ -1158,7 +1657,7 @@ function ProductRegister(props: Props) {
         setIsOptionValueFin(false);
       }
     }
-    if (OptionAdd === 2) {
+    if (OptionType === 2) {
       if (isOptionName1 && isOptionValue1 && isOptionName2 && isOptionValue2 && isOptionName3 && isOptionValue3) {
         setIsOptionNameFin(true);
         setIsOptionValueFin(true);
@@ -1167,7 +1666,7 @@ function ProductRegister(props: Props) {
         setIsOptionValueFin(false);
       }
     }
-    if (OptionAdd === 3) {
+    if (OptionType === 3) {
       if (isOptionName1 && isOptionValue1 && isOptionName2 && isOptionValue2 && isOptionName3 && isOptionValue3 && isOptionName4 && isOptionValue4) {
         setIsOptionNameFin(true);
         setIsOptionValueFin(true);
@@ -1176,7 +1675,7 @@ function ProductRegister(props: Props) {
         setIsOptionValueFin(false);
       }
     }
-    if (OptionAdd === 4) {
+    if (OptionType === 4) {
       if (
         isOptionName1 &&
         isOptionValue1 &&
@@ -1197,7 +1696,7 @@ function ProductRegister(props: Props) {
       }
     }
   }, [
-    OptionAdd,
+    OptionType,
     OptionName1,
     OptionName2,
     OptionName3,
@@ -1210,61 +1709,113 @@ function ProductRegister(props: Props) {
     OptionValue5,
   ]);
 
-  // 추가상품 유효성 검사
+  // 추가 상품 유효성 검사
+  // useEffect(() => {
+  //   setIsAddProductFinishEnd(false);
+  // }, [addListType, isAddProductFinish1, isAddProductFinish2, isAddProductFinish3, isAddProductFinish4, isAddProductFinish5]);
+
   useEffect(() => {
-    if (addListType === 0) {
-      if (isAddName1 && isAddPrice1 && isAddStock1) {
-        setIsAddProductFinish(true);
-      } else {
-        setIsAddProductFinish(false);
-      }
+    const AllTrue = isAddName1 && isAddPrice1 && isAddStock1;
+    setIsAddProductFinish1(AllTrue);
+    if (!AllTrue) {
+      setIsAddProductFinish1(false);
+      setIsAddProductFinishEnd(false);
     }
-    if (addListType === 1) {
-      if (isAddName1 && isAddPrice1 && isAddStock1 && isAddName2 && isAddPrice2 && isAddStock2) {
-        setIsAddProductFinish(true);
-      } else {
-        setIsAddProductFinish(false);
-      }
+    setAddSubmitErr("");
+
+    if (addListType === 0 && addName1 === "" && addPrice1 === 0 && addStock1 === 0) {
+      console.log("type0의 상품명 공백, 가격 0, 재고0으로 예외 허용");
+      setIsAddProductFinish1(true);
+      setIsAddProductFinishEnd(true);
     }
-    if (addListType === 2) {
-      if (isAddName1 && isAddPrice1 && isAddStock1 && isAddName2 && isAddPrice2 && isAddStock2 && isAddName3 && isAddPrice3 && isAddStock3) {
-        setIsAddProductFinish(true);
-      } else {
-        setIsAddProductFinish(false);
-      }
+  }, [addListType, isAddName1, isAddPrice1, isAddStock1, isAddProductFinish1]);
+
+  useEffect(() => {
+    const AllTrue = isAddName2 && isAddPrice2 && isAddStock2;
+    setIsAddProductFinish2(AllTrue);
+    if (!AllTrue) {
+      setIsAddProductFinish2(false);
+      setIsAddProductFinishEnd(false);
     }
-    if (addListType === 3) {
-      if (isAddName1 && isAddPrice1 && isAddStock1 && isAddName2 && isAddPrice2 && isAddStock2 && isAddName3 && isAddPrice3 && isAddStock3 && isAddName4 && isAddPrice4 && isAddStock4) {
-        setIsAddProductFinish(true);
-      } else {
-        setIsAddProductFinish(false);
-      }
+    setAddSubmitErr("");
+
+    if (addListType === 1 && addName2 === "" && addPrice2 === 0 && addStock2 === 0) {
+      console.log("type1의 상품명 공백, 가격 0, 재고0으로 예외 허용");
+      setIsAddProductFinish2(true);
     }
-    if (addListType === 4) {
-      if (isAddName1 && isAddPrice1 && isAddStock1 && isAddName2 && isAddPrice2 && isAddStock2 && isAddName3 && isAddPrice3 && isAddStock3 && isAddName4 && isAddPrice4 && isAddStock4 && isAddName5 && isAddPrice5 && isAddStock5) {
-        setIsAddProductFinish(true);
-      } else {
-        setIsAddProductFinish(false);
-      }
+  }, [addListType, isAddName2, isAddPrice2, isAddStock2]);
+
+  useEffect(() => {
+    const AllTrue = isAddName3 && isAddPrice3 && isAddStock3;
+    setIsAddProductFinish3(AllTrue);
+    if (!AllTrue) {
+      setIsAddProductFinish3(false);
+      setIsAddProductFinishEnd(false);
     }
-  }, [
-    addListType,
-    addName1,
-    addName2,
-    addName3,
-    addName4,
-    addName5,
-    addPrice1,
-    addPrice2,
-    addPrice3,
-    addPrice4,
-    addPrice5,
-    addStock1,
-    addStock2,
-    addStock3,
-    addStock4,
-    addStock5,
-  ]);
+    setAddSubmitErr("");
+
+    if (addListType === 2 && addName3 === "" && addPrice3 === 0 && addStock3 === 0) {
+      console.log("type2의 상품명 공백, 가격 0, 재고0으로 예외 허용");
+      setIsAddProductFinish3(true);
+    }
+  }, [addListType, isAddName3, isAddPrice3, isAddStock3]);
+
+  useEffect(() => {
+    const AllTrue = isAddName4 && isAddPrice4 && isAddStock4;
+    setIsAddProductFinish4(AllTrue);
+    if (!AllTrue) {
+      setIsAddProductFinish4(false);
+      setIsAddProductFinishEnd(false);
+    }
+    setAddSubmitErr("");
+
+    if (addListType === 3 && addName4 === "" && addPrice4 === 0 && addStock4 === 0) {
+      console.log("type3의 상품명 공백, 가격 0, 재고0으로 예외 허용");
+      setIsAddProductFinish4(true);
+    }
+  }, [addListType, isAddName4, isAddPrice4, isAddStock4]);
+
+  useEffect(() => {
+    const AllTrue = isAddName5 && isAddPrice5 && isAddStock5;
+    setIsAddProductFinish5(AllTrue);
+    if (!AllTrue) {
+      setIsAddProductFinish5(false);
+      setIsAddProductFinishEnd(false);
+    }
+    setAddSubmitErr("");
+
+    if (addListType === 4 && addName5 === "" && addPrice5 === 0 && addStock5 === 0) {
+      console.log("type4의 상품명 공백, 가격 0, 재고0으로 예외 허용");
+      setIsAddProductFinish5(true);
+    }
+  }, [addListType, isAddName5, isAddPrice5, isAddStock5]);
+
+  // 추가 상품 Input을 수정 및 삭제시 초기화.
+  // useEffect(() => {
+  //   setIsAddProductFinishEnd(false);
+    
+  // }, [
+  //   addName1,
+  //   addName2,
+  //   addName3,
+  //   addName4,
+  //   addName5,
+  //   addPrice1,
+  //   addPrice2,
+  //   addPrice3,
+  //   addPrice4,
+  //   addPrice5,
+  //   addStock1,
+  //   addStock2,
+  //   addStock3,
+  //   addStock4,
+  //   addStock5,
+  //   addUse1,
+  //   addUse2,
+  //   addUse3,
+  //   addUse4,
+  //   addUse5,
+  // ]);
 
   // 공지사항
   useEffect(() => {
@@ -1332,23 +1883,95 @@ function ProductRegister(props: Props) {
       }
 
       // 추가 상품
-      if (inputClickNumber === 40 && addRefName.current && !addRefName.current.contains(e.target)) {
+      if (inputClickNumber === 40 && addRefName1.current && !addRefName1.current.contains(e.target)) {
         setInputClick(false);
         setInputClickNumber(0);
       }
-      if (inputClickNumber === 41 && addRefPrice.current && !addRefPrice.current.contains(e.target)) {
+      if (inputClickNumber === 41 && addRefPrice1.current && !addRefPrice1.current.contains(e.target)) {
         setInputClick(false);
         setInputClickNumber(0);
       }
-      if (inputClickNumber === 42 && addRefStock.current && !addRefStock.current.contains(e.target)) {
+      if (inputClickNumber === 42 && addRefStock1.current && !addRefStock1.current.contains(e.target)) {
         setInputClick(false);
         setInputClickNumber(0);
       }
-      if (inputClickNumber === 43 && addRefUse.current && !addRefUse.current.contains(e.target)) {
+      if (addRefUse1.current && !addRefUse1.current.contains(e.target)) {
         setInputClick(false);
         setInputClickNumber(0);
+        setIsAddProDrop1(false);
       }
 
+      if (inputClickNumber === 50 && addRefName2.current && !addRefName2.current.contains(e.target)) {
+        setInputClick(false);
+        setInputClickNumber(0);
+      }
+      if (inputClickNumber === 51 && addRefPrice2.current && !addRefPrice2.current.contains(e.target)) {
+        setInputClick(false);
+        setInputClickNumber(0);
+      }
+      if (inputClickNumber === 52 && addRefStock2.current && !addRefStock2.current.contains(e.target)) {
+        setInputClick(false);
+        setInputClickNumber(0);
+      }
+      if (addRefUse2.current && !addRefUse2.current.contains(e.target)) {
+        setInputClick(false);
+        setInputClickNumber(0);
+        setIsAddProDrop2(false);
+      }
+
+      if (inputClickNumber === 60 && addRefName3.current && !addRefName3.current.contains(e.target)) {
+        setInputClick(false);
+        setInputClickNumber(0);
+      }
+      if (inputClickNumber === 61 && addRefPrice3.current && !addRefPrice3.current.contains(e.target)) {
+        setInputClick(false);
+        setInputClickNumber(0);
+      }
+      if (inputClickNumber === 62 && addRefStock3.current && !addRefStock3.current.contains(e.target)) {
+        setInputClick(false);
+        setInputClickNumber(0);
+      }
+      if (addRefUse3.current && !addRefUse3.current.contains(e.target)) {
+        setInputClick(false);
+        setInputClickNumber(0);
+        setIsAddProDrop3(false);
+      }
+
+      if (inputClickNumber === 70 && addRefName4.current && !addRefName4.current.contains(e.target)) {
+        setInputClick(false);
+        setInputClickNumber(0);
+      }
+      if (inputClickNumber === 71 && addRefPrice4.current && !addRefPrice4.current.contains(e.target)) {
+        setInputClick(false);
+        setInputClickNumber(0);
+      }
+      if (inputClickNumber === 72 && addRefStock4.current && !addRefStock4.current.contains(e.target)) {
+        setInputClick(false);
+        setInputClickNumber(0);
+      }
+      if (addRefUse4.current && !addRefUse4.current.contains(e.target)) {
+        setInputClick(false);
+        setInputClickNumber(0);
+        setIsAddProDrop4(false);
+      }
+
+      if (inputClickNumber === 80 && addRefName5.current && !addRefName5.current.contains(e.target)) {
+        setInputClick(false);
+        setInputClickNumber(0);
+      }
+      if (inputClickNumber === 81 && addRefPrice5.current && !addRefPrice5.current.contains(e.target)) {
+        setInputClick(false);
+        setInputClickNumber(0);
+      }
+      if (inputClickNumber === 82 && addRefStock5.current && !addRefStock5.current.contains(e.target)) {
+        setInputClick(false);
+        setInputClickNumber(0);
+      }
+      if (addRefUse5.current && !addRefUse5.current.contains(e.target)) {
+        setInputClick(false);
+        setInputClickNumber(0);
+        setIsAddProDrop5(false);
+      }
 
       if (inputClickNumber === 5 && inputRefDelivery.current && !inputRefDelivery.current.contains(e.target)) {
         setInputClick(false);
@@ -1386,7 +2009,7 @@ function ProductRegister(props: Props) {
 
   // 최종 상품 등록 체크
   useEffect(() => {
-    if (isName && isSubTitle && isPrice && isOptionNameFin && isOptionValueFin && isOptionList && isImage && isDelivery) {
+    if (isName && isSubTitle && isPrice && isOptionNameFin && isOptionValueFin && isOptionList && isAddProductFinishEnd && isImage && isDelivery) {
       setSubmit(true);
     } else {
       setSubmit(false);
@@ -1541,7 +2164,7 @@ function ProductRegister(props: Props) {
                     <div className="input-item">
                       <div className="input-area">
                         <div className="input-box" ref={inputRefPrice}>
-                          <div id={inputClick && inputClickNumber == 2 ? "input-inner-active" : "input-inner"}>
+                          <div id={inputClick && inputClickNumber === 2 ? "input-inner-active" : "input-inner"}>
                             <input
                               type="text"
                               maxLength={10}
@@ -1584,7 +2207,7 @@ function ProductRegister(props: Props) {
                           <div className="input-area" style={{ display: "flex", alignItems: "start" }}>
                             <div style={{ display: "flex", alignItems: "center", flexDirection: "column", flex: "80%" }}>
                               {/* 옵션명 */}
-                              {OptionAdd >= 0 && (
+                              {OptionType >= 0 && (
                                 <div style={{ display: "flex", alignItems: "center", flexDirection: "row", width: "100%" }}>
                                   <div className="input-box" style={{ flex: "30%" }}>
                                     <div className="input-box-title">
@@ -1630,7 +2253,7 @@ function ProductRegister(props: Props) {
                                   </div>
                                 </div>
                               )}
-                              {OptionAdd >= 1 && (
+                              {OptionType >= 1 && (
                                 <div style={{ display: "flex", alignItems: "center", flexDirection: "row", width: "100%" }}>
                                   <div className="input-box" style={{ flex: "30%" }}>
                                     <div className="input-box-title">
@@ -1677,7 +2300,7 @@ function ProductRegister(props: Props) {
                                   </div>
                                 </div>
                               )}
-                              {OptionAdd >= 2 && (
+                              {OptionType >= 2 && (
                                 <div style={{ display: "flex", alignItems: "center", flexDirection: "row", width: "100%" }}>
                                   <div className="input-box" style={{ flex: "30%" }}>
                                     <div className="input-box-title">
@@ -1724,7 +2347,7 @@ function ProductRegister(props: Props) {
                                   </div>
                                 </div>
                               )}
-                              {OptionAdd >= 3 && (
+                              {OptionType >= 3 && (
                                 <div style={{ display: "flex", alignItems: "center", flexDirection: "row", width: "100%" }}>
                                   <div className="input-box" style={{ flex: "30%" }}>
                                     <div className="input-box-title">
@@ -1771,7 +2394,7 @@ function ProductRegister(props: Props) {
                                   </div>
                                 </div>
                               )}
-                              {OptionAdd >= 4 && (
+                              {OptionType >= 4 && (
                                 <div style={{ display: "flex", alignItems: "center", flexDirection: "row", width: "100%" }}>
                                   <div className="input-box" style={{ flex: "30%" }}>
                                     <div className="input-box-title">
@@ -1843,11 +2466,12 @@ function ProductRegister(props: Props) {
                       <div className="menu-bottom">
                         <div className="info"></div>
                         <TableProduct
-                          OptionAdd={OptionAdd}
+                          OptionType={OptionType}
                           optionResult={OptionResult}
                           setOptionResult={setOptionResult}
                           optionSubmit={option.Submit}
                           setOptionValue={setOptionValue1}
+                          OptionList={OptionList}
                         ></TableProduct>
                       </div>
                     </div>
@@ -1869,467 +2493,479 @@ function ProductRegister(props: Props) {
                     <div className="menu-left">
                       <span>상품 리스트</span>
                     </div>
-                    <div className="menu-right" style={{ display: "flex" }}>
-                      <div className="input-item">
-                        {addListType >= 0 && (
-                          <div className="input-area" style={{ display: "flex", alignItems: "start", flexDirection: "row", width: "100%" }}>
-                            <div className="input-box" style={{ flex: "50%" }}>
-                              <div className="input-box-title">
-                                <span>상품명</span>
-                              </div>
-                              <div ref={addRefName} id={inputClick && inputClickNumber === 40 ? "input-inner-active" : "input-inner"}>
-                                <input
-                                  type="text"
-                                  className="input"
-                                  placeholder="예시: Final Cut Pro"
-                                  value={addName1}
-                                  onClick={() => {
-                                    setInputClick(true);
-                                    setInputClickNumber(40);
-                                  }}
-                                  onChange={addProducts.Name1Handler}
-                                />
-                              </div>
-                              <div className={!isAddName1 ? "error-active name" : "error"}>{addName1Err}</div>
-                            </div>
-                            <div className="input-box" style={{ flex: "50%" }}>
-                              <div className="input-box-title">
-                                <span>가격</span>
-                              </div>
-                              <div ref={addRefPrice} id={inputClick && inputClickNumber === 41 ? "input-inner-active" : "input-inner"}>
-                                <input
-                                  type="text"
-                                  className="input"
-                                  maxLength={10}
-                                  placeholder="예시: 440,000원"
-                                  value={addPrice1}
-                                  onClick={() => {
-                                    setInputClick(true);
-                                    setInputClickNumber(41);
-                                  }}
-                                  onChange={addProducts.Price1Handler}
-                                />
-                              </div>
-                              <div className={!isAddPrice1 ? "error-active name" : "error"}>{addPrice1Err}</div>
-                            </div>
-                            <div className="input-box" style={{ flex: "30%" }}>
-                              <div className="input-box-title">
-                                <span>재고</span>
-                              </div>
-                              <div ref={addRefStock} id={inputClick && inputClickNumber === 42 ? "input-inner-active" : "input-inner"}>
-                                <input
-                                  type="text"
-                                  className="input"
-                                  maxLength={10}
-                                  placeholder="예시: 200"
-                                  value={addStock1}
-                                  onClick={() => {
-                                    setInputClick(true);
-                                    setInputClickNumber(42);
-                                  }}
-                                  onChange={addProducts.Stock1Handler}
-                                />
-                              </div>
-                              <div className={!isAddStock1 ? "error-active name" : "error"}>{addStock1Err}</div>
-                            </div>
-                            <div className="input-box" ref={addRefUse} style={{ flex: "20%" }}>
-                              <div className="option-use">
+                    <div className="menu-right" style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                      <div style={{ display: "flex" }}>
+                        <div className="input-item">
+                          {addListType >= 0 && (
+                            <div className="input-area" style={{ display: "flex", alignItems: "start", flexDirection: "row", width: "100%" }}>
+                              <div className="input-box" style={{ flex: "50%" }}>
                                 <div className="input-box-title">
-                                  <span>사용여부</span>
+                                  <span>상품명</span>
                                 </div>
-                                <div
-                                  ref={addRefUse}
-                                  id={inputClick && inputClickNumber === 43 ? "input-inner-active" : "input-inner"}
-                                  style={{ height: "40px", display: "flex", alignItems: "center", position: "relative" }}
-                                  onClick={() => setIsAddProDrop((e) => !e)}
-                                >
-                                  <DropWrap
-                                    isAddProDrop={isAddProDrop}
+                                <div ref={addRefName1} id={inputClick && inputClickNumber === 40 ? "input-inner-active" : "input-inner"}>
+                                  <input
+                                    type="text"
+                                    className="input"
+                                    placeholder="예시: Final Cut Pro"
+                                    value={addName1}
                                     onClick={() => {
                                       setInputClick(true);
-                                      setInputClickNumber(43);
+                                      setInputClickNumber(40);
                                     }}
-                                  >
-                                    {addUse1 ? <div className="item">Y</div> : <div className="item">N</div>}
-                                  </DropWrap>
-                                  <DropMenu isAddProDrop={isAddProDrop}>
-                                    <div onClick={() => setAddUse1(true)}>Y</div>
-                                    <div onClick={() => setAddUse1(false)}>N</div>
-                                  </DropMenu>
+                                    onChange={addProducts.Name1Handler}
+                                  />
                                 </div>
+                                <div className={!isAddName1 ? "error-active name" : "error"}>{addName1Err}</div>
                               </div>
-                            </div>
-                          </div>
-                        )}
-                        {addListType >= 1 && (
-                          <div className="input-area" style={{ display: "flex", alignItems: "start", flexDirection: "row", width: "100%" }}>
-                            <div className="input-box" style={{ flex: "50%" }}>
-                              <div className="input-box-title">
-                                <span>상품명</span>
-                              </div>
-                              <div ref={addRefName} id={inputClick && inputClickNumber === 40 ? "input-inner-active" : "input-inner"}>
-                                <input
-                                  type="text"
-                                  className="input"
-                                  placeholder="예시: Final Cut Pro"
-                                  value={addName2}
-                                  onClick={() => {
-                                    setInputClick(true);
-                                    setInputClickNumber(40);
-                                  }}
-                                  onChange={addProducts.Name2Handler}
-                                />
-                              </div>
-                              <div className={!isAddName2 ? "error-active name" : "error"}>{addName2Err}</div>
-                            </div>
-                            <div className="input-box" style={{ flex: "50%" }}>
-                              <div className="input-box-title">
-                                <span>가격</span>
-                              </div>
-                              <div ref={addRefPrice} id={inputClick && inputClickNumber === 41 ? "input-inner-active" : "input-inner"}>
-                                <input
-                                  type="text"
-                                  className="input"
-                                  maxLength={10}
-                                  placeholder="예시: 440,000원"
-                                  value={addPrice2}
-                                  onClick={() => {
-                                    setInputClick(true);
-                                    setInputClickNumber(41);
-                                  }}
-                                  onChange={addProducts.Price2Handler}
-                                />
-                              </div>
-                              <div className={!isAddPrice2 ? "error-active name" : "error"}>{addPrice2Err}</div>
-                            </div>
-                            <div className="input-box" style={{ flex: "30%" }}>
-                              <div className="input-box-title">
-                                <span>재고</span>
-                              </div>
-                              <div ref={addRefStock} id={inputClick && inputClickNumber === 42 ? "input-inner-active" : "input-inner"}>
-                                <input
-                                  type="text"
-                                  className="input"
-                                  maxLength={10}
-                                  placeholder="예시: 200"
-                                  value={addStock2}
-                                  onClick={() => {
-                                    setInputClick(true);
-                                    setInputClickNumber(42);
-                                  }}
-                                  onChange={addProducts.Stock2Handler}
-                                />
-                              </div>
-                              <div className={!isAddStock2 ? "error-active name" : "error"}>{addStock2Err}</div>
-                            </div>
-                            <div className="input-box" ref={addRefUse} style={{ flex: "20%" }}>
-                              <div className="option-use">
+                              <div className="input-box" style={{ flex: "50%" }}>
                                 <div className="input-box-title">
-                                  <span>사용여부</span>
+                                  <span>가격</span>
                                 </div>
-                                <div
-                                  ref={addRefUse}
-                                  id={inputClick && inputClickNumber === 43 ? "input-inner-active" : "input-inner"}
-                                  style={{ height: "40px", display: "flex", alignItems: "center", position: "relative" }}
-                                  onClick={() => setIsAddProDrop((e) => !e)}
-                                >
-                                  <DropWrap
-                                    isAddProDrop={isAddProDrop}
+                                <div ref={addRefPrice1} id={inputClick && inputClickNumber === 41 ? "input-inner-active" : "input-inner"}>
+                                  <input
+                                    type="text"
+                                    className="input"
+                                    maxLength={10}
+                                    placeholder="예시: 440,000원"
+                                    value={addPrice1}
                                     onClick={() => {
                                       setInputClick(true);
-                                      setInputClickNumber(43);
+                                      setInputClickNumber(41);
                                     }}
-                                  >
-                                    {addUse2 ? <div className="item">Y</div> : <div className="item">N</div>}
-                                  </DropWrap>
-                                  <DropMenu isAddProDrop={isAddProDrop}>
-                                    <div onClick={() => setAddUse2(true)}>Y</div>
-                                    <div onClick={() => setAddUse2(false)}>N</div>
-                                  </DropMenu>
+                                    onChange={addProducts.Price1Handler}
+                                  />
                                 </div>
+                                <div className={!isAddPrice1 ? "error-active name" : "error"}>{addPrice1Err}</div>
                               </div>
-                            </div>
-                          </div>
-                        )}
-                        {addListType >= 2 && (
-                          <div className="input-area" style={{ display: "flex", alignItems: "start", flexDirection: "row", width: "100%" }}>
-                            <div className="input-box" style={{ flex: "50%" }}>
-                              <div className="input-box-title">
-                                <span>상품명</span>
-                              </div>
-                              <div ref={addRefName} id={inputClick && inputClickNumber === 40 ? "input-inner-active" : "input-inner"}>
-                                <input
-                                  type="text"
-                                  className="input"
-                                  placeholder="예시: Final Cut Pro"
-                                  value={addName3}
-                                  onClick={() => {
-                                    setInputClick(true);
-                                    setInputClickNumber(40);
-                                  }}
-                                  onChange={addProducts.Name3Handler}
-                                />
-                              </div>
-                              <div className={!isAddName3 ? "error-active name" : "error"}>{addName3Err}</div>
-                            </div>
-                            <div className="input-box" style={{ flex: "50%" }}>
-                              <div className="input-box-title">
-                                <span>가격</span>
-                              </div>
-                              <div ref={addRefPrice} id={inputClick && inputClickNumber === 41 ? "input-inner-active" : "input-inner"}>
-                                <input
-                                  type="text"
-                                  className="input"
-                                  maxLength={10}
-                                  placeholder="예시: 440,000원"
-                                  value={addPrice3}
-                                  onClick={() => {
-                                    setInputClick(true);
-                                    setInputClickNumber(41);
-                                  }}
-                                  onChange={addProducts.Price3Handler}
-                                />
-                              </div>
-                              <div className={!isAddPrice3 ? "error-active name" : "error"}>{addPrice3Err}</div>
-                            </div>
-                            <div className="input-box" style={{ flex: "30%" }}>
-                              <div className="input-box-title">
-                                <span>재고</span>
-                              </div>
-                              <div ref={addRefStock} id={inputClick && inputClickNumber === 42 ? "input-inner-active" : "input-inner"}>
-                                <input
-                                  type="text"
-                                  className="input"
-                                  maxLength={10}
-                                  placeholder="예시: 200"
-                                  value={addStock3}
-                                  onClick={() => {
-                                    setInputClick(true);
-                                    setInputClickNumber(42);
-                                  }}
-                                  onChange={addProducts.Stock3Handler}
-                                />
-                              </div>
-                              <div className={!isAddStock3 ? "error-active name" : "error"}>{addStock3Err}</div>
-                            </div>
-                            <div className="input-box" ref={addRefUse} style={{ flex: "20%" }}>
-                              <div className="option-use">
+                              <div className="input-box" style={{ flex: "30%" }}>
                                 <div className="input-box-title">
-                                  <span>사용여부</span>
+                                  <span>재고</span>
                                 </div>
-                                <div
-                                  ref={addRefUse}
-                                  id={inputClick && inputClickNumber === 43 ? "input-inner-active" : "input-inner"}
-                                  style={{ height: "40px", display: "flex", alignItems: "center", position: "relative" }}
-                                  onClick={() => setIsAddProDrop((e) => !e)}
-                                >
-                                  <DropWrap
-                                    isAddProDrop={isAddProDrop}
+                                <div ref={addRefStock1} id={inputClick && inputClickNumber === 42 ? "input-inner-active" : "input-inner"}>
+                                  <input
+                                    type="text"
+                                    className="input"
+                                    maxLength={10}
+                                    placeholder="예시: 200"
+                                    value={addStock1}
                                     onClick={() => {
                                       setInputClick(true);
-                                      setInputClickNumber(43);
+                                      setInputClickNumber(42);
                                     }}
+                                    onChange={addProducts.Stock1Handler}
+                                  />
+                                </div>
+                                <div className={!isAddStock1 ? "error-active name" : "error"}>{addStock1Err}</div>
+                              </div>
+                              <div className="input-box" style={{ flex: "20%" }}>
+                                <div className="option-use">
+                                  <div className="input-box-title">
+                                    <span>사용여부</span>
+                                  </div>
+                                  <div
+                                    ref={addRefUse1}
+                                    id={isAddProDrop1 ? "input-inner-active" : "input-inner"}
+                                    style={{ height: "40px", display: "flex", alignItems: "center", position: "relative" }}
+                                    onClick={() => setIsAddProDrop1((e) => !e)}
                                   >
-                                    {addUse3 ? <div className="item">Y</div> : <div className="item">N</div>}
-                                  </DropWrap>
-                                  <DropMenu isAddProDrop={isAddProDrop}>
-                                    <div onClick={() => setAddUse3(true)}>Y</div>
-                                    <div onClick={() => setAddUse3(false)}>N</div>
-                                  </DropMenu>
+                                    <DropWrap
+                                      isAddProDrop={isAddProDrop1}
+                                      onClick={() => {
+                                        setInputClick(true);
+                                        setInputClickNumber(43);
+                                      }}
+                                    >
+                                      {addUse1 ? <div className="item">Y</div> : <div className="item">N</div>}
+                                    </DropWrap>
+                                    <DropMenu isAddProDrop={isAddProDrop1}>
+                                      <div onClick={() => addProducts.Use1Handler(true)}>Y</div>
+                                      <div onClick={() => addProducts.Use1Handler(false)}>N</div>
+                                    </DropMenu>
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        )}
-                        {addListType >= 3 && (
-                          <div className="input-area" style={{ display: "flex", alignItems: "start", flexDirection: "row", width: "100%" }}>
-                            <div className="input-box" style={{ flex: "50%" }}>
-                              <div className="input-box-title">
-                                <span>상품명</span>
-                              </div>
-                              <div ref={addRefName} id={inputClick && inputClickNumber === 40 ? "input-inner-active" : "input-inner"}>
-                                <input
-                                  type="text"
-                                  className="input"
-                                  placeholder="예시: Final Cut Pro"
-                                  value={addName4}
-                                  onClick={() => {
-                                    setInputClick(true);
-                                    setInputClickNumber(40);
-                                  }}
-                                  onChange={addProducts.Name4Handler}
-                                />
-                              </div>
-                              <div className={!isAddName4 ? "error-active name" : "error"}>{addName4Err}</div>
-                            </div>
-                            <div className="input-box" style={{ flex: "50%" }}>
-                              <div className="input-box-title">
-                                <span>가격</span>
-                              </div>
-                              <div ref={addRefPrice} id={inputClick && inputClickNumber === 41 ? "input-inner-active" : "input-inner"}>
-                                <input
-                                  type="text"
-                                  className="input"
-                                  maxLength={10}
-                                  placeholder="예시: 440,000원"
-                                  value={addPrice4}
-                                  onClick={() => {
-                                    setInputClick(true);
-                                    setInputClickNumber(41);
-                                  }}
-                                  onChange={option.Name5Handler}
-                                />
-                              </div>
-                              <div className={!isAddPrice4 ? "error-active name" : "error"}>{addPrice4Err}</div>
-                            </div>
-                            <div className="input-box" style={{ flex: "30%" }}>
-                              <div className="input-box-title">
-                                <span>재고</span>
-                              </div>
-                              <div ref={addRefStock} id={inputClick && inputClickNumber === 42 ? "input-inner-active" : "input-inner"}>
-                                <input
-                                  type="text"
-                                  className="input"
-                                  maxLength={10}
-                                  placeholder="예시: 200"
-                                  value={addStock4}
-                                  onClick={() => {
-                                    setInputClick(true);
-                                    setInputClickNumber(42);
-                                  }}
-                                  onChange={option.Name5Handler}
-                                />
-                              </div>
-                              <div className={!isAddStock4 ? "error-active name" : "error"}>{addStock4Err}</div>
-                            </div>
-                            <div className="input-box" ref={addRefUse} style={{ flex: "20%" }}>
-                              <div className="option-use">
+                          )}
+                          {addListType >= 1 && (
+                            <div className="input-area" style={{ display: "flex", alignItems: "start", flexDirection: "row", width: "100%" }}>
+                              <div className="input-box" style={{ flex: "50%" }}>
                                 <div className="input-box-title">
-                                  <span>사용여부</span>
+                                  <span>상품명</span>
                                 </div>
-                                <div
-                                  ref={addRefUse}
-                                  id={inputClick && inputClickNumber === 43 ? "input-inner-active" : "input-inner"}
-                                  style={{ height: "40px", display: "flex", alignItems: "center", position: "relative" }}
-                                  onClick={() => setIsAddProDrop((e) => !e)}
-                                >
-                                  <DropWrap
-                                    isAddProDrop={isAddProDrop}
+                                <div ref={addRefName2} id={inputClick && inputClickNumber === 50 ? "input-inner-active" : "input-inner"}>
+                                  <input
+                                    type="text"
+                                    className="input"
+                                    placeholder="예시: Final Cut Pro"
+                                    value={addName2}
                                     onClick={() => {
                                       setInputClick(true);
-                                      setInputClickNumber(43);
+                                      setInputClickNumber(50);
                                     }}
-                                  >
-                                    {addUse4 ? <div className="item">Y</div> : <div className="item">N</div>}
-                                  </DropWrap>
-                                  <DropMenu isAddProDrop={isAddProDrop}>
-                                    <div onClick={() => setAddUse4(true)}>Y</div>
-                                    <div onClick={() => setAddUse4(false)}>N</div>
-                                  </DropMenu>
+                                    onChange={addProducts.Name2Handler}
+                                  />
                                 </div>
+                                <div className={!isAddName2 ? "error-active name" : "error"}>{addName2Err}</div>
                               </div>
-                            </div>
-                          </div>
-                        )}
-                        {addListType >= 4 && (
-                          <div className="input-area" style={{ display: "flex", alignItems: "start", flexDirection: "row", width: "100%" }}>
-                            <div className="input-box" style={{ flex: "50%" }}>
-                              <div className="input-box-title">
-                                <span>상품명</span>
-                              </div>
-                              <div ref={addRefName} id={inputClick && inputClickNumber === 40 ? "input-inner-active" : "input-inner"}>
-                                <input
-                                  type="text"
-                                  className="input"
-                                  placeholder="예시: Final Cut Pro"
-                                  value={addName5}
-                                  onClick={() => {
-                                    setInputClick(true);
-                                    setInputClickNumber(40);
-                                  }}
-                                  onChange={addProducts.Name5Handler}
-                                />
-                              </div>
-                              <div className={!isAddName5 ? "error-active name" : "error"}>{addName5Err}</div>
-                            </div>
-                            <div className="input-box" style={{ flex: "50%" }}>
-                              <div className="input-box-title">
-                                <span>가격</span>
-                              </div>
-                              <div ref={addRefPrice} id={inputClick && inputClickNumber === 41 ? "input-inner-active" : "input-inner"}>
-                                <input
-                                  type="text"
-                                  className="input"
-                                  maxLength={10}
-                                  placeholder="예시: 440,000원"
-                                  value={addPrice5}
-                                  onClick={() => {
-                                    setInputClick(true);
-                                    setInputClickNumber(41);
-                                  }}
-                                  onChange={addProducts.Price5Handler}
-                                />
-                              </div>
-                              <div className={!isAddPrice5 ? "error-active name" : "error"}>{addPrice5Err}</div>
-                            </div>
-                            <div className="input-box" style={{ flex: "30%" }}>
-                              <div className="input-box-title">
-                                <span>재고</span>
-                              </div>
-                              <div ref={addRefStock} id={inputClick && inputClickNumber === 42 ? "input-inner-active" : "input-inner"}>
-                                <input
-                                  type="text"
-                                  className="input"
-                                  maxLength={10}
-                                  placeholder="예시: 200"
-                                  value={addStock5}
-                                  onClick={() => {
-                                    setInputClick(true);
-                                    setInputClickNumber(42);
-                                  }}
-                                  onChange={addProducts.Stock5Handler}
-                                />
-                              </div>
-                              <div className={!isAddStock5 ? "error-active name" : "error"}>{addStock5Err}</div>
-                            </div>
-                            <div className="input-box" ref={addRefUse} style={{ flex: "20%" }}>
-                              <div className="option-use">
+                              <div className="input-box" style={{ flex: "50%" }}>
                                 <div className="input-box-title">
-                                  <span>사용여부</span>
+                                  <span>가격</span>
                                 </div>
-                                <div
-                                  ref={addRefUse}
-                                  id={inputClick && inputClickNumber === 43 ? "input-inner-active" : "input-inner"}
-                                  style={{ height: "40px", display: "flex", alignItems: "center", position: "relative" }}
-                                  onClick={() => setIsAddProDrop((e) => !e)}
-                                >
-                                  <DropWrap
-                                    isAddProDrop={isAddProDrop}
+                                <div ref={addRefPrice2} id={inputClick && inputClickNumber === 51 ? "input-inner-active" : "input-inner"}>
+                                  <input
+                                    type="text"
+                                    className="input"
+                                    maxLength={10}
+                                    placeholder="예시: 440,000원"
+                                    value={addPrice2}
                                     onClick={() => {
                                       setInputClick(true);
-                                      setInputClickNumber(43);
+                                      setInputClickNumber(51);
                                     }}
+                                    onChange={addProducts.Price2Handler}
+                                  />
+                                </div>
+                                <div className={!isAddPrice2 ? "error-active name" : "error"}>{addPrice2Err}</div>
+                              </div>
+                              <div className="input-box" style={{ flex: "30%" }}>
+                                <div className="input-box-title">
+                                  <span>재고</span>
+                                </div>
+                                <div ref={addRefStock2} id={inputClick && inputClickNumber === 52 ? "input-inner-active" : "input-inner"}>
+                                  <input
+                                    type="text"
+                                    className="input"
+                                    maxLength={10}
+                                    placeholder="예시: 200"
+                                    value={addStock2}
+                                    onClick={() => {
+                                      setInputClick(true);
+                                      setInputClickNumber(52);
+                                    }}
+                                    onChange={addProducts.Stock2Handler}
+                                  />
+                                </div>
+                                <div className={!isAddStock2 ? "error-active name" : "error"}>{addStock2Err}</div>
+                              </div>
+                              <div className="input-box" style={{ flex: "20%" }}>
+                                <div className="option-use">
+                                  <div className="input-box-title">
+                                    <span>사용여부</span>
+                                  </div>
+                                  <div
+                                    ref={addRefUse2}
+                                    id={isAddProDrop2 ? "input-inner-active" : "input-inner"}
+                                    style={{ height: "40px", display: "flex", alignItems: "center", position: "relative" }}
+                                    onClick={() => setIsAddProDrop2((e) => !e)}
                                   >
-                                    {addUse5 ? <div className="item">Y</div> : <div className="item">N</div>}
-                                  </DropWrap>
-                                  <DropMenu isAddProDrop={isAddProDrop}>
-                                    <div onClick={() => setAddUse5(true)}>Y</div>
-                                    <div onClick={() => setAddUse5(false)}>N</div>
-                                  </DropMenu>
+                                    <DropWrap
+                                      isAddProDrop={isAddProDrop2}
+                                      onClick={() => {
+                                        setInputClick(true);
+                                        setInputClickNumber(53);
+                                      }}
+                                    >
+                                      {addUse2 ? <div className="item">Y</div> : <div className="item">N</div>}
+                                    </DropWrap>
+                                    <DropMenu isAddProDrop={isAddProDrop2}>
+                                      <div onClick={() => addProducts.Use2Handler(true)}>Y</div>
+                                      <div onClick={() => addProducts.Use2Handler(false)}>N</div>
+                                    </DropMenu>
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        )}
-                      </div>
-                      <div style={{ display: "flex", marginTop: "40px" }}>
-                        <div className="normal-blue-btn" onClick={addProducts.PlusHandler}>
-                          <span className="text">추가</span>
+                          )}
+                          {addListType >= 2 && (
+                            <div className="input-area" style={{ display: "flex", alignItems: "start", flexDirection: "row", width: "100%" }}>
+                              <div className="input-box" style={{ flex: "50%" }}>
+                                <div className="input-box-title">
+                                  <span>상품명</span>
+                                </div>
+                                <div ref={addRefName3} id={inputClick && inputClickNumber === 60 ? "input-inner-active" : "input-inner"}>
+                                  <input
+                                    type="text"
+                                    className="input"
+                                    placeholder="예시: Final Cut Pro"
+                                    value={addName3}
+                                    onClick={() => {
+                                      setInputClick(true);
+                                      setInputClickNumber(60);
+                                    }}
+                                    onChange={addProducts.Name3Handler}
+                                  />
+                                </div>
+                                <div className={!isAddName3 ? "error-active name" : "error"}>{addName3Err}</div>
+                              </div>
+                              <div className="input-box" style={{ flex: "50%" }}>
+                                <div className="input-box-title">
+                                  <span>가격</span>
+                                </div>
+                                <div ref={addRefPrice3} id={inputClick && inputClickNumber === 61 ? "input-inner-active" : "input-inner"}>
+                                  <input
+                                    type="text"
+                                    className="input"
+                                    maxLength={10}
+                                    placeholder="예시: 440,000원"
+                                    value={addPrice3}
+                                    onClick={() => {
+                                      setInputClick(true);
+                                      setInputClickNumber(61);
+                                    }}
+                                    onChange={addProducts.Price3Handler}
+                                  />
+                                </div>
+                                <div className={!isAddPrice3 ? "error-active name" : "error"}>{addPrice3Err}</div>
+                              </div>
+                              <div className="input-box" style={{ flex: "30%" }}>
+                                <div className="input-box-title">
+                                  <span>재고</span>
+                                </div>
+                                <div ref={addRefStock3} id={inputClick && inputClickNumber === 62 ? "input-inner-active" : "input-inner"}>
+                                  <input
+                                    type="text"
+                                    className="input"
+                                    maxLength={10}
+                                    placeholder="예시: 200"
+                                    value={addStock3}
+                                    onClick={() => {
+                                      setInputClick(true);
+                                      setInputClickNumber(62);
+                                    }}
+                                    onChange={addProducts.Stock3Handler}
+                                  />
+                                </div>
+                                <div className={!isAddStock3 ? "error-active name" : "error"}>{addStock3Err}</div>
+                              </div>
+                              <div className="input-box" style={{ flex: "20%" }}>
+                                <div className="option-use">
+                                  <div className="input-box-title">
+                                    <span>사용여부</span>
+                                  </div>
+                                  <div
+                                    ref={addRefUse3}
+                                    id={isAddProDrop3 ? "input-inner-active" : "input-inner"}
+                                    style={{ height: "40px", display: "flex", alignItems: "center", position: "relative" }}
+                                    onClick={() => setIsAddProDrop3((e) => !e)}
+                                  >
+                                    <DropWrap
+                                      isAddProDrop={isAddProDrop3}
+                                      onClick={() => {
+                                        setInputClick(true);
+                                        setInputClickNumber(63);
+                                      }}
+                                    >
+                                      {addUse3 ? <div className="item">Y</div> : <div className="item">N</div>}
+                                    </DropWrap>
+                                    <DropMenu isAddProDrop={isAddProDrop3}>
+                                      <div onClick={() => addProducts.Use3Handler(true)}>Y</div>
+                                      <div onClick={() => addProducts.Use3Handler(false)}>N</div>
+                                    </DropMenu>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                          {addListType >= 3 && (
+                            <div className="input-area" style={{ display: "flex", alignItems: "start", flexDirection: "row", width: "100%" }}>
+                              <div className="input-box" style={{ flex: "50%" }}>
+                                <div className="input-box-title">
+                                  <span>상품명</span>
+                                </div>
+                                <div ref={addRefName4} id={inputClick && inputClickNumber === 70 ? "input-inner-active" : "input-inner"}>
+                                  <input
+                                    type="text"
+                                    className="input"
+                                    placeholder="예시: Final Cut Pro"
+                                    value={addName4}
+                                    onClick={() => {
+                                      setInputClick(true);
+                                      setInputClickNumber(70);
+                                    }}
+                                    onChange={addProducts.Name4Handler}
+                                  />
+                                </div>
+                                <div className={!isAddName4 ? "error-active name" : "error"}>{addName4Err}</div>
+                              </div>
+                              <div className="input-box" style={{ flex: "50%" }}>
+                                <div className="input-box-title">
+                                  <span>가격</span>
+                                </div>
+                                <div ref={addRefPrice4} id={inputClick && inputClickNumber === 71 ? "input-inner-active" : "input-inner"}>
+                                  <input
+                                    type="text"
+                                    className="input"
+                                    maxLength={10}
+                                    placeholder="예시: 440,000원"
+                                    value={addPrice4}
+                                    onClick={() => {
+                                      setInputClick(true);
+                                      setInputClickNumber(71);
+                                    }}
+                                    onChange={addProducts.Price4Handler}
+                                  />
+                                </div>
+                                <div className={!isAddPrice4 ? "error-active name" : "error"}>{addPrice4Err}</div>
+                              </div>
+                              <div className="input-box" style={{ flex: "30%" }}>
+                                <div className="input-box-title">
+                                  <span>재고</span>
+                                </div>
+                                <div ref={addRefStock4} id={inputClick && inputClickNumber === 72 ? "input-inner-active" : "input-inner"}>
+                                  <input
+                                    type="text"
+                                    className="input"
+                                    maxLength={10}
+                                    placeholder="예시: 200"
+                                    value={addStock4}
+                                    onClick={() => {
+                                      setInputClick(true);
+                                      setInputClickNumber(72);
+                                    }}
+                                    onChange={addProducts.Stock4Handler}
+                                  />
+                                </div>
+                                <div className={!isAddStock4 ? "error-active name" : "error"}>{addStock4Err}</div>
+                              </div>
+                              <div className="input-box" style={{ flex: "20%" }}>
+                                <div className="option-use">
+                                  <div className="input-box-title">
+                                    <span>사용여부</span>
+                                  </div>
+                                  <div
+                                    ref={addRefUse4}
+                                    id={isAddProDrop4 ? "input-inner-active" : "input-inner"}
+                                    style={{ height: "40px", display: "flex", alignItems: "center", position: "relative" }}
+                                    onClick={() => setIsAddProDrop4((e) => !e)}
+                                  >
+                                    <DropWrap
+                                      isAddProDrop={isAddProDrop4}
+                                      onClick={() => {
+                                        setInputClick(true);
+                                        setInputClickNumber(73);
+                                      }}
+                                    >
+                                      {addUse4 ? <div className="item">Y</div> : <div className="item">N</div>}
+                                    </DropWrap>
+                                    <DropMenu isAddProDrop={isAddProDrop4}>
+                                      <div onClick={() => addProducts.Use4Handler(true)}>Y</div>
+                                      <div onClick={() => addProducts.Use4Handler(false)}>N</div>
+                                    </DropMenu>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                          {addListType >= 4 && (
+                            <div className="input-area" style={{ display: "flex", alignItems: "start", flexDirection: "row", width: "100%" }}>
+                              <div className="input-box" style={{ flex: "50%" }}>
+                                <div className="input-box-title">
+                                  <span>상품명</span>
+                                </div>
+                                <div ref={addRefName5} id={inputClick && inputClickNumber === 80 ? "input-inner-active" : "input-inner"}>
+                                  <input
+                                    type="text"
+                                    className="input"
+                                    placeholder="예시: Final Cut Pro"
+                                    value={addName5}
+                                    onClick={() => {
+                                      setInputClick(true);
+                                      setInputClickNumber(80);
+                                    }}
+                                    onChange={addProducts.Name5Handler}
+                                  />
+                                </div>
+                                <div className={!isAddName5 ? "error-active name" : "error"}>{addName5Err}</div>
+                              </div>
+                              <div className="input-box" style={{ flex: "50%" }}>
+                                <div className="input-box-title">
+                                  <span>가격</span>
+                                </div>
+                                <div ref={addRefPrice5} id={inputClick && inputClickNumber === 81 ? "input-inner-active" : "input-inner"}>
+                                  <input
+                                    type="text"
+                                    className="input"
+                                    maxLength={10}
+                                    placeholder="예시: 440,000원"
+                                    value={addPrice5}
+                                    onClick={() => {
+                                      setInputClick(true);
+                                      setInputClickNumber(81);
+                                    }}
+                                    onChange={addProducts.Price5Handler}
+                                  />
+                                </div>
+                                <div className={!isAddPrice5 ? "error-active name" : "error"}>{addPrice5Err}</div>
+                              </div>
+                              <div className="input-box" style={{ flex: "30%" }}>
+                                <div className="input-box-title">
+                                  <span>재고</span>
+                                </div>
+                                <div ref={addRefStock5} id={inputClick && inputClickNumber === 82 ? "input-inner-active" : "input-inner"}>
+                                  <input
+                                    type="text"
+                                    className="input"
+                                    maxLength={10}
+                                    placeholder="예시: 200"
+                                    value={addStock5}
+                                    onClick={() => {
+                                      setInputClick(true);
+                                      setInputClickNumber(82);
+                                    }}
+                                    onChange={addProducts.Stock5Handler}
+                                  />
+                                </div>
+                                <div className={!isAddStock5 ? "error-active name" : "error"}>{addStock5Err}</div>
+                              </div>
+                              <div className="input-box" style={{ flex: "20%" }}>
+                                <div className="option-use">
+                                  <div className="input-box-title">
+                                    <span>사용여부</span>
+                                  </div>
+                                  <div
+                                    ref={addRefUse5}
+                                    id={isAddProDrop5 ? "input-inner-active" : "input-inner"}
+                                    style={{ height: "40px", display: "flex", alignItems: "center", position: "relative" }}
+                                    onClick={() => setIsAddProDrop5((e) => !e)}
+                                  >
+                                    <DropWrap
+                                      isAddProDrop={isAddProDrop5}
+                                      onClick={() => {
+                                        setInputClick(true);
+                                        setInputClickNumber(83);
+                                      }}
+                                    >
+                                      {addUse5 ? <div className="item">Y</div> : <div className="item">N</div>}
+                                    </DropWrap>
+                                    <DropMenu isAddProDrop={isAddProDrop5}>
+                                      <div onClick={() => addProducts.Use5Handler(true)}>Y</div>
+                                      <div onClick={() => addProducts.Use5Handler(false)}>N</div>
+                                    </DropMenu>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          )}
                         </div>
-                        <div className="normal-blue-btn" onClick={addProducts.MinusHandler}>
-                          <span className="text">삭제</span>
+                        <div style={{ display: "flex", marginTop: "40px" }}>
+                          <div className="normal-blue-btn" onClick={addProducts.PlusHandler}>
+                            <span className="text">추가</span>
+                          </div>
+                          <div className="normal-blue-btn" onClick={addProducts.MinusHandler}>
+                            <span className="text">삭제</span>
+                          </div>
                         </div>
                       </div>
+                      <div>
+                        <div className="normal-blue-btn" style={{width: "200px", height: "40px", marginTop: "20px"}} onClick={addProducts.Submit}>
+                          {!isAddProductFinishEnd ? (
+                            <span className="text">등록</span>
+                            ) : (
+                            <span className="text">등록 완료</span>
+                          )}
+                        </div>
+                      </div>
+                        <div className={isAddProductFinishEnd ? "error" : "error-active"}>{addSubmitErr}</div>
                     </div>
                   </div>
                 </li>
@@ -2356,7 +2992,7 @@ function ProductRegister(props: Props) {
                             <input
                               type="text"
                               name="name"
-                              placeholder="메인 스펙"
+                              placeholder="메인 스펙 (,로 구분)"
                               className="input"
                               value={mainSpec}
                               onClick={() => {
@@ -2382,7 +3018,7 @@ function ProductRegister(props: Props) {
                             <input
                               type="text"
                               name="name"
-                              placeholder="부제목"
+                              placeholder="부제목 (,로 구분)"
                               className="input"
                               value={spec}
                               onClick={() => {
@@ -2454,18 +3090,18 @@ function ProductRegister(props: Props) {
                     </div>
                     <div className="btn-wrap">
                       <button className="showdropmenu">
-                        <span className={DetailDrop === true ? "icon-arrow reverse" : "icon-arrow"}></span>
+                        <span className={DetailDrop ? "icon-arrow reverse" : "icon-arrow"}></span>
                       </button>
                     </div>
                   </div>
-                  <div className={DetailDrop == true ? "menu flex flex-align-center" : "menu hide"}>
+                  <div className={DetailDrop ? "menu flex flex-align-center" : "menu hide"}>
                     <div className="menu-left">
                       <span>URL 주소</span>
                     </div>
                     <div className="input-item">
                       <div className="input-area">
                         <div className="input-box" ref={inputRefName}>
-                          <div id={inputClick && inputClickNumber == 10 ? "input-inner-active" : "input-inner"}>
+                          <div id={inputClick && inputClickNumber === 10 ? "input-inner-active" : "input-inner"}>
                             <input
                               type="text"
                               name="name"

@@ -15,7 +15,8 @@ type Props = {
   setOptionValue?: any;
   setOptionPrice?: any;
   gridOptions?: any;
-  OptionAdd: number;
+  OptionType: number;
+  OptionList: any;
 };
 
 function TableProductRegi(props: Props) {
@@ -23,7 +24,6 @@ function TableProductRegi(props: Props) {
   const [gridApi, setGridApi] = useState<any>(null);
   const [selectedRows, setSelectedRows] = useState<any>([]);
 
-  console.log(selectedRows);
   const selectedID = selectedRows.map((list: any, index: any) => {
     return list.id;
   });
@@ -49,27 +49,28 @@ function TableProductRegi(props: Props) {
       ),
     },
   ]);
+  console.log(rowData);
 
 useEffect(() => {
   setColumnDefs(prevDefs => {
     // 먼저 현재 columnDefs에서 optionValue1과 optionValue2를 제거합니다.
     const filteredDefs = prevDefs.filter(def => def.field !== "optionValue1" && def.field !== "optionValue2" && def.field !== "optionValue3" && def.field !== "optionValue4" && def.field !== "optionValue5");
 
-    // OptionAdd 값에 따라 필드를 추가합니다.
-    if (props.OptionAdd === 0) {
+    // OptionType 값에 따라 필드를 추가합니다.
+    if (props.OptionType === 0) {
       return [
         filteredDefs[0], // 첫 번째 요소 유지
         { field: "optionValue1", headerName: "옵션명", width: 250, editable: true, resizable: true },
         ...filteredDefs.slice(1), // 첫 번째 요소 이후의 요소들을 그대로 유지
       ];
-    } else if (props.OptionAdd === 1) {
+    } else if (props.OptionType === 1) {
       return [
         filteredDefs[0], // 첫 번째 요소 유지
         { field: "optionValue1", headerName: "옵션명", width: 250, editable: true, resizable: true },
         { field: "optionValue2", headerName: "옵션명2", width: 250, editable: true, resizable: true },
         ...filteredDefs.slice(1), // 첫 번째 요소 이후의 요소들을 그대로 유지
       ];
-    } else if (props.OptionAdd === 2) {
+    } else if (props.OptionType === 2) {
       return [
         filteredDefs[0], // 첫 번째 요소 유지
         { field: "optionValue1", headerName: "옵션명", width: 250, editable: true, resizable: true },
@@ -77,7 +78,7 @@ useEffect(() => {
         { field: "optionValue3", headerName: "옵션명3", width: 250, editable: true, resizable: true },
         ...filteredDefs.slice(1), // 첫 번째 요소 이후의 요소들을 그대로 유지
       ];
-    } else if (props.OptionAdd === 3) {
+    } else if (props.OptionType === 3) {
       return [
         filteredDefs[0], // 첫 번째 요소 유지
         { field: "optionValue1", headerName: "옵션명", width: 250, editable: true, resizable: true },
@@ -86,7 +87,7 @@ useEffect(() => {
         { field: "optionValue4", headerName: "옵션명4", width: 250, editable: true, resizable: true },
         ...filteredDefs.slice(1), // 첫 번째 요소 이후의 요소들을 그대로 유지
       ];
-    } else if (props.OptionAdd === 4) {
+    } else if (props.OptionType === 4) {
       return [
         filteredDefs[0], // 첫 번째 요소 유지
         { field: "optionValue1", headerName: "옵션명", width: 250, editable: true, resizable: true },
@@ -100,7 +101,7 @@ useEffect(() => {
       return;
     }
   });
-}, [props.OptionAdd]);
+}, [props.OptionType]);
 
   const [optionPriceValue, setOptionPriceValue] = useState(0);
   const [optionStockValue, setOptionStockValue] = useState(0);

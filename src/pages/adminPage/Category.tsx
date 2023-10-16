@@ -76,13 +76,11 @@ const CustomCheckbox = styled.span`
 `;
 
 const AdvertiseBtn = styled.button`
-  position: absolute;
-  right: 15px;
+  margin-right: 10px;
   border: none;
   border-radius: 15px;
   background-color: var(--blue-color);
   padding: 8px 15px;
-  bottom: 5px;
 
   & span {
     color: var(--white-color);
@@ -214,6 +212,81 @@ const BlurWrap = styled.div<showProductList>`
   `}
 `;
 
+interface showAdverList {
+  isAdverListShow: boolean;
+}
+
+const AdverListWrap = styled.div<showAdverList>`
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  ${(props) =>
+    props.isAdverListShow
+      ? `
+opacity: 1;
+visibility: visible;
+`
+      : `
+opacity: 0;
+visibility: hidden;
+   `}
+  transition: opacity 0.32s cubic-bezier(0.4, 0, 0.6, 1) 80ms, visibility 0.32s step-start 80ms;
+`;
+const AdverList = styled.div`
+  position: relative;
+  width: 600px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+`;
+
+const AdverBlur = styled.div<showAdverList>`
+  backdrop-filter: blur(20px);
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+
+  ${(props) =>
+    props.isAdverListShow
+      ? `
+      opacity: 1;
+      visibility: visible;
+      `
+      : `
+      opacity: 0;
+      visibility: hidden;
+  `}
+  transition: opacity 0.32s cubic-bezier(0.4, 0, 0.6, 1) 80ms, visibility 0.32s step-start 80ms;
+`;
+
+const AdverBlurWrap = styled.div<showAdverList>`
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  ${(props) =>
+    props.isAdverListShow
+      ? `
+      visibility: visible;
+      `
+      : `
+      visibility: hidden;
+  `}
+`;
+
 interface adverPreview {
   adBackColor: string;
 }
@@ -275,6 +348,7 @@ export interface TaskType {
   chapterNavHide?: boolean;
   darkMode?: boolean;
   subTaskIds?: SubTaskType[] | null;
+  advertise?: Advertise[] | undefined;
 }
 
 export interface ColumnType {
@@ -286,6 +360,7 @@ export interface ColumnType {
   user: string;
   navHide?: boolean;
   darkMode?: boolean;
+  advertise?: Advertise[] | undefined;
 }
 
 export interface DndState {
@@ -295,6 +370,7 @@ export interface DndState {
 }
 
 export interface Advertise {
+  _id?: string | undefined;
   type: number;
   name: string;
   subtitle: string;
@@ -303,6 +379,8 @@ export interface Advertise {
   subdetail: string;
   url: string;
   backcolor: string;
+  product_id: string;
+  image: string;
 }
 
 function Category(props: Props) {
@@ -332,6 +410,8 @@ function Category(props: Props) {
   const [isAddedSelected, setIsAddedSelected] = useState<boolean>(false);
 
   const [selectedList, setSelectedList] = useState<any>([]);
+  console.log(selectedList);
+
   const [selectedName, setSelectedName] = useState<string>();
   const [selectedURL, setSelectedURL] = useState<string>();
 
@@ -358,6 +438,8 @@ function Category(props: Props) {
   // Ref
   const inputRef = useRef<any>();
   const listRef = useRef<any>(null);
+  const AdverBlurWrapRef = useRef<any>();
+  const AdverBlurRef = useRef<any>();
   const blurWrapRef = useRef<any>();
   const blurRef = useRef<any>();
   const colorRef = useRef<any>();
@@ -381,11 +463,20 @@ function Category(props: Props) {
 
   // 광고페이지 전환
   const [isAdvertise, setIsAdvertise] = useState<boolean>(false);
-  // console.log("isAdvertise " + isAdvertise);
+  const [isAdvertiseEdit, setIsAdvertiseEdit] = useState<boolean>(false);
+
+  console.log("isAdvertise " + isAdvertise);
+  // console.log("isAdvertiseEdit " + isAdvertiseEdit);
+
+  // 광고 목록 클릭 여부
+  const [isAdverListClick, setIsAdverListClick] = useState<boolean>(false);
+  const [selectedAdvertise, setSelectedAdvertise] = useState<Advertise[]>([]);
+  const [selectedAdverID, setSelectedAdverID] = useState<string>("");
+  console.log(selectedAdverID);
 
   // 광고페이지의 광고타입을 지정합니다.
-  const [selectedType, setSelectedType] = useState<number>(0);
   const [adName, setAdname] = useState<string>("");
+  const [adType, setAdType] = useState<number>(0);
   const [adSubTitle, setAdSubTitle] = useState<string>("");
   const [adMainTitle, setAdMainTitle] = useState<string>("");
   const [adDetail, setAdDetail] = useState<string>("");
@@ -395,7 +486,7 @@ function Category(props: Props) {
   const [adProduct, setAdProduct] = useState<any>([]);
   const [adImage, setAdImage] = useState<string>("");
 
-  // 광고페이지 상품 클릭 여부
+  // 광고 페이지 상품 클릭 여부
   const [isProductClick, setIsProductClick] = useState<boolean>(false);
 
   const [isAdName, setIsAdName] = useState<boolean>(false);
@@ -406,11 +497,11 @@ function Category(props: Props) {
   const [isAdURL, setIsAdURL] = useState<boolean>(false);
   const [isAdImage, setIsAdImage] = useState<boolean>(false);
   const [isBackColor, setIsBackColor] = useState<boolean>(false);
-
   const [advertise, setAdvertise] = useState<Advertise[]>([]);
 
+  // console.log(advertise);
+
   const [isAdFinish, setIsAdFinish] = useState<boolean>(false);
-  console.log(isAdFinish);
 
   // 광고 등록 에러 메세지
   const [ErrAdName, setErrAdName] = useState<string>("");
@@ -425,20 +516,87 @@ function Category(props: Props) {
   // 상품 목록창 boolean
   const [isProductListShow, setIsProductListShow] = useState<boolean>(false);
 
-  const [colorSelector, setColorSelector] = useState<boolean>(false);
-  console.log(colorSelector);
+  // 광고 목록창 boolean
+  const [isAdverListShow, setIsAdverListShow] = useState<boolean>(false);
 
-  // console.log(isAdSubTitle);
-  // console.log(isAdMainTitle);
-  // console.log(isAdDetail);
-  // console.log(isAdSubDetail);
-  // console.log(isAdURL);
+  // 배경 색상
+  const [colorSelector, setColorSelector] = useState<boolean>(false);
 
   // 광고 관련 함수 모음.
   const Advertise = {
+    advertiseListShow: () => {
+      setIsAdverListShow(true);
+    },
     advertiseShow: () => {
       setIsAdvertise(true);
       setIsCategory(false);
+    },
+    advertiseEdit: () => {
+      setIsAdvertise(true);
+      setIsCategory(false);
+
+      console.log(selectedAdvertise);
+
+      setAdname(selectedAdvertise[0].name);
+      setIsAdName(true);
+
+      setAdType(selectedAdvertise[0].type);
+
+      setAdSubTitle(selectedAdvertise[0].subtitle);
+      setIsAdSubTitle(true);
+
+      setAdMainTitle(selectedAdvertise[0].maintitle);
+      setIsAdMainTitle(true);
+
+      setAdDetail(selectedAdvertise[0].detail);
+      setIsAdDetail(true);
+
+      setAdSubDetail(selectedAdvertise[0].subdetail);
+      setIsAdSubDetail(true);
+
+      if (selectedAdvertise[0].image) {
+        setAdImage(selectedAdvertise[0].image);
+        setIsAdImage(true);
+      }
+
+      setAdBackColor(selectedAdvertise[0].backcolor);
+      setIsBackColor(true);
+
+      setAdURL(selectedAdvertise[0].url);
+      setIsAdURL(true);
+    },
+    // 광고 목록 리스트 클릭시
+    adListSelect: (id: string) => {
+      const data = advertise.filter((list: any) => list._id === id);
+      console.log(data);
+
+      if (selectedAdverID === id) {
+        setIsAdverListClick(false);
+        setSelectedAdverID("");
+      } else {
+        setIsAdverListClick(true);
+        if (data[0]._id) {
+          setSelectedAdverID(data[0]._id);
+        }
+      }
+    },
+    // 광고 목록 선택 버튼
+    adListSelectBtn: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      // const select = e.currentTarget.textContent;
+      const data = advertise.filter((list: any) => list._id === selectedAdverID);
+
+      if (data.length === 1) {
+        setSelectedAdvertise(data);
+        setIsAdvertiseEdit(true);
+      } else {
+        Advertise.InputReset();
+        setSelectedAdvertise([]);
+        setIsAdvertiseEdit(false);
+      }
+      setIsAdverListShow(false);
+    },
+    adverListClose: () => {
+      setIsAdverListShow(false);
     },
     cateInfoShow: () => {
       setIsAdvertise(false);
@@ -453,17 +611,20 @@ function Category(props: Props) {
         return;
       }
 
-      if (e.target.value.length > 11) {
+      if (e.target.value.length > 21) {
         setIsAdName(false);
-        setErrAdName("10글자 내로 입력해주세요.");
+        setErrAdName("20글자 내로 입력해주세요.");
       } else {
         setAdname(e.target.value);
         setIsAdName(true);
       }
     },
+    adTypeChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+      setAdType(Number(e.target.value));
+    },
     adSubTitle: (e: any) => {
-      if (e.target.value.length > 11) {
-        setErrAdSubTitle("10글자 내로 입력해주세요.");
+      if (e.target.value.length > 21) {
+        setErrAdSubTitle("20글자 내로 입력해주세요.");
         setIsAdSubTitle(false);
         return;
       } else {
@@ -491,8 +652,8 @@ function Category(props: Props) {
       }
     },
     adSubDetail: (e: any) => {
-      if (e.target.value.length > 31) {
-        setErrAdSubDetail("30글자 내로 입력해주세요.");
+      if (e.target.value.length > 51) {
+        setErrAdSubDetail("50글자 내로 입력해주세요.");
         setIsAdSubDetail(false);
       } else {
         setAdSubDetail(e.target.value);
@@ -500,8 +661,12 @@ function Category(props: Props) {
       }
     },
     // 등록된 상품 클릭시
-    adProductClick: () => {
-      setIsProductClick(true);
+    // adProductClick: () => {
+    //   setIsProductClick(true);
+    // },
+    adColorSelect: () => {
+      console.log('colorSelectHandler');
+      setColorSelector((e) => !e);
     },
     ProductListShow: () => {
       setIsProductListShow(true);
@@ -532,7 +697,6 @@ function Category(props: Props) {
       setAdProduct(selectedProductList);
       setAdURL(selectedProductList[0].url);
     },
-
     // 상품 삭제 버튼
     ProductDelete: async (e: any) => {
       e.preventDefault();
@@ -545,7 +709,6 @@ function Category(props: Props) {
       setAdProduct([]);
       setAdURL("");
     },
-
     adSubmit: async (e: any) => {
       e.preventDefault();
 
@@ -563,22 +726,48 @@ function Category(props: Props) {
           setIsAdFinish(true);
           setErrAdFinish("");
 
-          const newAdvertise = {
-            type: selectedType,
-            name: adName,
-            subtitle: adSubTitle,
-            maintitle: adMainTitle,
-            detail: adDetail,
-            subdetail: adSubDetail,
-            url: adURL,
-            backcolor: adBackColor,
-          };
-
-          setAdvertise([...advertise, newAdvertise]);
-          console.log(advertise);
+          let newAdvertise;
+          if (isAdvertiseEdit) {
+            newAdvertise = {
+              _id: selectedAdverID,
+              type: adType,
+              name: adName,
+              subtitle: adSubTitle,
+              maintitle: adMainTitle,
+              detail: adDetail,
+              subdetail: adSubDetail,
+              image: adImage,
+              url: adURL,
+              backcolor: adBackColor,
+              product_id: adProduct[0]._id,
+            };
+          } else {
+            newAdvertise = {
+              type: adType,
+              name: adName,
+              subtitle: adSubTitle,
+              maintitle: adMainTitle,
+              detail: adDetail,
+              subdetail: adSubDetail,
+              image: adImage,
+              url: adURL,
+              backcolor: adBackColor,
+              product_id: adProduct[0]._id,
+            };
+          }
 
           try {
-            await axios.post("/smartstore/home/category/advertise", { newAdvertise, selectedList }, { withCredentials: true });
+            const res = await axios.post("/smartstore/home/category/advertise", { isAdvertiseEdit ,newAdvertise, selectedList }, { withCredentials: true });
+            const { success, Advertises } = res.data;
+
+            console.log(res);
+            if (success) {
+              setAdvertise(Advertises);
+              setIsAdvertise(false);
+
+              // 광고 등록후 초기화
+              Advertise.InputReset();
+            }
           } catch (err) {
             console.log(err);
           }
@@ -591,16 +780,99 @@ function Category(props: Props) {
         setErrAdFinish("카테고리를 선택 해주세요.");
       }
 
-      if (!selectedProductList[0]) {
+      if (!adProduct[0]) {
         setErrAdFinish("상품을 선택 해주세요.");
         setIsAdURL(false);
         return;
       }
     },
-  };
+    Delete: async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, id: string) => {
+      e.stopPropagation();
+      const advertiseID = id;
+      const updatedAdvertise = advertise.filter((item) => item._id !== advertiseID);
+      console.log(updatedAdvertise);
 
-  const handleTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedType(Number(e.target.value));
+      try {
+        const res = await axios.post("/smartstore/home/category/adverdelete", { advertiseID, selectedList }, { withCredentials: true });
+        if (res.data.success) {
+          console.log(res.data);
+          setAdvertise(updatedAdvertise);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+
+      // if (isSelectedSubTask) {
+      //   setIsAdFinish(false);
+      //   setErrAdFinish("해당 카테고리는 광고를 노출 할 수 없습니다.");
+      //   return;
+      // }
+
+      // if (isSelected || isSelectedTask) {
+      //   setIsAdFinish(true);
+      //   setErrAdFinish("");
+
+      //   if (isAdName && isAdSubTitle && isAdMainTitle && isAdDetail && isAdSubDetail && isAdURL && isBackColor) {
+      //     setIsAdFinish(true);
+      //     setErrAdFinish("");
+
+      //     const newAdvertise = {
+      //       type: selectedType,
+      //       name: adName,
+      //       subtitle: adSubTitle,
+      //       maintitle: adMainTitle,
+      //       detail: adDetail,
+      //       subdetail: adSubDetail,
+      //       image: adImage,
+      //       url: adURL,
+      //       backcolor: adBackColor,
+      //       product_id: adProduct[0]._id,
+      //     };
+
+      //     console.log(advertise);
+
+      //   } else {
+      //     setIsAdFinish(false);
+      //     setErrAdFinish("내용을 전부 입력해주세요.");
+      //   }
+      // } else {
+      //   setIsAdFinish(false);
+      //   setErrAdFinish("카테고리를 선택 해주세요.");
+      // }
+
+      // if (!adProduct[0]) {
+      //   setErrAdFinish("상품을 선택 해주세요.");
+      //   setIsAdURL(false);
+      //   return;
+      // }
+    },
+    InputReset: () => {
+      console.log('Advertise InputReset');
+
+      setIsAdvertiseEdit(false);
+
+      setAdname("");
+      setAdType(0);
+      setAdSubTitle("");
+      setAdMainTitle("");
+      setAdDetail("");
+      setAdSubDetail("");
+      setAdURL("");
+      setAdBackColor("");
+      setAdProduct([]);
+      setAdImage("");
+
+      setIsProductClick(false);
+      setIsAdName(false);
+      setIsAdSubTitle(false);
+      setIsAdMainTitle(false);
+      setIsAdDetail(false);
+      setIsAdSubDetail(false);
+      setIsAdURL(false);
+      setIsAdImage(false);
+      setIsBackColor(false);
+      setIsAdFinish(false);
+    },
   };
 
   // 유저 카테고리 가져오기
@@ -608,7 +880,7 @@ function Category(props: Props) {
     const get = async () => {
       try {
         const res = await axios.post("/smartstore/home/category", token, { withCredentials: true });
-        console.log(res.data);
+        // console.log(res.data);
 
         const columnOrder: any = new Array();
         const columns: any = new Array();
@@ -748,6 +1020,8 @@ function Category(props: Props) {
           columns: newColumns,
           tasks: dnd.tasks,
         };
+
+        console.log();
 
         // setCategoryList(res.data);
         setDnd(sendingDND);
@@ -1138,31 +1412,35 @@ function Category(props: Props) {
   };
 
   // 카테고리 리스트 바깥 클릭시 선택 해제
-  useEffect(() => {
-    const clickOutside = (e: any) => {
-      if (listRef.current && !listRef.current.contains(e.target) && !inputRef.current.contains(e.target) && !blurWrapRef.current.contains(e.target)) {
-        setIsSelected(false);
-        setIsSelectedTask(false);
-        setIsSelectedSubTask(false);
-        setSelectedId(null);
-        setSelectedList([]);
-        setAddedProductList([]);
-        setSelectedName("");
-        setSelectedURL("");
-        setIconImg("");
-        setSelectedNavHide(false);
-        setSelectedChapNavHide(false);
-        setSelectedDarkMode(false);
-      }
-    };
-    document.addEventListener("mousedown", clickOutside);
-    return () => {
-      // Cleanup the event listener
-      document.removeEventListener("mousedown", clickOutside);
-    };
-  }, [selectedList]);
+  // useEffect(() => {
+  //   const clickOutside = (e: any) => {
+  //     if (listRef.current && !listRef.current.contains(e.target) && !inputRef.current.contains(e.target) && !blurWrapRef.current.contains(e.target) && !AdverBlurRef.current.contains(e.target) && !isAdverListShow) {
+  //       setIsSelected(false);
+  //       setIsSelectedTask(false);
+  //       setIsSelectedSubTask(false);
+  //       setSelectedId(null);
+  //       setSelectedList([]);
+  //       setAddedProductList([]);
+  //       setAdvertise([]);
+  //       setSelectedAdvertise([]);
+  //       setSelectedAdverName("");
+  //       setIsAdverListClick(false);
+  //       setSelectedName("");
+  //       setSelectedURL("");
+  //       setIconImg("");
+  //       setSelectedNavHide(false);
+  //       setSelectedChapNavHide(false);
+  //       setSelectedDarkMode(false);
+  //     }
+  //   };
+  //   document.addEventListener("mousedown", clickOutside);
+  //   return () => {
+  //     // Cleanup the event listener
+  //     document.removeEventListener("mousedown", clickOutside);
+  //   };
+  // }, [selectedList]);
 
-  // 상품목록에서 바깥 클릭시 닫힘 기능
+  // 상품 목록에서 바깥 클릭시 닫힘 기능
   useEffect(() => {
     const clickOutside = (e: any) => {
       if (blurRef.current && !blurRef.current.contains(e.target)) {
@@ -1175,6 +1453,20 @@ function Category(props: Props) {
       document.removeEventListener("mousedown", clickOutside);
     };
   }, [isProductListShow]);
+
+  // 광고 목록에서 바깥 클릭시 닫힘 기능
+  useEffect(() => {
+    const clickOutside = (e: any) => {
+      if (AdverBlurRef.current && !AdverBlurRef.current.contains(e.target)) {
+        setIsAdverListShow(false);
+      }
+    };
+    document.addEventListener("mousedown", clickOutside);
+    return () => {
+      // Cleanup the event listener
+      document.removeEventListener("mousedown", clickOutside);
+    };
+  }, [isAdverListShow]);
 
   // // 카테고리 등록된 상품 리스트 선택 해제
   // useEffect(() => {
@@ -1388,14 +1680,11 @@ function Category(props: Props) {
     [dnd]
   );
 
-  const colorSelectHandler = () => {
-    setColorSelector((e) => !e);
-  };
-
   // 배경 색상 선택 바깥 클릭시 색상선택 false
   useEffect(() => {
     const clickOutside = (e: any) => {
       if (colorRef.current && !colorRef.current.contains(e.target) && !imgRef.current.contains(e.target)) {
+        console.log('clickOutside');
         setColorSelector(false);
       }
     };
@@ -1421,54 +1710,61 @@ function Category(props: Props) {
             </div>
             <div className="panel-body flex">
               <div className="box-wrap flex">
+                {!isAdvertise && (
                 <div className="box first flex flex-ju-bt flex-di-row">
-                  <div className="category-list">
-                    <div ref={listRef} style={{ width: "350px" }}>
-                      <DragDropContext onDragEnd={onDragEnd}>
-                        <Droppable droppableId="all-columns" direction="vertical" type="column">
-                          {(provided) => (
-                            <Container {...provided.droppableProps} ref={provided.innerRef}>
-                              {dnd.columns &&
-                                dnd.columns.map((column: any, index: any) => {
-                                  const tasks = column.taskIds && column.taskIds.map((taskId: any) => taskId);
-                                  return (
-                                    <Column
-                                      key={column._id}
-                                      index={index}
-                                      dnd={dnd}
-                                      column={column}
-                                      tasks={tasks}
-                                      isSelected={isSelected}
-                                      isSelectedTask={isSelectedTask}
-                                      setIsSelected={setIsSelected}
-                                      setIsSelectedTask={setIsSelectedTask}
-                                      setIsSelectedSubTask={setIsSelectedSubTask}
-                                      selectedList={selectedList}
-                                      setSelectedList={setSelectedList}
-                                      setSelectedName={setSelectedName}
-                                      setSelectedURL={setSelectedURL}
-                                      selectedId={selectedId}
-                                      setSelectedId={setSelectedId}
-                                      setAddedProductList={setAddedProductList}
-                                      setIconImg={setIconImg}
-                                      setSelectedNavHide={setSelectedNavHide}
-                                      setSelectedChapNavHide={setSelectedChapNavHide}
-                                      setSelectedDarkMode={setSelectedDarkMode}
-                                      setInitialName={setInitialName}
-                                    />
-                                  );
-                                })}
-                              {provided.placeholder}
-                            </Container>
-                          )}
-                        </Droppable>
-                      </DragDropContext>
-                    </div>
+                <div className="category-list">
+                  <div ref={listRef} style={{ width: "350px" }}>
+                    <DragDropContext onDragEnd={onDragEnd}>
+                      <Droppable droppableId="all-columns" direction="vertical" type="column">
+                        {(provided) => (
+                          <Container {...provided.droppableProps} ref={provided.innerRef}>
+                            {dnd.columns &&
+                              dnd.columns.map((column: any, index: any) => {
+                                const tasks = column.taskIds && column.taskIds.map((taskId: any) => taskId);
+                                return (
+                                  <Column
+                                    key={column._id}
+                                    index={index}
+                                    dnd={dnd}
+                                    column={column}
+                                    tasks={tasks}
+                                    isSelected={isSelected}
+                                    isSelectedTask={isSelectedTask}
+                                    setIsSelected={setIsSelected}
+                                    setIsSelectedTask={setIsSelectedTask}
+                                    setIsSelectedSubTask={setIsSelectedSubTask}
+                                    selectedList={selectedList}
+                                    setSelectedList={setSelectedList}
+                                    setSelectedName={setSelectedName}
+                                    setSelectedURL={setSelectedURL}
+                                    selectedId={selectedId}
+                                    setSelectedId={setSelectedId}
+                                    setAddedProductList={setAddedProductList}
+                                    setIconImg={setIconImg}
+                                    setSelectedNavHide={setSelectedNavHide}
+                                    setSelectedChapNavHide={setSelectedChapNavHide}
+                                    setSelectedDarkMode={setSelectedDarkMode}
+                                    setInitialName={setInitialName}
+                                    setAdvertise={setAdvertise}
+                                    setIsAdverListClick={setIsAdverListClick}
+                                    setSelectedAdvertise={setSelectedAdvertise}
+                                    setSelectedAdverID={setSelectedAdverID}
+                                  />
+                                );
+                              })}
+                            {provided.placeholder}
+                          </Container>
+                        )}
+                      </Droppable>
+                    </DragDropContext>
                   </div>
                 </div>
-                <div className="box second flex flex-ju-bt flex-di-row">
+              </div>
+                )}
+
+                <div className="box second flex flex-ju-bt flex-di-row" >
                   <div ref={inputRef} style={{ padding: "0 20px" }}>
-                    <div>
+                    <div >
                       {!isAdvertise ? (
                         <>
                           <h3 className="cateInfo-title">카테고리 추가</h3>
@@ -1513,30 +1809,24 @@ function Category(props: Props) {
                               </div>
                               <div className={isName ? "error" : "error-active"}>{NameMessage}</div>
                               <div style={{ position: "relative" }}>
-                                <ul className="cateInfo-input">
+                                <div className="cateInfo-input">
                                   <h5 className="cateInfo-name">광고 목록</h5>
-                                  {advertise.map((list: any, index: any) => {
-                                    return (
-                                      <li
-                                        key={index}
-                                        value={list.name}
-                                        className="category-list"
-                                        style={{
-                                          backgroundColor: list.name === addedSelectedName && isAddedSelected ? "#e0e0e0" : "#fff",
-                                        }}
-                                        onClick={(e) => AddedProductClick(list.name, e)}
-                                      >
-                                        <div className="edit flex flex-ju-center flex-align-center">
-                                          <img src={list.mainImage[0]} style={{ width: "40px", marginRight: "5px", padding: "5px" }}></img>
-                                          <span>{list.name}</span>
-                                        </div>
-                                      </li>
-                                    );
-                                  })}
-                                </ul>
-                                <AdvertiseBtn onClick={Advertise.advertiseShow}>
-                                  <span>광고 등록</span>
-                                </AdvertiseBtn>
+                                  <span>{selectedAdvertise[0]?.name}</span>
+                                  <div>
+                                    <AdvertiseBtn onClick={Advertise.advertiseListShow}>
+                                      <span>광고 목록</span>
+                                    </AdvertiseBtn>
+                                    {selectedAdvertise.length === 1 ? (
+                                      <AdvertiseBtn onClick={Advertise.advertiseEdit}>
+                                        <span>광고 수정</span>
+                                      </AdvertiseBtn>
+                                    ) : (
+                                      <AdvertiseBtn onClick={Advertise.advertiseShow}>
+                                        <span>광고 등록</span>
+                                      </AdvertiseBtn>
+                                    )}
+                                  </div>
+                                </div>
                               </div>
                               <div style={{ marginTop: "10px", color: "#ff3627" }}>
                                 <span>{addedErrMessage}</span>
@@ -1603,9 +1893,10 @@ function Category(props: Props) {
                             <div className="wrap">
                               <div style={{ position: "relative" }}>
                                 <AdvertiseListBtn onClick={Advertise.cateInfoShow}>
-                                  <span>카테고리 정보</span>
+                                  <span>카테고리 목록</span>
                                 </AdvertiseListBtn>
                               </div>
+                                <div>{selectedList.name}</div>
                               <h3 className="cateInfo-title">카테고리 광고</h3>
                               <div className="cateInfo-input-wrap">
                                 <div className="cateInfo-input">
@@ -1614,7 +1905,7 @@ function Category(props: Props) {
                                     <input
                                       type="text"
                                       value={adName}
-                                      maxLength={10}
+                                      maxLength={20}
                                       placeholder="시작하는 광고의 이름을 적어주세요."
                                       className="input"
                                       onChange={Advertise.adName}
@@ -1625,28 +1916,28 @@ function Category(props: Props) {
                               </div>
                               <h3 className="cateInfo-title">광고 타입을 지정</h3>
                               <TypeBoxWrap>
-                                <TypeBox number={0} selectedType={selectedType}>
+                                <TypeBox number={0} selectedType={adType}>
                                   <img src={type1} alt="" />
-                                  <input type="radio" name="selectedType" value="0" checked={selectedType === 0} onChange={handleTypeChange} />
+                                  <input type="radio" name="selectedType" value="0" checked={adType === 0} onChange={Advertise.adTypeChange} />
                                 </TypeBox>
-                                <TypeBox number={1} selectedType={selectedType}>
+                                <TypeBox number={1} selectedType={adType}>
                                   <img src={type2} alt="" />
-                                  <input type="radio" name="selectedType" value="1" checked={selectedType === 1} onChange={handleTypeChange} />
+                                  <input type="radio" name="selectedType" value="1" checked={adType === 1} onChange={Advertise.adTypeChange} />
                                 </TypeBox>
-                                <TypeBox number={2} selectedType={selectedType}>
+                                <TypeBox number={2} selectedType={adType}>
                                   <img src={type3} alt="" />
-                                  <input type="radio" name="selectedType" value="2" checked={selectedType === 2} onChange={handleTypeChange} />
+                                  <input type="radio" name="selectedType" value="2" checked={adType === 2} onChange={Advertise.adTypeChange} />
                                 </TypeBox>
                               </TypeBoxWrap>
                               <h3 className="cateInfo-title">광고 미리보기</h3>
                               <div ref={imgRef}>
-                                {selectedType === 0 && (
+                                {adType === 0 && (
                                   <AdverPreview adBackColor={adBackColor}>
-                                    <div id="input-inner">
+                                    <div id="input-inner" style={{marginTop: "50px"}}>
                                       <input
                                         type="text"
                                         value={adSubTitle}
-                                        maxLength={10}
+                                        maxLength={20}
                                         placeholder="가장 위에 들어갑니다."
                                         className="input adsubtitle adver-input-type1"
                                         onChange={Advertise.adSubTitle}
@@ -1671,16 +1962,18 @@ function Category(props: Props) {
                                         placeholder="상품에 대한 내용"
                                         className="input addetail adver-input-type1"
                                         onChange={Advertise.adDetail}
+                                        style={{ backgroundColor: "transparent" }}
                                       />
                                       <div className={isAdDetail ? "error" : "error-active"}>{ErrAdDetail}</div>
                                     </div>
                                     <div id="input-inner">
                                       <textarea
                                         value={adSubDetail}
-                                        maxLength={30}
+                                        maxLength={50}
                                         placeholder="특징 및 가격"
                                         className="input adsubdetail adver-input-type1"
                                         onChange={Advertise.adSubDetail}
+                                        style={{ backgroundColor: "transparent" }}
                                       />
                                       <div className={isAdSubDetail ? "error" : "error-active"}>{ErrAdSubDetail}</div>
                                     </div>
@@ -1702,16 +1995,17 @@ function Category(props: Props) {
                                       setIsBackColor={setIsBackColor}
                                       colorSelector={colorSelector}
                                       setColorSelector={setColorSelector}
+                                      isAdvertiseEdit={isAdvertiseEdit}
                                     ></AdvertiseImage>
                                   </AdverPreview>
                                 )}
-                                {selectedType === 1 && (
+                                {adType === 1 && (
                                   <AdverPreview adBackColor={adBackColor}>
-                                    <div id="input-inner">
+                                    <div id="input-inner" style={{marginTop: "50px"}}>
                                       <input
                                         type="text"
                                         value={adSubTitle}
-                                        maxLength={10}
+                                        maxLength={20}
                                         placeholder="가장 위에 들어갑니다."
                                         className="input adsubtitle adver-input-type1"
                                         onChange={Advertise.adSubTitle}
@@ -1732,10 +2026,12 @@ function Category(props: Props) {
                                     <div id="input-inner">
                                       <textarea
                                         value={adDetail}
-                                        maxLength={15}
+                                        maxLength={50}
                                         placeholder="상품에 대한 내용"
                                         className="input addetail adver-input-type1"
                                         onChange={Advertise.adDetail}
+                                        style={{ backgroundColor: "transparent" }}
+
                                       />
                                       <div className={isAdDetail ? "error" : "error-active"}>{ErrAdDetail}</div>
                                     </div>
@@ -1749,35 +2045,38 @@ function Category(props: Props) {
                                       setIsBackColor={setIsBackColor}
                                       colorSelector={colorSelector}
                                       setColorSelector={setColorSelector}
+                                      isAdvertiseEdit={isAdvertiseEdit}
                                     ></AdvertiseImage>
-                                        <div id="input-inner">
-                                          <textarea
-                                            value={adSubDetail}
-                                            maxLength={15}
-                                            placeholder="특징 및 가격"
-                                            className="input adsubdetail adver-input-type1"
-                                            onChange={Advertise.adSubDetail}
-                                          />
+                                    <div id="input-inner">
+                                      <textarea
+                                        value={adSubDetail}
+                                        maxLength={50}
+                                        placeholder="특징 및 가격"
+                                        className="input adsubdetail adver-input-type1"
+                                        onChange={Advertise.adSubDetail}
+                                        style={{ backgroundColor: "transparent" }}
+
+                                      />
                                       <div className={isAdSubDetail ? "error" : "error-active"}>{ErrAdSubDetail}</div>
                                     </div>
-                                        <div id="input-inner" style={{ marginTop: "14px" }}>
-                                          <div className="adver-btn">
-                                            <span className="text">구입하기</span>
-                                          </div>
-                                          <div className="adver-btn2">
-                                            <span className="text">더 알아보기</span>
-                                          </div>
+                                    <div id="input-inner" style={{ marginTop: "14px" }}>
+                                      <div className="adver-btn">
+                                        <span className="text">구입하기</span>
+                                      </div>
+                                      <div className="adver-btn2">
+                                        <span className="text">더 알아보기</span>
+                                      </div>
                                     </div>
                                   </AdverPreview>
                                 )}
-                                {selectedType === 2 && (
+                                {adType === 2 && (
                                   <AdverPreviewColumn adBackColor={adBackColor}>
-                                    <div>
+                                    <div style={{marginTop: "50px"}}>
                                       <div className="adver-input-type3-wrap">
                                         <input
                                           type="text"
                                           value={adSubTitle}
-                                          maxLength={10}
+                                          maxLength={20}
                                           placeholder="가장 위에 들어갑니다."
                                           className="input adsubtitle adver-input-type3"
                                           onChange={Advertise.adSubTitle}
@@ -1798,20 +2097,22 @@ function Category(props: Props) {
                                       <div className="adver-input-type3-wrap">
                                         <textarea
                                           value={adDetail}
-                                          maxLength={15}
+                                          maxLength={50}
                                           placeholder="상품에 대한 내용"
                                           className="input addetail adver-input-type3"
                                           onChange={Advertise.adDetail}
+                                          style={{ backgroundColor: "transparent" }}
                                         />
                                         <div className={isAdDetail ? "error" : "error-active"}>{ErrAdDetail}</div>
                                       </div>
                                       <div className="adver-input-type3-wrap">
                                         <textarea
                                           value={adSubDetail}
-                                          maxLength={30}
+                                          maxLength={50}
                                           placeholder="특징 및 가격"
                                           className="input adsubdetail adver-input-type3"
                                           onChange={Advertise.adSubDetail}
+                                          style={{ backgroundColor: "transparent" }}
                                         />
                                         <div className={isAdSubDetail ? "error" : "error-active"}>{ErrAdSubDetail}</div>
                                       </div>
@@ -1834,6 +2135,7 @@ function Category(props: Props) {
                                       setIsBackColor={setIsBackColor}
                                       colorSelector={colorSelector}
                                       setColorSelector={setColorSelector}
+                                      isAdvertiseEdit={isAdvertiseEdit}
                                     ></AdvertiseImage>
                                   </AdverPreviewColumn>
                                 )}
@@ -1842,7 +2144,7 @@ function Category(props: Props) {
                                 <div className="cateInfo-input-wrap" style={{ width: "100%" }} ref={colorRef}>
                                   <div
                                     className="cateInfo-input"
-                                    onClick={colorSelectHandler}
+                                    onClick={Advertise.adColorSelect}
                                     style={{ outline: colorSelector ? "2px solid #0071e3" : "none" }}
                                   >
                                     <h5 className="cateInfo-name">배경 색상 선택</h5>
@@ -1892,7 +2194,11 @@ function Category(props: Props) {
                                 </div>
                               </div>
                               <AdSubmitBtn onClick={Advertise.adSubmit}>
+                              {isAdvertiseEdit ? (
+                                <span>수정</span>
+                              ) : (
                                 <span>등록</span>
+                              )}
                               </AdSubmitBtn>
                               <div className={isAdFinish ? "error" : "error-active"} style={{ textAlign: "right" }}>
                                 {ErrAdFinish}
@@ -1913,7 +2219,13 @@ function Category(props: Props) {
           <ProductListWrap isProductListShow={isProductListShow} ref={blurRef}>
             <ProductList>
               <h5 className="box-name">상품 목록</h5>
-              <TableProductList isAdvertise={isAdvertise} setSelectedProductList={setSelectedProductList}></TableProductList>
+              <TableProductList
+                isAdvertise={isAdvertise}
+                setSelectedProductList={setSelectedProductList}
+                selectedAdvertise={selectedAdvertise}
+                adProduct={adProduct}
+                setAdProduct={setAdProduct}
+              ></TableProductList>
               <div className="text-btn-wrap" style={{ marginRight: "10px", justifyContent: "end", marginTop: "10px", alignItems: "center" }}>
                 <span style={{ marginRight: "10px", color: "red", fontWeight: "600", fontSize: "14px" }}>{ErrProductList}</span>
                 <button
@@ -1939,6 +2251,72 @@ function Category(props: Props) {
           </ProductListWrap>
           <Blur className="blur" isProductListShow={isProductListShow}></Blur>
         </BlurWrap>
+        <AdverBlurWrap isAdverListShow={isAdverListShow} ref={AdverBlurWrapRef}>
+          <AdverListWrap isAdverListShow={isAdverListShow} ref={AdverBlurRef}>
+            <AdverList>
+              {advertise.length >= 1 && <h5 className="box-name">상품 목록</h5>}
+              {advertise?.length === 0 && (
+                <div style={{ textAlign: "center", padding: "20px", fontSize: "20px", fontWeight: "700" }}>등록된 광고가 없습니다.</div>
+              )}
+              <ul>
+                {advertise.map((list: any, index: any) => {
+                  return (
+                    <li
+                      key={index}
+                      value={list.name}
+                      style={{
+                        backgroundColor: list._id === selectedAdverID ? "#ececec" : "#f5f5f7",
+                        padding: "10px 10px",
+                        position: "relative",
+                        marginBottom: "5px",
+                        borderRadius: "12px",
+                        userSelect: "none",
+                        transition: "background-color 0.3s ease",
+                      }}
+                      onClick={() => Advertise.adListSelect(list._id)}
+                    >
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                        {list.image && <img src={list.image} style={{ width: "80px", marginRight: "5px", padding: "5px", marginLeft: "10px" }}></img>}
+                        <span>{list.name}</span>
+                      <button
+                        onClick={(e) => Advertise.Delete(e, list._id)}
+                        style={{ backgroundColor: "transparent", border: "none", color: "#0071e3" }}
+                      >
+                        삭제
+                      </button>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+              <div className="text-btn-wrap" style={{ marginRight: "10px", justifyContent: "end", marginTop: "10px", alignItems: "center" }}>
+                <span style={{ marginRight: "10px", color: "red", fontWeight: "600", fontSize: "14px" }}>{ErrProductList}</span>
+                {advertise.length >= 1 && (
+                  <button
+                    className="text-btn"
+                    onClick={(e) => Advertise.adListSelectBtn(e)}
+                    style={{ width: "100px", height: "30px", borderRadius: "20px", backgroundColor: "#0071e3" }}
+                  >
+                    <span className="text" style={{ color: "white" }}>
+                      선택
+                    </span>
+                  </button>
+                )}
+
+                <button
+                  className="text-btn"
+                  onClick={Advertise.adverListClose}
+                  style={{ width: "100px", height: "30px", borderRadius: "20px", backgroundColor: "#0071e3" }}
+                >
+                  <span className="text" style={{ color: "white" }}>
+                    닫기
+                  </span>
+                </button>
+              </div>
+            </AdverList>
+          </AdverListWrap>
+          <AdverBlur className="blur" isAdverListShow={isAdverListShow}></AdverBlur>
+        </AdverBlurWrap>
       </div>
     </>
   );

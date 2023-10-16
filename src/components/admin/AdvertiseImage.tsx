@@ -8,6 +8,7 @@ const IconWrap = styled.div`
   width: 100%;
   height: 500px;
   display: flex;
+  justify-content: center;
   align-items: center;
   margin-top: 14px;
 `;
@@ -31,26 +32,18 @@ const IconI = styled.div<IconI>`
 `;
 
 const IconLabel = styled.label`
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  right: 0px;
-  bottom: 0px;
   background-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 0;
 
   .ImagePreview {
-    overflow: hidden;
     width: 100%;
-    z-index: 2;
-
-    img {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      max-width: 100%;
-      max-height: 100%;
-    }
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 `;
 
@@ -64,24 +57,27 @@ const Error = styled.span`
   margin-top: 10px;
 `;
 
-function ImagePreview({ image, setAdBackColor, colorSelector, setIsBackColor }: any) {
-  const colorPicker = (e: any) => {
+function ImagePreview({ imageURL, setAdBackColor, colorSelector, setIsBackColor }: any) {
 
-    console.log(colorSelector);
-    if (!colorSelector) {
-      return;
-    }
+  // AWS S3에 업로드된 URL Image를 불러오면서 canvas를 적용하면 CORS 이슈가 생긴다.
+  // crossOrigin = 'Anonymous'; 추가로 해결.
+  
+  const image = new Image();
+  image.src = imageURL;
+  image.crossOrigin = 'Anonymous';
+
+  const colorPicker = (e: any) => {
+    console.log('colorpicker');
 
     const canvas = document.createElement("canvas");
 
     if (canvas) {
       const context = canvas.getContext("2d");
-      const img = e.target;
 
-      canvas.width = img.width;
-      canvas.height = img.height;
+      canvas.width = image.width;
+      canvas.height = image.height;
       if (context) {
-        context.drawImage(img, 0, 0, img.width, img.height);
+        context.drawImage(image, 0, 0, image.width, image.height);
 
         const x = e.nativeEvent.offsetX;
         const y = e.nativeEvent.offsetY;
@@ -98,14 +94,13 @@ function ImagePreview({ image, setAdBackColor, colorSelector, setIsBackColor }: 
   return (
     <>
       <div className="ImagePreview" draggable>
-        <img src={image} alt="preview" onClick={colorPicker} />
+        <img src={imageURL} alt="preview" onClick={colorPicker} />
       </div>
     </>
   );
 }
 
 function AdvertiseImage(props: any) {
-
   const [max, setMax] = useState<any>(1); // 이미지 최대 개수
   const [uploadedImages, setUploadedImages] = useState<any>([]);
   const [previewImages, setPreviewImages] = useState<any>([]);
@@ -170,6 +165,8 @@ function AdvertiseImage(props: any) {
   };
 
   const IconDelete = (event: any) => {
+    console.log('IconDelete');
+
     event.preventDefault();
     event.stopPropagation();
     setUploadedImages([]);
@@ -184,36 +181,48 @@ function AdvertiseImage(props: any) {
 
   // 상품 최초 등록시 미리보기
   useEffect(() => {
-    const imageJSXs = uploadedImages.map((image: any, index: any) => {
-      return (
-        <ImagePreview
-          image={image}
-          key={index}
-          colorSelector={props.colorSelector}
-          setAdBackColor={props.setAdBackColor}
-          setIsBackColor={props.setIsBackColor}
-        />
-      );
-    });
-
-    setPreviewImages(imageJSXs);
-  }, [uploadedImages, props.colorSelector]);
-
-  // 상품 수정시
-  useEffect(() => {
-    const editImg = props.iconImg;
-
-    if (!editImg) {
-      setPreviewImages("");
-      props.setAdImage("");
-      props.setIsAdImage(false);
+    if(props.isAdvertiseEdit){
       return;
     }
 
-    const imageJSXs = <ImagePreview image={editImg} />;
-    props.setIsAdImage(true);
-    setPreviewImages(imageJSXs);
-  }, [props.iconImg]);
+      const imageJSXs = uploadedImages.map((imageURL: any, index: any) => {
+        return (
+          <ImagePreview
+          imageURL={imageURL}
+            key={index}
+            colorSelector={props.colorSelector}
+            setAdBackColor={props.setAdBackColor}
+            setIsBackColor={props.setIsBackColor}
+          />
+        );
+      });
+      setPreviewImages(imageJSXs);
+
+  }, [uploadedImages, props.colorSelector]);
+
+  // 상품 수정시
+useEffect(() => {
+  const imageURL = props.adImage;
+  console.log('상품수정시 시작')
+
+  if(!props.isAdvertiseEdit){
+    return;
+  }
+
+  if (!imageURL) {
+    console.log('수정 아님')
+    setPreviewImages("");
+    props.setAdImage("");
+    props.setIsAdImage(false);
+    return;
+  }
+
+  const imageJSXs = <ImagePreview imageURL={imageURL} colorSelector={props.colorSelector} setAdBackColor={props.setAdBackColor} setIsBackColor={props.setIsBackColor}/>;
+
+  props.setIsAdImage(true);
+  setPreviewImages(imageJSXs);
+
+}, [props.adImage, props.colorSelector]);
 
   return (
     <>
@@ -223,13 +232,11 @@ function AdvertiseImage(props: any) {
           {previewImages}
           {!props.colorSelector && <IconInput type="file" multiple accept="image/*" onChange={changeHandler} />}
         </IconLabel>
-        {uploadedImages[0] && (
           <div className="text-btn-wrap" style={{ position: "absolute", right: "20px" }}>
             <button className="text-btn" onClick={IconDelete}>
               <span className="text">삭제</span>
             </button>
           </div>
-        )}
         <Error>{errorMessage}</Error>
       </IconWrap>
 

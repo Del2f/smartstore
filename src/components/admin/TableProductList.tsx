@@ -2,10 +2,9 @@ import axios from "../../api/axios";
 import { useCallback, useRef, useEffect, useState, Dispatch, SetStateAction } from "react";
 import { Link } from "react-router-dom";
 import { AgGridReact } from "ag-grid-react";
-
 import { useSelector } from "react-redux";
 import { selectToken } from "../../store/authSlice";
-
+import { Advertise } from "../../pages/adminPage/Category";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import "./TableProductList.scss";
@@ -14,15 +13,25 @@ type Props = {
   isAdvertise?: boolean;
   setProductTotal?: Dispatch<SetStateAction<number>>;
   setSelectedProductList?: Dispatch<any>;
+  selectedAdvertise?: Advertise[];
+  adProduct?: React.Dispatch<any>;
+  setAdProduct?: React.Dispatch<any>;
 };
 
 function TableProductList(props: Props) {
-
   const token = useSelector(selectToken);
-  const gridRef = useRef<any>();
-
-  const [rowData, setRowData] = useState();
+  const [rowData, setRowData] = useState<any>();
   const [selectedRows, setSelectedRows] = useState<any>([]);
+  const [inputClickNumber, setInputClickNumber] = useState(0);
+  const [inputClick, setInputClick] = useState(false);
+
+  const [deleteAgreeModal, setDeleteAgreeModal] = useState(false);
+  const [deleteAgreeValue, setDeleteAgreeValue] = useState("");
+  const [deleteAgreeErr, setDeleteAgreeErr] = useState("");
+  const [unselectedErr, setUnselectedErr] = useState("");
+
+  const gridRef = useRef<any>();
+  const dropmenu = useRef<HTMLDivElement>(null);
 
   const [columnDefs] = useState([
     { width: 50, checkboxSelection: true, headerCheckboxSelection: true },
@@ -127,9 +136,6 @@ function TableProductList(props: Props) {
     props.setSelectedProductList && props.setSelectedProductList(gridRef.current.api.getSelectedRows());
   };
 
-  const [inputClickNumber, setInputClickNumber] = useState(0);
-  const [inputClick, setInputClick] = useState(false);
-
   // 선택삭제 버튼을 눌렀을때
   const selectedDelete = (e: any) => {
     if (!selectedRows[0]) {
@@ -159,12 +165,6 @@ function TableProductList(props: Props) {
     };
   }, [inputClick]);
 
-  const [deleteAgreeModal, setDeleteAgreeModal] = useState(false);
-  const [deleteAgreeValue, setDeleteAgreeValue] = useState("");
-  const [deleteAgreeErr, setDeleteAgreeErr] = useState("");
-  const [unselectedErr, setUnselectedErr] = useState("");
-  const dropmenu = useRef<HTMLDivElement>(null);
-
   // 삭제 버튼
   const deleteBtn = async (e: any) => {
     if (deleteAgreeValue !== "삭제") {
@@ -188,16 +188,27 @@ function TableProductList(props: Props) {
     setDeleteAgreeErr("");
   };
 
-  // 초기화
+  // 카테고리에 등록된 광고의 product._id를 Product에서 검색후 해당하는 상품을 선택합니다.
   useEffect(() => {
-    const clearSelection = () => {
-      setSelectedRows([]);
-      if (selectedRows.length >= 1) {
-        gridRef.current.api.deselectAll();
-      }
-    };
-    clearSelection();
-  }, [props.isAdvertise]);
+    if(rowData && props.selectedAdvertise?.[0]){
+      const test = rowData?.filter((list: any) => list._id === props.selectedAdvertise?.[0].product_id);
+      props.setSelectedProductList && props.setSelectedProductList(test);
+      props.setAdProduct && props.setAdProduct(test);
+    }
+    // setSelectedRows(test);
+  }, [props.selectedAdvertise]);
+  
+
+  // 초기화
+  // useEffect(() => {
+  //   const clearSelection = () => {
+  //     setSelectedRows([]);
+  //     if (selectedRows.length >= 1) {
+  //       gridRef.current.api.deselectAll();
+  //     }
+  //   };
+  //   clearSelection();
+  // }, [props.isAdvertise, props.adProduct]);
 
   // 모달이 열려 있고 모달의 바깥쪽을 눌렀을 때 창 닫기
   useEffect(() => {

@@ -1,5 +1,5 @@
 import axios from "../../api/axios";
-import styled, { ThemeProvider } from "styled-components";
+import styled from "styled-components";
 import plus from "@img/plus1.svg";
 import { useState, useEffect } from "react";
 
@@ -50,7 +50,6 @@ const IconLabel = styled.label`
     overflow: hidden;
     width: 100%;
     height: 100px;
-    z-index: 2;
 
     img {
       position: absolute;
@@ -77,7 +76,6 @@ function ImagePreview({ image, deleteFunc }: any) {
   return (
     <div className="ImagePreview" draggable>
       <img src={image} alt="preview" />
-
     </div>
   );
 }
@@ -88,7 +86,6 @@ function ImageUploadBox(props: any) {
   const [previewImages, setPreviewImages] = useState<any>([]);
   const [errorMessage, setErrorMessage] = useState<any>([]);
   const [isImage, setIsImage] = useState<boolean>(false);
-
   const validFileTypes = ["image/svg+xml", "image/png"];
 
   const handleFiles = async (files: any) => {
@@ -116,7 +113,6 @@ function ImageUploadBox(props: any) {
       }
 
       const URL = await axios.post("/smartstore/home/categoryicon/img", formData);
-      console.log(URL);
       props.setIconImg(URL.data.location);
     } catch (error) {
       console.log(error);
@@ -171,12 +167,7 @@ function ImageUploadBox(props: any) {
   // 상품 수정시
   useEffect(() => {
     const editImg = props.iconImg;
-    // const imageJSXs =
-    //   editImg &&
-    //   editImg.map((image: any, index: any) => {
-    //     return <ImagePreview image={image} key={index} />;
-    //   });
-    // setPreviewImages(imageJSXs);
+
     if (!editImg) {
       props.setIconImg("");
       setPreviewImages("");
@@ -200,13 +191,12 @@ function ImageUploadBox(props: any) {
             <IconInput type="file" multiple accept="image/*" onChange={changeHandler} />
           </IconLabel>
           <div className="text-btn-wrap" style={{ position: "absolute", right: "20px" }}>
-          <button className="text-btn" onClick={IconDelete}>
-            <span className="text">삭제</span>
-          </button>
-        </div>
+            <button className="text-btn" onClick={IconDelete}>
+              <span className="text">삭제</span>
+            </button>
+          </div>
         </IconWrap>
         <Error>{errorMessage}</Error>
-
       </Icon>
     </>
   );

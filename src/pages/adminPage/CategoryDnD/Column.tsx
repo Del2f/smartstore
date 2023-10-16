@@ -2,7 +2,7 @@ import axios from "../../../api/axios";
 import styled from "styled-components";
 import { SetStateAction } from "react";
 import { Droppable, Draggable } from "react-beautiful-dnd";
-import { ColumnType, TaskType, SubTaskType } from "../Category";
+import { ColumnType, TaskType, SubTaskType, Advertise } from "../Category";
 import { DndState } from "../Category";
 import Task from "./Task";
 
@@ -85,6 +85,10 @@ interface IColumnProps {
   setSelectedChapNavHide: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedDarkMode: React.Dispatch<React.SetStateAction<boolean>>;
   setInitialName: React.Dispatch<React.SetStateAction<string | undefined>>;
+  setAdvertise: React.Dispatch<React.SetStateAction<Advertise[]>>;
+  setIsAdverListClick: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectedAdvertise: React.Dispatch<React.SetStateAction<Advertise[]>>;
+  setSelectedAdverID: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const Column = ({
@@ -109,16 +113,27 @@ const Column = ({
   setSelectedChapNavHide,
   setSelectedDarkMode,
   setInitialName,
+  setAdvertise,
+  setIsAdverListClick,
+  setSelectedAdvertise,
+  setSelectedAdverID,
 }: IColumnProps) => {
 
   const Selected = async (e: any) => {
     const draggableId = e.target.getAttribute('data-rbd-drag-handle-draggable-id');
     const selectedColumn = dnd.columns.find((list: any) => list._id === draggableId);
+    console.log(selectedColumn);
 
     if (selectedColumn) {
+      setSelectedAdvertise([]);
+      setSelectedAdverID("");
+
       setSelectedList(selectedColumn);
       setSelectedName(selectedColumn.name);
       setSelectedURL(selectedColumn.url);
+      if(selectedColumn.advertise){
+        setAdvertise(selectedColumn.advertise);
+      }
 
       setInitialName(selectedColumn.name);
       setSelectedId(selectedColumn._id);
@@ -142,9 +157,13 @@ const Column = ({
         setSelectedName("");
         setSelectedURL("");
         setInitialName("");
+        setAdvertise([]);
+        setSelectedAdvertise([]);
+        setSelectedAdverID('');
         setSelectedId(null);
         setSelectedNavHide(false);
         setSelectedDarkMode(false);
+        setIsAdverListClick(false);
   
         setIsSelected(false);
         setIsSelectedTask(false);
@@ -159,7 +178,10 @@ const Column = ({
 
     try {
       const res = await axios.post("/smartstore/home/category/productcategorylist", selectedColumn, { withCredentials: true });
-      setAddedProductList(res.data.productList);
+      const { Advertises, productList } = res.data;
+
+      setAdvertise(Advertises);
+      setAddedProductList(productList);
     } catch (err) {
       console.log(err);
     }
@@ -203,6 +225,10 @@ const Column = ({
                         setSelectedChapNavHide={setSelectedChapNavHide}
                         setSelectedDarkMode={setSelectedDarkMode}
                         setInitialName={setInitialName}
+                        setAdvertise={setAdvertise}
+                        setIsAdverListClick={setIsAdverListClick}
+                        setSelectedAdvertise={setSelectedAdvertise}
+                        setSelectedAdverID={setSelectedAdverID}
                       />
                     )})}
                   {provided.placeholder}
