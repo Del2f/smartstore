@@ -22,31 +22,29 @@ function App() {
   const navigate = useNavigate();
   const user = useSelector(selectCurrentAdmin);
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
-
-  useEffect(() => {
-    if (currentPath === location.pathname) window.location.reload();
-    currentPath = location.pathname;
-  }, [location]);
-
+  const [showdropmenu, setShowdrop] = useState(false);
+  const dropmenu = useRef<HTMLDivElement>(null);
+  
   // 관리자의 로그인 상태를 확인.
   // checkAdmin 미들웨어가 실행되면서 프론트엔드로 status를 보내줍니다.
   // App에 Routing 되어있는 component들은 함께 적용됩니다.
 
   useEffect(() => {
     const verifyUser = async () => {
+      console.log('쿠키 확인')
+
       if (!cookies.jwt) {
-        navigate("/login");
+        navigate("/");
       }
 
       try {
-        const data = await axios.post("/smartstore/home", {}, { withCredentials: true }).then((res) => {
+        const res = await axios.post("/smartstore/home", {}, { withCredentials: true });
           if (!res.data.status) {
             removeCookie("jwt");
-            navigate("/login");
+            navigate("/");
           } else {
             console.log(`안녕하세요 ${res.data.user} 님. 관리자 페이지 입니다.`);
           }
-        });
       } catch (errors) {
         console.log(errors);
       }
@@ -59,8 +57,10 @@ function App() {
     removeCookie("jwt", { path: "/" });
   };
 
-  const [showdropmenu, setShowdrop] = useState(false);
-  const dropmenu = useRef<HTMLDivElement>(null);
+  // useEffect(() => {
+  //   if (currentPath === location.pathname) window.location.reload();
+  //   currentPath = location.pathname;
+  // }, [location]);
 
   // 모달이 열려 있고 모달의 바깥쪽을 눌렀을 때 창 닫기
   useEffect(() => {
@@ -80,185 +80,6 @@ function App() {
       document.removeEventListener("mousedown", clickOutside);
     };
   }, [showdropmenu]);
-
-  const contents1 = (
-    <div className="contents">
-      <li></li>
-      <li></li>
-      {/* <li>
-                <Link to="productnew">상품 일괄등록</Link>
-            </li>
-            <li>
-                <Link to="productnew">상품 카탈로그 가격관리</Link>
-            </li>
-            <li>
-                <Link to="productnew">연관상품 관리</Link>
-            </li>
-            <li>
-                <Link to="productnew">사진 보관함</Link>
-            </li>
-            <li>
-                <Link to="productnew">배송정보 관리</Link>
-            </li>
-            <li>
-                <Link to="productnew">템플릿 관리</Link>
-            </li>
-            <li>
-                <Link to="productnew">공지사항 관리</Link>
-            </li>
-            <li>
-                <Link to="productnew">구독 관리</Link>
-            </li> */}
-    </div>
-  );
-  const contents2 = (
-    <div className="contents">
-      <li>선물 수락대기</li>
-      <li>미결제 확인</li>
-      <li>발주(주문)확인/발송관리</li>
-      <li>배송현황 관리</li>
-      <li>구매확정 내역</li>
-      <li>취소 관리</li>
-      <li>반품 관리</li>
-      <li>교환 관리</li>
-      <li>판매방해 고객관리</li>
-      <li>반품안심케어</li>
-    </div>
-  );
-  const contents3 = (
-    <div className="contents">
-      <li>정산 내역(일별/건별)</li>
-      <li>항목별 정산 내역</li>
-      <li>빠른정산</li>
-      <li>부가세신고 내역</li>
-      <li>세금계산서 조회</li>
-      <li>충전금 관리</li>
-      <li>초보판매자 정산가이드</li>
-    </div>
-  );
-  const contents4 = (
-    <div className="contents">
-      <li>문의 관리</li>
-      <li>고객문의 관리</li>
-      <li>리뷰 관리</li>
-      <li>리뷰이벤트 관리</li>
-    </div>
-  );
-  const contents5 = (
-    <div className="contents">
-      <li>톡톡 상담하기</li>
-      <li>톡톡 쇼핑챗봇/AI FAQ 설정</li>
-    </div>
-  );
-  const contents6 = (
-    <div className="contents">
-      {/* <li>스마트스토어</li> */}
-      <li></li>
-      <li></li>
-      {/* <li>쇼핑 스토리 관리</li> */}
-      {/* <li>라이브 예고 페이지 관리</li> */}
-      {/* <li>스토어 관리</li> */}
-      {/* <li>CLOVA MD 상품추천</li> */}
-    </div>
-  );
-  const contents7 = (
-    <div className="contents">
-      <li>쇼핑윈도 노출 제안</li>
-      <li>기획전 관리</li>
-      <li>럭키투데이 제안 관리</li>
-      <li>노출 서비스 관리</li>
-    </div>
-  );
-  const contents8 = (
-    <div className="contents">
-      <li>혜택 등록</li>
-      <li>혜택 조회/수정</li>
-      <li>혜택 리포트</li>
-      <li>고객등급 관리</li>
-      <li>포인트 지급내역 조회</li>
-    </div>
-  );
-  const contents9 = (
-    <div className="contents">
-      <li>마케팅 보내기</li>
-      <li>마케팅 이력</li>
-      <li>마케팅 통계</li>
-    </div>
-  );
-  const contents10 = (
-    <div className="contents">
-      <li>솔루션 목록</li>
-    </div>
-  );
-  const contents11 = (
-    <div className="contents">
-      <li>요약</li>
-      <li>판매분석</li>
-      <li>마케팅분석</li>
-      <li>쇼핑행동분석</li>
-      <li>시장벤치마크</li>
-      <li>판매성과예측</li>
-      <li>고객현황</li>
-      <li>재구매통계</li>
-    </div>
-  );
-  const contents12 = (
-    <div className="contents">
-      <li>탑탑 소개</li>
-      <li>탑탑 리포트</li>
-      <li>탑탑 입점 제안</li>
-    </div>
-  );
-  const contents13 = (
-    <div className="contents">
-      <li>원쁠딜 소개</li>
-      <li>제안 관리</li>
-      <li>공지/FAQ</li>
-    </div>
-  );
-  const contents14 = (
-    <div className="contents">
-      <li>판매자지원프로그램</li>
-    </div>
-  );
-  const contents15 = (
-    <div className="contents">
-      <li>판매자 정보</li>
-      <li>정보변경 신청</li>
-      <li>상품판매권한 신청</li>
-      <li>심사내역 조회</li>
-      <li>판매자 등급</li>
-      <li>매니저 관리</li>
-    </div>
-  );
-  const contents16 = (
-    <div className="contents">
-      <li>지식재산권 침해관리</li>
-    </div>
-  );
-  const contents17 = (
-    <div className="contents">
-      <li>풀필먼트 서비스신청</li>
-    </div>
-  );
-  const contents18 = (
-    <div className="contents">
-      <li>공지 사항</li>
-    </div>
-  );
-
-  let menuChange = (e: any) => {
-    $(".option").removeClass("selected");
-    $(e.target).addClass("selected");
-
-    const clone = $(e.target).clone();
-
-    $(".selectize-input").empty();
-    $(".selectize-input").append(clone);
-    $(".selectize-input").children(".option").attr("class", "item");
-
-    setShowdrop(false);
-  };
 
   // 메뉴 파트1 옵션 마우스 올렸을때
   useEffect(() => {

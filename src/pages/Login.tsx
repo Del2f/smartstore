@@ -575,7 +575,7 @@ interface Props {
 }
 
 function Login() {
-  const [cookies, setCookie, removeCookie] = useCookies(["userjwt"]);
+  const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -686,29 +686,29 @@ function Login() {
   };
 
   // 유저의 로그인 상태를 확인.
-  useEffect(() => {
-    const verifyUser = async () => {
-      if (cookies.userjwt) {
-        navigate("/shop");
-      }
+  // useEffect(() => {
+  //   const verifyUser = async () => {
+  //     if (cookies.jwt) {
+  //       navigate("/home");
+  //     }
 
-      try {
-        const res = await axios.post("/smartstore/user/login", {}, { withCredentials: true });
-        console.log(res);
-        if (res.data.status == false) {
-          window.onpopstate = function (event) {
-            if (event) {
-              event.preventDefault();
-            }
-            navigate(-2);
-          };
-        }
-      } catch (errors) {
-        console.log(errors);
-      }
-    };
-    verifyUser();
-  }, [cookies, navigate]);
+  //     try {
+  //       const res = await axios.post("/smartstore/user/login", { withCredentials: true });
+  //       console.log(res);
+  //       if (res.data.status == false) {
+  //         // window.onpopstate = function (event) {
+  //         //   if (event) {
+  //         //     event.preventDefault();
+  //         //   }
+  //         //   navigate(-2);
+  //         // };
+  //       }
+  //     } catch (errors) {
+  //       console.log(errors);
+  //     }
+  //   };
+  //   verifyUser();
+  // }, [cookies, navigate]);
 
   // 모달의 바깥쪽을 눌렀을 때 창 닫기
   useEffect(() => {

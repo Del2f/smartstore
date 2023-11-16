@@ -40,7 +40,7 @@ root.render(
               <Route path="/home/*" element={<App />} />
               <Route path="/shop/*" element={<Shop />} />
               <Route path="/buy/:id" element={<Buy />} />
-              <Route path="*" element={<Notfound />} />
+              {/* <Route path="*" element={<Notfound />} /> */}
             </Routes>
           </PersistGate>
         </Provider>

@@ -117,11 +117,11 @@ function TableProductList(props: Props) {
 
   const onGridReady = async (params?: any) => {
     try {
-      const db = await axios.post("/smartstore/home/product", token, { withCredentials: true });
-      console.log(db);
+      const res = await axios.post("/smartstore/home/product", token, { withCredentials: true });
+      console.log(res.data);
 
-      setRowData(db.data.productList);
-      props.setProductTotal && props.setProductTotal(db.data.productList.length);
+      setRowData(res.data.productList);
+      props.setProductTotal && props.setProductTotal(res.data.productList.length);
     } catch (err) {
       console.log(err);
     }
