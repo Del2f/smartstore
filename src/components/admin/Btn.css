@@ -1,0 +1,10 @@
+.btn-check:checked+ .btn {
+    background-color: #00C73C!important;
+    border-color: #00AE34!important;
+}
+
+.btn-primary {
+    --bs-btn-color: #767a83!important;
+    --bs-btn-bg: transparent!important;
+    --bs-btn-border-color: #aaaaaa!important;
+}

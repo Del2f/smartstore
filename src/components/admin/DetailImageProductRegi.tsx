@@ -26,7 +26,7 @@ import "./DetailImageProductRegi.scss";
     );
   }
 
-  function DetailImageUploadBox(props:any) {
+  function DetailImageUploadBox( props: any ) {
   
     const [max, setMax] = useState<any>(10); // 이미지 최대 개수
     const [uploadedImages, setUploadedImages] = useState<any>([]);
@@ -38,8 +38,8 @@ import "./DetailImageProductRegi.scss";
       const uploadBox = uploadBoxRef.current;
       const input = inputRef.current;
       
-      const handleFiles = async (files:any) => {
-        const timer = (ms:any) => new Promise(res => setTimeout(res, ms))
+      const handleFiles = async (files: any) => {
+        const timer = (ms: any) => new Promise(res => setTimeout(res, ms))
 
         const formData = new FormData();
 
@@ -49,7 +49,7 @@ import "./DetailImageProductRegi.scss";
 
         try {
           const URL = await axios.post('/smartstore/home/productregister/img2', formData);
-          URL.data.location.DetailImage.map((list:any, index:any) => {
+          URL.data.location.DetailImage.map((list: any, index: any) => {
             console.log(list.location)
             props.setDetailImage((data:any) => [...data, list.location]);
             props.setIsDetail(true);
@@ -90,17 +90,17 @@ import "./DetailImageProductRegi.scss";
     
     useEffect(() => {
       const editImg = props.DetailImage;
-      const imageJSXs = editImg.map((image:any, index:any) => {
+      const imageJSXs = editImg.map((image: any, index: any) => {
 
-        const isDeleteImage = (element:any) => {
+        const isDeleteImage = (element: any) => {
           return element === image;
         };
 
-        const addIndex = (element:any) => {
+        const addIndex = (element: any) => {
           return element === image;
         };
 
-        const addImg = async (event:any) => {
+        const addImg = async (event: any) => {
           const files = event.target.files;
           const formData = new FormData();
 

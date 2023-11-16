@@ -6,38 +6,44 @@ import { useState, useEffect, useRef } from "react";
 const IconWrap = styled.div`
   position: relative;
   width: 100%;
-  height: 500px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   margin-top: 14px;
 `;
 
-interface IconI {
+interface isImage {
   isAdImage: boolean;
 }
 
-const IconI = styled.div<IconI>`
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  position: absolute;
+const IconI = styled.div<isImage>`
   width: 50px;
   height: 50px;
   content: "";
   background: url(${plus}) 15px 15px no-repeat;
   background-size: 20px;
 
-  ${(props) => (props.isAdImage ? `opacity: 0;` : `opacity: 1;`)}
+  ${(props) =>
+    props.isAdImage
+      ? `
+  position: absolute;
+  opacity: 0;
+  `
+      : `
+  opacity: 1;
+  `}
 `;
 
 const IconLabel = styled.label`
   background-color: transparent;
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   z-index: 0;
+  padding: 100px;
 
   .ImagePreview {
     width: 100%;
@@ -48,26 +54,44 @@ const IconLabel = styled.label`
 `;
 
 const IconInput = styled.input`
+  position: absolute;
   width: 100%;
   visibility: hidden;
 `;
 
 const Error = styled.span`
   display: block;
-  margin-top: 10px;
+  margin: 20px 0;
+  font-size: 20px;
+  font-weight: 700;
+`;
+
+const DeleteBtn = styled.button<isImage>`
+  ${(props) =>
+    props.isAdImage
+      ? `
+  opacity: 1;
+  `
+      : `
+  opacity: 0;
+  `}
 `;
 
 function ImagePreview({ imageURL, setAdBackColor, colorSelector, setIsBackColor }: any) {
-
   // AWS S3에 업로드된 URL Image를 불러오면서 canvas를 적용하면 CORS 이슈가 생긴다.
   // crossOrigin = 'Anonymous'; 추가로 해결.
-  
+
   const image = new Image();
   image.src = imageURL;
-  image.crossOrigin = 'Anonymous';
+  image.crossOrigin = "Anonymous";
 
   const colorPicker = (e: any) => {
-    console.log('colorpicker');
+    console.log("colorpicker");
+
+    if (!colorSelector) {
+      console.log('colorSelector false')
+      return;
+    }
 
     const canvas = document.createElement("canvas");
 
@@ -108,6 +132,12 @@ function AdvertiseImage(props: any) {
 
   const validFileTypes = ["image/jpg", "image/jpeg", "image/png"];
 
+  console.log(props.colorSelector);
+  // console.log(previewImages);
+  // console.log(props.adImage);
+  // console.log(props.isAdvertiseEdit);
+
+  // 이미지 업로드
   const handleFiles = async (files: any) => {
     if (!validFileTypes.find((type: any) => type === files[0].type)) {
       setErrorMessage("이미지 파일을 업로드 해주세요.");
@@ -115,30 +145,41 @@ function AdvertiseImage(props: any) {
     }
     setErrorMessage("");
 
-    const img = files[0];
-    const formData = new FormData();
-    formData.append("AdvertiseImage", img);
     try {
       for (const file of files) {
         if (!file.type.startsWith("image/")) continue;
-        const reader = new FileReader();
-        reader.onloadend = (e: any) => {
-          let result = e.target.result;
-          if (result) {
-            setUploadedImages([result].slice(0, max));
-            props.setIsAdImage(true);
+
+        const image = new Image();
+        image.src = URL.createObjectURL(file);
+
+        image.onload = async () => {
+          if (image.width <= 1500 && image.height <= 800) {
+            const reader = new FileReader();
+            reader.onloadend = (e: any) => {
+              let result = e.target.result;
+              if (result) {
+                setUploadedImages([result].slice(0, max));
+                props.setIsAdImage(true);
+              }
+            };
+            reader.readAsDataURL(file);
+
+            const formData = new FormData();
+            formData.append("AdvertiseImage", file);
+
+            const URL = await axios.post("/smartstore/home/advertise/img", formData);
+            props.setAdImage(URL.data.location);
+          } else {
+            setErrorMessage("이미지의 가로는 1500px 이하, 세로는 800px 이하이어야 합니다.");
           }
         };
-        reader.readAsDataURL(file);
       }
-
-      const URL = await axios.post("/smartstore/home/advertise/img", formData);
-      props.setAdImage(URL.data.location);
     } catch (error) {
       console.log(error);
     }
   };
 
+  // 이미지 교체
   const changeHandler = (event: any) => {
     const files = event.target.files;
 
@@ -146,6 +187,7 @@ function AdvertiseImage(props: any) {
     event.target.value = ""; // 같은 파일 업로드를 위한 초기화
   };
 
+  // 끌어서 업로드
   const dropHandler = (event: any) => {
     event.preventDefault();
     event.stopPropagation();
@@ -164,11 +206,13 @@ function AdvertiseImage(props: any) {
     event.stopPropagation();
   };
 
+  // 삭제
   const IconDelete = (event: any) => {
-    console.log('IconDelete');
+    console.log("광고 이미지를 삭제합니다.");
 
     event.preventDefault();
     event.stopPropagation();
+    
     setUploadedImages([]);
     props.setAdImage("");
 
@@ -177,69 +221,85 @@ function AdvertiseImage(props: any) {
 
     props.setIsAdImage(false);
     props.setIsBackColor(false);
+
+    setPreviewImages("");
   };
 
   // 상품 최초 등록시 미리보기
   useEffect(() => {
-    if(props.isAdvertiseEdit){
-      return;
-    }
+    // if (props.isAdvertiseEdit) {
+    //   return;
+    // }
+    console.log('이미지 최초 업로드시 실행 됩니다.')
 
-      const imageJSXs = uploadedImages.map((imageURL: any, index: any) => {
-        return (
-          <ImagePreview
+    const imageJSXs = uploadedImages.map((imageURL: any, index: any) => {
+      return (
+        <ImagePreview
           imageURL={imageURL}
-            key={index}
-            colorSelector={props.colorSelector}
-            setAdBackColor={props.setAdBackColor}
-            setIsBackColor={props.setIsBackColor}
-          />
-        );
-      });
-      setPreviewImages(imageJSXs);
-
+          key={index}
+          colorSelector={props.colorSelector}
+          setAdBackColor={props.setAdBackColor}
+          setIsBackColor={props.setIsBackColor}
+        />
+      );
+    });
+    setPreviewImages(imageJSXs);
   }, [uploadedImages, props.colorSelector]);
 
   // 상품 수정시
-useEffect(() => {
-  const imageURL = props.adImage;
-  console.log('상품수정시 시작')
+  useEffect(() => {
+    const imageURL = props.adImage;
+    console.log("상품수정시 시작");
+    console.log(imageURL);
 
-  if(!props.isAdvertiseEdit){
-    return;
-  }
+    if (!props.isAdvertiseEdit) {
+      console.log("props.isAdvertiseEdit false이므로 return");
+      return;
+    }
 
-  if (!imageURL) {
-    console.log('수정 아님')
-    setPreviewImages("");
-    props.setAdImage("");
-    props.setIsAdImage(false);
-    return;
-  }
+    if (!imageURL) {
+      console.log("imageURL이 없으므로 수정이 아닌것으로 판단, return");
+      setPreviewImages("");
+      props.setAdImage("");
+      props.setIsAdImage(false);
+      return;
+    }
 
-  const imageJSXs = <ImagePreview imageURL={imageURL} colorSelector={props.colorSelector} setAdBackColor={props.setAdBackColor} setIsBackColor={props.setIsBackColor}/>;
+    const imageJSXs = (
+      <ImagePreview
+        imageURL={imageURL}
+        colorSelector={props.colorSelector}
+        setAdBackColor={props.setAdBackColor}
+        setIsBackColor={props.setIsBackColor}
+      />
+    );
 
-  props.setIsAdImage(true);
-  setPreviewImages(imageJSXs);
-
-}, [props.adImage, props.colorSelector]);
+    props.setIsAdImage(true);
+    setPreviewImages(imageJSXs);
+  }, [props.adImage, props.colorSelector]);
 
   return (
     <>
       <IconWrap className="IconWrap">
-        <IconI className="IconI" isAdImage={props.isAdImage}></IconI>
-        <IconLabel className="IconLabel dragorclick" onDragOver={dragOverHandler} onDrop={dropHandler} >
+        <IconLabel className="IconLabel dragorclick" onDragOver={dragOverHandler} onDrop={dropHandler}>
+          <IconI className="IconI" isAdImage={props.isAdImage}></IconI>
           {previewImages}
           {!props.colorSelector && <IconInput type="file" multiple accept="image/*" onChange={changeHandler} />}
         </IconLabel>
-          <div className="text-btn-wrap" style={{ position: "absolute", right: "20px" }}>
-            <button className="text-btn" onClick={IconDelete}>
-              <span className="text">삭제</span>
-            </button>
-          </div>
         <Error>{errorMessage}</Error>
+        <DeleteBtn
+            className="modal-close-button"
+            style={{ position: "absolute", right: "0px", zIndex: "1" }}
+            isAdImage={props.isAdImage}
+            onClick={IconDelete}
+          >
+            <span className="modal-close-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                <path d="M12.12,10l4.07-4.06a1.5,1.5,0,1,0-2.11-2.12L10,7.88,5.94,3.81A1.5,1.5,0,1,0,3.82,5.93L7.88,10,3.81,14.06a1.5,1.5,0,0,0,0,2.12,1.51,1.51,0,0,0,2.13,0L10,12.12l4.06,4.07a1.45,1.45,0,0,0,1.06.44,1.5,1.5,0,0,0,1.06-2.56Z"></path>
+              </svg>
+            </span>
+          </DeleteBtn>
       </IconWrap>
-
     </>
   );
 }

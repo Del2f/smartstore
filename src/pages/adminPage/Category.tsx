@@ -2,15 +2,17 @@ import axios from "../../api/axios";
 import styled from "styled-components";
 import React, { useState, useRef, useEffect, SetStateAction, useCallback } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import { selectToken } from "../../store/authSlice";
-import TableProductList from "../../components/admin/TableProductList";
+// import TableProductList from "../../components/admin/TableProductList";
 import CategoryIconRegi from "../../components/admin/CategoryIconRegi";
 import AdvertiseImage from "../../components/admin/AdvertiseImage";
-import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import Column from "./CategoryDnD/Column";
 import type1 from "@img/home/category/type1.png";
 import type2 from "@img/home/category/type2.png";
 import type3 from "@img/home/category/type3.png";
+import "./Category.scss";
 
 type Props = {
   setNoticeIcon?: React.Dispatch<SetStateAction<any>>;
@@ -226,20 +228,21 @@ const AdverListWrap = styled.div<showAdverList>`
   ${(props) =>
     props.isAdverListShow
       ? `
-opacity: 1;
-visibility: visible;
-`
+      opacity: 1;
+      visibility: visible;
+      `
       : `
-opacity: 0;
-visibility: hidden;
+      opacity: 0;
+      visibility: hidden;
    `}
   transition: opacity 0.32s cubic-bezier(0.4, 0, 0.6, 1) 80ms, visibility 0.32s step-start 80ms;
 `;
+
 const AdverList = styled.div`
   position: relative;
   width: 600px;
   background-color: white;
-  padding: 20px;
+  padding: 30px 25px;
   border-radius: 12px;
   display: flex;
   flex-direction: column;
@@ -297,8 +300,6 @@ const AdverPreview = styled.div<adverPreview>`
   align-items: center;
   flex-direction: column;
   margin-top: 30px;
-  /* border: 1px solid; */
-  /* border-color: var(--input-border-color); */
   border-radius: 15px;
   background-color: ${(props) => props.adBackColor};
 
@@ -313,13 +314,64 @@ const AdverPreviewColumn = styled.div<adverPreview>`
   align-items: center;
   flex-direction: row;
   margin-top: 30px;
-  /* border: 1px solid; */
-  /* border-color: var(--input-border-color); */
   border-radius: 15px;
   background-color: ${(props) => props.adBackColor};
 
   & input {
     background-color: transparent;
+  }
+`;
+
+interface Modal {
+  isAdvertiseModal: boolean;
+}
+
+const Modal = styled.div<Modal>`
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(20px);
+
+  ${(props) =>
+    props.isAdvertiseModal
+      ? `
+      visibility: visible;
+      `
+      : `
+      visibility: hidden;
+  `}
+`;
+const ModalInner = styled.div<Modal>`
+  position: relative;
+  width: 600px;
+  background-color: white;
+  padding: 30px 25px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  transition: opacity 0.32s cubic-bezier(0.4, 0, 0.6, 1) 80ms, visibility 0.32s step-start 80ms;
+
+  ${(props) =>
+    props.isAdvertiseModal
+      ? `
+      opacity: 1;
+      visibility: visible;
+      `
+      : `
+      opacity: 0;
+      visibility: hidden;
+  `}
+
+  span {
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+    padding: 20px;
   }
 `;
 
@@ -385,19 +437,17 @@ export interface Advertise {
 
 function Category(props: Props) {
   const token = useSelector(selectToken);
+  const navigate = useNavigate();
 
   useEffect(() => {
     props.setNoticeIcon && props.setNoticeIcon("");
     props.setNotice && props.setNotice("카테고리 관리");
     props.setNoticeDate && props.setNoticeDate("");
-    setIsCategory(true);
   }, []);
-
-  // 카테고리 페이지 접속시 true로 반환.
-  const [isCategory, setIsCategory] = useState<boolean>(false);
 
   // 우측 상품목록
   const [selectedProductList, setSelectedProductList] = useState<any>([]);
+  // console.log(selectedProductList);
 
   // 중앙 카테고리에 등록된 상품 목록
   const [addedProductList, setAddedProductList] = useState<any>([]);
@@ -440,6 +490,7 @@ function Category(props: Props) {
   const listRef = useRef<any>(null);
   const AdverBlurWrapRef = useRef<any>();
   const AdverBlurRef = useRef<any>();
+  const AdvertiseModalRef = useRef<any>();
   const blurWrapRef = useRef<any>();
   const blurRef = useRef<any>();
   const colorRef = useRef<any>();
@@ -465,13 +516,16 @@ function Category(props: Props) {
   const [isAdvertise, setIsAdvertise] = useState<boolean>(false);
   const [isAdvertiseEdit, setIsAdvertiseEdit] = useState<boolean>(false);
 
-  console.log("isAdvertise " + isAdvertise);
-  // console.log("isAdvertiseEdit " + isAdvertiseEdit);
+  // console.log("isAdvertise " + isAdvertise);
+  console.log("isAdvertiseEdit " + isAdvertiseEdit);
 
   // 광고 목록 클릭 여부
   const [isAdverListClick, setIsAdverListClick] = useState<boolean>(false);
   const [selectedAdvertise, setSelectedAdvertise] = useState<Advertise[]>([]);
   const [selectedAdverID, setSelectedAdverID] = useState<string>("");
+
+  console.log(isAdverListClick);
+  console.log(selectedAdvertise);
   console.log(selectedAdverID);
 
   // 광고페이지의 광고타입을 지정합니다.
@@ -485,6 +539,7 @@ function Category(props: Props) {
   const [adBackColor, setAdBackColor] = useState<string>("");
   const [adProduct, setAdProduct] = useState<any>([]);
   const [adImage, setAdImage] = useState<string>("");
+  // console.log(adProduct);
 
   // 광고 페이지 상품 클릭 여부
   const [isProductClick, setIsProductClick] = useState<boolean>(false);
@@ -522,47 +577,67 @@ function Category(props: Props) {
   // 배경 색상
   const [colorSelector, setColorSelector] = useState<boolean>(false);
 
+  // 광고 등록 모달창
+  const [isAdvertiseModal, setIsAdvertiseModal] = useState<boolean>(false);
+  console.log(isAdvertiseModal);
+
   // 광고 관련 함수 모음.
   const Advertise = {
+    Link: () => {
+      if (selectedList.length === 0) {
+        console.log("선택된 카테고리가 없습니다.");
+        setIsAdvertiseModal(true);
+        return;
+      }
+
+      if (!isAdvertiseEdit) {
+        navigate("../advertise", { state: { selectedList: selectedList, isAdvertiseEdit: isAdvertiseEdit } });
+      } else {
+        navigate("../advertise", {
+          state: { selectedList: selectedList, isAdvertiseEdit: isAdvertiseEdit, advertise: selectedAdvertise, selectedAdverID: selectedAdverID },
+        });
+      }
+    },
     advertiseListShow: () => {
       setIsAdverListShow(true);
     },
     advertiseShow: () => {
       setIsAdvertise(true);
-      setIsCategory(false);
     },
     advertiseEdit: () => {
+      console.log("광고 수정 버튼을 누름");
+
+      const data = advertise.filter((list: any) => list._id === selectedAdverID);
+      setSelectedAdvertise(data);
+      console.log(data);
+
       setIsAdvertise(true);
-      setIsCategory(false);
+      setIsAdvertiseEdit(true);
 
-      console.log(selectedAdvertise);
-
-      setAdname(selectedAdvertise[0].name);
+      setAdname(data[0].name);
       setIsAdName(true);
 
-      setAdType(selectedAdvertise[0].type);
+      setAdType(data[0].type);
 
-      setAdSubTitle(selectedAdvertise[0].subtitle);
+      setAdSubTitle(data[0].subtitle);
       setIsAdSubTitle(true);
 
-      setAdMainTitle(selectedAdvertise[0].maintitle);
+      setAdMainTitle(data[0].maintitle);
       setIsAdMainTitle(true);
 
-      setAdDetail(selectedAdvertise[0].detail);
+      setAdDetail(data[0].detail);
       setIsAdDetail(true);
 
-      setAdSubDetail(selectedAdvertise[0].subdetail);
+      setAdSubDetail(data[0].subdetail);
       setIsAdSubDetail(true);
 
-      if (selectedAdvertise[0].image) {
-        setAdImage(selectedAdvertise[0].image);
-        setIsAdImage(true);
-      }
+      setAdImage(data[0].image);
+      setIsAdImage(true);
 
-      setAdBackColor(selectedAdvertise[0].backcolor);
+      setAdBackColor(data[0].backcolor);
       setIsBackColor(true);
 
-      setAdURL(selectedAdvertise[0].url);
+      setAdURL(data[0].url);
       setIsAdURL(true);
     },
     // 광고 목록 리스트 클릭시
@@ -583,12 +658,17 @@ function Category(props: Props) {
     // 광고 목록 선택 버튼
     adListSelectBtn: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       // const select = e.currentTarget.textContent;
+      console.log("adListSelectBtn");
       const data = advertise.filter((list: any) => list._id === selectedAdverID);
+      console.log(data);
 
       if (data.length === 1) {
+        console.log("data.length === 1");
         setSelectedAdvertise(data);
         setIsAdvertiseEdit(true);
       } else {
+        console.log("data.length !== 1");
+
         Advertise.InputReset();
         setSelectedAdvertise([]);
         setIsAdvertiseEdit(false);
@@ -600,7 +680,6 @@ function Category(props: Props) {
     },
     cateInfoShow: () => {
       setIsAdvertise(false);
-      setIsCategory(true);
     },
     adName: (e: any) => {
       setAdname(e.target.value);
@@ -665,7 +744,7 @@ function Category(props: Props) {
     //   setIsProductClick(true);
     // },
     adColorSelect: () => {
-      console.log('colorSelectHandler');
+      console.log("colorSelectHandler");
       setColorSelector((e) => !e);
     },
     ProductListShow: () => {
@@ -709,83 +788,87 @@ function Category(props: Props) {
       setAdProduct([]);
       setAdURL("");
     },
-    adSubmit: async (e: any) => {
-      e.preventDefault();
+    // adSubmit: async (e: any) => {
+    //   e.preventDefault();
 
-      if (isSelectedSubTask) {
-        setIsAdFinish(false);
-        setErrAdFinish("해당 카테고리는 광고를 노출 할 수 없습니다.");
-        return;
-      }
+    //   if (isSelectedSubTask) {
+    //     setIsAdFinish(false);
+    //     setErrAdFinish("해당 카테고리는 광고를 노출 할 수 없습니다.");
+    //     return;
+    //   }
 
-      if (isSelected || isSelectedTask) {
-        setIsAdFinish(true);
-        setErrAdFinish("");
+    //   if (isSelected || isSelectedTask) {
+    //     setIsAdFinish(true);
+    //     setErrAdFinish("");
 
-        if (isAdName && isAdSubTitle && isAdMainTitle && isAdDetail && isAdSubDetail && isAdURL && isBackColor) {
-          setIsAdFinish(true);
-          setErrAdFinish("");
+    //     if (isAdName && isAdSubTitle && isAdMainTitle && isAdDetail && isAdSubDetail && isAdURL && isBackColor) {
+    //       setIsAdFinish(true);
+    //       setErrAdFinish("");
 
-          let newAdvertise;
-          if (isAdvertiseEdit) {
-            newAdvertise = {
-              _id: selectedAdverID,
-              type: adType,
-              name: adName,
-              subtitle: adSubTitle,
-              maintitle: adMainTitle,
-              detail: adDetail,
-              subdetail: adSubDetail,
-              image: adImage,
-              url: adURL,
-              backcolor: adBackColor,
-              product_id: adProduct[0]._id,
-            };
-          } else {
-            newAdvertise = {
-              type: adType,
-              name: adName,
-              subtitle: adSubTitle,
-              maintitle: adMainTitle,
-              detail: adDetail,
-              subdetail: adSubDetail,
-              image: adImage,
-              url: adURL,
-              backcolor: adBackColor,
-              product_id: adProduct[0]._id,
-            };
-          }
+    //       let newAdvertise;
+    //       if (isAdvertiseEdit) {
+    //         newAdvertise = {
+    //           _id: selectedAdverID,
+    //           type: adType,
+    //           name: adName,
+    //           subtitle: adSubTitle,
+    //           maintitle: adMainTitle,
+    //           detail: adDetail,
+    //           subdetail: adSubDetail,
+    //           image: adImage,
+    //           url: adURL,
+    //           backcolor: adBackColor,
+    //           product_id: adProduct[0]._id,
+    //         };
+    //       } else {
+    //         newAdvertise = {
+    //           type: adType,
+    //           name: adName,
+    //           subtitle: adSubTitle,
+    //           maintitle: adMainTitle,
+    //           detail: adDetail,
+    //           subdetail: adSubDetail,
+    //           image: adImage,
+    //           url: adURL,
+    //           backcolor: adBackColor,
+    //           product_id: adProduct[0]._id,
+    //         };
+    //       }
 
-          try {
-            const res = await axios.post("/smartstore/home/category/advertise", { isAdvertiseEdit ,newAdvertise, selectedList }, { withCredentials: true });
-            const { success, Advertises } = res.data;
+    //       try {
+    //         const res = await axios.post(
+    //           "/smartstore/home/category/advertise",
+    //           { isAdvertiseEdit, newAdvertise, selectedList },
+    //           { withCredentials: true }
+    //         );
+    //         const { success, Advertises } = res.data;
 
-            console.log(res);
-            if (success) {
-              setAdvertise(Advertises);
-              setIsAdvertise(false);
+    //         console.log(res);
+    //         if (success) {
+    //           setAdvertise(Advertises);
+    //           setIsAdvertise(false);
 
-              // 광고 등록후 초기화
-              Advertise.InputReset();
-            }
-          } catch (err) {
-            console.log(err);
-          }
-        } else {
-          setIsAdFinish(false);
-          setErrAdFinish("내용을 전부 입력해주세요.");
-        }
-      } else {
-        setIsAdFinish(false);
-        setErrAdFinish("카테고리를 선택 해주세요.");
-      }
+    //           // 광고 등록후 초기화
+    //           Advertise.InputReset();
+    //         }
+    //       } catch (err) {
+    //         console.log(err);
+    //       }
+    //     } else {
+    //       setIsAdFinish(false);
+    //       setErrAdFinish("내용을 전부 입력해주세요.");
+    //     }
+    //   } else {
+    //     setIsAdFinish(false);
+    //     setErrAdFinish("카테고리를 선택 해주세요.");
+    //   }
 
-      if (!adProduct[0]) {
-        setErrAdFinish("상품을 선택 해주세요.");
-        setIsAdURL(false);
-        return;
-      }
-    },
+    //   if (!adProduct[0]) {
+    //     setErrAdFinish("상품을 선택 해주세요.");
+    //     setIsAdURL(false);
+    //     return;
+    //   }
+    // },
     Delete: async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, id: string) => {
       e.stopPropagation();
       const advertiseID = id;
@@ -847,7 +930,7 @@ function Category(props: Props) {
       // }
     },
     InputReset: () => {
-      console.log('Advertise InputReset');
+      console.log("Advertise InputReset");
 
       setIsAdvertiseEdit(false);
 
@@ -1344,73 +1427,6 @@ function Category(props: Props) {
     }
   };
 
-  // 등록된 상품 클릭시
-  const AddedProductClick = (name: string, e: React.MouseEvent<HTMLLIElement>) => {
-    const select = e.currentTarget.textContent;
-    const data = addedProductList.filter((list: any) => list.name === select);
-    setIsAddedSelected(true);
-    setAddedSelected(data);
-    setAddedSelectedName(name);
-  };
-
-  // 상품 추가 버튼
-  const ProductAdd = async (e: any) => {
-    e.preventDefault();
-
-    const productCategoryAdd = {
-      selectedProduct: selectedProductList,
-      selectedCategory: selectedList,
-    };
-
-    if (!selectedProductList[0]) {
-      console.log("상품선택이 안됨");
-      return;
-    } else if (!selectedList) {
-      console.log("카테고리 선택이 안됨");
-      return;
-    }
-
-    try {
-      const res = await axios.post("/smartstore/home/category/productcategoryadd", productCategoryAdd, { withCredentials: true });
-      console.log(res.data);
-
-      setAddedProductList(res.data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  // 상품 삭제 버튼
-  const ProductDelete = async (e: any) => {
-    e.preventDefault();
-
-    if (!addedSelected[0]) {
-      console.log("카테고리가 등록된 상품이 선택되지 않았습니다.");
-      return;
-    }
-
-    console.log(addedSelected[0].category);
-    console.log(selectedList._id);
-    const copy = selectedList._id;
-    console.log(copy);
-    const addedDelete = addedSelected[0].category.filter((list: any) => list._id != selectedList._id);
-    console.log(addedDelete);
-
-    const data = {
-      selectedCategory: selectedList,
-      addedSelected: addedSelected,
-      addedDelete: addedDelete,
-    };
-
-    try {
-      const res = await axios.post("/smartstore/home/category/productcategorydelete", data, { withCredentials: true });
-      console.log(res.data);
-      setAddedProductList(res.data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   // 카테고리 리스트 바깥 클릭시 선택 해제
   // useEffect(() => {
   //   const clickOutside = (e: any) => {
@@ -1467,6 +1483,20 @@ function Category(props: Props) {
       document.removeEventListener("mousedown", clickOutside);
     };
   }, [isAdverListShow]);
+
+  // 광고 등록에서 바깥 클릭시 닫힘 기능
+  useEffect(() => {
+    const clickOutside = (e: any) => {
+      if (AdvertiseModalRef.current && !AdvertiseModalRef.current.contains(e.target)) {
+        setIsAdvertiseModal(false);
+      }
+    };
+    document.addEventListener("mousedown", clickOutside);
+    return () => {
+      // Cleanup the event listener
+      document.removeEventListener("mousedown", clickOutside);
+    };
+  }, [isAdvertiseModal]);
 
   // // 카테고리 등록된 상품 리스트 선택 해제
   // useEffect(() => {
@@ -1684,7 +1714,7 @@ function Category(props: Props) {
   useEffect(() => {
     const clickOutside = (e: any) => {
       if (colorRef.current && !colorRef.current.contains(e.target) && !imgRef.current.contains(e.target)) {
-        console.log('clickOutside');
+        console.log("clickOutside");
         setColorSelector(false);
       }
     };
@@ -1711,502 +1741,180 @@ function Category(props: Props) {
             <div className="panel-body flex">
               <div className="box-wrap flex">
                 {!isAdvertise && (
-                <div className="box first flex flex-ju-bt flex-di-row">
-                <div className="category-list">
-                  <div ref={listRef} style={{ width: "350px" }}>
-                    <DragDropContext onDragEnd={onDragEnd}>
-                      <Droppable droppableId="all-columns" direction="vertical" type="column">
-                        {(provided) => (
-                          <Container {...provided.droppableProps} ref={provided.innerRef}>
-                            {dnd.columns &&
-                              dnd.columns.map((column: any, index: any) => {
-                                const tasks = column.taskIds && column.taskIds.map((taskId: any) => taskId);
-                                return (
-                                  <Column
-                                    key={column._id}
-                                    index={index}
-                                    dnd={dnd}
-                                    column={column}
-                                    tasks={tasks}
-                                    isSelected={isSelected}
-                                    isSelectedTask={isSelectedTask}
-                                    setIsSelected={setIsSelected}
-                                    setIsSelectedTask={setIsSelectedTask}
-                                    setIsSelectedSubTask={setIsSelectedSubTask}
-                                    selectedList={selectedList}
-                                    setSelectedList={setSelectedList}
-                                    setSelectedName={setSelectedName}
-                                    setSelectedURL={setSelectedURL}
-                                    selectedId={selectedId}
-                                    setSelectedId={setSelectedId}
-                                    setAddedProductList={setAddedProductList}
-                                    setIconImg={setIconImg}
-                                    setSelectedNavHide={setSelectedNavHide}
-                                    setSelectedChapNavHide={setSelectedChapNavHide}
-                                    setSelectedDarkMode={setSelectedDarkMode}
-                                    setInitialName={setInitialName}
-                                    setAdvertise={setAdvertise}
-                                    setIsAdverListClick={setIsAdverListClick}
-                                    setSelectedAdvertise={setSelectedAdvertise}
-                                    setSelectedAdverID={setSelectedAdverID}
-                                  />
-                                );
-                              })}
-                            {provided.placeholder}
-                          </Container>
-                        )}
-                      </Droppable>
-                    </DragDropContext>
+                  <div className="box first flex flex-ju-bt flex-di-row">
+                    <div className="category-list">
+                      <div ref={listRef} style={{ width: "350px" }}>
+                        <DragDropContext onDragEnd={onDragEnd}>
+                          <Droppable droppableId="all-columns" direction="vertical" type="column">
+                            {(provided) => (
+                              <Container {...provided.droppableProps} ref={provided.innerRef}>
+                                {dnd.columns &&
+                                  dnd.columns.map((column: any, index: any) => {
+                                    const tasks = column.taskIds && column.taskIds.map((taskId: any) => taskId);
+                                    return (
+                                      <Column
+                                        key={column._id}
+                                        index={index}
+                                        dnd={dnd}
+                                        column={column}
+                                        tasks={tasks}
+                                        isSelected={isSelected}
+                                        isSelectedTask={isSelectedTask}
+                                        setIsSelected={setIsSelected}
+                                        setIsSelectedTask={setIsSelectedTask}
+                                        setIsSelectedSubTask={setIsSelectedSubTask}
+                                        selectedList={selectedList}
+                                        setSelectedList={setSelectedList}
+                                        setSelectedName={setSelectedName}
+                                        setSelectedURL={setSelectedURL}
+                                        selectedId={selectedId}
+                                        setSelectedId={setSelectedId}
+                                        setAddedProductList={setAddedProductList}
+                                        setIconImg={setIconImg}
+                                        setSelectedNavHide={setSelectedNavHide}
+                                        setSelectedChapNavHide={setSelectedChapNavHide}
+                                        setSelectedDarkMode={setSelectedDarkMode}
+                                        setInitialName={setInitialName}
+                                        setAdvertise={setAdvertise}
+                                        setIsAdverListClick={setIsAdverListClick}
+                                        setSelectedAdvertise={setSelectedAdvertise}
+                                        setSelectedAdverID={setSelectedAdverID}
+                                        setIsAdvertiseEdit={setIsAdvertiseEdit}
+                                      />
+                                    );
+                                  })}
+                                {provided.placeholder}
+                              </Container>
+                            )}
+                          </Droppable>
+                        </DragDropContext>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
                 )}
 
-                <div className="box second flex flex-ju-bt flex-di-row" >
+                <div className="box second flex flex-ju-bt flex-di-row">
                   <div ref={inputRef} style={{ padding: "0 20px" }}>
-                    <div >
-                      {!isAdvertise ? (
-                        <>
-                          <h3 className="cateInfo-title">카테고리 추가</h3>
-                          <div className="btn-list">
-                            <div className="cateInfo-bg-input">
-                              <div id="input-inner" style={{ display: "flex", alignItems: "center", padding: "0px", width: "100%" }}>
-                                <input
-                                  type="text"
-                                  className="input"
-                                  placeholder="카테고리 이름을 입력후 추가 버튼을 눌러주세요"
-                                  maxLength={20}
-                                  value={addColumn}
-                                  onChange={inputValue}
-                                  style={{}}
-                                />
-                                <div className="text-btn-wrap" style={{ marginRight: "5px" }}>
-                                  <button className="text-btn" onClick={categoryAdd}>
-                                    <span className="text">추가</span>
-                                  </button>
-                                  <button className="text-btn" onClick={categoryDelete}>
-                                    <span className="text">삭제</span>
-                                  </button>
-                                </div>
-                              </div>
+                    <div>
+                      <h3 className="cateInfo-title">카테고리 추가</h3>
+                      <div className="btn-list">
+                        <div className="cateInfo-bg-input">
+                          <div id="input-inner" style={{ display: "flex", alignItems: "center", padding: "0px", width: "100%" }}>
+                            <input
+                              type="text"
+                              className="input"
+                              placeholder="카테고리 이름을 입력후 추가 버튼을 눌러주세요"
+                              maxLength={20}
+                              value={addColumn}
+                              onChange={inputValue}
+                              style={{}}
+                            />
+                            <div className="text-btn-wrap" style={{ marginRight: "5px" }}>
+                              <button className="text-btn" onClick={categoryAdd}>
+                                <span className="text">추가</span>
+                              </button>
+                              <button className="text-btn" onClick={categoryDelete}>
+                                <span className="text">삭제</span>
+                              </button>
                             </div>
-                            <div className={isAdd ? "error" : "error-active"}>{AddMessage}</div>
                           </div>
-                          <div className="second-product-list">
-                            <div className="wrap">
-                              <h2 className="cateInfo-title">카테고리 정보</h2>
-                              <div className="cateInfo-input" style={{ marginTop: "15px" }}>
-                                <h5 className="cateInfo-name">이름</h5>
-                                <div id="input-inner">
-                                  <input type="text" value={selectedName} placeholder="이름을 입력하세요" className="input" onChange={onChange} />
-                                </div>
-                              </div>
-                              <div className="cateInfo-input" style={{ marginTop: "15px" }}>
-                                <h5 className="cateInfo-name">URL 주소</h5>
-                                <div id="input-inner">
-                                  <input type="text" value={selectedURL} placeholder="URL 주소" className="input" onChange={onChangeURL} />
-                                </div>
-                              </div>
-                              <div className={isName ? "error" : "error-active"}>{NameMessage}</div>
-                              <div style={{ position: "relative" }}>
-                                <div className="cateInfo-input">
-                                  <h5 className="cateInfo-name">광고 목록</h5>
-                                  <span>{selectedAdvertise[0]?.name}</span>
-                                  <div>
-                                    <AdvertiseBtn onClick={Advertise.advertiseListShow}>
-                                      <span>광고 목록</span>
-                                    </AdvertiseBtn>
-                                    {selectedAdvertise.length === 1 ? (
-                                      <AdvertiseBtn onClick={Advertise.advertiseEdit}>
-                                        <span>광고 수정</span>
-                                      </AdvertiseBtn>
-                                    ) : (
-                                      <AdvertiseBtn onClick={Advertise.advertiseShow}>
-                                        <span>광고 등록</span>
-                                      </AdvertiseBtn>
-                                    )}
-                                  </div>
-                                </div>
-                              </div>
-                              <div style={{ marginTop: "10px", color: "#ff3627" }}>
-                                <span>{addedErrMessage}</span>
-                              </div>
-                              <CategoryIconRegi
-                                iconImg={iconImg}
-                                setIconImg={setIconImg}
-                                isSelectedTask={isSelectedTask}
-                                isSelectedSubTask={isSelectedSubTask}
-                              ></CategoryIconRegi>
-                              <CategoryInfoUl>
-                                <CategoryInfoLi>
-                                  <Label>
-                                    <h5>다크 모드</h5>
-                                    <Input
-                                      type="checkbox"
-                                      onChange={(e) => setSelectedDarkMode(e.target.checked)}
-                                      checked={selectedDarkMode}
-                                      disabled={!selectedList}
-                                    />
-                                    <CustomCheckbox />
-                                  </Label>
-                                </CategoryInfoLi>
-                                <CategoryInfoLi>
-                                  <Label>
-                                    <h5>메인 메뉴 숨김</h5>
-                                    <Input
-                                      type="checkbox"
-                                      onChange={(e) => setSelectedNavHide(e.target.checked)}
-                                      checked={selectedNavHide}
-                                      disabled={!selectedList}
-                                    />
-                                    <CustomCheckbox />
-                                  </Label>
-                                </CategoryInfoLi>
-                                {selectedList.type === "task" ? (
-                                  <CategoryInfoLi>
-                                    <Label>
-                                      <h5>챕터 메뉴 숨김</h5>
-                                      <Input
-                                        type="checkbox"
-                                        onChange={(e) => setSelectedChapNavHide(e.target.checked)}
-                                        checked={selectedChapNavHide}
-                                        disabled={!selectedList}
-                                      />
-                                      <CustomCheckbox />
-                                    </Label>
-                                  </CategoryInfoLi>
+                        </div>
+                        <div className={isAdd ? "error" : "error-active"}>{AddMessage}</div>
+                      </div>
+                      <div className="second-product-list">
+                        <div className="wrap">
+                          <h2 className="cateInfo-title">카테고리 정보</h2>
+                          <div className="cateInfo-input" style={{ marginTop: "15px" }}>
+                            <h5 className="cateInfo-name">이름</h5>
+                            <div id="input-inner">
+                              <input type="text" value={selectedName} placeholder="이름을 입력하세요" className="input" onChange={onChange} />
+                            </div>
+                          </div>
+                          <div className="cateInfo-input" style={{ marginTop: "15px" }}>
+                            <h5 className="cateInfo-name">URL 주소</h5>
+                            <div id="input-inner">
+                              <input type="text" value={selectedURL} placeholder="URL 주소" className="input" onChange={onChangeURL} />
+                            </div>
+                          </div>
+                          <div className={isName ? "error" : "error-active"}>{NameMessage}</div>
+                          <div style={{ position: "relative" }}>
+                            <div className="cateInfo-input">
+                              <h5 className="cateInfo-name">광고 목록</h5>
+                              <span>{selectedAdvertise[0]?.name}</span>
+                              <div>
+                                <AdvertiseBtn onClick={Advertise.advertiseListShow}>
+                                  <span>광고 목록</span>
+                                </AdvertiseBtn>
+                                {selectedAdvertise.length === 1 ? (
+                                  <AdvertiseBtn onClick={Advertise.Link}>
+                                    <span>광고 수정</span>
+                                  </AdvertiseBtn>
                                 ) : (
-                                  ``
+                                  <AdvertiseBtn onClick={Advertise.Link}>
+                                    <span>광고 등록</span>
+                                  </AdvertiseBtn>
                                 )}
-                              </CategoryInfoUl>
-                              <div className="submit-btn-wrap" style={{ marginTop: "50px" }}>
-                                <button className="submit-btn" onClick={CategoryEdit}>
-                                  <span className="text">저장</span>
-                                </button>
                               </div>
                             </div>
                           </div>
-                        </>
-                      ) : (
-                        <>
-                          <div className="second-product-list">
-                            <div className="wrap">
-                              <div style={{ position: "relative" }}>
-                                <AdvertiseListBtn onClick={Advertise.cateInfoShow}>
-                                  <span>카테고리 목록</span>
-                                </AdvertiseListBtn>
-                              </div>
-                                <div>{selectedList.name}</div>
-                              <h3 className="cateInfo-title">카테고리 광고</h3>
-                              <div className="cateInfo-input-wrap">
-                                <div className="cateInfo-input">
-                                  <h5 className="cateInfo-name">광고 이름</h5>
-                                  <div id="input-inner">
-                                    <input
-                                      type="text"
-                                      value={adName}
-                                      maxLength={20}
-                                      placeholder="시작하는 광고의 이름을 적어주세요."
-                                      className="input"
-                                      onChange={Advertise.adName}
-                                    />
-                                  </div>
-                                </div>
-                                <div className={isAdName ? "error" : "error-active"}>{ErrAdName}</div>
-                              </div>
-                              <h3 className="cateInfo-title">광고 타입을 지정</h3>
-                              <TypeBoxWrap>
-                                <TypeBox number={0} selectedType={adType}>
-                                  <img src={type1} alt="" />
-                                  <input type="radio" name="selectedType" value="0" checked={adType === 0} onChange={Advertise.adTypeChange} />
-                                </TypeBox>
-                                <TypeBox number={1} selectedType={adType}>
-                                  <img src={type2} alt="" />
-                                  <input type="radio" name="selectedType" value="1" checked={adType === 1} onChange={Advertise.adTypeChange} />
-                                </TypeBox>
-                                <TypeBox number={2} selectedType={adType}>
-                                  <img src={type3} alt="" />
-                                  <input type="radio" name="selectedType" value="2" checked={adType === 2} onChange={Advertise.adTypeChange} />
-                                </TypeBox>
-                              </TypeBoxWrap>
-                              <h3 className="cateInfo-title">광고 미리보기</h3>
-                              <div ref={imgRef}>
-                                {adType === 0 && (
-                                  <AdverPreview adBackColor={adBackColor}>
-                                    <div id="input-inner" style={{marginTop: "50px"}}>
-                                      <input
-                                        type="text"
-                                        value={adSubTitle}
-                                        maxLength={20}
-                                        placeholder="가장 위에 들어갑니다."
-                                        className="input adsubtitle adver-input-type1"
-                                        onChange={Advertise.adSubTitle}
-                                      />
-                                      <div className={isAdSubTitle ? "error" : "error-active"}>{ErrAdSubTitle}</div>
-                                    </div>
-                                    <div id="input-inner">
-                                      <input
-                                        type="text"
-                                        value={adMainTitle}
-                                        maxLength={15}
-                                        placeholder="가장 큰 제목 입니다."
-                                        className="input admaintitle adver-input-type1"
-                                        onChange={Advertise.adMainTitle}
-                                      />
-                                      <div className={isAdMainTitle ? "error" : "error-active"}>{ErrAdMainTitle}</div>
-                                    </div>
-                                    <div id="input-inner">
-                                      <textarea
-                                        value={adDetail}
-                                        maxLength={50}
-                                        placeholder="상품에 대한 내용"
-                                        className="input addetail adver-input-type1"
-                                        onChange={Advertise.adDetail}
-                                        style={{ backgroundColor: "transparent" }}
-                                      />
-                                      <div className={isAdDetail ? "error" : "error-active"}>{ErrAdDetail}</div>
-                                    </div>
-                                    <div id="input-inner">
-                                      <textarea
-                                        value={adSubDetail}
-                                        maxLength={50}
-                                        placeholder="특징 및 가격"
-                                        className="input adsubdetail adver-input-type1"
-                                        onChange={Advertise.adSubDetail}
-                                        style={{ backgroundColor: "transparent" }}
-                                      />
-                                      <div className={isAdSubDetail ? "error" : "error-active"}>{ErrAdSubDetail}</div>
-                                    </div>
-                                    <div id="input-inner" style={{ marginTop: "14px" }}>
-                                      <div className="adver-btn">
-                                        <span className="text">구입하기</span>
-                                      </div>
-                                      <div className="adver-btn2">
-                                        <span className="text">더 알아보기</span>
-                                      </div>
-                                    </div>
-                                    <AdvertiseImage
-                                      className={"AdvertiseImage"}
-                                      adImage={adImage}
-                                      setAdImage={setAdImage}
-                                      isAdImage={isAdImage}
-                                      setIsAdImage={setIsAdImage}
-                                      setAdBackColor={setAdBackColor}
-                                      setIsBackColor={setIsBackColor}
-                                      colorSelector={colorSelector}
-                                      setColorSelector={setColorSelector}
-                                      isAdvertiseEdit={isAdvertiseEdit}
-                                    ></AdvertiseImage>
-                                  </AdverPreview>
-                                )}
-                                {adType === 1 && (
-                                  <AdverPreview adBackColor={adBackColor}>
-                                    <div id="input-inner" style={{marginTop: "50px"}}>
-                                      <input
-                                        type="text"
-                                        value={adSubTitle}
-                                        maxLength={20}
-                                        placeholder="가장 위에 들어갑니다."
-                                        className="input adsubtitle adver-input-type1"
-                                        onChange={Advertise.adSubTitle}
-                                      />
-                                      <div className={isAdSubTitle ? "error" : "error-active"}>{ErrAdSubTitle}</div>
-                                    </div>
-                                    <div id="input-inner">
-                                      <input
-                                        type="text"
-                                        value={adMainTitle}
-                                        maxLength={15}
-                                        placeholder="가장 큰 제목 입니다."
-                                        className="input admaintitle adver-input-type1"
-                                        onChange={Advertise.adMainTitle}
-                                      />
-                                      <div className={isAdMainTitle ? "error" : "error-active"}>{ErrAdMainTitle}</div>
-                                    </div>
-                                    <div id="input-inner">
-                                      <textarea
-                                        value={adDetail}
-                                        maxLength={50}
-                                        placeholder="상품에 대한 내용"
-                                        className="input addetail adver-input-type1"
-                                        onChange={Advertise.adDetail}
-                                        style={{ backgroundColor: "transparent" }}
-
-                                      />
-                                      <div className={isAdDetail ? "error" : "error-active"}>{ErrAdDetail}</div>
-                                    </div>
-                                    <AdvertiseImage
-                                      className={"AdvertiseImage"}
-                                      adImage={adImage}
-                                      setAdImage={setAdImage}
-                                      isAdImage={isAdImage}
-                                      setIsAdImage={setIsAdImage}
-                                      setAdBackColor={setAdBackColor}
-                                      setIsBackColor={setIsBackColor}
-                                      colorSelector={colorSelector}
-                                      setColorSelector={setColorSelector}
-                                      isAdvertiseEdit={isAdvertiseEdit}
-                                    ></AdvertiseImage>
-                                    <div id="input-inner">
-                                      <textarea
-                                        value={adSubDetail}
-                                        maxLength={50}
-                                        placeholder="특징 및 가격"
-                                        className="input adsubdetail adver-input-type1"
-                                        onChange={Advertise.adSubDetail}
-                                        style={{ backgroundColor: "transparent" }}
-
-                                      />
-                                      <div className={isAdSubDetail ? "error" : "error-active"}>{ErrAdSubDetail}</div>
-                                    </div>
-                                    <div id="input-inner" style={{ marginTop: "14px" }}>
-                                      <div className="adver-btn">
-                                        <span className="text">구입하기</span>
-                                      </div>
-                                      <div className="adver-btn2">
-                                        <span className="text">더 알아보기</span>
-                                      </div>
-                                    </div>
-                                  </AdverPreview>
-                                )}
-                                {adType === 2 && (
-                                  <AdverPreviewColumn adBackColor={adBackColor}>
-                                    <div style={{marginTop: "50px"}}>
-                                      <div className="adver-input-type3-wrap">
-                                        <input
-                                          type="text"
-                                          value={adSubTitle}
-                                          maxLength={20}
-                                          placeholder="가장 위에 들어갑니다."
-                                          className="input adsubtitle adver-input-type3"
-                                          onChange={Advertise.adSubTitle}
-                                        />
-                                        <div className={isAdSubTitle ? "error" : "error-active"}>{ErrAdSubTitle}</div>
-                                      </div>
-                                      <div className="adver-input-type3-wrap">
-                                        <input
-                                          type="text"
-                                          value={adMainTitle}
-                                          maxLength={15}
-                                          placeholder="가장 큰 제목 입니다."
-                                          className="input admaintitle adver-input-type3"
-                                          onChange={Advertise.adMainTitle}
-                                        />
-                                        <div className={isAdMainTitle ? "error" : "error-active"}>{ErrAdMainTitle}</div>
-                                      </div>
-                                      <div className="adver-input-type3-wrap">
-                                        <textarea
-                                          value={adDetail}
-                                          maxLength={50}
-                                          placeholder="상품에 대한 내용"
-                                          className="input addetail adver-input-type3"
-                                          onChange={Advertise.adDetail}
-                                          style={{ backgroundColor: "transparent" }}
-                                        />
-                                        <div className={isAdDetail ? "error" : "error-active"}>{ErrAdDetail}</div>
-                                      </div>
-                                      <div className="adver-input-type3-wrap">
-                                        <textarea
-                                          value={adSubDetail}
-                                          maxLength={50}
-                                          placeholder="특징 및 가격"
-                                          className="input adsubdetail adver-input-type3"
-                                          onChange={Advertise.adSubDetail}
-                                          style={{ backgroundColor: "transparent" }}
-                                        />
-                                        <div className={isAdSubDetail ? "error" : "error-active"}>{ErrAdSubDetail}</div>
-                                      </div>
-                                      <div className="adver-input-type3-wrap" style={{ marginTop: "15px" }}>
-                                        <div className="adver-btn">
-                                          <span className="text">구입하기</span>
-                                        </div>
-                                        <div className="adver-btn2">
-                                          <span className="text">더 알아보기</span>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <AdvertiseImage
-                                      className={"AdvertiseImage"}
-                                      adImage={adImage}
-                                      setAdImage={setAdImage}
-                                      isAdImage={isAdImage}
-                                      setIsAdImage={setIsAdImage}
-                                      setAdBackColor={setAdBackColor}
-                                      setIsBackColor={setIsBackColor}
-                                      colorSelector={colorSelector}
-                                      setColorSelector={setColorSelector}
-                                      isAdvertiseEdit={isAdvertiseEdit}
-                                    ></AdvertiseImage>
-                                  </AdverPreviewColumn>
-                                )}
-                              </div>
-                              {adImage && (
-                                <div className="cateInfo-input-wrap" style={{ width: "100%" }} ref={colorRef}>
-                                  <div
-                                    className="cateInfo-input"
-                                    onClick={Advertise.adColorSelect}
-                                    style={{ outline: colorSelector ? "2px solid #0071e3" : "none" }}
-                                  >
-                                    <h5 className="cateInfo-name">배경 색상 선택</h5>
-                                    <div
-                                      style={{
-                                        width: "40px",
-                                        height: "40px",
-                                        marginRight: "20px",
-                                        backgroundColor: adBackColor ?? "transparent",
-                                        border: "1px solid #86868b",
-                                        borderRadius: "8px",
-                                      }}
-                                    ></div>
-                                  </div>
-                                </div>
-                              )}
-                              <div className="cateInfo-input-wrap">
-                                <div className="cateInfo-input">
-                                  <h5 className="cateInfo-name">상품 연결</h5>
-                                  {adProduct &&
-                                    adProduct.map((list: any, index: any) => {
-                                      return (
-                                        <li
-                                          key={index}
-                                          value={list.name}
-                                          className="adproduct-list"
-                                          style={{
-                                            backgroundColor: isProductClick ? "#f5f5f7" : "#fff",
-                                          }}
-                                          onClick={() => setIsProductClick((boolean) => !boolean)}
-                                        >
-                                          <div className="edit flex flex-ju-center flex-align-center" style={{ padding: "0 15px" }}>
-                                            <img src={list.mainImage[0]} style={{ width: "40px", marginRight: "5px", padding: "5px" }}></img>
-                                            <span>{list.name}</span>
-                                          </div>
-                                        </li>
-                                      );
-                                    })}
-                                  <div className="text-btn-wrap" style={{ marginRight: "10px" }}>
-                                    <button className="text-btn" onClick={Advertise.ProductListShow}>
-                                      <span className="text">추가</span>
-                                    </button>
-                                    <button className="text-btn" onClick={Advertise.ProductDelete}>
-                                      <span className="text">삭제</span>
-                                    </button>
-                                  </div>
-                                </div>
-                              </div>
-                              <AdSubmitBtn onClick={Advertise.adSubmit}>
-                              {isAdvertiseEdit ? (
-                                <span>수정</span>
-                              ) : (
-                                <span>등록</span>
-                              )}
-                              </AdSubmitBtn>
-                              <div className={isAdFinish ? "error" : "error-active"} style={{ textAlign: "right" }}>
-                                {ErrAdFinish}
-                              </div>
-                            </div>
+                          <div style={{ marginTop: "10px", color: "#ff3627" }}>
+                            <span>{addedErrMessage}</span>
                           </div>
-                        </>
-                      )}
+                          <CategoryIconRegi
+                            iconImg={iconImg}
+                            setIconImg={setIconImg}
+                            isSelectedTask={isSelectedTask}
+                            isSelectedSubTask={isSelectedSubTask}
+                          ></CategoryIconRegi>
+                          <CategoryInfoUl>
+                            <CategoryInfoLi>
+                              <Label>
+                                <h5>다크 모드</h5>
+                                <Input
+                                  type="checkbox"
+                                  onChange={(e) => setSelectedDarkMode(e.target.checked)}
+                                  checked={selectedDarkMode}
+                                  disabled={!selectedList}
+                                />
+                                <CustomCheckbox />
+                              </Label>
+                            </CategoryInfoLi>
+                            <CategoryInfoLi>
+                              <Label>
+                                <h5>메인 메뉴 숨김</h5>
+                                <Input
+                                  type="checkbox"
+                                  onChange={(e) => setSelectedNavHide(e.target.checked)}
+                                  checked={selectedNavHide}
+                                  disabled={!selectedList}
+                                />
+                                <CustomCheckbox />
+                              </Label>
+                            </CategoryInfoLi>
+                            {selectedList.type === "task" ? (
+                              <CategoryInfoLi>
+                                <Label>
+                                  <h5>챕터 메뉴 숨김</h5>
+                                  <Input
+                                    type="checkbox"
+                                    onChange={(e) => setSelectedChapNavHide(e.target.checked)}
+                                    checked={selectedChapNavHide}
+                                    disabled={!selectedList}
+                                  />
+                                  <CustomCheckbox />
+                                </Label>
+                              </CategoryInfoLi>
+                            ) : (
+                              ``
+                            )}
+                          </CategoryInfoUl>
+                          <div className="submit-btn-wrap" style={{ marginTop: "50px" }}>
+                            <button className="submit-btn" onClick={CategoryEdit}>
+                              <span className="text">저장</span>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -2215,45 +1923,16 @@ function Category(props: Props) {
             <div className="panel-footer"></div>
           </div>
         </div>
-        <BlurWrap isProductListShow={isProductListShow} ref={blurWrapRef}>
-          <ProductListWrap isProductListShow={isProductListShow} ref={blurRef}>
-            <ProductList>
-              <h5 className="box-name">상품 목록</h5>
-              <TableProductList
-                isAdvertise={isAdvertise}
-                setSelectedProductList={setSelectedProductList}
-                selectedAdvertise={selectedAdvertise}
-                adProduct={adProduct}
-                setAdProduct={setAdProduct}
-              ></TableProductList>
-              <div className="text-btn-wrap" style={{ marginRight: "10px", justifyContent: "end", marginTop: "10px", alignItems: "center" }}>
-                <span style={{ marginRight: "10px", color: "red", fontWeight: "600", fontSize: "14px" }}>{ErrProductList}</span>
-                <button
-                  className="text-btn"
-                  onClick={Advertise.ProductAdd}
-                  style={{ width: "100px", height: "30px", borderRadius: "20px", backgroundColor: "#0071e3" }}
-                >
-                  <span className="text" style={{ color: "white" }}>
-                    추가
-                  </span>
-                </button>
-                <button
-                  className="text-btn"
-                  onClick={Advertise.ProductListClose}
-                  style={{ width: "100px", height: "30px", borderRadius: "20px", backgroundColor: "#0071e3" }}
-                >
-                  <span className="text" style={{ color: "white" }}>
-                    닫기
-                  </span>
-                </button>
-              </div>
-            </ProductList>
-          </ProductListWrap>
-          <Blur className="blur" isProductListShow={isProductListShow}></Blur>
-        </BlurWrap>
-        <AdverBlurWrap isAdverListShow={isAdverListShow} ref={AdverBlurWrapRef}>
+        <AdverBlurWrap isAdverListShow={isAdverListShow} ref={AdverBlurWrapRef} className="modal">
           <AdverListWrap isAdverListShow={isAdverListShow} ref={AdverBlurRef}>
             <AdverList>
+              <button className="modal-close-button" style={{ position: "absolute", top: "0" }} onClick={Advertise.adverListClose}>
+                <span className="modal-close-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                    <path d="M12.12,10l4.07-4.06a1.5,1.5,0,1,0-2.11-2.12L10,7.88,5.94,3.81A1.5,1.5,0,1,0,3.82,5.93L7.88,10,3.81,14.06a1.5,1.5,0,0,0,0,2.12,1.51,1.51,0,0,0,2.13,0L10,12.12l4.06,4.07a1.45,1.45,0,0,0,1.06.44,1.5,1.5,0,0,0,1.06-2.56Z"></path>
+                  </svg>
+                </span>
+              </button>
               {advertise.length >= 1 && <h5 className="box-name">상품 목록</h5>}
               {advertise?.length === 0 && (
                 <div style={{ textAlign: "center", padding: "20px", fontSize: "20px", fontWeight: "700" }}>등록된 광고가 없습니다.</div>
@@ -2278,45 +1957,49 @@ function Category(props: Props) {
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                         {list.image && <img src={list.image} style={{ width: "80px", marginRight: "5px", padding: "5px", marginLeft: "10px" }}></img>}
                         <span>{list.name}</span>
-                      <button
-                        onClick={(e) => Advertise.Delete(e, list._id)}
-                        style={{ backgroundColor: "transparent", border: "none", color: "#0071e3" }}
-                      >
-                        삭제
-                      </button>
+                        <button
+                          onClick={(e) => Advertise.Delete(e, list._id)}
+                          style={{ backgroundColor: "transparent", border: "none", color: "#0071e3" }}
+                        >
+                          삭제
+                        </button>
                       </div>
                     </li>
                   );
                 })}
               </ul>
-              <div className="text-btn-wrap" style={{ marginRight: "10px", justifyContent: "end", marginTop: "10px", alignItems: "center" }}>
-                <span style={{ marginRight: "10px", color: "red", fontWeight: "600", fontSize: "14px" }}>{ErrProductList}</span>
-                {advertise.length >= 1 && (
-                  <button
-                    className="text-btn"
-                    onClick={(e) => Advertise.adListSelectBtn(e)}
-                    style={{ width: "100px", height: "30px", borderRadius: "20px", backgroundColor: "#0071e3" }}
-                  >
-                    <span className="text" style={{ color: "white" }}>
-                      선택
-                    </span>
-                  </button>
-                )}
-
-                <button
-                  className="text-btn"
-                  onClick={Advertise.adverListClose}
-                  style={{ width: "100px", height: "30px", borderRadius: "20px", backgroundColor: "#0071e3" }}
-                >
-                  <span className="text" style={{ color: "white" }}>
-                    닫기
-                  </span>
-                </button>
-              </div>
+              {advertise?.length !== 0 && (
+                <div className="text-btn-wrap" style={{ marginRight: "10px", justifyContent: "end", marginTop: "10px", alignItems: "center" }}>
+                  <span style={{ marginRight: "10px", color: "red", fontWeight: "600", fontSize: "14px" }}>{ErrProductList}</span>
+                  {advertise.length >= 1 && (
+                    <button
+                      className="text-btn"
+                      onClick={(e) => Advertise.adListSelectBtn(e)}
+                      style={{ width: "100px", height: "30px", borderRadius: "20px", backgroundColor: "#0071e3" }}
+                    >
+                      <span className="text" style={{ color: "white" }}>
+                        선택
+                      </span>
+                    </button>
+                  )}
+                </div>
+              )}
             </AdverList>
           </AdverListWrap>
-          <AdverBlur className="blur" isAdverListShow={isAdverListShow}></AdverBlur>
+          <AdverBlur isAdverListShow={isAdverListShow}></AdverBlur>
         </AdverBlurWrap>
+        <Modal isAdvertiseModal={isAdvertiseModal} className="modal">
+          <ModalInner isAdvertiseModal={isAdvertiseModal} ref={AdvertiseModalRef}>
+            <span>카테고리가 선택 되지 않았습니다.</span>
+            <button className="modal-close-button" style={{ position: "absolute", top: "0" }} onClick={() => setIsAdvertiseModal(false)}>
+              <span className="modal-close-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                  <path d="M12.12,10l4.07-4.06a1.5,1.5,0,1,0-2.11-2.12L10,7.88,5.94,3.81A1.5,1.5,0,1,0,3.82,5.93L7.88,10,3.81,14.06a1.5,1.5,0,0,0,0,2.12,1.51,1.51,0,0,0,2.13,0L10,12.12l4.06,4.07a1.45,1.45,0,0,0,1.06.44,1.5,1.5,0,0,0,1.06-2.56Z"></path>
+                </svg>
+              </span>
+            </button>
+          </ModalInner>
+        </Modal>
       </div>
     </>
   );

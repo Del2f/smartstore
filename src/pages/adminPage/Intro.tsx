@@ -1,270 +1,456 @@
-import { useState, useRef, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import SwiperIntro from "../../components/Intro/Swiper_lntro";
+// import { useState, useRef, useEffect } from "react";
+// import { Link, useNavigate } from "react-router-dom";
+// import styled, { css } from "styled-components";
 
-function Intro() {
-    const navigate = useNavigate();
-    const [showNavdropmenu, setShowNavdropmenu] = useState(false);
-    const navdropmenu = useRef<HTMLLIElement>(null);
+// import "./Intro.scss";
 
-    useEffect(() => {
-        const clickOutside1 = (e: any) => {
-            if (showNavdropmenu && navdropmenu.current && !navdropmenu.current.contains(e.target)) {
-                setShowNavdropmenu(false);
-            }
-        };
-        document.addEventListener("mousedown", clickOutside1);
-        return () => {
-            // Cleanup the event listener
-            document.removeEventListener("mousedown", clickOutside1);
-        };
-    }, [showNavdropmenu]);
+// const LayoutInner = styled.div`
+//   margin-left: auto;
+//   margin-right: auto;
+//   width: 980px;
+// `;
 
-    return (
-        <>
-            <div className="intro-main-wrap">
-                <div className="intro">
-                    <div className="navi flex flex-ju-bt flex-align-center">
-                        <div className="nav-left flex flex-align-center">
-                            <ul className="nav-logo flex flex-wrap flex-align-center">
-                                <li>
-                                    <a
-                                        className="sell-shop"
-                                        onClick={() => {
-                                            navigate("/");
-                                        }}
-                                    >
-                                        스마트스토어센터
-                                    </a>
-                                </li>
-                            </ul>
-                            <ul className="quick-link flex flex-wrap flex-align-center">
-                                <li>
-                                    <a>
-                                        <span className="txt">쇼핑파트너센터</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a>
-                                        <span className="txt">커머스솔루션마켓</span>
-                                        <i className="icon-beta"></i>
-                                    </a>
-                                </li>
-                                <li ref={navdropmenu}>
-                                    <a onClick={() => setShowNavdropmenu((e) => !e)}>
-                                        <span className="txt">네이버광고</span>
-                                        <i className={showNavdropmenu ? "fn fn-up2 arrow" : "fn fn-down2 arrow"}></i>
-                                    </a>
-                                    <ul className={showNavdropmenu ? "nav-dropdown-menu nav-dropdown-menu-active" : "nav-dropdown-menu"}>
-                                        <li>검색광고</li>
-                                        <li>성과형 디스플레이광고</li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div className="service-intro">
-                        <div className="inner">
-                            <div className="info-area flex flex-ju-center flex-wrap">
-                                <div className="text-area">
-                                    <h2>
-                                        나만의 온라인 쇼핑몰<strong>네이버 스마트스토어</strong>
-                                    </h2>
-                                    <p>
-                                        온라인에서 상품을 팔고 싶은데, 쇼핑몰이 없으시다고요?
-                                        <br></br>
-                                        누구나 쉽게 만드는 스마트스토어로 시작하세요.
-                                    </p>
-                                </div>
-                                <div className="btn-area">
-                                    <Link to="./commerce/login">
-                                        <button className="btn btn-login">
-                                            <span>로그인하기</span>
-                                        </button>
-                                    </Link>
-                                    <Link to="./commerce">
-                                        <button className="btn btn-join">
-                                            <span>가입하기</span>
-                                        </button>
-                                    </Link>
-                                </div>
-                                <ul className="link-area">
-                                    <li>
-                                        <i className="fn fn-info1"></i>
-                                        <p className="text">네이버 커머스 ID로 스마트스토어센터를 이용하세요.</p>
-                                        <a>
-                                            <span>네이버 커머스 ID 알아보기</span>
-                                            <i className="fn-shopping"></i>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <i className="fn fn-info1"></i>
-                                        <p className="text">
-                                            <strong>
-                                                기존 스마트스토어센터를 이용하시던 회원님들은 로그인 후 네이버 커머스 ID 회원으로 <br></br>
-                                                전환
-                                            </strong>
-                                            하셔야 스마트스토어센터 이용이 가능합니다.
-                                        </p>
-                                    </li>
-                                </ul>
-                                {/* <div className="intro-banner">
-                                    <span className="image"></span>
-                                    <div className="info">
-                                        <strong>뭐가 다른지 모르시겠다고요?</strong>
-                                        <p>
-                                            네이버 쇼핑과 스마트스토어, 수수료까지 <br></br>한방에 이해하기
-                                        </p>
-                                        <a href="{() => false}" className="link">
-                                            자세히 보기
-                                            <i className="fn-shopping"></i>
-                                        </a>
-                                    </div>
-                                </div> */}
-                            </div>
-                            <div className="tip-area">
-                                <a href="{() => false}" className="tip-area-inner">
-                                    <strong className="title">
-                                        <label htmlFor="" className="label">
-                                            <i className="tip-icon"></i>
-                                        </label>
-                                        <span className="text">윈도 노출</span>
-                                    </strong>
-                                    <span className="detail">
-                                        윈도 노출 신청 조건을 확인해 주세요.
-                                        <i className="fn-shopping"></i>
-                                    </span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="service-join">
-                    <h2 className="title">
-                        <p className="text"></p>
-                    </h2>
-                    <ul className="join-list">
-                        <li className="document">
-                            <a href="{() => false}" className="inner">
-                                <h3 className="icon"></h3>
-                                <h3 className="sub-title"></h3>
-                                <p className="detail"></p>
-                            </a>
-                        </li>
-                        <li className="window">
-                            <a href="{() => false}" className="inner">
-                                <h3 className="icon"></h3>
-                                <h3 className="sub-title"></h3>
-                                <p className="detail"></p>
-                            </a>
-                        </li>
-                        <li className="safety-service">
-                            <a href="{() => false}" className="inner">
-                                <h3 className="icon"></h3>
-                                <h3 className="sub-title"></h3>
-                                <p className="detail"></p>
-                            </a>
-                        </li>
-                        <li className="manual">
-                            <a href="{() => false}" className="inner">
-                                <h3 className="icon"></h3>
-                                <h3 className="sub-title"></h3>
-                                <p className="detail"></p>
-                            </a>
-                        </li>
-                        <li className="fee">
-                            <a href="{() => false}" className="inner">
-                                <h3 className="icon"></h3>
-                                <h3 className="sub-title"></h3>
-                                <p className="detail"></p>
-                            </a>
-                        </li>
-                        <li className="training-cource">
-                            <a href="{() => false}" className="inner">
-                                <h3 className="icon"></h3>
-                                <h3 className="sub-title"></h3>
-                                <p className="detail"></p>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <div className="service-use">
-                    <h2 className="title">
-                        <p className="text"></p>
-                    </h2>
-                    <SwiperIntro />
-                    <div className="footer-wrap">
-                        <div className="inner-footer-wrap">
-                            <div className="footer">
-                                <ul className="provision flex flex-ju-center">
-                                    <li>
-                                        <a href="{() => false}">이용약관</a>
-                                    </li>
-                                    <li>
-                                        <a href="{() => false}">전자금융거래 이용약관</a>
-                                    </li>
-                                    <li>
-                                        <a href="{() => false}">
-                                            <strong className="strong">개인정보 처리방침</strong>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{() => false}">청소년 보호정책</a>
-                                    </li>
-                                    <li>
-                                        <a href="{() => false}">책임의 한계와 법적고지</a>
-                                    </li>
-                                    <li>
-                                        <a href="{() => false}">안전거래가이드</a>
-                                    </li>
-                                    <li>
-                                        <a href="{() => false}">고객센터</a>
-                                    </li>
-                                </ul>
-                                <p className="dsc flex flex-ju-center flex-align-center">
-                                    네이버㈜는 통신판매중개자이며, 통신판매의 당사자가 아닙니다. 상품, 상품정보, 거래에 관한 의무와 책임은 판매자에게 있습니다.
-                                    <br></br>
-                                    또한 판매자와 구매자간의 직거래에 대하여 당사는 관여하지 않기 때문에 거래에 대해서는 책임을 지지 않습니다.
-                                </p>
-                                <ul className="provision flex flex-ju-center flex-align-center">
-                                    <li>사업자등록번호 : 220-81-62517</li>
-                                    <li>통신판매업신고번호 : 제2006-경기성남-0692호</li>
-                                    <li>대표이사 : 최수연</li>
-                                    <li>
-                                        <a href="{() => false}" className="btn-box">
-                                            사업자정보확인
-                                        </a>
-                                    </li>
-                                </ul>
-                                <ul className="provision flex flex-ju-center flex-align-center">
-                                    <li>주소 : 경기도 성남시 분당구 정자일로 95, NAVER 1784, 13561</li>
-                                    <li>
-                                        <a href="{() => false}" className="btn-box">
-                                            전화상담 (전화 전 클릭)
-                                        </a>
-                                    </li>
-                                    <li className="talktalk-wrap">
-                                        <a href="{() => false}" className="btn-box">
-                                            <a href="{() => false}" className="talktalk-icon-sm"></a>
-                                            톡톡상담
-                                        </a>
-                                    </li>
-                                </ul>
-                                <address className="address flex flex-ju-center flex-align-center">
-                                    <p className="logo"></p>
-                                    Copyright ©&nbsp;
-                                    <a href="{() => false}">
-                                        <strong>NAVER Corp.</strong>
-                                    </a>
-                                    &nbsp;All rights reserved.
-                                </address>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </>
-    );
-}
+// const LoginArea = styled.div`
+//   max-width: 300px;
+//   height: 480px;
+//   margin: 0 auto 90px;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   flex-direction: column;
+// `;
 
-export default Intro;
+// const LoginH2 = styled.h2`
+//   padding-top: 34px;
+//   font-size: 40px;
+//   font-weight: 700;
+// `;
+
+// const LoginH3 = styled.h3`
+//   font-size: 24px;
+//   font-weight: 600;
+// `;
+
+// const LoginBox = styled.div`
+//   margin-top: 20px;
+//   width: 100%;
+//   position: relative;
+// `;
+
+// const LoginItem = css`
+//   position: relative;
+//   width: 100%;
+//   height: 44px;
+//   font-size: 15px;
+//   border-radius: 6px;
+//   border: 1px solid #d6d6d6;
+//   background: transparent;
+//   margin: 0;
+//   vertical-align: top;
+//   transition: 0.32s cubic-bezier(0.4, 0, 0.6, 1);
+//   z-index: 1;
+// `;
+
+// const InputStyle = css`
+//   position: relative;
+//   width: 100%;
+//   height: 100%;
+//   padding-left: 15px;
+//   padding-right: 43px;
+//   border-radius: 6px;
+//   border: 0;
+
+//   &:focus {
+//     border: 0;
+//     outline: 0;
+//   }
+
+//   &::placeholder {
+//     color: #a1a1a1;
+//     font-weight: 100;
+//   }
+// `;
+
+// const LoginItemID = styled.div`
+//   ${LoginItem}
+// `;
+
+// const LoginInputID = styled.input`
+//   ${InputStyle}
+// `;
+
+// const LoginItemPW = styled.div`
+//   ${LoginItem}
+// `;
+
+// const LoginInputPW = styled.input`
+//   ${InputStyle}
+// `;
+
+// interface LoginList {
+//   Id: String;
+//   Password: String;
+//   InputFocus: string;
+//   pwInputShow: Boolean;
+//   inputClick: Boolean;
+//   inputClickNumber: Number;
+// }
+
+// const LoginList = styled.ul<LoginList>`
+//   --pw-height: ${(props) => (props.pwInputShow ? `44px` : `0px`)};
+//   --input-opacity: ${(props) => (props.pwInputShow ? `1` : `0`)};
+//   /* min-height: 158px; */
+//   /* max-height: none; */
+
+//   @keyframes fade-in {
+//     0% {
+//       opacity: 0;
+//     }
+
+//     to {
+//       opacity: 0.6;
+//     }
+//   }
+
+//   ${(props) =>
+//     props.InputFocus === "id"
+//       ? `
+//   ${LoginItemID}{
+//     border: 1px solid #0070c9;
+//       border-width: 1px;
+//       box-shadow: 0 0 0 1px #0070c9;
+//       outline: 0;
+//       z-index: 2;
+//     }
+    
+//     ${InputBtn}{
+//         z-index: 2;
+//       }
+
+
+
+//     `
+//       : `
+// ${LoginItemPW}{
+//   border: 1px solid #0070c9;
+//   border-width: 1px;
+//   box-shadow: 0 0 0 1px #0070c9;
+//   outline: 0;
+//   z-index: 2;
+// }
+
+// ${InputBtn2}{
+//         z-index: 2;
+//       }
+// `}
+
+//   ${(props) =>
+//     props.pwInputShow === false && props.Id.length > 0
+//       ? `
+//       ${InputBtn}{
+//         cursor: pointer;
+//         & > i { 
+//           color: #494949;
+//         }
+//       }
+//       `
+//       : `
+
+//   `}
+
+//   ${(props) =>
+//     props.pwInputShow === true && props.Password.length > 0
+//       ? `
+//       ${InputBtn2}{
+//         cursor: pointer;
+//         & > i { 
+//           color: #494949;
+//         }
+//       }
+//       `
+//       : `
+//       ${InputBtn2}{
+//         cursor: pointer;
+//         & > i { 
+//           color: #929292;
+//         }
+//       }
+//   `}
+
+//   ${(props) =>
+//     props.pwInputShow
+//       ? `
+
+//       ${LoginItemID} {
+//         border-top-left-radius: 6px;
+//         border-top-right-radius: 6px;
+//         border-bottom-left-radius: 0;
+//         border-bottom-right-radius: 0;
+//       }
+
+//       ${LoginItemPW} {
+//         opacity: 1;
+//       }
+
+//       ${LoginItemPW} {
+//         border-top-left-radius: 0;
+//         border-top-right-radius: 0;
+//         border-bottom-left-radius: 6px;
+//         border-bottom-right-radius: 6px;
+//       }
+
+//       ${InputBtn}{
+//         opacity: 0;
+//         visibility: hidden;
+//         transition: opacity .32s cubic-bezier(.4, 0, .6, 1) 80ms, visibility .32s step-end 80ms;
+//       }
+
+//       ${InputBtn2}{
+//         opacity: 1;
+//         visibility: visible;
+//         transition: opacity .32s cubic-bezier(.4, 0, .6, 1) 80ms, visibility .32s step-start 80ms;
+//       }
+//       `
+//       : `
+//       ${LoginItemPW} {
+//         opacity: 0;
+//       }
+
+//       ${InputBtn}{
+//         opacity: 1;
+//         visibility: visible;
+//         transition: opacity .32s cubic-bezier(.4, 0, .6, 1) 80ms, visibility .32s step-start 80ms;
+//       }
+
+//       ${InputBtn2}{
+//         opacity: 0;
+//         visibility: hidden;
+//         transition: opacity .32s cubic-bezier(.4, 0, .6, 1) 80ms, visibility .32s step-end 80ms;
+//       }
+//     `};
+// `;
+
+// interface LoginError {
+//   isError: Boolean;
+// }
+
+// const LoginError = styled.div<LoginError>`
+//   ${(props) =>
+//     props.isError
+//       ? `
+//       display: block;
+//       `
+//       : `
+//       display: none;
+//   `};
+
+//   color: #503e30;
+//   background-color: #fae9a3;
+//   position: absolute;
+//   width: 100%;
+//   margin-left: -50%;
+//   border-radius: 5px;
+//   left: 50%;
+//   border: 1px solid rgba(185, 149, 1, 0.47);
+//   box-shadow: 0 5px 10px 2px rgba(0, 0, 0, 0.1);
+//   margin-top: 15px;
+//   padding: 11px;
+//   text-align: center;
+
+//   &::before {
+//     width: 15px;
+//     height: 15px;
+//     background-color: #fae9a3;
+//     content: "";
+//     position: absolute;
+//     left: 47.2%;
+//     -webkit-transform: rotate(135deg) skewX(5deg) skewY(5deg);
+//     -ms-transform: rotate(135deg) skewX(5deg) skewY(5deg);
+//     -o-transform: rotate(135deg) skewX(5deg) skewY(5deg);
+//     transform: rotate(135deg) skewX(5deg) skewY(5deg);
+//     top: -8px;
+//     border-left: 1px solid rgba(185, 149, 1, 0.47);
+//     border-bottom: 1px solid rgba(185, 149, 1, 0.47);
+//     box-shadow: -1px 1px 2px -1px rgba(185, 149, 1, 0.47);
+//   }
+
+//   & > p {
+//     font-size: 13px;
+//     font-weight: 600;
+//   }
+
+//   & > a {
+//     color: #503e30;
+//     text-decoration: underline;
+//   }
+
+//   & > a > span {
+//     font-size: 12px;
+//     font-weight: 500;
+//   }
+// `;
+
+// interface LoginBtn {}
+
+// const InputBtn = styled.button<LoginBtn>`
+//   position: absolute;
+//   background: transparent;
+//   margin: 0;
+//   border: 1px solid transparent;
+//   top: 6px;
+//   right: 10px;
+//   padding: 0 1px 0 2px;
+//   z-index: 1;
+
+//   & > i {
+//     font-size: 26px;
+//     vertical-align: top;
+//     color: #929292;
+//   }
+
+//   i:before {
+//     font-family: shared-icons;
+//     vertical-align: middle;
+//     line-height: 1;
+//     font-weight: 400;
+//     font-style: normal;
+//     content: "\f127";
+//   }
+// `;
+
+// const InputBtn2 = styled(InputBtn)`
+//   top: 3em;
+//   cursor: pointer;
+
+//   & > i {
+//     color: #494949;
+//   }
+// `;
+
+// function Intro() {
+//   const navigate = useNavigate();
+//   const [showNavdropmenu, setShowNavdropmenu] = useState(false);
+
+//   // 유효성 검사
+//   const [isError, setIsError] = useState<boolean>(false);
+
+//   const [pwInputShow, setPwInputShow] = useState(false);
+//   const [IDDeleteIconShow, setIDDeleteIconShow] = useState(false);
+//   const [PWDeleteIconShow, setPWDeleteIconShow] = useState(false);
+
+//   const [inputClickNumber, setInputClickNumber] = useState<Number>(0);
+//   const [inputClick, setInputClick] = useState<Boolean>(false);
+
+//   const idinput = useRef<any>(null);
+//   const pwinput = useRef<any>(null);
+//   const navdropmenu = useRef<HTMLLIElement>(null);
+//   const inputRef = useRef<HTMLUListElement>(null);
+
+//   const IDinputDelete = () => {
+//     idinput.current.value = null;
+//   };
+
+//   const PWinputDelete = () => {
+//     pwinput.current.value = null;
+//   };
+
+//   useEffect(() => {
+//     const clickOutside1 = (e: any) => {
+//       if (showNavdropmenu && navdropmenu.current && !navdropmenu.current.contains(e.target)) {
+//         setShowNavdropmenu(false);
+//       }
+//     };
+//     document.addEventListener("mousedown", clickOutside1);
+//     return () => {
+//       // Cleanup the event listener
+//       document.removeEventListener("mousedown", clickOutside1);
+//     };
+//   }, [showNavdropmenu]);
+
+//   return (
+//     <>
+//       <Link to="./commerce/login">
+//         <button className="btn btn-login">
+//           <span>로그인하기</span>
+//         </button>
+//       </Link>
+//       <Link to="./commerce">
+//         <button className="btn btn-join">
+//           <span>가입하기</span>
+//         </button>
+//       </Link>
+//       <form onSubmit={(e) => LoginBtn(e)}>
+//         <div className="userlogin-layout-wrap">
+//           <LayoutInner className="LayoutInner">
+//             <LoginH2>더욱 빠르게 결제하시려면 로그인하세요.</LoginH2>
+//             <LoginArea className="LoginArea">
+//               <LoginH3 className="LoginH3">Apple Store에 로그인하세요</LoginH3>
+//               <LoginBox className="LoginBox">
+//                 <LoginList
+//                   className="LoginList"
+//                   ref={inputRef}
+//                   Id={Id}
+//                   Password={Password}
+//                   pwInputShow={pwInputShow}
+//                   inputClick={inputClick}
+//                   inputClickNumber={inputClickNumber}
+//                   InputFocus={InputFocus}
+//                 >
+//                   <LoginItemID className="LoginItem">
+//                     <LoginInputID
+//                       type="text"
+//                       name="id"
+//                       placeholder="아이디"
+//                       className="LoginInput"
+//                       ref={idinput}
+//                       onKeyDown={handleKeyDown}
+//                       onClick={() => {
+//                         setInputClick(true);
+//                         setInputClickNumber(1);
+//                       }}
+//                       onFocus={() => handleFocus("id")}
+//                       onBlur={handleBlur}
+//                       onChange={IdHandler}
+//                     />
+//                     <span className={IDDeleteIconShow == false ? "delete-icon-none delete-icon" : "delete-icon"} onClick={IDinputDelete}></span>
+//                   </LoginItemID>
+//                   <LoginItemPW className="LoginItem PW">
+//                     <LoginInputPW
+//                       type="password"
+//                       name="password"
+//                       placeholder="비밀번호"
+//                       className="login-input"
+//                       ref={pwinput}
+//                       onClick={() => {
+//                         setInputClick(true);
+//                         setInputClickNumber(2);
+//                       }}
+//                       onFocus={() => handleFocus("pw")}
+//                       onBlur={handleBlur}
+//                       onChange={PasswordHandler}
+//                     />
+//                     <span className={PWDeleteIconShow == false ? "delete-icon-none delete-icon" : "delete-icon"} onClick={PWinputDelete}></span>
+//                   </LoginItemPW>
+//                   <InputBtn type="submit" className="id">
+//                     <i className="shared-icon"></i>
+//                   </InputBtn>
+//                   <InputBtn2 type="submit" className="pw">
+//                     <i className="shared-icon"></i>
+//                   </InputBtn2>
+//                 </LoginList>
+//                 <LoginError isError={isError}>
+//                   <p className="login-error">Apple&nbsp;ID 또는 암호가 올바르지 않습니다.</p>
+//                   <a className="login-error under" target="_blank">
+//                     <span className="">암호를 잊으셨습니까?</span>
+//                   </a>
+//                 </LoginError>
+//               </LoginBox>
+//             </LoginArea>
+//           </LayoutInner>
+//         </div>
+//       </form>
+//     </>
+//   );
+// }
+
+// export default Intro;

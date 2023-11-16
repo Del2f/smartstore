@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import { AgGridReact } from "ag-grid-react";
-
+import styled from "styled-components";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import "./TableProductRegi.scss";
-
 import $ from "jquery";
+import Checkbox from '../CheckBox';
 
 type Props = {
   optionResult?: any;
@@ -17,28 +17,91 @@ type Props = {
   gridOptions?: any;
   OptionType: number;
   OptionList: any;
+  OptionName1: string;
+  OptionName2: string;
+  OptionName3: string;
+  OptionName4: string;
+  OptionName5: string;
+  OptionName6: string;
+  isEdit: boolean;
 };
+
+const Select = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  color: #525252;
+  border: 1px solid #dbdde2;
+  user-select: none;
+  font-weight: 700;
+  margin-right: -1px;
+
+`
+
+interface pricetype {
+  priceTypeShow: boolean;
+}
+
+const Selector = styled.div<pricetype>`
+  position: absolute;
+  top: 35px;
+  z-index: 1;
+  width: 30px;
+  color: #525252;
+  border: 1px solid #dbdde2;
+  background-color: white;
+  user-select: none;
+  font-weight: 700;
+
+
+  ${ props => props.priceTypeShow ? `
+    display: block;
+    
+  ` : `
+    display: none;
+  `}
+`
+const List = styled.li`
+  text-align: center;
+  padding: 5px 0;
+
+  &:hover {
+    background-color: #e7e7e7;
+  }
+`
 
 function TableProductRegi(props: Props) {
   const rowData = [...props.optionResult];
   const [gridApi, setGridApi] = useState<any>(null);
   const [selectedRows, setSelectedRows] = useState<any>([]);
+  const [selectedID, setSelectedID] = useState<string[]>([]);
+  const [priceTypeSelect, setPriceTypeSelect] = useState<string>("+");
+  const [priceTypeSelector, setPriceTypeSelector] = useState<string[]>(["+","-","="]);
+  const [priceTypeShow, setPriceTypeShow] = useState<boolean>(false);
 
-  const selectedID = selectedRows.map((list: any, index: any) => {
-    return list.id;
-  });
+  const [isOptionPriceCheckBox, setIsOptionPriceCheckBox] = useState<boolean>(true);
+  const [isOptionStockCheckBox, setIsOptionStockCheckBox] = useState<boolean>(true);
+  const [isOptionUseCheckBox, setIsOptionUseCheckBox] = useState<boolean>(true);
+
+  useEffect(() => {
+    const selectedID = selectedRows.map((list: any) => list.id);
+    setSelectedID(selectedID);
+  },[selectedRows])
 
   const [columnDefs, setColumnDefs] = useState<any>([
-    { width: 50, checkboxSelection: true, headerCheckboxSelection: true, resizable: false },
+    { width: 50, checkboxSelection: true, headerCheckboxSelection: true, headerCheckboxSelectionFilteredOnly: true, resizable: false },
     // { field: "optionValue", headerName: "옵션명", width: 250, editable: true, resizable: true },
-    { field: "optionPrice", headerName: "옵션가", width: 200, editable: true, resizable: true },
-    { field: "optionStock", headerName: "재고수량", width: 200, editable: true, resizable: true },
-    { field: "optionStatus", headerName: "판매상태", width: 200, resizable: true },
-    { field: "optionUse", headerName: "사용여부", width: 200, editable: true, resizable: true },
+    { field: "optionPrice", headerName: "옵션가", width: 100, editable: true, resizable: true },
+    { field: "optionStock", headerName: "재고수량", width: 100, editable: true, resizable: true },
+    { field: "optionStatus", headerName: "판매상태", width: 100, resizable: true },
+    { field: "optionUse", headerName: "사용여부", width: 100, editable: true, resizable: true },
     {
       field: "deleteBtn",
       headerName: "삭제",
-      width: 200,
+      width: 100,
       resizable: false,
       cellRendererFramework: () => (
         <div className="delete-btn-wrap">
@@ -49,67 +112,86 @@ function TableProductRegi(props: Props) {
       ),
     },
   ]);
-  console.log(rowData);
 
-useEffect(() => {
-  setColumnDefs(prevDefs => {
-    // 먼저 현재 columnDefs에서 optionValue1과 optionValue2를 제거합니다.
-    const filteredDefs = prevDefs.filter(def => def.field !== "optionValue1" && def.field !== "optionValue2" && def.field !== "optionValue3" && def.field !== "optionValue4" && def.field !== "optionValue5");
+  // 옵션 슬롯을 추가할때마다 Table에 optionValue 슬롯을 추가합니다.
+  // [옵션 목록으로 적용]을 눌러 props.optionResult가 최신화 될 경우에만 슬롯이 늘어납니다.
+  useEffect(() => {
+    setColumnDefs((prevDefs) => {
+      const filteredDefs = prevDefs.filter(
+        (def) =>
+          def.field !== "optionValue1" &&
+          def.field !== "optionValue2" &&
+          def.field !== "optionValue3" &&
+          def.field !== "optionValue4" &&
+          def.field !== "optionValue5" &&
+          def.field !== "optionValue6"
+      );
 
-    // OptionType 값에 따라 필드를 추가합니다.
-    if (props.OptionType === 0) {
-      return [
-        filteredDefs[0], // 첫 번째 요소 유지
-        { field: "optionValue1", headerName: "옵션명", width: 250, editable: true, resizable: true },
-        ...filteredDefs.slice(1), // 첫 번째 요소 이후의 요소들을 그대로 유지
-      ];
-    } else if (props.OptionType === 1) {
-      return [
-        filteredDefs[0], // 첫 번째 요소 유지
-        { field: "optionValue1", headerName: "옵션명", width: 250, editable: true, resizable: true },
-        { field: "optionValue2", headerName: "옵션명2", width: 250, editable: true, resizable: true },
-        ...filteredDefs.slice(1), // 첫 번째 요소 이후의 요소들을 그대로 유지
-      ];
-    } else if (props.OptionType === 2) {
-      return [
-        filteredDefs[0], // 첫 번째 요소 유지
-        { field: "optionValue1", headerName: "옵션명", width: 250, editable: true, resizable: true },
-        { field: "optionValue2", headerName: "옵션명2", width: 250, editable: true, resizable: true },
-        { field: "optionValue3", headerName: "옵션명3", width: 250, editable: true, resizable: true },
-        ...filteredDefs.slice(1), // 첫 번째 요소 이후의 요소들을 그대로 유지
-      ];
-    } else if (props.OptionType === 3) {
-      return [
-        filteredDefs[0], // 첫 번째 요소 유지
-        { field: "optionValue1", headerName: "옵션명", width: 250, editable: true, resizable: true },
-        { field: "optionValue2", headerName: "옵션명2", width: 250, editable: true, resizable: true },
-        { field: "optionValue3", headerName: "옵션명3", width: 250, editable: true, resizable: true },
-        { field: "optionValue4", headerName: "옵션명4", width: 250, editable: true, resizable: true },
-        ...filteredDefs.slice(1), // 첫 번째 요소 이후의 요소들을 그대로 유지
-      ];
-    } else if (props.OptionType === 4) {
-      return [
-        filteredDefs[0], // 첫 번째 요소 유지
-        { field: "optionValue1", headerName: "옵션명", width: 250, editable: true, resizable: true },
-        { field: "optionValue2", headerName: "옵션명2", width: 250, editable: true, resizable: true },
-        { field: "optionValue3", headerName: "옵션명3", width: 250, editable: true, resizable: true },
-        { field: "optionValue4", headerName: "옵션명4", width: 250, editable: true, resizable: true },
-        { field: "optionValue5", headerName: "옵션명5", width: 250, editable: true, resizable: true },
-        ...filteredDefs.slice(1), // 첫 번째 요소 이후의 요소들을 그대로 유지
-      ];
-    } else {
-      return;
-    }
-  });
-}, [props.OptionType]);
+      // OptionType 값에 따라 필드를 추가합니다.
+      if (props.OptionType === 0) {
+        return [
+          filteredDefs[0], // 첫 번째 요소 유지
+          { field: "optionValue1", headerName: props.OptionName1, width: 100, editable: true, resizable: true, filter: true },
+          ...filteredDefs.slice(1), // 첫 번째 요소 이후의 요소들을 그대로 유지
+        ];
+      } else if (props.OptionType === 1) {
+        return [
+          filteredDefs[0], // 첫 번째 요소 유지
+          { field: "optionValue1", headerName: props.OptionName1, width: 100, editable: true, resizable: true, filter: true },
+          { field: "optionValue2", headerName: props.OptionName2, width: 250, editable: true, resizable: true, filter: true },
+          ...filteredDefs.slice(1), // 첫 번째 요소 이후의 요소들을 그대로 유지
+        ];
+      } else if (props.OptionType === 2) {
+        return [
+          filteredDefs[0], // 첫 번째 요소 유지
+          { field: "optionValue1", headerName: props.OptionName1, width: 100, editable: true, resizable: true, filter: true },
+          { field: "optionValue2", headerName: props.OptionName2, width: 250, editable: true, resizable: true, filter: true },
+          { field: "optionValue3", headerName: props.OptionName3, width: 250, editable: true, resizable: true, filter: true },
+          ...filteredDefs.slice(1), // 첫 번째 요소 이후의 요소들을 그대로 유지
+        ];
+      } else if (props.OptionType === 3) {
+        return [
+          filteredDefs[0], // 첫 번째 요소 유지
+          { field: "optionValue1", headerName: props.OptionName1, width: 100, editable: true, resizable: true, filter: true },
+          { field: "optionValue2", headerName: props.OptionName2, width: 250, editable: true, resizable: true, filter: true },
+          { field: "optionValue3", headerName: props.OptionName3, width: 250, editable: true, resizable: true, filter: true },
+          { field: "optionValue4", headerName: props.OptionName4, width: 250, editable: true, resizable: true, filter: true },
+          ...filteredDefs.slice(1), // 첫 번째 요소 이후의 요소들을 그대로 유지
+        ];
+      } else if (props.OptionType === 4) {
+        return [
+          filteredDefs[0], // 첫 번째 요소 유지
+          { field: "optionValue1", headerName: props.OptionName1, width: 100, editable: true, resizable: true, filter: true },
+          { field: "optionValue2", headerName: props.OptionName2, width: 250, editable: true, resizable: true, filter: true },
+          { field: "optionValue3", headerName: props.OptionName3, width: 250, editable: true, resizable: true, filter: true },
+          { field: "optionValue4", headerName: props.OptionName4, width: 250, editable: true, resizable: true, filter: true },
+          { field: "optionValue5", headerName: props.OptionName5, width: 250, editable: true, resizable: true, filter: true },
+          ...filteredDefs.slice(1), // 첫 번째 요소 이후의 요소들을 그대로 유지
+        ];
+      } else if (props.OptionType === 5) {
+        return [
+          filteredDefs[0], // 첫 번째 요소 유지
+          { field: "optionValue1", headerName: props.OptionName1, width: 100, editable: true, resizable: true, filter: true },
+          { field: "optionValue2", headerName: props.OptionName2, width: 250, editable: true, resizable: true, filter: true },
+          { field: "optionValue3", headerName: props.OptionName3, width: 250, editable: true, resizable: true, filter: true },
+          { field: "optionValue4", headerName: props.OptionName4, width: 250, editable: true, resizable: true, filter: true },
+          { field: "optionValue5", headerName: props.OptionName5, width: 250, editable: true, resizable: true, filter: true },
+          { field: "optionValue6", headerName: props.OptionName6, width: 250, editable: true, resizable: true, filter: true },
+          ...filteredDefs.slice(1), // 첫 번째 요소 이후의 요소들을 그대로 유지
+        ];
+      } else {
+        return;
+      }
+    });
+  }, [props.optionResult]);
 
-  const [optionPriceValue, setOptionPriceValue] = useState(0);
-  const [optionStockValue, setOptionStockValue] = useState(0);
-  const [optionStatusValue, setOptionStatusValue] = useState(" 절");
-  const [optionUseValue, setOptionUseValue] = useState(true);
+  const [optionPriceValue, setOptionPriceValue] = useState<any>(0);
+  const [optionStockValue, setOptionStockValue] = useState<any>(0);
+  const [optionUseValue, setOptionUseValue] = useState<Boolean>(true);
 
-  const [showdropmenu, setShowdropmenu] = useState(false);
+  const [showdropmenu, setShowdropmenu] = useState<Boolean>(false);
   const dropmenu = useRef<HTMLDivElement>(null);
+  const pricedropmenu = useRef<HTMLDivElement>(null);
 
   const onCellEditingStopped = (params: any) => {
     // 셀 수정 즉시 새 데이터를 반환합니다.
@@ -124,30 +206,11 @@ useEffect(() => {
     props.setOptionResult(test);
   };
 
-  // 2023-01-10 드디어 해결한 옵션.
-  // 선택목록 일괄 수정을 눌렀을때 체크된 row만 값이 변하는 코드.
-  const onUpdateBtn = () => {
-    const copy = [...rowData];
-
-    const copy2 = copy.map((list: any, index: any) =>
-    selectedID.includes(list.id)
-        ? {
-            ...list,
-            optionPrice: optionPriceValue,
-            optionStock: optionStockValue,
-            optionStatus: optionStockValue > 0 ? "판매" : "품절",
-            optionUse: optionUseValue ? "Y" : "N",
-          }
-        : { ...list }
-    );
-    console.log(copy2)
-    props.setOptionResult(copy2);
-  };
-
   const onSelectionChanged = () => {
     setSelectedRows(gridApi.getSelectedRows());
   };
 
+  // 선택삭제
   const onDeleteBtn = (params: any) => {
     const selectedData = gridApi.getSelectedRows();
     const data = gridApi.updateRowData({ remove: selectedData });
@@ -157,16 +220,23 @@ useEffect(() => {
     props.setOptionValue(newInput);
   };
 
+  const priceTypeOnChange = (e: any) => {
+    const select = e.currentTarget.innerHTML;
+    setPriceTypeSelect(select);
+  }
+
+  // 옵션가
   const onChangePrice = (e: any) => {
     setOptionPriceValue(e.target.value);
   };
 
+  // 재고 수량
   const onChangeStock = (e: any) => {
     setOptionStockValue(e.target.value);
   };
 
   // 사용여부 Y/N 인풋
-  const menuChange = (e: any) => {
+  const onChangeUse = (e: any) => {
     if (e.target.innerHTML == "Y") {
       setOptionUseValue(true);
     } else {
@@ -183,6 +253,72 @@ useEffect(() => {
     $(".selectize-input").children(".option").attr("class", "item");
 
     setShowdropmenu(false);
+  };
+
+  const option = {
+    CheckBoxPriceHandler: () => {
+      console.log('CheckBoxPriceHandler');
+      setIsOptionPriceCheckBox(!isOptionPriceCheckBox);
+    },
+    CheckBoxStockHandler: () => {
+      console.log('CheckBoxStockHandler');
+      setIsOptionStockCheckBox(!isOptionStockCheckBox);
+    },
+    CheckBoxUseHandler: () => {
+      console.log('CheckBoxUseHandler');
+      setIsOptionUseCheckBox(!isOptionUseCheckBox);
+    },
+  }
+  
+  // 2023-01-10 드디어 해결한 옵션.
+  // 선택목록 일괄 수정을 눌렀을때 체크된 row만 값이 변하는 코드.
+  const onUpdateBtn = () => {
+    console.log('onUpdateBtn')
+    const copy = [...rowData];
+
+    const result = copy.map((list: any, index: any) => {
+      if (selectedID.includes(list.id)) {
+        let updatedOptionPrice = parseFloat(list.optionPrice);
+        let updatedOptionStock = list.optionStock;
+        let updatedOptionUse = list.optionUse;
+        
+        if (isOptionPriceCheckBox) {
+          if (priceTypeSelect === "+") {
+            updatedOptionPrice += parseFloat(optionPriceValue);
+          } else if (priceTypeSelect === "-") {
+            updatedOptionPrice -= parseFloat(optionPriceValue);
+            if (updatedOptionPrice < 0) {
+              updatedOptionPrice = 0;
+            }
+          } else if (priceTypeSelect === "=") {
+            updatedOptionPrice = optionPriceValue;
+          }
+        }
+
+        if (isOptionStockCheckBox) {
+          updatedOptionStock = optionStockValue;
+        }
+
+        if (isOptionUseCheckBox) {
+          updatedOptionUse = optionUseValue ? "Y" : "N";
+        }
+
+        return {
+          ...list,
+          optionPrice: updatedOptionPrice,
+          optionStock: updatedOptionStock,
+          optionStatus: updatedOptionStock > 0 ? "판매" : "품절",
+          optionUse: updatedOptionUse,
+        };
+      } else {
+        return { ...list };
+      }
+    });
+
+    setSelectedRows([]);
+    setSelectedID([]);
+    console.log(result);
+    props.setOptionResult(result);
   };
 
   // 메뉴 파트1 옵션 마우스 올렸을때
@@ -206,6 +342,9 @@ useEffect(() => {
       if (showdropmenu && dropmenu.current && !dropmenu.current.contains(e.target)) {
         setShowdropmenu(false);
       }
+      if (priceTypeShow && pricedropmenu.current && !pricedropmenu.current.contains(e.target)) {
+        setPriceTypeShow(false);
+      }
     };
 
     document.addEventListener("mousedown", clickOutside);
@@ -214,7 +353,7 @@ useEffect(() => {
       // Cleanup the event listener
       document.removeEventListener("mousedown", clickOutside);
     };
-  }, [showdropmenu]);
+  }, [showdropmenu, priceTypeShow]);
 
   return (
     <>
@@ -225,11 +364,21 @@ useEffect(() => {
         <div className="menu-bottom-right flex">
           <div className="option-price">
             <span>옵션가</span>
+            <Select onClick={() => setPriceTypeShow(!priceTypeShow)}>
+              {priceTypeSelect}
+              <Selector priceTypeShow={priceTypeShow} ref={pricedropmenu}>
+                {priceTypeSelector.map((list: any, index: number) => (
+                  <List key={index} onClick={priceTypeOnChange}>{list}</List>
+                ))}
+              </Selector>
+            </Select>
             <input type="text" className="option-input" value={optionPriceValue} onChange={onChangePrice} />
+            <Checkbox checked={isOptionPriceCheckBox} onClick={option.CheckBoxPriceHandler}/>
           </div>
           <div className="option-stock">
             <span>재고수량</span>
             <input type="text" className="option-input" value={optionStockValue} onChange={onChangeStock} />
+            <Checkbox checked={isOptionStockCheckBox} onClick={option.CheckBoxStockHandler}/>
           </div>
           <div className="option-use">
             <span>사용여부</span>
@@ -240,16 +389,17 @@ useEffect(() => {
                 </div>
                 <div className={showdropmenu ? "selectize-dropdown dropdown-active" : "selectize-dropdown"}>
                   <div className="selectize-dropdown-content">
-                    <div className="option selected" onClick={menuChange}>
+                    <div className="option selected" onClick={onChangeUse}>
                       Y
                     </div>
-                    <div className="option" onClick={menuChange}>
+                    <div className="option" onClick={onChangeUse}>
                       N
                     </div>
                   </div>
                 </div>
               </div>
             </ul>
+            <Checkbox checked={isOptionUseCheckBox} onClick={option.CheckBoxUseHandler}/>
           </div>
           <button className="selected-modify-btn" onClick={onUpdateBtn}>
             <span>선택목록 일괄수정</span>

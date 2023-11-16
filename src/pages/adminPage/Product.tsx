@@ -1,6 +1,7 @@
 import { useState, useEffect, SetStateAction } from "react";
 import { useCookies } from "react-cookie";
 import TableProductList from "../../components/admin/TableProductList";
+import "./Product.scss";
 
 type Props = {
   setNoticeIcon?: React.Dispatch<SetStateAction<any>>;
@@ -21,32 +22,30 @@ function Product(props: Props) {
   return (
     <>
       <div className="SellerSubframe product">
-        <div style={{minWidth: "1200px"}}>
-
-        <div className="panel panel-seller">
-          <div className="panel-heading">
-            <div className="pull-left">
-              <h3 className="panel-title">
-                상품목록 (총&nbsp;
-                <span className="text-primary">{productTotal}</span>
-                개)
-              </h3>
-            </div>
-          </div>
-          <div className="panel-body">
-            <div className="btn-list"></div>
-            {cookies.jwt ? (
-              <div className="table-product-list">
-                <TableProductList setProductTotal={setProductTotal}></TableProductList>
+        <div style={{ minWidth: "1200px" }}>
+          <div className="panel panel-seller">
+            <div className="panel-heading">
+              <div className="pull-left">
+                <h3 className="panel-title">
+                  상품목록 (총&nbsp;
+                  <span className="text-primary">{productTotal}</span>
+                  개)
+                </h3>
               </div>
-            ) : (
-              ""
-            )}
+            </div>
+            <div className="panel-body">
+              <div className="btn-list"></div>
+              {cookies.jwt ? (
+                <div className="table-product-list">
+                  <TableProductList setProductTotal={setProductTotal}></TableProductList>
+                </div>
+              ) : (
+                ""
+              )}
+            </div>
+            <div className="panel-footer"></div>
           </div>
-          <div className="panel-footer"></div>
         </div>
-        </div>
-
       </div>
     </>
   );

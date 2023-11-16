@@ -191,7 +191,7 @@ const ActionButton = styled.div`
   margin-left: 24px;
   float: left;
 `;
-const ActionLink = styled.a`
+const ActionLink = styled(Link)`
   cursor: pointer;
   display: inline-block;
   text-align: center;
@@ -222,23 +222,24 @@ interface Props {
 }
 
 function Products({ gmId, categoryList, setNavCart }: Props) {
-  const [cookies, setCookie, removeCookie] = useCookies(["userjwt"]);
   const { id } = useParams();
-  console.log(id);
+  const [cookies, setCookie, removeCookie] = useCookies(["userjwt"]);
 
   const [product, setProduct] = useState<productList | null>();
+  const [URL, setURL] = useState<string>("");
+  const [isIdNotFound, setIsIdNotFound] = useState<boolean>(false);
+
+  const [scrollActive, setScrollActive] = useState(false);
+  const [selectedBtnColor, setSelectedBtnColor] = useState(0);
+  
+  console.log(URL);
+  console.log(product);
+
   const cost = (product && parseInt(product?.cost)) || 0;
   const price = (product && parseInt(product?.price)) || 0;
   const salePercent = ((cost - price) / cost) * 100;
   const salePercentInt = Math.floor(salePercent);
   const scroll = useRef<any>(null);
-  const [scrollActive, setScrollActive] = useState(false);
-  const [selectedBtnColor, setSelectedBtnColor] = useState(0);
-  const [URL, setURL] = useState<string>("");
-  const [isIdNotFound, setIsIdNotFound] = useState<boolean>(false);
-
-  console.log(URL);
-  console.log(product);
 
   // // 마우스 스크롤 상단고정
   const [scrollY, setScrollY] = useState(0);
@@ -558,7 +559,6 @@ function Products({ gmId, categoryList, setNavCart }: Props) {
     "macbook-air-m2": MacBookAirM2,
     // 다른 URL과 컴포넌트를 추가할 수 있습니다.
   };
-  console.log(componentMap);
 
   const selectProduct = () => {
     const SelectedComponent = componentMap[URL];
@@ -610,7 +610,7 @@ function Products({ gmId, categoryList, setNavCart }: Props) {
                   </MenuWrap>
                   <Actions className="ac-ln-actions">
                     <ActionButton className="ac-ln-action ac-ln-action-button">
-                      <ActionLink className="ac-ln-button" href="/kr/shop/goto/buy_mac/macbook_air">
+                      <ActionLink className="ac-ln-button" to={`../buy/${URL}`}>
                         구입하기
                       </ActionLink>
                     </ActionButton>

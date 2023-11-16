@@ -95,6 +95,7 @@ interface ITaskProps {
   setIsAdverListClick: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedAdvertise: React.Dispatch<React.SetStateAction<Advertise[]>>;
   setSelectedAdverID: React.Dispatch<React.SetStateAction<string>>;
+  setIsAdvertiseEdit: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Task = ({
@@ -123,6 +124,7 @@ const Task = ({
   setIsAdverListClick,
   setSelectedAdvertise,
   setSelectedAdverID,
+  setIsAdvertiseEdit,
 }: ITaskProps) => {
 
   const taskSelected = async (e: any) => {
@@ -185,6 +187,7 @@ const Task = ({
         setSelectedChapNavHide(false);
         setSelectedDarkMode(false);
         setIsAdverListClick(false);
+        setIsAdvertiseEdit(false);
         return;
       }
     }

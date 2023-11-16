@@ -6,8 +6,10 @@ import { useCookies } from "react-cookie";
 import TableProduct from "../../components/admin/TableProductRegi";
 import ImageProductRegi from "../../components/admin/ImageProductRegi";
 import SubImageProductRegi from "../../components/admin/SubImageProductRegi";
-import { relative } from "path";
+import OptionImage from "../../components/admin/OptionImage";
 import { addProductModel } from "../../../../server/Models/ProductModel";
+import "./ProductRegister.scss";
+import { Column } from "ag-grid-community";
 
 type Props = {
   setNoticeIcon?: React.Dispatch<SetStateAction<any>>;
@@ -64,7 +66,67 @@ const DropMenu = styled.div<DropMenu>`
   }
 `;
 
-interface addProductResult {}
+interface OptionDropMenu {
+  isOptionDropMenu: boolean;
+}
+
+const OptionDropMenu = styled.div<OptionDropMenu>`
+  align-items: center;
+  padding: 20px;
+
+  ${(props) =>
+    props.isOptionDropMenu
+      ? `
+  display: flex;
+  `
+      : `
+  display: none;
+  `}
+`;
+
+const OptionUl = styled.ul`
+  width: 100%;
+`;
+
+const Optionli = styled.li<any>`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+
+  &:hover {
+    background-color: #e6e6e6;
+    border-radius: 20px;
+  }
+`;
+
+const OptionImagePreview = styled.div`
+  position: absolute;
+  z-index: 1;
+`;
+
+interface Option {
+  optionName1?: string;
+  optionValue1?: string;
+  optionImage1?: string;
+  optionName2?: string;
+  optionValue2?: string;
+  optionImage2?: string;
+  optionName3?: string;
+  optionValue3?: string;
+  optionImage3?: string;
+  optionName4?: string;
+  optionValue4?: string;
+  optionImage4?: string;
+  optionName5?: string;
+  optionValue5?: string;
+  optionImage5?: string;
+  optionName6?: string;
+  optionValue6?: string;
+  optionImage6?: string;
+}
+
+export type OptionList = Array<Array<Option>>;
 
 function ProductRegister(props: Props) {
   const navigate = useNavigate();
@@ -81,24 +143,54 @@ function ProductRegister(props: Props) {
   const [Price, setPrice] = useState<Number | null>(null);
 
   const [OptionType, setOptionType] = useState<number>(0);
-  const [OptionList, setOptionList] = useState<any[]>([]);
+  const [OptionList, setOptionList] = useState<any>([]);
+
+  console.log(OptionList);
 
   const [OptionName1, setOptionName1] = useState<string>("");
   const [OptionName2, setOptionName2] = useState<string>("");
   const [OptionName3, setOptionName3] = useState<string>("");
   const [OptionName4, setOptionName4] = useState<string>("");
   const [OptionName5, setOptionName5] = useState<string>("");
+  const [OptionName6, setOptionName6] = useState<string>("");
   const [OptionValue1, setOptionValue1] = useState<string[]>([]);
   const [OptionValue2, setOptionValue2] = useState<string[]>([]);
   const [OptionValue3, setOptionValue3] = useState<string[]>([]);
   const [OptionValue4, setOptionValue4] = useState<string[]>([]);
   const [OptionValue5, setOptionValue5] = useState<string[]>([]);
+  const [OptionValue6, setOptionValue6] = useState<string[]>([]);
+  const [OptionImage1, setOptionImage1] = useState<string>("");
+  const [OptionImage2, setOptionImage2] = useState<string>("");
+  const [OptionImage3, setOptionImage3] = useState<string>("");
+  const [OptionImage4, setOptionImage4] = useState<string>("");
+  const [OptionImage5, setOptionImage5] = useState<string>("");
+  const [OptionImage6, setOptionImage6] = useState<string>("");
+  const [OptionListIndex1, setOptionListIndex1] = useState<number | null>(null);
+  const [OptionListIndex2, setOptionListIndex2] = useState<number | null>(null);
+
+  // 옵션 이미지 개수
+  const [OptionImageMax, setOptionImageMax] = useState<number>(8);
+
+  // 중복 클릭 방지
 
   const [OptionResult, setOptionResult] = useState<any>([]);
   const [addProductResult, setAddProductResult] = useState<InstanceType<typeof addProductModel>[]>([]);
   // const [addProductResult, setAddProductResult] = useState<addProductResult[]>([]);
+  // console.log(OptionResult);
 
-  console.log(OptionResult);
+  // 옵션 이미지 추가 드롭메뉴
+  const [isOptionDropMenu1, setIsOptionDropMenu1] = useState<boolean>(false);
+  const [isOptionDropMenu2, setIsOptionDropMenu2] = useState<boolean>(false);
+  const [isOptionDropMenu3, setIsOptionDropMenu3] = useState<boolean>(false);
+  const [isOptionDropMenu4, setIsOptionDropMenu4] = useState<boolean>(false);
+  const [isOptionDropMenu5, setIsOptionDropMenu5] = useState<boolean>(false);
+  const [isOptionDropMenu6, setIsOptionDropMenu6] = useState<boolean>(false);
+  // console.log("isOptionDropMenu1 + " + isOptionDropMenu1);
+  // console.log("isOptionDropMenu2 + " + isOptionDropMenu2);
+  // console.log("isOptionDropMenu3 + " + isOptionDropMenu3);
+  // console.log("isOptionDropMenu4 + " + isOptionDropMenu4);
+  // console.log("isOptionDropMenu5 + " + isOptionDropMenu5);
+  // console.log("isOptionDropMenu6 + " + isOptionDropMenu6);
 
   const [URL, setURL] = useState<string>("");
   const [MainImage, setMainImage] = useState<any>([]);
@@ -107,477 +199,6 @@ function ProductRegister(props: Props) {
   const [mainSpec, setMainSpec] = useState<any>([]);
   const [spec, setSpec] = useState<any>([]);
   const [Delivery, setDelivery] = useState<Number | null>(null);
-
-  // // 옵션목록에서 옵션명을 수정했을때 Input에도 반영하기.
-  // useEffect(() => {
-  //   const editedOptionValues = OptionResult && OptionResult.map((list: any) => list.optionValue1);
-  //   setOptionValue1(editedOptionValues);
-  // }, [OptionResult]);
-
-  useEffect(() => {
-    // 재고가 있으면서 사용여부가 Y인 경우에만 판매승인
-    const use = OptionResult.some((list: any) => {
-      return list.optionUse === "Y" && list.optionStock > 0;
-    });
-
-    if (use) {
-      setIsOptionList(true);
-    } else {
-      setIsOptionList(false);
-    }
-  }, [OptionResult]);
-
-  useEffect(() => {
-    // 상품 수정시 실행됩니다.
-    if (id) {
-      setIsEdit(true);
-
-      const productedit = async () => {
-        const db = await axios.get(`/smartstore/home/product/${id}`);
-        try {
-          console.log(`${id}의 db 정보를 가져옵니다.`);
-          const product = db.data.productEdit;
-          console.log(product);
-          console.log(product.optionList);
-
-          setCategory(product.category);
-          setName(product.name);
-          setSubTitle(product.subtitle);
-          setCost(product.cost);
-          setPrice(product.price);
-
-          setOptionList(product.optionList);
-            setOptionType(product.optionList.length - 1);
-
-            if(product.optionList.length === 1){
-              console.log("product.optionList.length === 1");
-
-              product.optionList[0].forEach((option, index) => {
-                setOptionValue1(prevValues => {
-                  const updatedValues = [...prevValues];
-                  updatedValues[index] = option.optionValue1;
-                  return updatedValues;
-                });
-              });
-
-              setOptionName1(product.optionList[0][0].optionName1);
-              // setOptionValue1(product.option[0].optionValue1);
-              setIsOptionName1(true);
-              setIsOptionValue1(true);
-            } else if (product.optionList.length === 2) {
-              product.optionList[0].forEach((option, index) => {
-                setOptionValue1(prevValues => {
-                  const updatedValues = [...prevValues];
-                  updatedValues[index] = option.optionValue1;
-                  return updatedValues;
-                });
-              });
-              product.optionList[1].forEach((option, index) => {
-                setOptionValue2(prevValues => {
-                  const updatedValues = [...prevValues];
-                  updatedValues[index] = option.optionValue2;
-                  return updatedValues;
-                });
-              });
-              
-              setOptionName1(product.optionList[0][0].optionName1);
-              setOptionName2(product.optionList[1][0].optionName2);
-
-              setIsOptionName1(true);
-              setIsOptionValue1(true);
-              setIsOptionName2(true);
-              setIsOptionValue2(true);
-            } else if (product.optionList.length === 3) {
-              product.optionList[0].forEach((option, index) => {
-                setOptionValue1(prevValues => {
-                  const updatedValues = [...prevValues];
-                  updatedValues[index] = option.optionValue1;
-                  return updatedValues;
-                });
-              });
-              product.optionList[1].forEach((option, index) => {
-                setOptionValue2(prevValues => {
-                  const updatedValues = [...prevValues];
-                  updatedValues[index] = option.optionValue2;
-                  return updatedValues;
-                });
-              });
-              product.optionList[2].forEach((option, index) => {
-                setOptionValue3(prevValues => {
-                  const updatedValues = [...prevValues];
-                  updatedValues[index] = option.optionValue3;
-                  return updatedValues;
-                });
-              });
-
-              setOptionName1(product.optionList[0][0].optionName1);
-              setOptionName2(product.optionList[1][0].optionName2);
-              setOptionName3(product.optionList[2][0].optionName3);
-
-              setIsOptionName1(true);
-              setIsOptionValue1(true);
-              setIsOptionName2(true);
-              setIsOptionValue2(true);
-              setIsOptionName3(true);
-              setIsOptionValue3(true);
-            } else if (product.optionList.length === 4) {
-              product.optionList[0].forEach((option, index) => {
-                setOptionValue1(prevValues => {
-                  const updatedValues = [...prevValues];
-                  updatedValues[index] = option.optionValue1;
-                  return updatedValues;
-                });
-              });
-              product.optionList[1].forEach((option, index) => {
-                setOptionValue2(prevValues => {
-                  const updatedValues = [...prevValues];
-                  updatedValues[index] = option.optionValue2;
-                  return updatedValues;
-                });
-              });
-              product.optionList[2].forEach((option, index) => {
-                setOptionValue3(prevValues => {
-                  const updatedValues = [...prevValues];
-                  updatedValues[index] = option.optionValue3;
-                  return updatedValues;
-                });
-              });
-              product.optionList[3].forEach((option, index) => {
-                setOptionValue3(prevValues => {
-                  const updatedValues = [...prevValues];
-                  updatedValues[index] = option.optionValue4;
-                  return updatedValues;
-                });
-              });
-
-              setOptionName1(product.optionList[0][0].optionName1);
-              setOptionName2(product.optionList[1][0].optionName2);
-              setOptionName3(product.optionList[2][0].optionName3);
-              setOptionName4(product.optionList[3][0].optionName4);
-
-              setIsOptionName1(true);
-              setIsOptionValue1(true);
-              setIsOptionName2(true);
-              setIsOptionValue2(true);
-              setIsOptionName3(true);
-              setIsOptionValue3(true);
-              setIsOptionName4(true);
-              setIsOptionValue4(true);
-            } else if (product.optionList.length === 5) {
-              product.optionList[0].forEach((option, index) => {
-                setOptionValue1(prevValues => {
-                  const updatedValues = [...prevValues];
-                  updatedValues[index] = option.optionValue1;
-                  return updatedValues;
-                });
-              });
-              product.optionList[1].forEach((option, index) => {
-                setOptionValue2(prevValues => {
-                  const updatedValues = [...prevValues];
-                  updatedValues[index] = option.optionValue2;
-                  return updatedValues;
-                });
-              });
-              product.optionList[2].forEach((option, index) => {
-                setOptionValue3(prevValues => {
-                  const updatedValues = [...prevValues];
-                  updatedValues[index] = option.optionValue3;
-                  return updatedValues;
-                });
-              });
-              product.optionList[3].forEach((option, index) => {
-                setOptionValue3(prevValues => {
-                  const updatedValues = [...prevValues];
-                  updatedValues[index] = option.optionValue4;
-                  return updatedValues;
-                });
-              });
-              product.optionList[4].forEach((option, index) => {
-                setOptionValue3(prevValues => {
-                  const updatedValues = [...prevValues];
-                  updatedValues[index] = option.optionValue5;
-                  return updatedValues;
-                });
-              });
-
-              setOptionName1(product.optionList[0][0].optionName1);
-              setOptionName2(product.optionList[1][0].optionName2);
-              setOptionName3(product.optionList[2][0].optionName3);
-              setOptionName4(product.optionList[3][0].optionName4);
-              setOptionName5(product.optionList[4][0].optionName5);
-
-              setIsOptionName1(true);
-              setIsOptionValue1(true);
-              setIsOptionName2(true);
-              setIsOptionValue2(true);
-              setIsOptionName3(true);
-              setIsOptionValue3(true);
-              setIsOptionName4(true);
-              setIsOptionValue4(true);
-              setIsOptionName5(true);
-              setIsOptionValue5(true);
-            }
-
-            if(product.addProduct.length === 0){
-              setAddListType(product.addProduct.length);
-            } else {
-              setAddListType(product.addProduct.length - 1);
-            }
-            
-            setAddProductResult(product.addProduct);
-            if(product.addProduct.length === 1){
-              console.log('addProduct.length 0')
-              if(product.addProduct[0]){
-                console.log('product.addProduct[0]')
-
-                setAddName1(product.addProduct[0].name);
-                setAddPrice1(product.addProduct[0].price);
-                setAddStock1(product.addProduct[0].stock);
-                setAddUse1(product.addProduct[0].use);
-
-                setIsAddName1(true);
-                setIsAddPrice1(true);
-                setIsAddStock1(true);
-                setIsAddProductFinish1(true);
-              }
-
-            } else if (product.addProduct.length === 2) {
-              console.log('addProduct.length 1')
-
-              if(product.addProduct[0]){
-                console.log('product.addProduct[0]')
-
-                setAddName1(product.addProduct[0].name);
-                setAddPrice1(product.addProduct[0].price);
-                setAddStock1(product.addProduct[0].stock);
-                setAddUse1(product.addProduct[0].use);
-
-                setIsAddName1(true);
-                setIsAddPrice1(true);
-                setIsAddStock1(true);
-                setIsAddProductFinish1(true);
-                setIsAddProductFinishEnd(true);
-
-              }
-              if(product.addProduct[1]){
-                setAddName2(product.addProduct[1].name);
-                setAddPrice2(product.addProduct[1].price);
-                setAddStock2(product.addProduct[1].stock);
-                setAddUse2(product.addProduct[1].use);
-
-                setIsAddName2(true);
-                setIsAddPrice2(true);
-                setIsAddStock2(true);
-                setIsAddProductFinish2(true);
-              }
-
-            } else if (product.addProduct.length === 3) {
-              if(product.addProduct[0]){
-                setAddName1(product.addProduct[0].name);
-                setAddPrice1(product.addProduct[0].price);
-                setAddStock1(product.addProduct[0].stock);
-                setAddUse1(product.addProduct[0].use);
-
-                setIsAddName1(true);
-                setIsAddPrice1(true);
-                setIsAddStock1(true);
-                setIsAddProductFinish1(true);
-              }
-              if(product.addProduct[1]){
-                setAddName2(product.addProduct[1].name);
-                setAddPrice2(product.addProduct[1].price);
-                setAddStock2(product.addProduct[1].stock);
-                setAddUse2(product.addProduct[1].use);
-
-                setIsAddName2(true);
-                setIsAddPrice2(true);
-                setIsAddStock2(true);
-                setIsAddProductFinish2(true);
-              }
-              if(product.addProduct[2]){
-                setAddName3(product.addProduct[2].name);
-                setAddPrice3(product.addProduct[2].price);
-                setAddStock3(product.addProduct[2].stock);
-                setAddUse3(product.addProduct[2].use);
-
-                setIsAddName3(true);
-                setIsAddPrice3(true);
-                setIsAddStock3(true);
-                setIsAddProductFinish3(true);
-              }
-              setIsAddProductFinishEnd(true);
-
-            } else if (product.addProduct.length === 4) {
-              if(product.addProduct[0]){
-                setAddName1(product.addProduct[0].name);
-                setAddPrice1(product.addProduct[0].price);
-                setAddStock1(product.addProduct[0].stock);
-                setAddUse1(product.addProduct[0].use);
-
-                setIsAddName1(true);
-                setIsAddPrice1(true);
-                setIsAddStock1(true);
-                setIsAddProductFinish1(true);
-              }
-              if(product.addProduct[1]){
-                setAddName2(product.addProduct[1].name);
-                setAddPrice2(product.addProduct[1].price);
-                setAddStock2(product.addProduct[1].stock);
-                setAddUse2(product.addProduct[1].use);
-
-                setIsAddName2(true);
-                setIsAddPrice2(true);
-                setIsAddStock2(true);
-                setIsAddProductFinish2(true);
-              }
-              if(product.addProduct[2]){
-                setAddName3(product.addProduct[2].name);
-                setAddPrice3(product.addProduct[2].price);
-                setAddStock3(product.addProduct[2].stock);
-                setAddUse3(product.addProduct[2].use);
-
-                setIsAddName3(true);
-                setIsAddPrice3(true);
-                setIsAddStock3(true);
-                setIsAddProductFinish3(true);
-              }
-              if(product.addProduct[3]){
-                setAddName4(product.addProduct[3].name);
-                setAddPrice4(product.addProduct[3].price);
-                setAddStock4(product.addProduct[3].stock);
-                setAddUse4(product.addProduct[3].use);
-
-                setIsAddName4(true);
-                setIsAddPrice4(true);
-                setIsAddStock4(true);
-                setIsAddProductFinish4(true);
-              }
-              setIsAddProductFinishEnd(true);
-
-            } else if (product.addProduct.length === 5) {
-              if(product.addProduct[0]){
-                setAddName1(product.addProduct[0].name);
-                setAddPrice1(product.addProduct[0].price);
-                setAddStock1(product.addProduct[0].stock);
-                setAddUse1(product.addProduct[0].use);
-
-                setIsAddName1(true);
-                setIsAddPrice1(true);
-                setIsAddStock1(true);
-                setIsAddProductFinish1(true);
-              }
-              if(product.addProduct[1]){
-                setAddName2(product.addProduct[1].name);
-                setAddPrice2(product.addProduct[1].price);
-                setAddStock2(product.addProduct[1].stock);
-                setAddUse2(product.addProduct[1].use);
-
-                setIsAddName2(true);
-                setIsAddPrice2(true);
-                setIsAddStock2(true);
-                setIsAddProductFinish2(true);
-              }
-              if(product.addProduct[2]){
-                setAddName3(product.addProduct[2].name);
-                setAddPrice3(product.addProduct[2].price);
-                setAddStock3(product.addProduct[2].stock);
-                setAddUse3(product.addProduct[2].use);
-                
-                setIsAddName3(true);
-                setIsAddPrice3(true);
-                setIsAddStock3(true);
-                setIsAddProductFinish3(true);
-              }
-              if(product.addProduct[3]){
-                setAddName4(product.addProduct[3].name);
-                setAddPrice4(product.addProduct[3].price);
-                setAddStock4(product.addProduct[3].stock);
-                setAddUse4(product.addProduct[3].use);
-
-                setIsAddName4(true);
-                setIsAddPrice4(true);
-                setIsAddStock4(true);
-                setIsAddProductFinish4(true);
-              }
-              if(product.addProduct[4]){
-                setAddName5(product.addProduct[4].name);
-                setAddPrice5(product.addProduct[4].price);
-                setAddStock5(product.addProduct[4].stock);
-                setAddUse5(product.addProduct[4].use);
-
-                setIsAddName5(true);
-                setIsAddPrice5(true);
-                setIsAddStock5(true);
-                setIsAddProductFinish5(true);
-              }
-              setIsAddProductFinishEnd(true);
-
-          }
-          setOptionResult(product.option);
-
-          setURL(product.url);
-          setMainImage(product.mainImage);
-          setSubImage(product.subImage);
-          setDetailImage(product.detailImage);
-          setMainSpec(product.mainspec);
-          setSpec(product.spec);
-          setDelivery(product.delivery);
-
-          //유효성 검사 true
-          setIsName(true);
-          setIsSubTitle(true);
-          setIsCost(true);
-          setIsPrice(true);
-          setIsOptionList(true);
-          setIsURL(true);
-          setIsImage(true);
-          setIsDelivery(true);
-          setSubmit(true);
-        } catch (error) {
-          console.log(error);
-        }
-      };
-
-      productedit();
-    } else if (!id) {
-      const productadd = async () => {
-        try {
-          const res = await axios.post("/smartstore/home/productregister/get", cookies, { withCredentials: true });
-          const allProduct = res.data;
-
-          setCategory([allProduct]);
-        } catch (err) {
-          console.log(err);
-        }
-      };
-      productadd();
-
-      setIsEdit(false);
-      setName("");
-      setSubTitle("");
-      setCost(null);
-      setPrice(null);
-
-      setOptionName1("");
-      setOptionName2("");
-      setOptionName3("");
-      setOptionName4("");
-      setOptionName5("");
-      setOptionValue1([]);
-      setOptionValue2([]);
-      setOptionValue3([]);
-      setOptionValue4([]);
-      setOptionValue5([]);
-      setOptionResult([]);
-      setURL("");
-      setMainImage([]);
-      setSubImage([]);
-      setDetailImage([]);
-      setMainSpec([]);
-      setSpec([]);
-      setDelivery(null);
-    }
-  }, [id]);
 
   // 오류메시지 상태저장
   const [NameMessage, setNameMessage] = useState<string>("");
@@ -589,11 +210,13 @@ function ProductRegister(props: Props) {
   const [OptionName3Message, setOptionName3Message] = useState<string>("");
   const [OptionName4Message, setOptionName4Message] = useState<string>("");
   const [OptionName5Message, setOptionName5Message] = useState<string>("");
+  const [OptionName6Message, setOptionName6Message] = useState<string>("");
   const [OptionValue1Message, setOptionValue1Message] = useState<string>("");
   const [OptionValue2Message, setOptionValue2Message] = useState<string>("");
   const [OptionValue3Message, setOptionValue3Message] = useState<string>("");
   const [OptionValue4Message, setOptionValue4Message] = useState<string>("");
   const [OptionValue5Message, setOptionValue5Message] = useState<string>("");
+  const [OptionValue6Message, setOptionValue6Message] = useState<string>("");
   const [URLMessage, setURLMessage] = useState<string>("");
   const [DeliveryMessage, setDeliveryMessage] = useState<string>("");
 
@@ -607,15 +230,21 @@ function ProductRegister(props: Props) {
   const [isOptionName3, setIsOptionName3] = useState<boolean>(false);
   const [isOptionName4, setIsOptionName4] = useState<boolean>(false);
   const [isOptionName5, setIsOptionName5] = useState<boolean>(false);
+  const [isOptionName6, setIsOptionName6] = useState<boolean>(false);
   const [isOptionNameFin, setIsOptionNameFin] = useState<boolean>(false);
   const [isOptionValue1, setIsOptionValue1] = useState<boolean>(false);
   const [isOptionValue2, setIsOptionValue2] = useState<boolean>(false);
   const [isOptionValue3, setIsOptionValue3] = useState<boolean>(false);
   const [isOptionValue4, setIsOptionValue4] = useState<boolean>(false);
   const [isOptionValue5, setIsOptionValue5] = useState<boolean>(false);
+  const [isOptionValue6, setIsOptionValue6] = useState<boolean>(false);
   const [isOptionValueFin, setIsOptionValueFin] = useState<boolean>(false);
 
   const [isOptionList, setIsOptionList] = useState<boolean>(false);
+
+  // 옵션 이미지 중복 클릭
+  const [isClicked, setIsClicked] = useState(false);
+
   const [isURL, setIsURL] = useState<boolean>(false);
   const [isImage, setIsImage] = useState<boolean>(false);
   const [isDelivery, setIsDelivery] = useState<boolean>(false);
@@ -690,12 +319,16 @@ function ProductRegister(props: Props) {
   const [isAddProductFinish5, setIsAddProductFinish5] = useState<boolean>(false);
   const [isAddProductFinishEnd, setIsAddProductFinishEnd] = useState<boolean>(false);
 
-  console.log(isAddName1);
-  console.log(isAddPrice1);
-  console.log(isAddStock1);
-  console.log(addListType);
-  console.log(isAddProductFinish1);
-  console.log(isAddProductFinishEnd);
+  // console.log(isAddName1);
+  // console.log(isAddPrice1);
+  // console.log(isAddStock1);
+  // console.log(addListType);
+  // console.log('isAddProductFinish1 ' + isAddProductFinish1);
+  // console.log('isAddProductFinish2 ' + isAddProductFinish2);
+  // console.log('isAddProductFinish3 ' + isAddProductFinish3);
+  // console.log('isAddProductFinish4 ' + isAddProductFinish4);
+  // console.log('isAddProductFinish5 ' + isAddProductFinish5);
+  // console.log('isAddProductFinishEnd ' + isAddProductFinishEnd);
 
   const [addName1Err, setAddName1Err] = useState<string>("");
   const [addName2Err, setAddName2Err] = useState<string>("");
@@ -716,7 +349,7 @@ function ProductRegister(props: Props) {
   const [addStock5Err, setAddStock5Err] = useState<string>("");
 
   const [addSubmitErr, setAddSubmitErr] = useState<string>("");
-  console.log(addSubmitErr);
+  // console.log(addSubmitErr);
 
   // Ref
   const inputRefName = useRef<HTMLDivElement>(null);
@@ -728,11 +361,25 @@ function ProductRegister(props: Props) {
   const inputRefOptionName3 = useRef<HTMLDivElement>(null);
   const inputRefOptionName4 = useRef<HTMLDivElement>(null);
   const inputRefOptionName5 = useRef<HTMLDivElement>(null);
+  const inputRefOptionName6 = useRef<HTMLDivElement>(null);
   const inputRefOptionValue1 = useRef<HTMLDivElement>(null);
   const inputRefOptionValue2 = useRef<HTMLDivElement>(null);
   const inputRefOptionValue3 = useRef<HTMLDivElement>(null);
   const inputRefOptionValue4 = useRef<HTMLDivElement>(null);
   const inputRefOptionValue5 = useRef<HTMLDivElement>(null);
+  const inputRefOptionValue6 = useRef<HTMLDivElement>(null);
+  const inputRefOptionDropMenu1 = useRef<HTMLDivElement>(null);
+  const inputRefOptionDropMenu2 = useRef<HTMLDivElement>(null);
+  const inputRefOptionDropMenu3 = useRef<HTMLDivElement>(null);
+  const inputRefOptionDropMenu4 = useRef<HTMLDivElement>(null);
+  const inputRefOptionDropMenu5 = useRef<HTMLDivElement>(null);
+  const inputRefOptionDropMenu6 = useRef<HTMLDivElement>(null);
+  const inputRefOptionDropMenuBtn1 = useRef<HTMLButtonElement>(null);
+  const inputRefOptionDropMenuBtn2 = useRef<HTMLButtonElement>(null);
+  const inputRefOptionDropMenuBtn3 = useRef<HTMLButtonElement>(null);
+  const inputRefOptionDropMenuBtn4 = useRef<HTMLButtonElement>(null);
+  const inputRefOptionDropMenuBtn5 = useRef<HTMLButtonElement>(null);
+  const inputRefOptionDropMenuBtn6 = useRef<HTMLButtonElement>(null);
   const inputRefURL = useRef<HTMLDivElement>(null);
   const inputRefImage = useRef<HTMLDivElement>(null);
   // const inputRefDetail = useRef<HTMLDivElement>(null);
@@ -941,67 +588,6 @@ function ProductRegister(props: Props) {
     }
   };
 
-  // 상품 데이터
-  const productdata = {
-    name: Name,
-    subtitle: SubTitle,
-    cost: Cost,
-    price: Price,
-    option: OptionResult,
-    optionList: OptionList,
-    addProduct: addProductResult,
-    url: URL,
-    mainImage: MainImage,
-    subImage: SubImage,
-    detailImage: DetailImage,
-    delivery: Delivery,
-    category: category,
-    mainspec: mainSpec,
-    spec: spec,
-  };
-
-  console.log(productdata);
-
-  // 등록 버튼
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-
-    if (!Submit) {
-      return;
-    }
-
-    try {
-      // 상품 등록, 상품 수정을 확인합니다.
-      console.log(isEdit ? "수정 버튼" : "등록 버튼");
-
-      const endpoint = isEdit ? `/smartstore/home/product/${id}` : "/smartstore/home/productregister";
-      await axios.post(endpoint, productdata, { withCredentials: true });
-
-      if (Submit) {
-        navigate("/home/product"); // 등록시 상품목록으로
-      }
-    } catch (errors) {
-      console.log(errors);
-    }
-  };
-
-  const copyBtn = async (e: any) => {
-    // 복사 버튼
-    if (!Submit) {
-      return;
-    }
-
-    try {
-      await axios.post("/smartstore/home/productregister", productdata, { withCredentials: true });
-
-      if (Submit) {
-        navigate("/home/product"); // 등록시 상품목록으로
-      }
-    } catch (errors) {
-      console.log(errors);
-    }
-  };
-
   const pagefold = async () => {
     // 페이지 접기
     setCategoryDrop((e) => !e);
@@ -1009,9 +595,89 @@ function ProductRegister(props: Props) {
 
   // 옵션 함수 모음
   const option = {
+    // 옵션 드롭 메뉴
+    DropMenu: (listIndex: number, setIsOptionDropMenu: React.Dispatch<SetStateAction<boolean>>) => {
+      setIsOptionDropMenu((e) => !e);
+      setOptionListIndex1(listIndex);
+    },
+    ImageHandler: (optionIndex: number) => {
+      // console.log(type);
+      // console.log(index);
+
+      setOptionListIndex2(optionIndex);
+    },
+    DropMenuHandler1: () => {
+      // if(!isOptionName1 && !isOptionValue1){
+      //   return;
+      // } else if (isOptionDropMenu2 || isOptionDropMenu3 || isOptionDropMenu4 || isOptionDropMenu5 || isOptionDropMenu6) {
+      //   return;
+      // }
+
+      option.DropMenu(0, setIsOptionDropMenu1);
+      setIsOptionDropMenu2(false);
+      setIsOptionDropMenu3(false);
+      setIsOptionDropMenu4(false);
+      setIsOptionDropMenu5(false);
+      setIsOptionDropMenu6(false);
+    },
+    DropMenuHandler2: () => {
+      // if(!isOptionName2 && !isOptionValue2){
+      //   return;
+      // } else if (isOptionDropMenu1 || isOptionDropMenu3 || isOptionDropMenu4 || isOptionDropMenu5 || isOptionDropMenu6) {
+      //   return;
+      // }
+
+      option.DropMenu(1, setIsOptionDropMenu2);
+      setIsOptionDropMenu1(false);
+      setIsOptionDropMenu3(false);
+      setIsOptionDropMenu4(false);
+      setIsOptionDropMenu5(false);
+      setIsOptionDropMenu6(false);
+    },
+    DropMenuHandler3: () => {
+      if (!isOptionName3 && !isOptionValue3) {
+        return;
+      } else if (isOptionDropMenu1 || isOptionDropMenu2 || isOptionDropMenu4 || isOptionDropMenu5 || isOptionDropMenu6) {
+        return;
+      }
+
+      option.DropMenu(2, setIsOptionDropMenu3);
+      setIsOptionDropMenu1(false);
+      setIsOptionDropMenu2(false);
+      setIsOptionDropMenu4(false);
+      setIsOptionDropMenu5(false);
+      setIsOptionDropMenu6(false);
+    },
+    DropMenuHandler4: () => {
+      if (!isOptionName4 && !isOptionValue4) {
+        return;
+      } else if (isOptionDropMenu1 || isOptionDropMenu2 || isOptionDropMenu3 || isOptionDropMenu5 || isOptionDropMenu6) {
+        return;
+      }
+
+      option.DropMenu(3, setIsOptionDropMenu4);
+    },
+    DropMenuHandler5: () => {
+      if (!isOptionName5 && !isOptionValue5) {
+        return;
+      } else if (isOptionDropMenu1 || isOptionDropMenu2 || isOptionDropMenu3 || isOptionDropMenu4 || isOptionDropMenu6) {
+        return;
+      }
+
+      option.DropMenu(4, setIsOptionDropMenu5);
+    },
+    DropMenuHandler6: () => {
+      if (!isOptionName6 && !isOptionValue6) {
+        return;
+      } else if (isOptionDropMenu1 || isOptionDropMenu2 || isOptionDropMenu3 || isOptionDropMenu4 || isOptionDropMenu5) {
+        return;
+      }
+
+      option.DropMenu(5, setIsOptionDropMenu6);
+    },
     // 옵션 추가
     PlusHandler: () => {
-      if (OptionType === 4) {
+      if (OptionType === 5) {
         return;
       } else {
         setOptionType((e) => e + 1);
@@ -1026,134 +692,76 @@ function ProductRegister(props: Props) {
       }
     },
     // 옵션명- 01
-    Name1Handler: (e: React.ChangeEvent<HTMLInputElement>) => {
-      setOptionName1(e.target.value);
+    NameHandler: (
+      e: React.ChangeEvent<HTMLInputElement>,
+      setOptionName: React.Dispatch<SetStateAction<string>>,
+      setIsOptionName: React.Dispatch<SetStateAction<boolean>>,
+      setOptionNameMessage: React.Dispatch<React.SetStateAction<string>>
+    ) => {
+      setOptionName(e.target.value);
 
       if (e.target.value === "") {
-        setIsOptionName1(false);
-        setOptionName1Message("옵션명을 입력 해주세요.");
-      } else if (e.target.value.length > 11) {
-        setIsOptionName1(false);
-        setOptionName1Message("옵션명을 10글자 이내로 작성 해주세요.");
+        setIsOptionName(false);
+        setOptionNameMessage("옵션명을 입력 해주세요.");
+      } else if (e.target.value.length > 41) {
+        setIsOptionName(false);
+        setOptionNameMessage("옵션명을 40글자 이내로 작성 해주세요.");
       } else {
-        setIsOptionName1(true);
+        setIsOptionName(true);
       }
     },
     // 옵션값- 01
-    Value1Handler: (e: React.ChangeEvent<HTMLInputElement>) => {
+    ValueHandler: (
+      e: React.ChangeEvent<HTMLInputElement>,
+      setOptionValue: React.Dispatch<SetStateAction<string[]>>,
+      setIsOptionValue: React.Dispatch<SetStateAction<boolean>>,
+      setOptionValueMessage: React.Dispatch<React.SetStateAction<string>>
+    ) => {
       const dataSlice = e.target.value.split(",");
 
-      setOptionValue1(dataSlice);
+      setOptionValue(dataSlice);
       if (dataSlice[dataSlice.length - 1] === "") {
-        setIsOptionValue1(false);
-        setOptionValue1Message("입력되지 않은 옵션값이 있습니다.");
+        setIsOptionValue(false);
+        setOptionValueMessage("입력되지 않은 옵션값이 있습니다.");
       } else {
-        setIsOptionValue1(true);
+        setIsOptionValue(true);
       }
     },
-    // 옵션명- 02
+    Name1Handler: (e: React.ChangeEvent<HTMLInputElement>) => {
+      option.NameHandler(e, setOptionName1, setIsOptionName1, setOptionName1Message);
+    },
     Name2Handler: (e: React.ChangeEvent<HTMLInputElement>) => {
-      setOptionName2(e.target.value);
-
-      if (e.target.value === "") {
-        setIsOptionName2(false);
-        setOptionName2Message("옵션명을 입력 해주세요.");
-      } else if (e.target.value.length > 11) {
-        setIsOptionName2(false);
-        setOptionName2Message("옵션명을 10글자 이내로 작성 해주세요.");
-      } else {
-        setIsOptionName2(true);
-      }
+      option.NameHandler(e, setOptionName2, setIsOptionName2, setOptionName2Message);
     },
-    // 옵션값- 02
-    Value2Handler: (e: React.ChangeEvent<HTMLInputElement>) => {
-      const dataSlice = e.target.value.split(",");
-
-      setOptionValue2(dataSlice);
-      if (dataSlice[dataSlice.length - 1] === "") {
-        setIsOptionValue2(false);
-        setOptionValue2Message("입력되지 않은 옵션값이 있습니다.");
-      } else {
-        setIsOptionValue2(true);
-      }
-    },
-    // 옵션명- 03
     Name3Handler: (e: React.ChangeEvent<HTMLInputElement>) => {
-      setOptionName3(e.target.value);
-
-      if (e.target.value === "") {
-        setIsOptionName3(false);
-        setOptionName3Message("옵션명을 입력 해주세요.");
-      } else if (e.target.value.length > 11) {
-        setIsOptionName3(false);
-        setOptionName3Message("옵션명을 10글자 이내로 작성 해주세요.");
-      } else {
-        setIsOptionName3(true);
-      }
+      option.NameHandler(e, setOptionName3, setIsOptionName3, setOptionName3Message);
     },
-    // 옵션값- 03
-    Value3Handler: (e: React.ChangeEvent<HTMLInputElement>) => {
-      const dataSlice = e.target.value.split(",");
-
-      setOptionValue3(dataSlice);
-      if (dataSlice[dataSlice.length - 1] === "") {
-        setIsOptionValue3(false);
-        setOptionValue3Message("입력되지 않은 옵션값이 있습니다.");
-      } else {
-        setIsOptionValue3(true);
-      }
-    },
-    // 옵션명- 04
     Name4Handler: (e: React.ChangeEvent<HTMLInputElement>) => {
-      setOptionName4(e.target.value);
-
-      if (e.target.value === "") {
-        setIsOptionName4(false);
-        setOptionName4Message("옵션명을 입력 해주세요.");
-      } else if (e.target.value.length > 11) {
-        setIsOptionName4(false);
-        setOptionName4Message("옵션명을 10글자 이내로 작성 해주세요.");
-      } else {
-        setIsOptionName4(true);
-      }
+      option.NameHandler(e, setOptionName4, setIsOptionName4, setOptionName4Message);
     },
-    // 옵션값- 04
-    Value4Handler: (e: React.ChangeEvent<HTMLInputElement>) => {
-      const dataSlice = e.target.value.split(",");
-
-      setOptionValue4(dataSlice);
-      if (dataSlice[dataSlice.length - 1] === "") {
-        setIsOptionValue4(false);
-        setOptionValue4Message("입력되지 않은 옵션값이 있습니다.");
-      } else {
-        setIsOptionValue4(true);
-      }
-    },
-    // 옵션명- 05
     Name5Handler: (e: React.ChangeEvent<HTMLInputElement>) => {
-      setOptionName5(e.target.value);
-
-      if (e.target.value === "") {
-        setIsOptionName5(false);
-        setOptionName5Message("옵션명을 입력 해주세요.");
-      } else if (e.target.value.length > 11) {
-        setIsOptionName5(false);
-        setOptionName5Message("옵션명을 10글자 이내로 작성 해주세요.");
-      } else {
-        setIsOptionName5(true);
-      }
+      option.NameHandler(e, setOptionName5, setIsOptionName5, setOptionName5Message);
     },
-    // 옵션값- 05
+    Name6Handler: (e: React.ChangeEvent<HTMLInputElement>) => {
+      option.NameHandler(e, setOptionName6, setIsOptionName6, setOptionName6Message);
+    },
+    Value1Handler: (e: React.ChangeEvent<HTMLInputElement>) => {
+      option.ValueHandler(e, setOptionValue1, setIsOptionValue1, setOptionValue1Message);
+    },
+    Value2Handler: (e: React.ChangeEvent<HTMLInputElement>) => {
+      option.ValueHandler(e, setOptionValue2, setIsOptionValue2, setOptionValue2Message);
+    },
+    Value3Handler: (e: React.ChangeEvent<HTMLInputElement>) => {
+      option.ValueHandler(e, setOptionValue3, setIsOptionValue3, setOptionValue3Message);
+    },
+    Value4Handler: (e: React.ChangeEvent<HTMLInputElement>) => {
+      option.ValueHandler(e, setOptionValue4, setIsOptionValue4, setOptionValue4Message);
+    },
     Value5Handler: (e: React.ChangeEvent<HTMLInputElement>) => {
-      const dataSlice = e.target.value.split(",");
-
-      setOptionValue5(dataSlice);
-      if (dataSlice[dataSlice.length - 1] === "") {
-        setIsOptionValue5(false);
-        setOptionValue5Message("입력되지 않은 옵션값이 있습니다.");
-      } else {
-        setIsOptionValue5(true);
-      }
+      option.ValueHandler(e, setOptionValue5, setIsOptionValue5, setOptionValue5Message);
+    },
+    Value6Handler: (e: React.ChangeEvent<HTMLInputElement>) => {
+      option.ValueHandler(e, setOptionValue6, setIsOptionValue6, setOptionValue6Message);
     },
     // 옵션목록으로 적용 버튼
     Submit: (e: any) => {
@@ -1169,8 +777,8 @@ function ProductRegister(props: Props) {
         if (list === "") {
           setIsOptionValue1(false);
           setOptionValue1Message("옵션값을 입력 해주세요.");
-        } else if (list.length > 11) {
-          setOptionValue1Message("하나의 옵션값은 최대 10자로 입력해주세요.");
+        } else if (list.length > 21) {
+          setOptionValue1Message("하나의 옵션값은 최대 20자로 입력해주세요.");
         } else {
           setIsOptionValue1(true);
         }
@@ -1180,8 +788,8 @@ function ProductRegister(props: Props) {
         if (list === "") {
           setIsOptionValue2(false);
           setOptionValue2Message("옵션값을 입력 해주세요.");
-        } else if (list.length > 11) {
-          setOptionValue2Message("하나의 옵션값은 최대 10자로 입력해주세요.");
+        } else if (list.length > 21) {
+          setOptionValue2Message("하나의 옵션값은 최대 20자로 입력해주세요.");
         } else {
           setIsOptionValue2(true);
         }
@@ -1190,8 +798,8 @@ function ProductRegister(props: Props) {
         if (list === "") {
           setIsOptionValue3(false);
           setOptionValue3Message("옵션값을 입력 해주세요.");
-        } else if (list.length > 11) {
-          setOptionValue3Message("하나의 옵션값은 최대 10자로 입력해주세요.");
+        } else if (list.length > 21) {
+          setOptionValue3Message("하나의 옵션값은 최대 20자로 입력해주세요.");
         } else {
           setIsOptionValue3(true);
         }
@@ -1200,8 +808,8 @@ function ProductRegister(props: Props) {
         if (list === "") {
           setIsOptionValue4(false);
           setOptionValue4Message("옵션값을 입력 해주세요.");
-        } else if (list.length > 11) {
-          setOptionValue4Message("하나의 옵션값은 최대 10자로 입력해주세요.");
+        } else if (list.length > 21) {
+          setOptionValue4Message("하나의 옵션값은 최대 20자로 입력해주세요.");
         } else {
           setIsOptionValue4(true);
         }
@@ -1210,10 +818,20 @@ function ProductRegister(props: Props) {
         if (list === "") {
           setIsOptionValue5(false);
           setOptionValue5Message("옵션값을 입력 해주세요.");
-        } else if (list.length > 11) {
-          setOptionValue5Message("하나의 옵션값은 최대 10자로 입력해주세요.");
+        } else if (list.length > 21) {
+          setOptionValue5Message("하나의 옵션값은 최대 20자로 입력해주세요.");
         } else {
           setIsOptionValue5(true);
+        }
+      });
+      OptionValue6?.map((list: any, index: any) => {
+        if (list === "") {
+          setIsOptionValue6(false);
+          setOptionValue6Message("옵션값을 입력 해주세요.");
+        } else if (list.length > 21) {
+          setOptionValue6Message("하나의 옵션값은 최대 20자로 입력해주세요.");
+        } else {
+          setIsOptionValue6(true);
         }
       });
 
@@ -1226,12 +844,6 @@ function ProductRegister(props: Props) {
       };
 
       const result: Array<any> = [];
-
-      // setOptionValue1([]);
-      // setOptionValue2([]);
-      // setOptionValue3([]);
-      // setOptionValue4([]);
-      // setOptionValue5([]);
       setOptionList([]);
 
       if (OptionType === 0) {
@@ -1243,7 +855,7 @@ function ProductRegister(props: Props) {
             optionValue1: value1,
           });
         });
-        const list = [
+        const list: OptionList = [
           OptionValue1.map((value, index) => ({
             optionName1: OptionName1,
             optionValue1: value,
@@ -1291,7 +903,7 @@ function ProductRegister(props: Props) {
             });
           });
         });
-        const list = [
+        const list: OptionList = [
           OptionValue1.map((value, index) => ({
             optionName1: OptionName1,
             optionValue1: value,
@@ -1327,7 +939,7 @@ function ProductRegister(props: Props) {
             });
           });
         });
-        const list = [
+        const list: OptionList = [
           OptionValue1.map((value, index) => ({
             optionName1: OptionName1,
             optionValue1: value,
@@ -1371,7 +983,7 @@ function ProductRegister(props: Props) {
             });
           });
         });
-        const list = [
+        const list: OptionList = [
           OptionValue1.map((value, index) => ({
             optionName1: OptionName1,
             optionValue1: value,
@@ -1391,6 +1003,62 @@ function ProductRegister(props: Props) {
           OptionValue5.map((value, index) => ({
             optionName5: OptionName5,
             optionValue5: value,
+          })),
+        ];
+        setOptionList(list);
+      } else if (OptionType === 5) {
+        OptionValue1.forEach((value1) => {
+          OptionValue2.forEach((value2) => {
+            OptionValue3.forEach((value3) => {
+              OptionValue4.forEach((value4) => {
+                OptionValue5.forEach((value5) => {
+                  OptionValue6.forEach((value6) => {
+                    result.push({
+                      ...optiondata,
+                      id: result.length,
+                      optionName1: OptionName1,
+                      optionValue1: value1,
+                      optionName2: OptionName2,
+                      optionValue2: value2,
+                      optionName3: OptionName3,
+                      optionValue3: value3,
+                      optionName4: OptionName4,
+                      optionValue4: value4,
+                      optionName5: OptionName5,
+                      optionValue5: value5,
+                      optionName6: OptionName6,
+                      optionValue6: value6,
+                    });
+                  });
+                });
+              });
+            });
+          });
+        });
+        const list: OptionList = [
+          OptionValue1.map((value, index) => ({
+            optionName1: OptionName1,
+            optionValue1: value,
+          })),
+          OptionValue2.map((value, index) => ({
+            optionName2: OptionName2,
+            optionValue2: value,
+          })),
+          OptionValue3.map((value, index) => ({
+            optionName3: OptionName3,
+            optionValue3: value,
+          })),
+          OptionValue4.map((value, index) => ({
+            optionName4: OptionName4,
+            optionValue4: value,
+          })),
+          OptionValue5.map((value, index) => ({
+            optionName5: OptionName5,
+            optionValue5: value,
+          })),
+          OptionValue6.map((value, index) => ({
+            optionName6: OptionName6,
+            optionValue6: value,
           })),
         ];
         setOptionList(list);
@@ -1417,9 +1085,9 @@ function ProductRegister(props: Props) {
       if (e.target.value === "") {
         setIsAddName(false);
         setAddNameErr("옵션명을 입력 해주세요.");
-      } else if (e.target.value.length > 11) {
+      } else if (e.target.value.length > 21) {
         setIsAddName(false);
-        setAddNameErr("옵션명을 10글자 이내로 작성 해주세요.");
+        setAddNameErr("옵션명을 20글자 이내로 작성 해주세요.");
       } else {
         setIsAddName(true);
       }
@@ -1432,6 +1100,7 @@ function ProductRegister(props: Props) {
     ) => {
       const price = e.target.value;
       const regex = /^[0-9]+$/;
+      console.log(price);
 
       if (price === "") {
         setAddPrice(0);
@@ -1478,6 +1147,7 @@ function ProductRegister(props: Props) {
         return;
       } else {
         setAddListType((e) => e + 1);
+        setAddProductResult((prevResult) => [...prevResult, { name: "", price: 0, stock: 0, use: true }]);
       }
     },
     // 옵션 삭제
@@ -1486,6 +1156,76 @@ function ProductRegister(props: Props) {
         return;
       } else {
         setAddListType((e) => e - 1);
+        setAddProductResult((prevState) => prevState.slice(0, -1));
+
+        switch (addListType) {
+          case 4:
+            console.log("case4");
+            setAddName5("");
+            setAddPrice5(0);
+            setAddStock5(0);
+            setAddUse5(true);
+
+            setIsAddName5(false);
+            setIsAddPrice5(false);
+            setIsAddStock5(false);
+            setIsAddProductFinish5(false);
+            break;
+          case 3:
+            console.log("case3");
+
+            setAddName4("");
+            setAddPrice4(0);
+            setAddStock4(0);
+            setAddUse4(true);
+
+            setIsAddName4(false);
+            setIsAddPrice4(false);
+            setIsAddStock4(false);
+            setIsAddProductFinish4(false);
+            break;
+          case 2:
+            console.log("case2");
+
+            setAddName3("");
+            setAddPrice3(0);
+            setAddStock3(0);
+            setAddUse3(true);
+
+            setIsAddName3(false);
+            setIsAddPrice3(false);
+            setIsAddStock3(false);
+            setIsAddProductFinish3(false);
+            break;
+          case 1:
+            console.log("case1");
+
+            setAddName2("");
+            setAddPrice2(0);
+            setAddStock2(0);
+            setAddUse2(true);
+
+            setIsAddName2(false);
+            setIsAddPrice2(false);
+            setIsAddStock2(false);
+            setIsAddProductFinish2(false);
+            break;
+          case 0:
+            console.log("case0");
+
+            setAddName1("");
+            setAddPrice1(0);
+            setAddStock1(0);
+            setAddUse1(true);
+
+            setIsAddName1(false);
+            setIsAddPrice1(false);
+            setIsAddStock1(false);
+            setIsAddProductFinish1(false);
+            break;
+          default:
+            break;
+        }
       }
     },
     // 상품명
@@ -1555,47 +1295,14 @@ function ProductRegister(props: Props) {
     Submit: (e: any) => {
       e.preventDefault();
 
-      if (addListType === 0) {
-        if (isAddProductFinish1) {
-          setIsAddProductFinishEnd(true);
-        } else {
-          setIsAddProductFinishEnd(false);
-          setAddSubmitErr('상품 내용을 전부 입력 해주세요.');
-        }
-      } else if (addListType === 1) {
-        if (isAddProductFinish1 && isAddProductFinish2) {
-          setIsAddProductFinishEnd(true);
-        } else {
-          setIsAddProductFinishEnd(false);
-          setAddSubmitErr('상품 내용을 전부 입력 해주세요.');
-
-        }
-      } else if (addListType === 2) {
-        if (isAddProductFinish1 && isAddProductFinish2 && isAddProductFinish3) {
-          setIsAddProductFinishEnd(true);
-        } else {
-          setIsAddProductFinishEnd(false);
-          setAddSubmitErr('상품 내용을 전부 입력 해주세요.');
-
-        }
-      } else if (addListType === 3) {
-        if (isAddProductFinish1 && isAddProductFinish2 && isAddProductFinish3 && isAddProductFinish4) {
-          setIsAddProductFinishEnd(true);
-        } else {
-          setIsAddProductFinishEnd(false);
-          setAddSubmitErr('상품 내용을 전부 입력 해주세요.');
-
-        }
-      } else if (addListType === 4) {
-        if (isAddProductFinish1 && isAddProductFinish2 && isAddProductFinish3 && isAddProductFinish4 && isAddProductFinish5) {
-          setIsAddProductFinishEnd(true);
-        } else {
-          setIsAddProductFinishEnd(false);
-          setAddSubmitErr('상품 내용을 전부 입력 해주세요.');
-
-        }
+      if (addListType <= 4) {
+        const isAllProductsFinish = Array.from({ length: addListType + 1 }, (_, i) => `isAddProductFinish${i + 1}`).every((key) => eval(key));
+        console.log(isAllProductsFinish);
+        setIsAddProductFinishEnd(isAllProductsFinish);
+      } else {
+        setIsAddProductFinishEnd(false);
+        setAddSubmitErr("상품 내용을 전부 입력 해주세요.");
       }
-
 
       const addProductObject: InstanceType<typeof addProductModel>[] = [];
 
@@ -1636,6 +1343,525 @@ function ProductRegister(props: Props) {
     },
   };
 
+  // // 옵션목록에서 옵션명을 수정했을때 Input에도 반영하기.
+  // useEffect(() => {
+  //   const editedOptionValues = OptionResult && OptionResult.map((list: any) => list.optionValue1);
+  //   setOptionValue1(editedOptionValues);
+  // }, [OptionResult]);
+
+  // 재고가 있으면서 사용여부가 Y인 경우에만 판매승인
+  useEffect(() => {
+    const use = OptionResult.some((list: any) => {
+      return list.optionUse === "Y" && list.optionStock > 0;
+    });
+
+    if (use) {
+      setIsOptionList(true);
+    } else {
+      setIsOptionList(false);
+    }
+  }, [OptionResult]);
+
+  // 상품 수정시 실행됩니다.
+  useEffect(() => {
+    if (id) {
+      setIsEdit(true);
+
+      const productedit = async () => {
+        const db = await axios.get(`/smartstore/home/product/${id}`);
+        try {
+          console.log(`${id}의 db 정보를 가져옵니다.`);
+          const product = db.data.productEdit;
+          console.log(product);
+
+          setCategory(product.category);
+          setName(product.name);
+          setSubTitle(product.subtitle);
+          setCost(product.cost);
+          setPrice(product.price);
+
+          setOptionList(product.optionList);
+          setOptionType(product.optionList.length - 1);
+
+          if (product.optionList.length === 1) {
+            console.log("product.optionList.length === 1");
+
+            setOptionName1(product.optionList[0][0].optionName1);
+
+            product.optionList[0].forEach((option, index) => {
+              setOptionValue1((prevValues) => {
+                const updatedValues = [...prevValues];
+                updatedValues[index] = option.optionValue1;
+                return updatedValues;
+              });
+            });
+
+            setIsOptionName1(true);
+            setIsOptionValue1(true);
+          } else if (product.optionList.length === 2) {
+            setOptionName1(product.optionList[0][0].optionName1);
+            setOptionName2(product.optionList[1][0].optionName2);
+
+            product.optionList[0].forEach((option, index) => {
+              setOptionValue1((prevValues) => {
+                const updatedValues = [...prevValues];
+                updatedValues[index] = option.optionValue1;
+                return updatedValues;
+              });
+            });
+            product.optionList[1].forEach((option, index) => {
+              setOptionValue2((prevValues) => {
+                const updatedValues = [...prevValues];
+                updatedValues[index] = option.optionValue2;
+                return updatedValues;
+              });
+            });
+
+            setIsOptionName1(true);
+            setIsOptionValue1(true);
+            setIsOptionName2(true);
+            setIsOptionValue2(true);
+          } else if (product.optionList.length === 3) {
+            setOptionName1(product.optionList[0][0].optionName1);
+            setOptionName2(product.optionList[1][0].optionName2);
+            setOptionName3(product.optionList[2][0].optionName3);
+
+            product.optionList[0].forEach((option, index) => {
+              setOptionValue1((prevValues) => {
+                const updatedValues = [...prevValues];
+                updatedValues[index] = option.optionValue1;
+                return updatedValues;
+              });
+            });
+            product.optionList[1].forEach((option, index) => {
+              setOptionValue2((prevValues) => {
+                const updatedValues = [...prevValues];
+                updatedValues[index] = option.optionValue2;
+                return updatedValues;
+              });
+            });
+            product.optionList[2].forEach((option, index) => {
+              setOptionValue3((prevValues) => {
+                const updatedValues = [...prevValues];
+                updatedValues[index] = option.optionValue3;
+                return updatedValues;
+              });
+            });
+
+            setIsOptionName1(true);
+            setIsOptionValue1(true);
+            setIsOptionName2(true);
+            setIsOptionValue2(true);
+            setIsOptionName3(true);
+            setIsOptionValue3(true);
+          } else if (product.optionList.length === 4) {
+            setOptionName1(product.optionList[0][0].optionName1);
+            setOptionName2(product.optionList[1][0].optionName2);
+            setOptionName3(product.optionList[2][0].optionName3);
+            setOptionName4(product.optionList[3][0].optionName4);
+
+            product.optionList[0].forEach((option, index) => {
+              setOptionValue1((prevValues) => {
+                const updatedValues = [...prevValues];
+                updatedValues[index] = option.optionValue1;
+                return updatedValues;
+              });
+            });
+            product.optionList[1].forEach((option, index) => {
+              setOptionValue2((prevValues) => {
+                const updatedValues = [...prevValues];
+                updatedValues[index] = option.optionValue2;
+                return updatedValues;
+              });
+            });
+            product.optionList[2].forEach((option, index) => {
+              setOptionValue3((prevValues) => {
+                const updatedValues = [...prevValues];
+                updatedValues[index] = option.optionValue3;
+                return updatedValues;
+              });
+            });
+            product.optionList[3].forEach((option, index) => {
+              setOptionValue4((prevValues) => {
+                const updatedValues = [...prevValues];
+                updatedValues[index] = option.optionValue4;
+                return updatedValues;
+              });
+            });
+
+            setIsOptionName1(true);
+            setIsOptionValue1(true);
+            setIsOptionName2(true);
+            setIsOptionValue2(true);
+            setIsOptionName3(true);
+            setIsOptionValue3(true);
+            setIsOptionName4(true);
+            setIsOptionValue4(true);
+          } else if (product.optionList.length === 5) {
+            setOptionName1(product.optionList[0][0].optionName1);
+            setOptionName2(product.optionList[1][0].optionName2);
+            setOptionName3(product.optionList[2][0].optionName3);
+            setOptionName4(product.optionList[3][0].optionName4);
+            setOptionName5(product.optionList[4][0].optionName5);
+
+            product.optionList[0].forEach((option, index) => {
+              setOptionValue1((prevValues) => {
+                const updatedValues = [...prevValues];
+                updatedValues[index] = option.optionValue1;
+                return updatedValues;
+              });
+            });
+            product.optionList[1].forEach((option, index) => {
+              setOptionValue2((prevValues) => {
+                const updatedValues = [...prevValues];
+                updatedValues[index] = option.optionValue2;
+                return updatedValues;
+              });
+            });
+            product.optionList[2].forEach((option, index) => {
+              setOptionValue3((prevValues) => {
+                const updatedValues = [...prevValues];
+                updatedValues[index] = option.optionValue3;
+                return updatedValues;
+              });
+            });
+            product.optionList[3].forEach((option, index) => {
+              setOptionValue4((prevValues) => {
+                const updatedValues = [...prevValues];
+                updatedValues[index] = option.optionValue4;
+                return updatedValues;
+              });
+            });
+            product.optionList[4].forEach((option, index) => {
+              setOptionValue5((prevValues) => {
+                const updatedValues = [...prevValues];
+                updatedValues[index] = option.optionValue5;
+                return updatedValues;
+              });
+            });
+
+            setIsOptionName1(true);
+            setIsOptionValue1(true);
+            setIsOptionName2(true);
+            setIsOptionValue2(true);
+            setIsOptionName3(true);
+            setIsOptionValue3(true);
+            setIsOptionName4(true);
+            setIsOptionValue4(true);
+            setIsOptionName5(true);
+            setIsOptionValue5(true);
+          } else if (product.optionList.length === 6) {
+            setOptionName1(product.optionList[0][0].optionName1);
+            setOptionName2(product.optionList[1][0].optionName2);
+            setOptionName3(product.optionList[2][0].optionName3);
+            setOptionName4(product.optionList[3][0].optionName4);
+            setOptionName5(product.optionList[4][0].optionName5);
+            setOptionName6(product.optionList[5][0].optionName6);
+
+            product.optionList[0].forEach((option, index) => {
+              setOptionValue1((prevValues) => {
+                const updatedValues = [...prevValues];
+                updatedValues[index] = option.optionValue1;
+                return updatedValues;
+              });
+            });
+            product.optionList[1].forEach((option, index) => {
+              setOptionValue2((prevValues) => {
+                const updatedValues = [...prevValues];
+                updatedValues[index] = option.optionValue2;
+                return updatedValues;
+              });
+            });
+            product.optionList[2].forEach((option, index) => {
+              setOptionValue3((prevValues) => {
+                const updatedValues = [...prevValues];
+                updatedValues[index] = option.optionValue3;
+                return updatedValues;
+              });
+            });
+            product.optionList[3].forEach((option, index) => {
+              setOptionValue4((prevValues) => {
+                const updatedValues = [...prevValues];
+                updatedValues[index] = option.optionValue4;
+                return updatedValues;
+              });
+            });
+            product.optionList[4].forEach((option, index) => {
+              setOptionValue5((prevValues) => {
+                const updatedValues = [...prevValues];
+                updatedValues[index] = option.optionValue5;
+                return updatedValues;
+              });
+            });
+            product.optionList[5].forEach((option, index) => {
+              setOptionValue6((prevValues) => {
+                const updatedValues = [...prevValues];
+                updatedValues[index] = option.optionValue6;
+                return updatedValues;
+              });
+            });
+
+            setIsOptionName1(true);
+            setIsOptionValue1(true);
+            setIsOptionName2(true);
+            setIsOptionValue2(true);
+            setIsOptionName3(true);
+            setIsOptionValue3(true);
+            setIsOptionName4(true);
+            setIsOptionValue4(true);
+            setIsOptionName5(true);
+            setIsOptionValue5(true);
+            setIsOptionName6(true);
+            setIsOptionValue6(true);
+          }
+
+          if (product.addProduct.length === 0) {
+            setAddListType(product.addProduct.length);
+          } else {
+            setAddListType(product.addProduct.length - 1);
+          }
+
+          setAddProductResult(product.addProduct);
+          if (product.addProduct.length === 1) {
+            if (product.addProduct[0]) {
+              setAddName1(product.addProduct[0].name);
+              setAddPrice1(product.addProduct[0].price);
+              setAddStock1(product.addProduct[0].stock);
+              setAddUse1(product.addProduct[0].use);
+
+              setIsAddName1(true);
+              setIsAddPrice1(true);
+              setIsAddStock1(true);
+              setIsAddProductFinish1(true);
+            }
+          } else if (product.addProduct.length === 2) {
+            if (product.addProduct[0]) {
+              setAddName1(product.addProduct[0].name);
+              setAddPrice1(product.addProduct[0].price);
+              setAddStock1(product.addProduct[0].stock);
+              setAddUse1(product.addProduct[0].use);
+
+              setIsAddName1(true);
+              setIsAddPrice1(true);
+              setIsAddStock1(true);
+              setIsAddProductFinish1(true);
+            }
+            if (product.addProduct[1]) {
+              setAddName2(product.addProduct[1].name);
+              setAddPrice2(product.addProduct[1].price);
+              setAddStock2(product.addProduct[1].stock);
+              setAddUse2(product.addProduct[1].use);
+
+              setIsAddName2(true);
+              setIsAddPrice2(true);
+              setIsAddStock2(true);
+              setIsAddProductFinish2(true);
+            }
+          } else if (product.addProduct.length === 3) {
+            if (product.addProduct[0]) {
+              setAddName1(product.addProduct[0].name);
+              setAddPrice1(product.addProduct[0].price);
+              setAddStock1(product.addProduct[0].stock);
+              setAddUse1(product.addProduct[0].use);
+
+              setIsAddName1(true);
+              setIsAddPrice1(true);
+              setIsAddStock1(true);
+              setIsAddProductFinish1(true);
+            }
+            if (product.addProduct[1]) {
+              setAddName2(product.addProduct[1].name);
+              setAddPrice2(product.addProduct[1].price);
+              setAddStock2(product.addProduct[1].stock);
+              setAddUse2(product.addProduct[1].use);
+
+              setIsAddName2(true);
+              setIsAddPrice2(true);
+              setIsAddStock2(true);
+              setIsAddProductFinish2(true);
+            }
+            if (product.addProduct[2]) {
+              setAddName3(product.addProduct[2].name);
+              setAddPrice3(product.addProduct[2].price);
+              setAddStock3(product.addProduct[2].stock);
+              setAddUse3(product.addProduct[2].use);
+
+              setIsAddName3(true);
+              setIsAddPrice3(true);
+              setIsAddStock3(true);
+              setIsAddProductFinish3(true);
+            }
+          } else if (product.addProduct.length === 4) {
+            if (product.addProduct[0]) {
+              setAddName1(product.addProduct[0].name);
+              setAddPrice1(product.addProduct[0].price);
+              setAddStock1(product.addProduct[0].stock);
+              setAddUse1(product.addProduct[0].use);
+
+              setIsAddName1(true);
+              setIsAddPrice1(true);
+              setIsAddStock1(true);
+              setIsAddProductFinish1(true);
+            }
+            if (product.addProduct[1]) {
+              setAddName2(product.addProduct[1].name);
+              setAddPrice2(product.addProduct[1].price);
+              setAddStock2(product.addProduct[1].stock);
+              setAddUse2(product.addProduct[1].use);
+
+              setIsAddName2(true);
+              setIsAddPrice2(true);
+              setIsAddStock2(true);
+              setIsAddProductFinish2(true);
+            }
+            if (product.addProduct[2]) {
+              setAddName3(product.addProduct[2].name);
+              setAddPrice3(product.addProduct[2].price);
+              setAddStock3(product.addProduct[2].stock);
+              setAddUse3(product.addProduct[2].use);
+
+              setIsAddName3(true);
+              setIsAddPrice3(true);
+              setIsAddStock3(true);
+              setIsAddProductFinish3(true);
+            }
+            if (product.addProduct[3]) {
+              setAddName4(product.addProduct[3].name);
+              setAddPrice4(product.addProduct[3].price);
+              setAddStock4(product.addProduct[3].stock);
+              setAddUse4(product.addProduct[3].use);
+
+              setIsAddName4(true);
+              setIsAddPrice4(true);
+              setIsAddStock4(true);
+              setIsAddProductFinish4(true);
+            }
+          } else if (product.addProduct.length === 5) {
+            if (product.addProduct[0]) {
+              setAddName1(product.addProduct[0].name);
+              setAddPrice1(product.addProduct[0].price);
+              setAddStock1(product.addProduct[0].stock);
+              setAddUse1(product.addProduct[0].use);
+
+              setIsAddName1(true);
+              setIsAddPrice1(true);
+              setIsAddStock1(true);
+              setIsAddProductFinish1(true);
+            }
+            if (product.addProduct[1]) {
+              setAddName2(product.addProduct[1].name);
+              setAddPrice2(product.addProduct[1].price);
+              setAddStock2(product.addProduct[1].stock);
+              setAddUse2(product.addProduct[1].use);
+
+              setIsAddName2(true);
+              setIsAddPrice2(true);
+              setIsAddStock2(true);
+              setIsAddProductFinish2(true);
+            }
+            if (product.addProduct[2]) {
+              setAddName3(product.addProduct[2].name);
+              setAddPrice3(product.addProduct[2].price);
+              setAddStock3(product.addProduct[2].stock);
+              setAddUse3(product.addProduct[2].use);
+
+              setIsAddName3(true);
+              setIsAddPrice3(true);
+              setIsAddStock3(true);
+              setIsAddProductFinish3(true);
+            }
+            if (product.addProduct[3]) {
+              setAddName4(product.addProduct[3].name);
+              setAddPrice4(product.addProduct[3].price);
+              setAddStock4(product.addProduct[3].stock);
+              setAddUse4(product.addProduct[3].use);
+
+              setIsAddName4(true);
+              setIsAddPrice4(true);
+              setIsAddStock4(true);
+              setIsAddProductFinish4(true);
+            }
+            if (product.addProduct[4]) {
+              setAddName5(product.addProduct[4].name);
+              setAddPrice5(product.addProduct[4].price);
+              setAddStock5(product.addProduct[4].stock);
+              setAddUse5(product.addProduct[4].use);
+
+              setIsAddName5(true);
+              setIsAddPrice5(true);
+              setIsAddStock5(true);
+              setIsAddProductFinish5(true);
+            }
+          }
+          setOptionResult(product.option);
+
+          setURL(product.url);
+          setMainImage(product.mainImage);
+          setSubImage(product.subImage);
+          setDetailImage(product.detailImage);
+          setMainSpec(product.mainspec);
+          setSpec(product.spec);
+          setDelivery(product.delivery);
+
+          //유효성 검사 true
+          setIsName(true);
+          setIsSubTitle(true);
+          setIsCost(true);
+          setIsPrice(true);
+          setIsOptionList(true);
+          setIsURL(true);
+          setIsImage(true);
+          setIsDelivery(true);
+          setSubmit(true);
+          setIsAddProductFinishEnd(true);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+
+      productedit();
+    } else if (!id) {
+      const productadd = async () => {
+        try {
+          const res = await axios.post("/smartstore/home/productregister/get", cookies, { withCredentials: true });
+          const allProduct = res.data;
+
+          setCategory([allProduct]);
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      productadd();
+
+      setIsEdit(false);
+      setName("");
+      setSubTitle("");
+      setCost(null);
+      setPrice(null);
+
+      setOptionName1("");
+      setOptionName2("");
+      setOptionName3("");
+      setOptionName4("");
+      setOptionName5("");
+      setOptionName6("");
+      setOptionValue1([]);
+      setOptionValue2([]);
+      setOptionValue3([]);
+      setOptionValue4([]);
+      setOptionValue5([]);
+      setOptionValue6([]);
+      setOptionResult([]);
+      setURL("");
+      setMainImage([]);
+      setSubImage([]);
+      setDetailImage([]);
+      setMainSpec([]);
+      setSpec([]);
+      setDelivery(null);
+    }
+  }, [id]);
+
   // 추가 옵션 유효성 검사
   useEffect(() => {
     if (OptionType === 0) {
@@ -1643,7 +1869,6 @@ function ProductRegister(props: Props) {
         setIsOptionNameFin(true);
         setIsOptionValueFin(true);
       } else {
-        console.log('false');
         setIsOptionNameFin(false);
         setIsOptionValueFin(false);
       }
@@ -1695,6 +1920,28 @@ function ProductRegister(props: Props) {
         setIsOptionValueFin(false);
       }
     }
+    if (OptionType === 5) {
+      if (
+        isOptionName1 &&
+        isOptionValue1 &&
+        isOptionName2 &&
+        isOptionValue2 &&
+        isOptionName3 &&
+        isOptionValue3 &&
+        isOptionName4 &&
+        isOptionValue4 &&
+        isOptionName5 &&
+        isOptionValue5 &&
+        isOptionName6 &&
+        isOptionValue6
+      ) {
+        setIsOptionNameFin(true);
+        setIsOptionValueFin(true);
+      } else {
+        setIsOptionNameFin(false);
+        setIsOptionValueFin(false);
+      }
+    }
   }, [
     OptionType,
     OptionName1,
@@ -1702,126 +1949,195 @@ function ProductRegister(props: Props) {
     OptionName3,
     OptionName4,
     OptionName5,
+    OptionName6,
     OptionValue1,
     OptionValue2,
     OptionValue3,
     OptionValue4,
     OptionValue5,
+    OptionValue6,
   ]);
-
-  // 추가 상품 유효성 검사
-  // useEffect(() => {
-  //   setIsAddProductFinishEnd(false);
-  // }, [addListType, isAddProductFinish1, isAddProductFinish2, isAddProductFinish3, isAddProductFinish4, isAddProductFinish5]);
 
   useEffect(() => {
     const AllTrue = isAddName1 && isAddPrice1 && isAddStock1;
-    setIsAddProductFinish1(AllTrue);
-    if (!AllTrue) {
-      setIsAddProductFinish1(false);
-      setIsAddProductFinishEnd(false);
-    }
-    setAddSubmitErr("");
 
-    if (addListType === 0 && addName1 === "" && addPrice1 === 0 && addStock1 === 0) {
-      console.log("type0의 상품명 공백, 가격 0, 재고0으로 예외 허용");
+    if (AllTrue) {
       setIsAddProductFinish1(true);
-      setIsAddProductFinishEnd(true);
+    } else {
+      setIsAddProductFinish1(false);
     }
-  }, [addListType, isAddName1, isAddPrice1, isAddStock1, isAddProductFinish1]);
+
+    // 사용여부가 N 이면 조건없이 true
+    if (!addUse1) {
+      setIsAddProductFinish1(true);
+    }
+
+    setAddSubmitErr("");
+  }, [addListType, isAddName1, isAddPrice1, isAddStock1, addUse1, isAddProductFinish1]);
 
   useEffect(() => {
     const AllTrue = isAddName2 && isAddPrice2 && isAddStock2;
-    setIsAddProductFinish2(AllTrue);
-    if (!AllTrue) {
-      setIsAddProductFinish2(false);
-      setIsAddProductFinishEnd(false);
-    }
-    setAddSubmitErr("");
 
-    if (addListType === 1 && addName2 === "" && addPrice2 === 0 && addStock2 === 0) {
-      console.log("type1의 상품명 공백, 가격 0, 재고0으로 예외 허용");
+    if (AllTrue) {
+      setIsAddProductFinish2(true);
+    } else {
+      setIsAddProductFinish2(false);
+    }
+
+    // 사용여부가 N 이면 조건없이 true
+    if (!addUse2) {
       setIsAddProductFinish2(true);
     }
-  }, [addListType, isAddName2, isAddPrice2, isAddStock2]);
+
+    setAddSubmitErr("");
+  }, [addListType, isAddName2, isAddPrice2, isAddStock2, addUse2, isAddProductFinish1]);
 
   useEffect(() => {
     const AllTrue = isAddName3 && isAddPrice3 && isAddStock3;
-    setIsAddProductFinish3(AllTrue);
-    if (!AllTrue) {
-      setIsAddProductFinish3(false);
-      setIsAddProductFinishEnd(false);
-    }
-    setAddSubmitErr("");
 
-    if (addListType === 2 && addName3 === "" && addPrice3 === 0 && addStock3 === 0) {
-      console.log("type2의 상품명 공백, 가격 0, 재고0으로 예외 허용");
+    if (AllTrue) {
+      setIsAddProductFinish3(true);
+    } else {
+      setIsAddProductFinish3(false);
+    }
+
+    // 사용여부가 N 이면 조건없이 true
+    if (!addUse3) {
       setIsAddProductFinish3(true);
     }
-  }, [addListType, isAddName3, isAddPrice3, isAddStock3]);
+
+    setAddSubmitErr("");
+  }, [addListType, isAddName3, isAddPrice3, isAddStock3, addUse3, isAddProductFinish3]);
 
   useEffect(() => {
     const AllTrue = isAddName4 && isAddPrice4 && isAddStock4;
-    setIsAddProductFinish4(AllTrue);
-    if (!AllTrue) {
-      setIsAddProductFinish4(false);
-      setIsAddProductFinishEnd(false);
-    }
-    setAddSubmitErr("");
 
-    if (addListType === 3 && addName4 === "" && addPrice4 === 0 && addStock4 === 0) {
-      console.log("type3의 상품명 공백, 가격 0, 재고0으로 예외 허용");
+    if (AllTrue) {
+      setIsAddProductFinish4(true);
+    } else {
+      setIsAddProductFinish4(false);
+    }
+
+    // 사용여부가 N 이면 조건없이 true
+    if (!addUse4) {
       setIsAddProductFinish4(true);
     }
-  }, [addListType, isAddName4, isAddPrice4, isAddStock4]);
+
+    setAddSubmitErr("");
+  }, [addListType, isAddName4, isAddPrice4, isAddStock4, addUse4, isAddProductFinish4]);
 
   useEffect(() => {
     const AllTrue = isAddName5 && isAddPrice5 && isAddStock5;
-    setIsAddProductFinish5(AllTrue);
-    if (!AllTrue) {
-      setIsAddProductFinish5(false);
-      setIsAddProductFinishEnd(false);
-    }
-    setAddSubmitErr("");
 
-    if (addListType === 4 && addName5 === "" && addPrice5 === 0 && addStock5 === 0) {
-      console.log("type4의 상품명 공백, 가격 0, 재고0으로 예외 허용");
+    if (AllTrue) {
+      setIsAddProductFinish5(true);
+    } else {
+      setIsAddProductFinish5(false);
+    }
+    // 사용여부가 N 이면 조건없이 true
+    if (!addUse5) {
       setIsAddProductFinish5(true);
     }
-  }, [addListType, isAddName5, isAddPrice5, isAddStock5]);
+
+    setAddSubmitErr("");
+  }, [addListType, isAddName5, isAddPrice5, isAddStock5, addUse5, isAddProductFinish5]);
+
+  useEffect(() => {
+    if (addListType === 0) {
+      if (!isAddProductFinish1) {
+        setIsAddProductFinishEnd(false);
+      }
+    } else if (addListType === 1) {
+      if (!isAddProductFinish1 || !isAddProductFinish2) {
+        setIsAddProductFinishEnd(false);
+      }
+    } else if (addListType === 2) {
+      if (!isAddProductFinish1 || !isAddProductFinish2 || !isAddProductFinish3) {
+        setIsAddProductFinishEnd(false);
+      }
+    } else if (addListType === 3) {
+      if (!isAddProductFinish1 || !isAddProductFinish2 || !isAddProductFinish3 || !isAddProductFinish4) {
+        setIsAddProductFinishEnd(false);
+      }
+    } else if (addListType === 4) {
+      if (!isAddProductFinish1 || !isAddProductFinish2 || !isAddProductFinish3 || !isAddProductFinish4 || !isAddProductFinish5) {
+        setIsAddProductFinishEnd(false);
+      }
+    }
+  }, [isAddProductFinish1, isAddProductFinish2, isAddProductFinish3, isAddProductFinish4, isAddProductFinish5]);
 
   // 추가 상품 Input을 수정 및 삭제시 초기화.
-  // useEffect(() => {
-  //   setIsAddProductFinishEnd(false);
-    
-  // }, [
-  //   addName1,
-  //   addName2,
-  //   addName3,
-  //   addName4,
-  //   addName5,
-  //   addPrice1,
-  //   addPrice2,
-  //   addPrice3,
-  //   addPrice4,
-  //   addPrice5,
-  //   addStock1,
-  //   addStock2,
-  //   addStock3,
-  //   addStock4,
-  //   addStock5,
-  //   addUse1,
-  //   addUse2,
-  //   addUse3,
-  //   addUse4,
-  //   addUse5,
-  // ]);
+  useEffect(() => {
+    console.log("추가 상품 Input을 수정 및 삭제시 초기화.");
+    setIsAddProductFinishEnd(false);
+  }, [addListType]);
 
   // 공지사항
   useEffect(() => {
     props.setNotice && props.setNotice(isEdit ? <a>상품 수정</a> : <a>상품 등록</a>);
     props.setNoticeDate && props.setNoticeDate("");
   }, [isEdit]);
+
+  // 옵션 드롭메뉴 닫기
+  useEffect(() => {
+    const clickOutside = (e: any) => {
+      // 옵션 이미지 추가하는 드롭메뉴
+      if (
+        inputRefOptionDropMenuBtn1.current &&
+        !inputRefOptionDropMenuBtn1.current.contains(e.target) &&
+        inputRefOptionDropMenu1.current &&
+        !inputRefOptionDropMenu1.current.contains(e.target)
+      ) {
+        setIsOptionDropMenu1(false);
+      }
+      if (
+        inputRefOptionDropMenuBtn2.current &&
+        !inputRefOptionDropMenuBtn2.current.contains(e.target) &&
+        inputRefOptionDropMenu2.current &&
+        !inputRefOptionDropMenu2.current.contains(e.target)
+      ) {
+        setIsOptionDropMenu2(false);
+      }
+      if (
+        inputRefOptionDropMenuBtn3.current &&
+        !inputRefOptionDropMenuBtn3.current.contains(e.target) &&
+        inputRefOptionDropMenu3.current &&
+        !inputRefOptionDropMenu3.current.contains(e.target)
+      ) {
+        setIsOptionDropMenu3(false);
+      }
+      if (
+        inputRefOptionDropMenuBtn4.current &&
+        !inputRefOptionDropMenuBtn4.current.contains(e.target) &&
+        inputRefOptionDropMenu4.current &&
+        !inputRefOptionDropMenu4.current.contains(e.target)
+      ) {
+        setIsOptionDropMenu4(false);
+      }
+      if (
+        inputRefOptionDropMenuBtn5.current &&
+        !inputRefOptionDropMenuBtn5.current.contains(e.target) &&
+        inputRefOptionDropMenu5.current &&
+        !inputRefOptionDropMenu5.current.contains(e.target)
+      ) {
+        setIsOptionDropMenu5(false);
+      }
+      if (
+        inputRefOptionDropMenuBtn6.current &&
+        !inputRefOptionDropMenuBtn6.current.contains(e.target) &&
+        inputRefOptionDropMenu6.current &&
+        !inputRefOptionDropMenu6.current.contains(e.target)
+      ) {
+        setIsOptionDropMenu6(false);
+      }
+    };
+    document.addEventListener("mousedown", clickOutside);
+
+    return () => {
+      // Cleanup the event listener
+      document.removeEventListener("mousedown", clickOutside);
+    };
+  }, [isOptionDropMenu1, isOptionDropMenu2]);
 
   // 모든 인풋 바깥 클릭시 닫기
   useEffect(() => {
@@ -1860,6 +2176,10 @@ function ProductRegister(props: Props) {
         setInputClick(false);
         setInputClickNumber(0);
       }
+      if (inputClickNumber === 25 && inputRefOptionName6.current && !inputRefOptionName6.current.contains(e.target)) {
+        setInputClick(false);
+        setInputClickNumber(0);
+      }
 
       if (inputClickNumber === 30 && inputRefOptionValue1.current && !inputRefOptionValue1.current.contains(e.target)) {
         setInputClick(false);
@@ -1878,6 +2198,10 @@ function ProductRegister(props: Props) {
         setInputClickNumber(0);
       }
       if (inputClickNumber === 34 && inputRefOptionValue5.current && !inputRefOptionValue5.current.contains(e.target)) {
+        setInputClick(false);
+        setInputClickNumber(0);
+      }
+      if (inputClickNumber === 35 && inputRefOptionValue6.current && !inputRefOptionValue6.current.contains(e.target)) {
         setInputClick(false);
         setInputClickNumber(0);
       }
@@ -2015,6 +2339,67 @@ function ProductRegister(props: Props) {
       setSubmit(false);
     }
   });
+
+  // 최종 상품 데이터
+  const productdata = {
+    name: Name,
+    subtitle: SubTitle,
+    cost: Cost,
+    price: Price,
+    option: OptionResult,
+    optionList: OptionList,
+    addProduct: addProductResult,
+    url: URL,
+    mainImage: MainImage,
+    subImage: SubImage,
+    detailImage: DetailImage,
+    delivery: Delivery,
+    category: category,
+    mainspec: mainSpec,
+    spec: spec,
+  };
+
+  // console.log(productdata);
+
+  // 등록 버튼
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+
+    if (!Submit) {
+      return;
+    }
+
+    try {
+      // 상품 등록, 상품 수정을 확인합니다.
+      console.log(isEdit ? "수정 버튼" : "등록 버튼");
+
+      const endpoint = isEdit ? `/smartstore/home/product/${id}` : "/smartstore/home/productregister";
+      await axios.post(endpoint, productdata, { withCredentials: true });
+
+      if (Submit) {
+        navigate("/home/product"); // 등록시 상품목록으로
+      }
+    } catch (errors) {
+      console.log(errors);
+    }
+  };
+
+  // 복사 버튼
+  const copyBtn = async (e: any) => {
+    if (!Submit) {
+      return;
+    }
+
+    try {
+      await axios.post("/smartstore/home/productregister", productdata, { withCredentials: true });
+
+      if (Submit) {
+        navigate("/home/product"); // 등록시 상품목록으로
+      }
+    } catch (errors) {
+      console.log(errors);
+    }
+  };
 
   return (
     <>
@@ -2217,7 +2602,7 @@ function ProductRegister(props: Props) {
                                       <input
                                         type="text"
                                         className="input"
-                                        maxLength={10}
+                                        maxLength={20}
                                         name="productOptionName"
                                         placeholder="예시 : 컬러"
                                         value={OptionName1}
@@ -2234,7 +2619,11 @@ function ProductRegister(props: Props) {
                                     <div className="input-box-title">
                                       <span>옵션값</span>
                                     </div>
-                                    <div ref={inputRefOptionValue1} id={inputClick && inputClickNumber === 30 ? "input-inner-active" : "input-inner"}>
+                                    <div
+                                      ref={inputRefOptionValue1}
+                                      id={inputClick && inputClickNumber === 30 ? "input-inner-active" : "input-inner"}
+                                      className="option-input-wrap"
+                                    >
                                       <input
                                         type="text"
                                         className="input"
@@ -2248,6 +2637,43 @@ function ProductRegister(props: Props) {
                                         }}
                                         onChange={option.Value1Handler}
                                       />
+                                      <button className="dropmenu-btn" onClick={option.DropMenuHandler1} ref={inputRefOptionDropMenuBtn1}>
+                                        <span>+</span>
+                                      </button>
+                                      <OptionDropMenu
+                                        className="option-input-list"
+                                        isOptionDropMenu={isOptionDropMenu1}
+                                        ref={inputRefOptionDropMenu1}
+                                      >
+                                        <OptionUl>
+                                          <div style={{ display: "flex", padding: "20px", fontWeight: "600" }}>
+                                            <div style={{ flex: "25%" }}>옵션값</div>
+                                            <div style={{ flex: "75%" }}>옵션 사진</div>
+                                          </div>
+                                          {isOptionDropMenu1 &&
+                                            OptionList[0]?.map((list: any, index: number) => (
+                                              <Optionli key={index} onClick={() => option.ImageHandler(index)}>
+                                                <div style={{ display: "flex", flexDirection: "column" }}>{list.optionValue1}</div>
+                                                <div>
+                                                  <div style={{ display: "flex", marginBottom: "10px" }}>
+                                                    {[...Array(OptionImageMax)].map((_, index2: any) => (
+                                                      <OptionImage
+                                                        index={index2}
+                                                        optionImage={list.optionImage}
+                                                        OptionListIndex1={OptionListIndex1}
+                                                        OptionListIndex2={OptionListIndex2}
+                                                        OptionList={OptionList}
+                                                        setOptionList={setOptionList}
+                                                        isClicked={isClicked}
+                                                        setIsClicked={setIsClicked}
+                                                      />
+                                                    ))}
+                                                  </div>
+                                                </div>
+                                              </Optionli>
+                                            ))}
+                                        </OptionUl>
+                                      </OptionDropMenu>
                                     </div>
                                     <div className={!isOptionValue1 ? "error-active value" : "error"}>{OptionValue1Message}</div>
                                   </div>
@@ -2263,7 +2689,7 @@ function ProductRegister(props: Props) {
                                       <input
                                         type="text"
                                         className="input"
-                                        maxLength={10}
+                                        maxLength={20}
                                         name="productOptionName"
                                         placeholder="예시 : 컬러"
                                         value={OptionName2}
@@ -2274,14 +2700,17 @@ function ProductRegister(props: Props) {
                                         onChange={option.Name2Handler}
                                       />
                                     </div>
-
                                     <div className={!isOptionName2 ? "error-active name" : "error"}>{OptionName2Message}</div>
                                   </div>
                                   <div className="input-box">
                                     <div className="input-box-title">
                                       <span>옵션값2</span>
                                     </div>
-                                    <div ref={inputRefOptionValue2} id={inputClick && inputClickNumber === 31 ? "input-inner-active" : "input-inner"}>
+                                    <div
+                                      ref={inputRefOptionValue2}
+                                      id={inputClick && inputClickNumber === 31 ? "input-inner-active" : "input-inner"}
+                                      className="option-input-wrap"
+                                    >
                                       <input
                                         type="text"
                                         className="input"
@@ -2295,6 +2724,43 @@ function ProductRegister(props: Props) {
                                         }}
                                         onChange={option.Value2Handler}
                                       />
+                                      <button className="dropmenu-btn" onClick={option.DropMenuHandler2} ref={inputRefOptionDropMenuBtn2}>
+                                        <span>+</span>
+                                      </button>
+                                      <OptionDropMenu
+                                        className="option-input-list"
+                                        isOptionDropMenu={isOptionDropMenu2}
+                                        ref={inputRefOptionDropMenu2}
+                                      >
+                                        <OptionUl>
+                                        <div style={{ display: "flex", padding: "20px", fontWeight: "600" }}>
+                                            <div style={{ flex: "25%" }}>옵션값</div>
+                                            <div style={{ flex: "75%" }}>옵션 사진</div>
+                                          </div>
+                                        {isOptionDropMenu2 &&
+                                            OptionList[1]?.map((list: any, index: number) => (
+                                              <Optionli key={index} onClick={() => option.ImageHandler(index)}>
+                                                <div style={{ display: "flex", flexDirection: "column" }}>{list.optionValue2}</div>
+                                                <div>
+                                                  <div style={{ display: "flex", marginBottom: "10px" }}>
+                                                    {[...Array(OptionImageMax)].map((_, index2: any) => (
+                                                      <OptionImage
+                                                        index={index2}
+                                                        optionImage={list.optionImage}
+                                                        OptionListIndex1={OptionListIndex1}
+                                                        OptionListIndex2={OptionListIndex2}
+                                                        OptionList={OptionList}
+                                                        setOptionList={setOptionList}
+                                                        isClicked={isClicked}
+                                                        setIsClicked={setIsClicked}
+                                                      />
+                                                    ))}
+                                                  </div>
+                                                </div>
+                                              </Optionli>
+                                            ))}
+                                        </OptionUl>
+                                      </OptionDropMenu>
                                     </div>
                                     <div className={!isOptionValue2 ? "error-active value" : "error"}>{OptionValue2Message}</div>
                                   </div>
@@ -2310,7 +2776,7 @@ function ProductRegister(props: Props) {
                                       <input
                                         type="text"
                                         className="input"
-                                        maxLength={10}
+                                        maxLength={20}
                                         name="productOptionName"
                                         placeholder="예시 : 컬러"
                                         value={OptionName3}
@@ -2321,14 +2787,17 @@ function ProductRegister(props: Props) {
                                         onChange={option.Name3Handler}
                                       />
                                     </div>
-
                                     <div className={!isOptionName3 ? "error-active name" : "error"}>{OptionName3Message}</div>
                                   </div>
                                   <div className="input-box">
                                     <div className="input-box-title">
                                       <span>옵션값3</span>
                                     </div>
-                                    <div ref={inputRefOptionValue3} id={inputClick && inputClickNumber === 32 ? "input-inner-active" : "input-inner"}>
+                                    <div
+                                      ref={inputRefOptionValue3}
+                                      id={inputClick && inputClickNumber === 32 ? "input-inner-active" : "input-inner"}
+                                      className="option-input-wrap"
+                                    >
                                       <input
                                         type="text"
                                         className="input"
@@ -2342,6 +2811,43 @@ function ProductRegister(props: Props) {
                                         }}
                                         onChange={option.Value3Handler}
                                       />
+                                      <button className="dropmenu-btn" onClick={option.DropMenuHandler3} ref={inputRefOptionDropMenuBtn3}>
+                                        <span>+</span>
+                                      </button>
+                                      <OptionDropMenu
+                                        className="option-input-list"
+                                        isOptionDropMenu={isOptionDropMenu3}
+                                        ref={inputRefOptionDropMenu3}
+                                      >
+                                        <OptionUl>
+                                        <div style={{ display: "flex", padding: "20px", fontWeight: "600" }}>
+                                            <div style={{ flex: "25%" }}>옵션값</div>
+                                            <div style={{ flex: "75%" }}>옵션 사진</div>
+                                          </div>
+                                        {isOptionDropMenu3 &&
+                                            OptionList[2]?.map((list: any, index: number) => (
+                                              <Optionli key={index} onClick={() => option.ImageHandler(index)}>
+                                                <div style={{ display: "flex", flexDirection: "column" }}>{list.optionValue3}</div>
+                                                <div>
+                                                  <div style={{ display: "flex", marginBottom: "10px" }}>
+                                                    {[...Array(OptionImageMax)].map((_, index2: any) => (
+                                                      <OptionImage
+                                                        index={index2}
+                                                        optionImage={list.optionImage}
+                                                        OptionListIndex1={OptionListIndex1}
+                                                        OptionListIndex2={OptionListIndex2}
+                                                        OptionList={OptionList}
+                                                        setOptionList={setOptionList}
+                                                        isClicked={isClicked}
+                                                        setIsClicked={setIsClicked}
+                                                      />
+                                                    ))}
+                                                  </div>
+                                                </div>
+                                              </Optionli>
+                                            ))}
+                                        </OptionUl>
+                                      </OptionDropMenu>
                                     </div>
                                     <div className={!isOptionValue3 ? "error-active value" : "error"}>{OptionValue3Message}</div>
                                   </div>
@@ -2357,7 +2863,7 @@ function ProductRegister(props: Props) {
                                       <input
                                         type="text"
                                         className="input"
-                                        maxLength={10}
+                                        maxLength={20}
                                         name="productOptionName"
                                         placeholder="예시 : 컬러"
                                         value={OptionName4}
@@ -2368,14 +2874,17 @@ function ProductRegister(props: Props) {
                                         onChange={option.Name4Handler}
                                       />
                                     </div>
-
                                     <div className={!isOptionName4 ? "error-active name" : "error"}>{OptionName4Message}</div>
                                   </div>
                                   <div className="input-box">
                                     <div className="input-box-title">
                                       <span>옵션값4</span>
                                     </div>
-                                    <div ref={inputRefOptionValue4} id={inputClick && inputClickNumber === 33 ? "input-inner-active" : "input-inner"}>
+                                    <div
+                                      ref={inputRefOptionValue4}
+                                      id={inputClick && inputClickNumber === 33 ? "input-inner-active" : "input-inner"}
+                                      className="option-input-wrap"
+                                    >
                                       <input
                                         type="text"
                                         className="input"
@@ -2389,6 +2898,43 @@ function ProductRegister(props: Props) {
                                         }}
                                         onChange={option.Value4Handler}
                                       />
+                                      <button className="dropmenu-btn" onClick={option.DropMenuHandler4} ref={inputRefOptionDropMenuBtn4}>
+                                        <span>+</span>
+                                      </button>
+                                      <OptionDropMenu
+                                        className="option-input-list"
+                                        isOptionDropMenu={isOptionDropMenu4}
+                                        ref={inputRefOptionDropMenu4}
+                                      >
+                                        <OptionUl>
+                                        <div style={{ display: "flex", padding: "20px", fontWeight: "600" }}>
+                                            <div style={{ flex: "25%" }}>옵션값</div>
+                                            <div style={{ flex: "75%" }}>옵션 사진</div>
+                                          </div>
+                                        {isOptionDropMenu4 &&
+                                            OptionList[3]?.map((list: any, index: number) => (
+                                              <Optionli key={index} onClick={() => option.ImageHandler(index)}>
+                                                <div style={{ display: "flex", flexDirection: "column" }}>{list.optionValue4}</div>
+                                                <div>
+                                                  <div style={{ display: "flex", marginBottom: "10px" }}>
+                                                    {[...Array(OptionImageMax)].map((_, index2: any) => (
+                                                      <OptionImage
+                                                        index={index2}
+                                                        optionImage={list.optionImage}
+                                                        OptionListIndex1={OptionListIndex1}
+                                                        OptionListIndex2={OptionListIndex2}
+                                                        OptionList={OptionList}
+                                                        setOptionList={setOptionList}
+                                                        isClicked={isClicked}
+                                                        setIsClicked={setIsClicked}
+                                                      />
+                                                    ))}
+                                                  </div>
+                                                </div>
+                                              </Optionli>
+                                            ))}
+                                        </OptionUl>
+                                      </OptionDropMenu>
                                     </div>
                                     <div className={!isOptionValue4 ? "error-active value" : "error"}>{OptionValue4Message}</div>
                                   </div>
@@ -2404,7 +2950,7 @@ function ProductRegister(props: Props) {
                                       <input
                                         type="text"
                                         className="input"
-                                        maxLength={10}
+                                        maxLength={20}
                                         name="productOptionName"
                                         placeholder="예시 : 컬러"
                                         value={OptionName5}
@@ -2421,7 +2967,11 @@ function ProductRegister(props: Props) {
                                     <div className="input-box-title">
                                       <span>옵션값5</span>
                                     </div>
-                                    <div ref={inputRefOptionValue5} id={inputClick && inputClickNumber === 34 ? "input-inner-active" : "input-inner"}>
+                                    <div
+                                      ref={inputRefOptionValue5}
+                                      id={inputClick && inputClickNumber === 34 ? "input-inner-active" : "input-inner"}
+                                      className="option-input-wrap"
+                                    >
                                       <input
                                         type="text"
                                         className="input"
@@ -2435,8 +2985,132 @@ function ProductRegister(props: Props) {
                                         }}
                                         onChange={option.Value5Handler}
                                       />
+                                      <button className="dropmenu-btn" onClick={option.DropMenuHandler5} ref={inputRefOptionDropMenuBtn5}>
+                                        <span>+</span>
+                                      </button>
+                                      <OptionDropMenu
+                                        className="option-input-list"
+                                        isOptionDropMenu={isOptionDropMenu5}
+                                        ref={inputRefOptionDropMenu5}
+                                      >
+                                        <OptionUl>
+                                        <div style={{ display: "flex", padding: "20px", fontWeight: "600" }}>
+                                            <div style={{ flex: "25%" }}>옵션값</div>
+                                            <div style={{ flex: "75%" }}>옵션 사진</div>
+                                          </div>
+                                        {isOptionDropMenu5 &&
+                                            OptionList[4]?.map((list: any, index: number) => (
+                                              <Optionli key={index} onClick={() => option.ImageHandler(index)}>
+                                                <div style={{ display: "flex", flexDirection: "column" }}>{list.optionValue5}</div>
+                                                <div>
+                                                  <div style={{ display: "flex", marginBottom: "10px" }}>
+                                                    {[...Array(OptionImageMax)].map((_, index2: any) => (
+                                                      <OptionImage
+                                                        index={index2}
+                                                        optionImage={list.optionImage}
+                                                        OptionListIndex1={OptionListIndex1}
+                                                        OptionListIndex2={OptionListIndex2}
+                                                        OptionList={OptionList}
+                                                        setOptionList={setOptionList}
+                                                        isClicked={isClicked}
+                                                        setIsClicked={setIsClicked}
+                                                      />
+                                                    ))}
+                                                  </div>
+                                                </div>
+                                              </Optionli>
+                                            ))}
+                                        </OptionUl>
+                                      </OptionDropMenu>
                                     </div>
                                     <div className={!isOptionValue5 ? "error-active value" : "error"}>{OptionValue5Message}</div>
+                                  </div>
+                                </div>
+                              )}
+                              {OptionType >= 5 && (
+                                <div style={{ display: "flex", alignItems: "center", flexDirection: "row", width: "100%" }}>
+                                  <div className="input-box" style={{ flex: "30%" }}>
+                                    <div className="input-box-title">
+                                      <span>옵션명6</span>
+                                    </div>
+                                    <div ref={inputRefOptionName6} id={inputClick && inputClickNumber === 25 ? "input-inner-active" : "input-inner"}>
+                                      <input
+                                        type="text"
+                                        className="input"
+                                        maxLength={20}
+                                        name="productOptionName"
+                                        placeholder="예시 : 컬러"
+                                        value={OptionName6}
+                                        onClick={() => {
+                                          setInputClick(true);
+                                          setInputClickNumber(25);
+                                        }}
+                                        onChange={option.Name6Handler}
+                                      />
+                                    </div>
+                                    <div className={!isOptionName6 ? "error-active name" : "error"}>{OptionName6Message}</div>
+                                  </div>
+                                  <div className="input-box">
+                                    <div className="input-box-title">
+                                      <span>옵션값6</span>
+                                    </div>
+                                    <div
+                                      ref={inputRefOptionValue6}
+                                      id={inputClick && inputClickNumber === 35 ? "input-inner-active" : "input-inner"}
+                                      className="option-input-wrap"
+                                    >
+                                      <input
+                                        type="text"
+                                        className="input"
+                                        name="productOptionValue"
+                                        placeholder="예시 : 빨강,노랑 ( ,로 구분 )"
+                                        id="OptionInputValue"
+                                        value={OptionValue6}
+                                        onClick={() => {
+                                          setInputClick(true);
+                                          setInputClickNumber(35);
+                                        }}
+                                        onChange={option.Value6Handler}
+                                      />
+                                      <button className="dropmenu-btn" onClick={option.DropMenuHandler6} ref={inputRefOptionDropMenuBtn6}>
+                                        <span>+</span>
+                                      </button>
+                                      <OptionDropMenu
+                                        className="option-input-list"
+                                        isOptionDropMenu={isOptionDropMenu6}
+                                        ref={inputRefOptionDropMenu6}
+                                      >
+                                        <OptionUl>
+                                        <div style={{ display: "flex", padding: "20px", fontWeight: "600" }}>
+                                            <div style={{ flex: "25%" }}>옵션값</div>
+                                            <div style={{ flex: "75%" }}>옵션 사진</div>
+                                          </div>
+                                        {isOptionDropMenu6 &&
+                                            OptionList[5]?.map((list: any, index: number) => (
+                                              <Optionli key={index} onClick={() => option.ImageHandler(index)}>
+                                                <div style={{ display: "flex", flexDirection: "column" }}>{list.optionValue6}</div>
+                                                <div>
+                                                  <div style={{ display: "flex", marginBottom: "10px" }}>
+                                                    {[...Array(OptionImageMax)].map((_, index2: any) => (
+                                                      <OptionImage
+                                                        index={index2}
+                                                        optionImage={list.optionImage}
+                                                        OptionListIndex1={OptionListIndex1}
+                                                        OptionListIndex2={OptionListIndex2}
+                                                        OptionList={OptionList}
+                                                        setOptionList={setOptionList}
+                                                        isClicked={isClicked}
+                                                        setIsClicked={setIsClicked}
+                                                      />
+                                                    ))}
+                                                  </div>
+                                                </div>
+                                              </Optionli>
+                                            ))}
+                                        </OptionUl>
+                                      </OptionDropMenu>
+                                    </div>
+                                    <div className={!isOptionValue6 ? "error-active value" : "error"}>{OptionValue6Message}</div>
                                   </div>
                                 </div>
                               )}
@@ -2472,6 +3146,13 @@ function ProductRegister(props: Props) {
                           optionSubmit={option.Submit}
                           setOptionValue={setOptionValue1}
                           OptionList={OptionList}
+                          OptionName1={OptionName1}
+                          OptionName2={OptionName2}
+                          OptionName3={OptionName3}
+                          OptionName4={OptionName4}
+                          OptionName5={OptionName5}
+                          OptionName6={OptionName6}
+                          isEdit={isEdit}
                         ></TableProduct>
                       </div>
                     </div>
@@ -2957,15 +3638,11 @@ function ProductRegister(props: Props) {
                         </div>
                       </div>
                       <div>
-                        <div className="normal-blue-btn" style={{width: "200px", height: "40px", marginTop: "20px"}} onClick={addProducts.Submit}>
-                          {!isAddProductFinishEnd ? (
-                            <span className="text">등록</span>
-                            ) : (
-                            <span className="text">등록 완료</span>
-                          )}
+                        <div className="normal-blue-btn" style={{ width: "200px", height: "40px", marginTop: "20px" }} onClick={addProducts.Submit}>
+                          {!isAddProductFinishEnd ? <span className="text">등록</span> : <span className="text">등록 완료</span>}
                         </div>
                       </div>
-                        <div className={isAddProductFinishEnd ? "error" : "error-active"}>{addSubmitErr}</div>
+                      <div className={isAddProductFinishEnd ? "error" : "error-active"}>{addSubmitErr}</div>
                     </div>
                   </div>
                 </li>

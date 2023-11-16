@@ -21,8 +21,8 @@ type Props = {
 function TableProductList(props: Props) {
   const token = useSelector(selectToken);
   const [rowData, setRowData] = useState<any>();
+
   const [selectedRows, setSelectedRows] = useState<any>([]);
-  const [inputClickNumber, setInputClickNumber] = useState(0);
   const [inputClick, setInputClick] = useState(false);
 
   const [deleteAgreeModal, setDeleteAgreeModal] = useState(false);
@@ -118,6 +118,8 @@ function TableProductList(props: Props) {
   const onGridReady = async (params?: any) => {
     try {
       const db = await axios.post("/smartstore/home/product", token, { withCredentials: true });
+      console.log(db);
+
       setRowData(db.data.productList);
       props.setProductTotal && props.setProductTotal(db.data.productList.length);
     } catch (err) {
@@ -146,25 +148,6 @@ function TableProductList(props: Props) {
     }
   };
 
-  // 선택삭제 모달안에 input의 border-active 컨트롤
-  useEffect(() => {
-    const clickOutside = (e: any) => {
-      // 모달이 열려 있고 모달의 바깥쪽을 눌렀을 때 창 닫기
-      // useRef의 current 값은 선택한 DOM을 말함.
-      // 드롭메뉴를 제외한 나머지 공간을 클릭하면 닫히게된다.
-      if (inputClick && dropmenu.current && dropmenu.current.contains(e.target)) {
-        setInputClick(false);
-      }
-    };
-
-    document.addEventListener("mousedown", clickOutside);
-
-    return () => {
-      // Cleanup the event listener
-      document.removeEventListener("mousedown", clickOutside);
-    };
-  }, [inputClick]);
-
   // 삭제 버튼
   const deleteBtn = async (e: any) => {
     if (deleteAgreeValue !== "삭제") {
@@ -190,13 +173,35 @@ function TableProductList(props: Props) {
 
   // 카테고리에 등록된 광고의 product._id를 Product에서 검색후 해당하는 상품을 선택합니다.
   useEffect(() => {
+    console.log('tableproductlist adproduct')
+
     if(rowData && props.selectedAdvertise?.[0]){
+      console.log('등록')
       const test = rowData?.filter((list: any) => list._id === props.selectedAdvertise?.[0].product_id);
       props.setSelectedProductList && props.setSelectedProductList(test);
       props.setAdProduct && props.setAdProduct(test);
     }
     // setSelectedRows(test);
-  }, [props.selectedAdvertise]);
+  }, [rowData && props.selectedAdvertise]);
+
+  // 선택삭제 모달안에 input의 border-active 컨트롤
+  useEffect(() => {
+    const clickOutside = (e: any) => {
+      // 모달이 열려 있고 모달의 바깥쪽을 눌렀을 때 창 닫기
+      // useRef의 current 값은 선택한 DOM을 말함.
+      // 드롭메뉴를 제외한 나머지 공간을 클릭하면 닫히게된다.
+      if (inputClick && dropmenu.current && dropmenu.current.contains(e.target)) {
+        setInputClick(false);
+      }
+    };
+
+    document.addEventListener("mousedown", clickOutside);
+
+    return () => {
+      // Cleanup the event listener
+      document.removeEventListener("mousedown", clickOutside);
+    };
+  }, [inputClick]);
   
 
   // 초기화

@@ -6,5 +6,6 @@ module.exports = override(
     "@img": path.resolve(__dirname, "src", "img"),
     "@scss": path.resolve(__dirname, "src", "scss"),
     "@styles": path.resolve(__dirname, "src", "styles"),
+    "@components": path.resolve(__dirname, "src", "components"),
   })
 );

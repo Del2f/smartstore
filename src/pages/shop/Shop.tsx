@@ -12,15 +12,14 @@ import Products from "./Products";
 import NotFound from "./NotFound";
 import Qna from "./Qna";
 import Login from "./Login";
-import Cart from "../shop/Cart";
+import Cart from "./Cart";
+import Buy from "./Buy";
 import Usersign from "./Usersign";
-// import Mac from "./Mac";
 
 import { ColumnType, TaskType, SubTaskType } from "../adminPage/Category";
 import { cartListType } from "./Cart";
 
 import { darkTheme, lightTheme } from "@styles/theme";
-
 import { selectCurrentUser } from "../../store/userSlice";
 import "./Shop.scss";
 
@@ -827,9 +826,9 @@ function Shop() {
     return savedCategoryList ? JSON.parse(savedCategoryList) : [];
   });
 
-  console.log(categoryList);
-  console.log(selectedColumn);
-  console.log(selectedTask);
+  // console.log(categoryList);
+  // console.log(selectedColumn);
+  // console.log(selectedTask);
 
   const [modifyTime, setModifyTime] = useState(() => {
     const savedModifyTime = sessionStorage.getItem("modifyTime");
@@ -1536,6 +1535,7 @@ function Shop() {
             </NavInner>
           </NavWrap>
           <Routes>
+            <Route path="/buy/:id" element={<Buy />} />
             <Route path="/products/:id" element={<Products gmId={gmId} categoryList={categoryList} setNavCart={setNavCart} />} />
             <Route path="/products/*" element={<NotFound />} />
             <Route path="/*" element={<NotFound />} />

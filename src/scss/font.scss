@@ -1,12 +1,5 @@
 
-// TableProductList 컴포넌트 폰트
-.ag-root-wrapper {
-    // font-family: GmarketSansMedium;
-    // font-weight: 300;
-}
-
 // G마켓 폰트
-
 @font-face {
     font-family: 'GmarketSansMedium';
     src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
@@ -15,7 +8,6 @@
 }
 
 // 나눔스퀘어 폰트 
-
 @font-face {
     font-family: 'NanumSquare';
     font-weight: 300;
@@ -118,7 +110,6 @@
         url('/fonts/Pretendard-Medium.otf') format('truetype');
 }
 
-
 @font-face {
     font-family: 'Pretendard';
     font-weight: 600;
@@ -177,4 +168,32 @@
     font-weight: 600;
     font-style: normal;
     src: url('/fonts/sf-pro-icons_bold.woff2') format('woff2');
+}
+
+/* 네이버 아이콘 */
+@font-face {
+    font-family: Naver Icons;
+    src: url(/img/Naver-Icons.woff2) format("woff2");
+    /* format("woff2"),url(/img//Naver-Icons.woff) */
+    /* format("woff"),url(/img//Naver-Icons.ttf) */
+    /* format("truetype"),url(/img//Naver-Icons.svg) */
+    /* format("svg"); */
+}
+
+@font-face {
+    font-family: Naver booking Icons;
+    src: url(/img/Naver-booking-Icons.woff2) format("woff2");
+    /* format("woff2"),url(/img//Naver-Icons.woff) */
+    /* format("woff"),url(/img//Naver-Icons.ttf) */
+    /* format("truetype"),url(/img//Naver-Icons.svg) */
+    /* format("svg"); */
+}
+
+@font-face {
+    font-family: Naver shopping Icons;
+    src: url(/img/Naver-shopping-Icons.woff2) format("woff2");
+    /* format("woff2"),url(/img//Naver-Icons.woff) */
+    /* format("woff"),url(/img//Naver-Icons.ttf) */
+    /* format("truetype"),url(/img//Naver-Icons.svg) */
+    /* format("svg"); */
 }

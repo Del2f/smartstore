@@ -1,3 +1,61 @@
+.modal {
+    --modal-overlay-background: rgb(255, 255, 255);
+    --modal-overlay-padding-top: 76px;
+    --modal-overlay-padding-bottom: 76px;
+    --modal-overlay-padding-inline: 76px;
+    --modal-close-button-offset-top: 16px;
+    --modal-close-button-offset-inline-start: 16px;
+    --modal-close-button-size: 44px;
+    --modal-close-background: rgb(232, 232, 237);
+    --modal-close-background-hover: #ececf0;
+    --modal-close-background-active: #dfdfe4;
+    --modal-close-color: rgba(0, 0, 0, 0.56);
+    --modal-close-color-hover: rgba(0, 0, 0, 0.72);
+    --modal-close-border-radius: 50%;
+    --modal-close-button-position: sticky;
+    --modal-close-icon-size: 36px;
+    --modal-close-icon-svg-size: 20px;
+    --modal-overlay-padding-top: 96px;
+    --modal-overlay-padding-bottom: 96px;
+
+}
+
+.blur {
+    backdrop-filter: blur(20px);
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+}
+
+// 모달창
+.modalpage {
+    position: relative;
+    width: 600px;
+    background-color: white;
+    padding: 30px 25px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    transition: opacity 0.32s cubic-bezier(0.4,0,0.6,1) 80ms,visibility 0.32s step-start 80ms;
+
+    h1 {
+        font-size: 40px;
+        font-weight: 800;
+        text-align: center;
+        padding: 20px;
+    }
+
+    span {
+        font-size: 20px;
+        font-weight: 600;
+        text-align: center;
+        padding: 20px;
+      }
+}
+
 .LR-margin-10 {
     margin: 0 10px;
 }
@@ -213,4 +271,58 @@
 
 .hide {
     display: none;
+}
+
+.modal-close-button {
+    --modal-overlay-background: rgb(255, 255, 255);
+    --modal-overlay-padding-top: 76px;
+    --modal-overlay-padding-bottom: 76px;
+    --modal-overlay-padding-inline: 76px;
+    --modal-close-button-offset-top: 16px;
+    --modal-close-button-offset-inline-start: 16px;
+    --modal-close-button-size: 44px;
+    --modal-close-background: rgb(232, 232, 237);
+    --modal-close-background-hover: #ececf0;
+    --modal-close-background-active: #dfdfe4;
+    --modal-close-color: rgba(0, 0, 0, 0.56);
+    --modal-close-color-hover: rgba(0, 0, 0, 0.72);
+    --modal-close-border-radius: 50%;
+    --modal-close-button-position: sticky;
+    --modal-close-icon-size: 36px;
+    --modal-close-icon-svg-size: 20px;
+    --modal-overlay-padding-top: 96px;
+    --modal-overlay-padding-bottom: 96px;
+
+    position: sticky;
+    right: 0;
+    order: 1;
+    border: 0;
+    background: none;
+    align-self: flex-end;
+    margin-inline-end: var(--modal-close-button-offset-inline-start);
+    top: var(--modal-close-button-offset-top);
+    margin-top: var(--modal-close-button-offset-top);
+    z-index: 1;
+}
+
+.modal-close-icon {
+    background: var(--modal-close-background);
+    border-radius: var(--modal-close-border-radius);
+    color: var(--modal-close-color);
+    display: flex;
+    align-items: center;
+    height: var(--modal-close-icon-size);
+    width: var(--modal-close-icon-size);
+    outline: none;
+    transition: color 100ms linear, background 100ms linear;
+    position: relative;
+
+    svg {
+        fill: currentColor;
+        position: absolute;
+        inset-inline-start: 50%;
+        transform: translateX(-50%);
+        height: var(--modal-close-icon-svg-size);
+        width: var(--modal-close-icon-svg-size);
+    }
 }

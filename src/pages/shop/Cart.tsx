@@ -1,16 +1,12 @@
 import axios from "../../api/axios";
 import styled from "styled-components";
-import { useState, useEffect, useReducer } from "react";
-import { Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
-import Buy from "./Buy";
-
+import { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { productList } from "./Category";
 import { ObjectId } from "mongodb";
-
 import { useCookies } from "react-cookie";
-
-import checkIcon from "@img/icon-check-16.00020358.svg";
 import { v4 as uuidv4 } from "uuid";
+import checkIcon from "@img/icon-check-16.00020358.svg";
 
 const Wrap = styled.div`
   display: flex;
@@ -440,7 +436,7 @@ interface Props {
   setNavCart: React.Dispatch<React.SetStateAction<cartListType[] | undefined>>;
 }
 
-function Cart({ setNavCart }:Props) {
+function Cart({ setNavCart }: Props) {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -472,7 +468,7 @@ function Cart({ setNavCart }:Props) {
 
       try {
         const res = await axios.post("/smartstore/cart", {}, { withCredentials: true });
-        console.log(res.data)
+        console.log(res.data);
 
         if (res.data.status == false) {
           navigate("/shop");
@@ -581,7 +577,7 @@ function Cart({ setNavCart }:Props) {
 
     try {
       const checkboxID = e.currentTarget.id;
-      console.log(e.currentTarget.id)
+      console.log(e.currentTarget.id);
 
       const res = await axios.post("/smartstore/cart/cartdelete/", { checkboxID }, { withCredentials: true });
       console.log(res.data);
@@ -613,10 +609,7 @@ function Cart({ setNavCart }:Props) {
       }
       return item;
     });
-
-    // console.log(filteredCartList);
-
-    // const result = filteredCartList?.filter((list: any) => list.selected.length > 0);
+    
     const newResult = filteredCartList?.map((item: any) => {
       const newSelected = item.selected.map((selectedItem: any) => {
         const newListItem = selectedItem.list.map((listItem: any) => listItem.count);

@@ -93,7 +93,10 @@ const AdverInner = styled.div<AdverInnerType>`
 
 const AdverImageWrap = styled.div`
   display: flex;
+  justify-content: center;
   align-items: center;
+  margin-top: 170px;
+  margin-bottom: 100px;
 `;
 
 const AdverImage = styled.img`
@@ -474,6 +477,22 @@ const ChapterNavIcon = styled.figure<ChapterNavIcon>`
           width: 35px;
           height: 54px;
           background-size: 35px 54px;
+        `;
+      default:
+        return "";
+    }
+  }
+}}
+
+  // MacBook Pro
+  ${(props) => {
+  if (props.parentID === '64ff27dc3c9faa3d2f6fbbfb') {
+    switch (props.taskName) {
+      case "MacBook Pro 13":
+        return `
+          width: 54px;
+          height: 54px;
+          background-size: 54px 54px;
         `;
       default:
         return "";

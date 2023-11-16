@@ -450,7 +450,9 @@ br.small {
         position: relative;
         min-height: 100%;
         width: 100%;
-
+        background-color: white;
+        padding: 96px 76px;
+        order: 2;
     }
 
     .modal-overlay {
@@ -481,39 +483,27 @@ br.small {
     }
 }
 
-.modal {
+.modal-M2 {
+
     .article-copy {
         color: $grayColor;
     }
 
-    --modal-overlay-background: rgb(255, 255, 255);
-    --modal-overlay-padding-top: 76px;
-    --modal-overlay-padding-bottom: 76px;
-    --modal-overlay-padding-inline: 76px;
-    --modal-close-button-offset-top: 16px;
-    --modal-close-button-offset-inline-start: 16px;
-    --modal-close-button-size: 44px;
-    --modal-close-background: rgb(232, 232, 237);
-    --modal-close-background-hover: #ececf0;
-    --modal-close-background-active: #dfdfe4;
-    --modal-close-color: rgba(0, 0, 0, 0.56);
-    --modal-close-color-hover: rgba(0, 0, 0, 0.72);
-    --modal-close-border-radius: 50%;
-    --modal-close-button-position: sticky;
-    --modal-close-icon-size: 36px;
-    --modal-close-icon-svg-size: 20px;
-    --modal-overlay-padding-top: 96px;
-    --modal-overlay-padding-bottom: 96px;
-
+    .modal-close-button-wrap {
+        display: flex;
+        align-self: flex-end;
+        position: sticky;
+    }
+    display: flex;
+    flex-direction: column;
+    overflow: scroll;
+    z-index: 3;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    background-color: rgba(255, 255, 255);
 
     .typography-modal-headline {
         font-size: 62px;
@@ -538,42 +528,6 @@ br.small {
         padding-inline-end: var(--modal-overlay-padding-inline);
         margin-top: calc(-1 * (44px + var(--modal-close-button-offset-top))); // modal-close-button 때문에 생긴 여백을 없애준다.
 
-    }
-
-    .modal-close-button {
-        position: sticky;
-        top: 0;
-        right: 0;
-        order: 1;
-        width: 44px;
-        height: 44px;
-        border: 0;
-        background: none;
-        align-self: flex-end;
-        margin-inline-end: var(--modal-close-button-offset-inline-start);
-        margin-top: var(--modal-close-button-offset-top);
-    }
-
-    .modal-close-icon {
-        background: var(--modal-close-background);
-        border-radius: var(--modal-close-border-radius);
-        color: var(--modal-close-color);
-        display: flex;
-        align-items: center;
-        height: var(--modal-close-icon-size);
-        width: var(--modal-close-icon-size);
-        outline: none;
-        transition: color 100ms linear, background 100ms linear;
-        position: relative;
-
-        svg {
-            fill: currentColor;
-            position: absolute;
-            inset-inline-start: 50%;
-            transform: translateX(-50%);
-            height: var(--modal-close-icon-svg-size);
-            width: var(--modal-close-icon-svg-size);
-        }
     }
 
     .typography-modal-eyebrow {
@@ -627,7 +581,6 @@ br.small {
     }
 
     .chip-content {
-
         .chip-gradient-container {
             --p-width: 544px;
             --p-height: 492px;

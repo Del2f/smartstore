@@ -21,12 +21,12 @@ const GlobalStyles = createGlobalStyle`
 
         // shop
         box-sizing: border-box; 
-        font-family: 'Pretendard' !important;
     }
-
+    
     body {
         font-size: 17px;
         font-weight: 400;
+        font-family: 'Pretendard';
     }
 
     a {

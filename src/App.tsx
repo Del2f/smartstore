@@ -3,18 +3,16 @@ import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
 import { selectCurrentAdmin } from "./store/adminSlice";
-import { menuSlice, showMenu } from "./store/menuSlice";
 import { useCookies } from "react-cookie";
 
 import Home from "./pages/adminPage/Home";
 import Product from "./pages/adminPage/Product";
 import ProductRegister from "./pages/adminPage/ProductRegister";
 import Category from "./pages/adminPage/Category";
-import Accordion from "./components/admin/Accordion";
+import Advertise from "./pages/adminPage/Advertise";
 
 import $ from "jquery";
 import "./App.scss";
-import cat from "@img/cat.jpeg";
 
 let currentPath = "";
 
@@ -37,14 +35,14 @@ function App() {
   useEffect(() => {
     const verifyUser = async () => {
       if (!cookies.jwt) {
-        navigate("/commerce/login");
+        navigate("/login");
       }
 
       try {
         const data = await axios.post("/smartstore/home", {}, { withCredentials: true }).then((res) => {
           if (!res.data.status) {
             removeCookie("jwt");
-            navigate("/commerce/login");
+            navigate("/login");
           } else {
             console.log(`안녕하세요 ${res.data.user} 님. 관리자 페이지 입니다.`);
           }
@@ -62,9 +60,7 @@ function App() {
   };
 
   const [showdropmenu, setShowdrop] = useState(false);
-  const [showNavdropmenu, setShowNavdropmenu] = useState(false);
   const dropmenu = useRef<HTMLDivElement>(null);
-  const navdropmenu = useRef<HTMLLIElement>(null);
 
   // 모달이 열려 있고 모달의 바깥쪽을 눌렀을 때 창 닫기
   useEffect(() => {
@@ -84,22 +80,6 @@ function App() {
       document.removeEventListener("mousedown", clickOutside);
     };
   }, [showdropmenu]);
-
-  // 모달이 열려 있고 모달의 바깥쪽을 눌렀을 때 창 닫기
-  useEffect(() => {
-    const clickOutside1 = (e: any) => {
-      if (showNavdropmenu && navdropmenu.current && !navdropmenu.current.contains(e.target)) {
-        setShowNavdropmenu(false);
-      }
-    };
-
-    document.addEventListener("mousedown", clickOutside1);
-
-    return () => {
-      // Cleanup the event listener
-      document.removeEventListener("mousedown", clickOutside1);
-    };
-  }, [showNavdropmenu]);
 
   const contents1 = (
     <div className="contents">
@@ -295,7 +275,7 @@ function App() {
   return (
     <div className="App">
       <div className="flex flex-ju-center flex-align-center">
-        <div className="navi flex flex-ju-bt flex-align-center" style={{width: "1300px"}}>
+        <div className="navi flex flex-ju-bt flex-align-center" style={{ width: "1280px" }}>
           <div className="nav-left flex flex-align-center">
             <ul className="nav-logo flex flex-wrap flex-align-center">
               <li>
@@ -305,21 +285,13 @@ function App() {
                     navigate("/home");
                   }}
                 >
-                  관리자 페이지
+                  <svg height="44" viewBox="0 0 14 44" width="31px" xmlns="http://www.w3.org/2000/svg">
+                    <path d="m13.0729 17.6825a3.61 3.61 0 0 0 -1.7248 3.0365 3.5132 3.5132 0 0 0 2.1379 3.2223 8.394 8.394 0 0 1 -1.0948 2.2618c-.6816.9812-1.3943 1.9623-2.4787 1.9623s-1.3633-.63-2.613-.63c-1.2187 0-1.6525.6507-2.644.6507s-1.6834-.9089-2.4787-2.0243a9.7842 9.7842 0 0 1 -1.6628-5.2776c0-3.0984 2.014-4.7405 3.9969-4.7405 1.0535 0 1.9314.6919 2.5924.6919.63 0 1.6112-.7333 2.8092-.7333a3.7579 3.7579 0 0 1 3.1604 1.5802zm-3.7284-2.8918a3.5615 3.5615 0 0 0 .8469-2.22 1.5353 1.5353 0 0 0 -.031-.32 3.5686 3.5686 0 0 0 -2.3445 1.2084 3.4629 3.4629 0 0 0 -.8779 2.1585 1.419 1.419 0 0 0 .031.2892 1.19 1.19 0 0 0 .2169.0207 3.0935 3.0935 0 0 0 2.1586-1.1368z"></path>
+                  </svg>
                 </a>
               </li>
             </ul>
             <ul className="quick-link flex flex-wrap flex-align-center">
-              <li ref={navdropmenu}>
-                <a onClick={() => setShowNavdropmenu((e) => !e)}>
-                  <span className="txt">네이버광고</span>
-                  <i className={showNavdropmenu ? "fn fn-up2 arrow" : "fn fn-down2 arrow"}></i>
-                </a>
-                <ul className={showNavdropmenu ? "nav-dropdown-menu nav-dropdown-menu-active" : "nav-dropdown-menu"}>
-                  <li>검색광고</li>
-                  <li>성과형 디스플레이광고</li>
-                </ul>
-              </li>
               <li>
                 <Link to="/shop">
                   <span className="txt">내 상점</span>
@@ -333,9 +305,6 @@ function App() {
               </li>
               <li>
                 <Link to="category">카테고리 관리</Link>
-              </li>
-              <li>
-                <Link to="advertisement">광고 관리</Link>
               </li>
             </ul>
           </div>
@@ -367,6 +336,7 @@ function App() {
           <Route path="/product/:id" element={<ProductRegister />} />
           <Route path="/productregister" element={<ProductRegister />} />
           <Route path="/category" element={<Category />} />
+          <Route path="/advertise" element={<Advertise />} />
           <Route path="/product" element={<Product />} />
           {/* <Route path="*" element={<Notfound/>}/> */}
         </Routes>

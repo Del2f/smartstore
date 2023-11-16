@@ -3,16 +3,16 @@
 @import './scss/layout.scss';
 @import './scss/font.scss';
 
-@import './scss/admin/ProductRegister.scss';
-@import './scss/admin/Product.scss';
-@import './scss/admin/SignupIntro.scss';
-@import './scss/admin/Category.scss';
-@import './scss/admin/Usersign.scss';
-@import './scss/admin/Intro.scss';
-@import './scss/admin/Home.scss';
+// @import './scss/admin/ProductRegister.scss';
+// @import './scss/admin/Product.scss';
+// @import './scss/admin/SignupIntro.scss';
+// @import './scss/admin/Category.scss';
+// @import './scss/admin/Usersign.scss';
+// @import './scss/admin/Intro.scss';
+// @import './scss/admin/Home.scss';
 
 // 컴포넌트
-@import './scss/admin/component/Accordion';
+// @import './scss/admin/component/Accordion';
 
 .App {
   position: relative;
@@ -28,37 +28,6 @@ body {
   vertical-align: middle;
 }
 
-/* 네이버 아이콘 */
-
-@font-face {
-  font-family: Naver Icons;
-  src: url(/img/Naver-Icons.woff2) format("woff2");
-  /* format("woff2"),url(/img//Naver-Icons.woff) */
-  /* format("woff"),url(/img//Naver-Icons.ttf) */
-  /* format("truetype"),url(/img//Naver-Icons.svg) */
-  /* format("svg"); */
-}
-
-@font-face {
-  font-family: Naver booking Icons;
-  src: url(/img/Naver-booking-Icons.woff2) format("woff2");
-  /* format("woff2"),url(/img//Naver-Icons.woff) */
-  /* format("woff"),url(/img//Naver-Icons.ttf) */
-  /* format("truetype"),url(/img//Naver-Icons.svg) */
-  /* format("svg"); */
-}
-
-@font-face {
-  font-family: Naver shopping Icons;
-  src: url(/img/Naver-shopping-Icons.woff2) format("woff2");
-  /* format("woff2"),url(/img//Naver-Icons.woff) */
-  /* format("woff"),url(/img//Naver-Icons.ttf) */
-  /* format("truetype"),url(/img//Naver-Icons.svg) */
-  /* format("svg"); */
-}
-
-
-
 .fn:before {
   font-family: Naver Icons;
   font-style: normal;
@@ -72,7 +41,6 @@ body {
 }
 
 /* 돋보기 */
-
 .fn-search:before {
   content: "\EA94";
   color: #9399A3;
@@ -83,7 +51,6 @@ body {
 }
 
 /* i 아이콘 */
-
 .fn-info1:before {
   content: "\EA50";
   color: #b0b6c4;
@@ -99,7 +66,6 @@ body {
 }
 
 /* 네비게이션 */
-
 .App {
 
   .navi {
@@ -124,12 +90,12 @@ body {
       padding: 0px;
       margin: 0px;
       margin-left: 10px;
-      
+
       li a {
         color: $naviTextColor;
         position: relative;
         padding: 0 10px 0 11px;
-        font-size: 14px;
+        font-size: 11px;
         font-weight: 500;
       }
 
@@ -689,7 +655,7 @@ body {
       top: 3px;
       left: -2px;
     }
-    
+
     .address {
       color: #494949;
       margin: 20px 0 0;
@@ -702,7 +668,7 @@ body {
         font-weight: 700;
       }
     }
-    
+
     .logo {
       margin-bottom: 0px;
       margin-right: 3px;
@@ -727,7 +693,7 @@ body {
       margin: 0px;
       padding: 0px;
       text-align: center;
-    
+
       li {
         position: relative;
         padding: 0 7px 0 11px;
@@ -750,7 +716,7 @@ body {
           font-size: 11px;
           line-height: 19px;
         }
-        
+
       }
 
       li:not(:first-child):before {

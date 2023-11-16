@@ -1,21 +1,16 @@
 import { useState, SetStateAction, useEffect } from "react";
 import { useSelector } from "react-redux";
-
-// import styled from "styled-components";
-// import { Link, useNavigate } from "react-router-dom";
-// import $ from "jquery";
-
-import Swiper from "../../components/Swiper";
-import Swiper2 from "../../components/Swiper2";
-import Swiper_large from "../../components/Swiper_large";
-import Chart from "../../components/Chart";
-import StoreChart from "../../components/StoreChart";
-import Btn from "../../components/Btn";
-import QAtabs from "../../components/QAtabs";
-
+// import Swiper from "../../components/admin/Swiper";
+// import Swiper2 from "../../components/admin/Swiper2";
+import Swiper_large from "../../components/admin/Swiper_large";
+import Chart from "../../components/admin/Chart";
+import StoreChart from "../../components/admin/StoreChart";
+import Btn from "../../components/admin/Btn";
+import QAtabs from "../../components/admin/QAtabs";
 import { ArrowClockwise, Truck, ExclamationCircle } from "react-bootstrap-icons";
 import { selectToken } from "../../store/authSlice";
 import { selectCurrentUser } from "../../store/userSlice";
+import "./Home.scss";
 
 type Props = {
   setNoticeIcon?: React.Dispatch<SetStateAction<any>>;
@@ -43,38 +38,11 @@ function Home(props: Props) {
 
   return (
     <>
-      <div className="Notice">
-        <div className="NoticeWrapper">
-          <a className="text-wrap">
-            <span className="round-icon-area">
-              <i className="fn fn-alert2" aria-hidden="true"></i>
-            </span>
-            <span className="notice-title">[일반] 럭키투데이 서비스 종료 안내</span>
-            <span className="notice-date">2022.11.10.</span>
-          </a>
-        </div>
-      </div>
-
       <div className="SellerSubframe">
         <div className="Sellerdashboard">
           <div className="SellerSubcontents">
             <div className="flex flex-wrap flex-panel-wrap">
-              {/* 01 좌측 배너 */}
-              <div className="Topbanner panel-wrap flex-col-6 flex-col-xs-12 flex-order-md-1 flex-order-xs-3">
-                <div className="panel panel-dashboard panel-top-banner">
-                  <div className="swiper">
-                    <Swiper />
-                  </div>
-                </div>
-              </div>
-              {/* 02 우측 배너 */}
-              <div className="Topbanner panel-wrap flex-col-6 flex-col-xs-12 flex-order-md-2 flex-order-xs-4">
-                <div className="panel panel-dashboard panel-top-banner">
-                  <div className="swiper">
-                    <Swiper2 />
-                  </div>
-                </div>
-              </div>
+
               {/* 03 주문/배송 박스 */}
               <div className="salesinfo panel-wrap flex-col-6 flex-col-xs-12 flex-order-md-3 flex-order-xs-1">
                 <div className="panel panel-dashboard">
@@ -287,8 +255,7 @@ function Home(props: Props) {
                   <div className="panel-heading">
                     <div className="pull-left">
                       <h3 className="panel-title">
-                        스토어 매출 통계
-                        <span className="sub-text">오전 8시 업데이트</span>
+                        매출 통계
                       </h3>
                     </div>
                     <div className="pull-right">
@@ -715,151 +682,6 @@ function Home(props: Props) {
                         </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* 판매자 등급 */}
-              <div className="panel-wrap flex-col-6 flex-col-md-12 flex-order-md-12 flex-order-xs-12">
-                <div className="panel panel-dashboard">
-                  <div className="panel-heading">
-                    <div className="pull-left">
-                      <h3 className="panel-title">판매자 등급</h3>
-                    </div>
-                    <div className="pull-right">
-                      <span className="sub-text">최근 20:51</span>
-                      <span className="refresh_Btn">
-                        <ArrowClockwise className="pull-right-icon" />
-                      </span>
-                    </div>
-                  </div>
-                  <div className="panel-body flex flex-wrap no-padding" id="seller-grade">
-                    <div className="border-list-wrap flex-col-6 flex-col-sm-6 flex-col-xs-12">
-                      <ul className="panel-border-list">
-                        <li className="clearfix">
-                          <span className="info-title">
-                            이번달 등급<i className="fn fn-info1"></i>
-                          </span>
-                          <span className="number-area">
-                            <a className="text">씨앗</a>
-                          </span>
-                        </li>
-                        <li className="clearfix">
-                          <span className="info-title">
-                            굿 서비스 기준<i className="fn fn-info1"></i>
-                          </span>
-                          <span className="number-area">
-                            <a className="text">불충족</a>
-                          </span>
-                        </li>
-                      </ul>
-                    </div>
-                    <div className="border-list-wrap flex-col-6 flex-col-sm-6 flex-col-xs-12">
-                      <ul className="panel-border-list">
-                        <li className="clearfix">
-                          <span className="info-title">
-                            판매 페널티<i className="fn fn-info1"></i>
-                          </span>
-                          <span className="number-area">
-                            <a className="text-number">4</a>
-                            <span>점 / </span>
-                            <a className="text-number">44</a>
-                            <span>%</span>
-                          </span>
-                        </li>
-                        <li className="clearfix">
-                          <span className="info-title">
-                            제재 단계<i className="fn fn-info1"></i>
-                          </span>
-                          <span className="number-area">
-                            <a className="text-number">-</a>
-                            {/* <span>건</span> */}
-                          </span>
-                        </li>
-                        <li className="clearfix">
-                          <span className="info-title">지재권침해신고</span>
-                          <span className="number-area">
-                            <a className="text-number">0</a>
-                            <span>건</span>
-                          </span>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {/* 하단 긴 배너 */}
-              <div className="panel-wrap flex-col-6 flex-col-md-12 flex-order-md-13 flex-order-xs-13">
-                <div className="panel panel-dashboard swiper_large">
-                  <Swiper_large />
-                </div>
-              </div>
-              {/* 퀵 메뉴 */}
-              <div className="panel-wrap flex-col-12 flex-col-md-12 flex-order-md-14 flex-order-xs-14">
-                <div className="panel panel-dashboard">
-                  <div className="panel-body" id="panel-quick-menu">
-                    <ul className="panel-list flex flex-ju-center">
-                      <li>
-                        <a>
-                          <span className="icon-wrap">
-                            <span className="icon-seller2 manual-icon"></span>
-                          </span>
-                          <span className="text">
-                            스마트스토어센터<br className="br-md"></br> 매뉴얼
-                          </span>
-                        </a>
-                      </li>
-                      <li>
-                        <a>
-                          <span className="icon-wrap">
-                            <span className="icon-seller2 partner-icon"></span>
-                          </span>
-                          <span className="text">
-                            쇼핑<br className="br-md"></br> 파트너센터
-                          </span>
-                        </a>
-                      </li>
-                      <li>
-                        <a>
-                          <span className="icon-wrap">
-                            <span className="icon-seller2 talktalk-icon"></span>
-                          </span>
-                          <span className="text">
-                            톡톡<br className="br-md"></br> 파트너센터
-                          </span>
-                        </a>
-                      </li>
-                      <li>
-                        <a>
-                          <span className="icon-wrap">
-                            <span className="icon-seller2 commerce-icon"></span>
-                          </span>
-                          <span className="text">
-                            D-커머스<br className="br-md"></br> 프로그램
-                          </span>
-                        </a>
-                      </li>
-                      <li>
-                        <a>
-                          <span className="icon-wrap">
-                            <span className="icon-seller2 analytics-icon"></span>
-                          </span>
-                          <span className="text">
-                            네이버<br className="br-md"></br> 애널리틱스
-                          </span>
-                        </a>
-                      </li>
-                      <li>
-                        <a>
-                          <span className="icon-wrap">
-                            <span className="icon-seller2 fullcare-icon"></span>
-                          </span>
-                          <span className="text">
-                            SME 풀케어<br className="br-md"></br> 시스템
-                          </span>
-                        </a>
-                      </li>
-                    </ul>
                   </div>
                 </div>
               </div>

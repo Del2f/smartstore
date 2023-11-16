@@ -249,13 +249,12 @@ function MacBookAirM2() {
   };
 
   const containerRef = useRef<HTMLDivElement>(null);
-
   const [dragging, setDragging] = useState(false);
   const [clickPoint, setClickPoint] = useState(0); // 처음 클릭한 지점.
   const [scrollLeft, setScrollLeft] = useState(0); // 움직인 거리.
 
-  console.log("처음 클릭 지점" + clickPoint);
-  console.log("움직인 거리" + scrollLeft);
+  // console.log("처음 클릭 지점" + clickPoint);
+  // console.log("움직인 거리" + scrollLeft);
 
   const handleMouseDownEvent = (e: React.MouseEvent<HTMLDivElement>) => {
     setDragging(true);
@@ -1275,7 +1274,7 @@ function MacBookAirM2() {
                     <p className="macbook-air-m1-product-display product-display">
                       33.7cm Retina 디스플레이
                       <sup className="footnote footnote-number">
-                        <a href="#footnote-19" aria-label="Footnote 19" data-modal-close="">
+                        <a href="#footnote-19" aria-label="Footnote 19">
                           19
                         </a>
                       </sup>
@@ -1288,7 +1287,7 @@ function MacBookAirM2() {
                     <p className="macbook-air-m1-product-storage product-storage">
                       256GB~2TB 저장 장치
                       <sup className="footnote footnote-number">
-                        <a href="#footnote-20" aria-label="Footnote 20" data-modal-close="">
+                        <a href="#footnote-20" aria-label="Footnote 20">
                           20
                         </a>
                       </sup>
@@ -1296,7 +1295,7 @@ function MacBookAirM2() {
                     <p className="macbook-air-m1-product-battery product-battery">
                       최대 18시간의 배터리 사용 시간
                       <sup className="footnote footnote-number">
-                        <a href="#footnote-21" aria-label="Footnote 21" data-modal-close="">
+                        <a href="#footnote-21" aria-label="Footnote 21">
                           21
                         </a>
                       </sup>
@@ -1323,7 +1322,7 @@ function MacBookAirM2() {
                       <span className="violator violator-frameless violator-frameless-reduced">새로운 15 모델</span> MacBook Air 13 및 15
                       <span className="macbook-air-13-15-product-eyebrow product-eyebrow typography-compare-product-eyebrow">M2 칩</span>
                     </h3>
-                    <p className="macbook-air-13-15-product-pricing product-pricing has-dynamic-content" data-pricing-hide="macbook-air-13">
+                    <p className="macbook-air-13-15-product-pricing product-pricing has-dynamic-content">
                       <span>₩1,590,000부터</span>
                     </p>
                     <p className="macbook-air-13-15-product-display product-display">
@@ -1331,7 +1330,7 @@ function MacBookAirM2() {
                       <br className="small" />
                       디스플레이
                       <sup className="footnote footnote-number">
-                        <a href="#footnote-19" aria-label="Footnote 19" data-modal-close="">
+                        <a href="#footnote-19" aria-label="Footnote 19">
                           19
                         </a>
                       </sup>
@@ -1344,7 +1343,7 @@ function MacBookAirM2() {
                     <p className="macbook-air-13-15-product-storage product-storage">
                       256GB~2TB 저장 장치
                       <sup className="footnote footnote-number">
-                        <a href="#footnote-20" aria-label="Footnote 20" data-modal-close="">
+                        <a href="#footnote-20" aria-label="Footnote 20">
                           20
                         </a>
                       </sup>
@@ -1352,7 +1351,7 @@ function MacBookAirM2() {
                     <p className="macbook-air-13-15-product-battery product-battery">
                       최대 18시간의 배터리 사용 시간
                       <sup className="footnote footnote-number">
-                        <a href="#footnote-1" aria-label="Footnote 1" data-modal-close="">
+                        <a href="#footnote-1" aria-label="Footnote 1">
                           1
                         </a>
                       </sup>
@@ -1373,13 +1372,13 @@ function MacBookAirM2() {
                     <h3 className="macbook-pro-13-product-headline typography-compare-product-name product-headline">
                       MacBook Pro 13 <span className="macbook-pro-13-product-eyebrow product-eyebrow typography-compare-product-eyebrow">M2 칩</span>
                     </h3>
-                    <p className="macbook-pro-13-product-pricing product-pricing has-dynamic-content" data-pricing-hide="macbook-pro-13">
+                    <p className="macbook-pro-13-product-pricing product-pricing has-dynamic-content">
                       <span>₩1,790,000부터</span>
                     </p>
                     <p className="macbook-pro-13-product-display product-display">
                       33.7cm Retina 디스플레이
                       <sup className="footnote footnote-number">
-                        <a href="#footnote-19" aria-label="Footnote 19" data-modal-close="">
+                        <a href="#footnote-19" aria-label="Footnote 19">
                           19
                         </a>
                       </sup>
@@ -1392,7 +1391,7 @@ function MacBookAirM2() {
                     <p className="macbook-pro-13-product-storage product-storage">
                       256GB~2TB 저장 장치
                       <sup className="footnote footnote-number">
-                        <a href="#footnote-20" aria-label="Footnote 20" data-modal-close="">
+                        <a href="#footnote-20" aria-label="Footnote 20">
                           20
                         </a>
                       </sup>
@@ -1400,7 +1399,7 @@ function MacBookAirM2() {
                     <p className="macbook-pro-13-product-battery product-battery">
                       최대 20시간의 배터리 사용 시간
                       <sup className="footnote footnote-number">
-                        <a href="#footnote-22" aria-label="Footnote 22" data-modal-close="">
+                        <a href="#footnote-22" aria-label="Footnote 22">
                           22
                         </a>
                       </sup>
@@ -1831,30 +1830,30 @@ function MacBookAirM2() {
               </li>
             </ol>
           </section>
-        <nav className="ac-gf-breadcrumbs">
-          <a href="/kr/" className="home ac-gf-breadcrumbs-home">
-            <span className="ac-gf-breadcrumbs-home-icon" aria-hidden="true">
-              
-            </span>
-          </a>
-          <div className="ac-gf-breadcrumbs-path">
-            <ol className="ac-gf-breadcrumbs-list" vocab="http://schema.org/" typeof="BreadcrumbList">
-              <li className="ac-gf-breadcrumbs-item" property="itemListElement" typeof="ListItem">
-                <a className="ac-gf-breadcrumbs-link" href="/kr/mac/" property="item" typeof="WebPage">
-                  <span property="name">Mac</span>
-                </a>
-              </li>
-              <li className="ac-gf-breadcrumbs-item" property="itemListElement" typeof="ListItem">
-                <a className="ac-gf-breadcrumbs-link" href="/kr/macbook-air/" property="item" typeof="WebPage">
-                  <span property="name">MacBook&nbsp;Air</span>
-                </a>
-              </li>
-              <li className="ac-gf-breadcrumbs-item" property="itemListElement" typeof="ListItem">
-                <span property="name">M2&nbsp;칩 탑재 MacBook&nbsp;Air&nbsp;13&nbsp;및 15</span>
-              </li>
-            </ol>
-          </div>
-        </nav>
+          <nav className="ac-gf-breadcrumbs">
+            <a href="/kr/" className="home ac-gf-breadcrumbs-home">
+              <span className="ac-gf-breadcrumbs-home-icon" aria-hidden="true">
+                
+              </span>
+            </a>
+            <div className="ac-gf-breadcrumbs-path">
+              <ol className="ac-gf-breadcrumbs-list" vocab="http://schema.org/" typeof="BreadcrumbList">
+                <li className="ac-gf-breadcrumbs-item" property="itemListElement" typeof="ListItem">
+                  <a className="ac-gf-breadcrumbs-link" href="/kr/mac/" property="item" typeof="WebPage">
+                    <span property="name">Mac</span>
+                  </a>
+                </li>
+                <li className="ac-gf-breadcrumbs-item" property="itemListElement" typeof="ListItem">
+                  <a className="ac-gf-breadcrumbs-link" href="/kr/macbook-air/" property="item" typeof="WebPage">
+                    <span property="name">MacBook&nbsp;Air</span>
+                  </a>
+                </li>
+                <li className="ac-gf-breadcrumbs-item" property="itemListElement" typeof="ListItem">
+                  <span property="name">M2&nbsp;칩 탑재 MacBook&nbsp;Air&nbsp;13&nbsp;및 15</span>
+                </li>
+              </ol>
+            </div>
+          </nav>
         </div>
       </footer>
     </>

@@ -1,8 +1,8 @@
 import axios from "../../api/axios";
-import styled, { createGlobalStyle, css } from "styled-components";
+import styled, { css } from "styled-components";
 
 import { useState, useRef, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { UserLogin } from "../../store/userSlice";
 import { useCookies } from "react-cookie";
@@ -305,7 +305,7 @@ const InputBtn = styled.button<LoginBtn>`
   top: 6px;
   right: 10px;
   padding: 0 1px 0 2px;
-  z-index: 1;
+  z-index: 2;
 
   & > i {
     font-size: 26px;

@@ -89,6 +89,7 @@ interface IColumnProps {
   setIsAdverListClick: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedAdvertise: React.Dispatch<React.SetStateAction<Advertise[]>>;
   setSelectedAdverID: React.Dispatch<React.SetStateAction<string>>;
+  setIsAdvertiseEdit: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Column = ({
@@ -117,6 +118,7 @@ const Column = ({
   setIsAdverListClick,
   setSelectedAdvertise,
   setSelectedAdverID,
+  setIsAdvertiseEdit,
 }: IColumnProps) => {
 
   const Selected = async (e: any) => {
@@ -168,6 +170,8 @@ const Column = ({
         setIsSelected(false);
         setIsSelectedTask(false);
         setIsSelectedSubTask(false);
+
+        setIsAdvertiseEdit(false);
         return;
       }
     } 
@@ -229,6 +233,7 @@ const Column = ({
                         setIsAdverListClick={setIsAdverListClick}
                         setSelectedAdvertise={setSelectedAdvertise}
                         setSelectedAdverID={setSelectedAdverID}
+                        setIsAdvertiseEdit={setIsAdvertiseEdit}
                       />
                     )})}
                   {provided.placeholder}

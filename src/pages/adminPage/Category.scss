@@ -1,0 +1,290 @@
+@import '../../scss/color.scss';
+
+.home-category {
+
+    .cateInfo-title {
+        font-size: 15px;
+        font-weight: 700;
+        margin-top: 20px;
+        margin-bottom: 15px;
+    }
+
+    .cateInfo-name {
+        font-size: 15px;
+        font-weight: 600;
+        margin-left: 20px;
+        display: flex;
+        align-items: center;
+    }
+
+    .box-name {
+        display: inline-block;
+        margin: 20px 0 10px;
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    .cateInfo-bg-input {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        border-radius: 12px;
+        padding: 20px;
+        height: 80px;
+        background-color: #f5f5f7;
+
+        h3 {
+            color: var(--black2-color);
+            font-weight: 600;
+        }
+
+        input {
+            background-color: #f5f5f7;
+            border-radius: 10px;
+            padding: 0 10px;
+        }
+    }
+
+    .cateInfo-input-wrap {
+        margin-top: 10px;
+    }
+
+    .cateInfo-input {
+        width: 100%;
+        background-color: #fff;
+        border: 1px solid;
+        border-radius: 12px;
+        border-color: var(--input-border-color);
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .adproduct-list {
+        padding: 5px;
+        border-radius: 10px;
+    }
+
+    .panel-body {
+
+        .box-wrap {
+            width: 100%;
+            padding: 0 70px;
+            font-size: 14px;
+            font-weight: 500;
+            color: rgba(0, 0, 0, 0.8);
+        }
+
+        .box {
+            border-radius: 20px;
+
+            .category-list::-webkit-scrollbar {
+                width: 0;
+            }
+
+            .category-list {
+                border-radius: 15px;
+                overflow-y: auto;
+                width: 400px;
+
+                li {
+                    font-size: 13px;
+                    padding: 15px;
+                    background-color: white;
+                }
+
+                .sub-list {
+                    padding: 10px;
+                    border-radius: 10px;
+                    color: black;
+                    background-color: #EDF0F5;
+                }
+
+                .category-li-active {
+                    color: white;
+                    background-color: $mainColor;
+                    border-color: 1px solid $mainColorBorder;
+                }
+
+                .category-li {
+                    border: 5px solid #EDF0F5;
+
+                }
+
+                .category-li:hover {
+                    background-color: $mainColor;
+                    user-select: none;
+                    color: white;
+                }
+            }
+
+            .btn-list {
+                margin-top: 10px;
+
+                input {
+                    margin-top: -1px;
+                }
+
+                .edit {
+                    display: inline-block;
+                    width: 28px;
+                    height: 28px;
+                }
+
+                .edit2 {
+                    display: inline-block;
+                }
+
+                .text {
+                    display: inline-block;
+                }
+            }
+        }
+
+        .first {
+            height: 790px;
+            // background-color: #f5f5f7;
+        }
+
+        .second {
+            position: relative;
+            flex: 40%;
+
+            .second-product-list {
+                .wrap {
+                    .category-list-wrap {
+                        width: 100%;
+                        background-color: #fff;
+                        border-color: var(--input-border-color);
+                        border: 1px solid;
+                        border-radius: 12px;
+                        height: 100px;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+
+                        .category-list {
+                            display: flex;
+                            justify-content: center;
+                            height: 50px;
+                            border-radius: 10px;
+                        }
+                    }
+                }
+
+            }
+        }
+
+        .third {
+            flex: 20%;
+            position: relative;
+            padding: 20px;
+        }
+    }
+
+    // 카테고리 광고 프리뷰
+    .adver-input-type1 {
+        text-align: center;
+    }
+
+    .adver-input-type3-wrap {}
+
+    .adver-input-type3 {
+        width: 100%;
+        text-align: left;
+    }
+
+    .adsubtitle {
+        font-size: 17px;
+        font-weight: 500;
+        color: var(--black2-color);
+    }
+
+    .adsubtitle::placeholder {
+        font-size: 17px;
+        font-weight: 500;
+    }
+
+    .admaintitle {
+        font-size: 56px;
+        font-weight: 700;
+        color: var(--black2-color);
+    }
+
+    .admaintitle::placeholder {
+        font-size: 56px;
+        font-weight: 700;
+    }
+
+    .addetail {
+        font-size: 30px;
+        font-weight: 700;
+        color: var(--black2-color);
+    }
+
+    .addetail::placeholder {
+        font-size: 30px;
+        font-weight: 700;
+    }
+
+    .adsubdetail {
+        margin-top: 25px;
+        font-size: 17px;
+        font-weight: 500;
+        color: var(--black2-color);
+    }
+
+    .adsubdetail::placeholder {
+        font-size: 17px;
+        font-weight: 500;
+    }
+
+    // 광고 버튼
+    .adver-btn {
+        cursor: pointer;
+        display: inline-block;
+        text-align: center;
+        white-space: nowrap;
+        font-size: 17px;
+        line-height: 1.17648;
+        font-weight: 400;
+        min-width: 28px;
+        padding-left: 16px;
+        padding-right: 16px;
+        padding-top: 8px;
+        padding-bottom: 8px;
+        border-radius: 980px;
+        background: #0071e3;
+        color: #fff;
+        margin: 0 10px;
+
+        .text {
+            font-size: 16px;
+            line-height: 1.17648;
+            font-weight: 400;
+        }
+    }
+
+    .adver-btn2 {
+        cursor: pointer;
+        display: inline-block;
+        text-align: center;
+        white-space: nowrap;
+        font-size: 17px;
+        line-height: 1.17648;
+        font-weight: 400;
+        min-width: 28px;
+        color: #06c;
+        margin: 0 10px;
+    }
+
+    .adver-btn2::after {
+        position: relative;
+        font-family: "SF Pro Icons";
+        content: "\f301";
+        font-weight: 500;
+        top: -1px;
+        padding-left: 0.3em;
+    }
+}
