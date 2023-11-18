@@ -2,25 +2,29 @@
 # React-Apple Store Admin Page & Store Page
 
 ## 프로젝트
-애플 스토어와 애플 스토어와 연동되는 관리자 페이지를 제작.
+애플 스토어와 스토어가 연동되는 관리자 페이지를 제작.
 
-### 개발환경
+## 개발환경
 - React
 - NodeJS
 - MongoDB
 - AWS
 
-1. 애플 스토어 관리자 페이지
+## 제작 과정 및 상세 설명
 
-http://35.76.233.160/smartstore
+### 1. 애플 스토어 관리자 페이지
+
+- http://35.76.233.160/smartstore
 
     관리자 계정
     ID : thanks6
     PW : 123456789a!
 
-- 관리자 회원가입
+1) 관리자 회원가입
 
-사용한 라이브러리: nodemailer, bcrypt
+사용한 라이브러리
+- nodemailer
+- bcrypt
 
 모든 Input을 정상적으로 입력했을때 유효성 검사에서 true를 반환한다.
 이메일 입력시 해당 메일로 인증번호가 전송되며 일치하는 경우 true를 반환한다.
@@ -28,7 +32,7 @@ http://35.76.233.160/smartstore
 추후 관리자 권한 기능을 도입하여 접근 할 수 있는 영역을 나눌 예정.
 
 
-- 로그인 및 로그아웃
+2) 로그인 및 로그아웃
 
 ![login](https://github.com/Del2f/smartstore/assets/92422357/685c1252-3b8e-4ad5-b267-2fd14732566e)
 
@@ -36,9 +40,10 @@ http://35.76.233.160/smartstore
 로그아웃시 토큰이 제거되며 뒤로가기 및 관리자 페이지 URL을 입력하여도 접속이 되지 않음.
 
 
-- 상품 등록
+3) 상품 등록
 
-사용한 라이브러리: ag-grid-react
+사용한 라이브러리
+- ag-grid-react
 
 ![product-add](https://github.com/Del2f/smartstore/assets/92422357/2aa1cd65-e06a-45a0-86a1-b5f1ab600a8a)
 
@@ -55,11 +60,11 @@ http://35.76.233.160/smartstore
 
 ag-grid 라이브러리에 웬만한 기능을 지원해서 딱히 만든건 없지만 큰 문제가 있었다.
 
-2023-01-10 드디어 해결한 문제.
+- 2023-01-10 드디어 해결한 문제.
 선택된 옵션만 데이터를 수정하는 코드. 벌써 10개월이 지났다. 기본 지식이 없어 많이 헤메다가 겨우 만들었었다.
 map 메소드 요소에 ...을 붙이고, 해당하는 object를 원하는 값으로 수정하는 방법, 그리고 삼항연산자를
 사용한다면 또 다르게 바꿀 수 있다는걸 처음 알았다.
-  
+
     const onUpdateBtn = () => {
         const result = copy.map((list: any, index: any) => {
         --------생략---------
@@ -94,8 +99,11 @@ color picker 라이브러리를 합쳐 에디터에서 텍스트를 그라데이
 애플 스토어는 세부 카테고리가 곧 제품 페이지이다. 아래에서 작성 하겠지만, 카테고리를 등록할때
 작성한 url을 useParams를 사용해 서버로 전송하고, 서버에서는 해당 url로 상품 url을 검색해서 전송.
 
-/smartstore/shop/products/${requrl} // useParams를 사용하고 서버로 전송.
-const product = await Product.findOne({ url: requrl }); // 서버로 전송된 코드.
+- useParams를 사용하고 서버로 전송.
+/smartstore/shop/products/${requrl};
+
+- 서버로 전송된 코드.
+const product = await Product.findOne({ url: requrl }); 
 
 안타깝게도 가장 마지막은 하드코딩으로 처리했다.(..)
 제품의 컴포넌트를 import 하고, componentMap 변수에 모아준다.
@@ -123,9 +131,10 @@ const product = await Product.findOne({ url: requrl }); // 서버로 전송된 �
 모든 Input을 정상적으로 입력 했을때 유효성 검사에서 true를 반환하며 상품 등록이 된다.
 
 
-- 상품 목록 및 삭제
+4) 상품 목록 및 삭제
 
-사용한 라이브러리: ag-grid-react
+사용한 라이브러리
+- ag-grid-react
 
 MongoDB에 업로드된 상품 목록을 가져온다. 그리드가 필요한 구조에서는 ag-grid 라이브러리를 그대로 사용했다.
 상품 특성상 이미지가 있어야 구분이 쉬울것 같아, 목록에 이미지를 같이 출력하도록 했다.
@@ -146,8 +155,8 @@ ag-grid는 입력한 배열을 쉽고 간단하게 출력 할 수 있어 매우 
         },
     },
 
-아무래도 상품인지라 수정이 불가피하다.
-수정 버튼을 추가해주고, react-router-dom의 Link를 사용해 상품의 _id를 기반으로 다시 상품 등록 페이지로 이동해준다.
+아무래도 상품인지라 수정이 불가피하다. 수정 버튼을 추가해주고,
+react-router-dom의 Link를 사용해 상품의 _id를 기반으로 다시 상품 등록 페이지로 이동해준다.
 
     <Link to={params.data._id} style={{ display: "flex", alignItems: "center" }}>
         <button className="editBtn" data-action="edit">
@@ -169,13 +178,14 @@ ag-grid는 입력한 배열을 쉽고 간단하게 출력 할 수 있어 매우 
     res.send({ productEdit: dataList }); // 상품의 정보를 다시 클라이언트로 보낸다.
 
 상품명, 상품 가격등 해당하는 state에 값을 전부 setState로 입력해주면 수정도 완성된다.
-모든 boolean도 미리 true로 만들어주고, 상품 수정시 true가 되는 [edit, setEdit] 같은 boolean을 만들어
-true 인 경우 상품등록 버튼을 상품수정 버튼으로 바뀌게끔 한다.
+모든 boolean도 미리 true로 만들어주고, 상품 수정시 true가 되는 [edit, setEdit] 같은 boolean을
+만들어 true 인 경우 상품 등록 버튼을 상품 수정 버튼으로 바뀌게끔 한다.
 
 
-- 스토어 카테고리 관리
+5) 스토어 카테고리 관리
 
-사용한 라이브러리: react-beautiful-dnd
+사용한 라이브러리
+- react-beautiful-dnd
 
 애플 스토어의 카테고리를 관리자 페이지에서 직접 등록하여 연동되도록 만들었다.
 
@@ -279,13 +289,11 @@ cloudfront를 중간에 추가하는 방법도 있었지만 실패. (현재 코�
 라이브러리 기본 구조 Column, Task에서 SubTask를 추가하여 애플 스토어의 구조와 동일하게 하였습니다.
 
 
-2. 애플 스토어
+### 2. 애플 스토어
 
 ![apple-menu](https://github.com/Del2f/smartstore/assets/92422357/b7a3d0b3-99ba-471e-a3ec-012538f52132)
 
-
-- 애플 스토어 페이지 주소
-http://35.76.233.160/smartstore/shop
+- http://35.76.233.160/smartstore/shop
 
 ID : user
 PW : 123456789a!
@@ -294,10 +302,10 @@ PW : 123456789a!
 - 유저 회원가입(이메일 인증 가능) 및 토큰 인증하는 로그인 및 로그아웃
 
 
-3. NodeJS로 서버가 제작되었으며 AWS EC2로 배포중
+### 3. NodeJS로 서버가 제작되었으며 AWS EC2로 배포중
 - ubuntu, nginx, pm2 사용
 
-4. 그외 이슈
+### 4. 그외 이슈
 AWS에서 배포를 할때 생겼던 문제인데, 평소에는 로컬에서만 테스트를 하니 node.js는
 당연히 8080 기본포트로 열게 되었다. ubuntu에도 그냥 그대로 올렸다.
 
