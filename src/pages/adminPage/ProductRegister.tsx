@@ -2427,9 +2427,10 @@ function ProductRegister(props: Props) {
                           key={list.id}
                           style={{
                             borderRadius: "10px",
-                            backgroundColor: "#e9e9e9",
+                            backgroundColor: "#f1f1f1",
                             padding: "5px 10px",
                             marginRight: index !== productdata.category.length - 1 ? "7px" : "0",
+                            fontSize: "12px"
                           }}
                         >
                           {list.name}
@@ -3115,12 +3116,12 @@ function ProductRegister(props: Props) {
                                 </div>
                               )}
                             </div>
-                            <div style={{ display: "flex", marginTop: "32px" }}>
-                              <div className="normal-blue-btn" onClick={option.PlusHandler}>
-                                <span className="text">추가</span>
+                            <div style={{ display: "flex", marginTop: "35px" }}>
+                              <div className="circle-btn-wrap2" onClick={option.PlusHandler} style={{marginRight: "5px"}}>
+                                <span className="text">+</span>
                               </div>
-                              <div className="normal-blue-btn" onClick={option.MinusHandler}>
-                                <span className="text">삭제</span>
+                              <div className="circle-btn-wrap2" onClick={option.MinusHandler}>
+                                <span className="text">-</span>
                               </div>
                             </div>
                           </div>
@@ -3134,11 +3135,7 @@ function ProductRegister(props: Props) {
                       </div>
                     </div>
                     <div className="inner-menu-list">
-                      <div className="menu-left">
-                        <span>옵션목록</span>
-                      </div>
                       <div className="menu-bottom">
-                        <div className="info"></div>
                         <TableProduct
                           OptionType={OptionType}
                           optionResult={OptionResult}
@@ -3172,7 +3169,7 @@ function ProductRegister(props: Props) {
                   </div>
                   <div className={AddDrop ? "menu flex flex-align-center" : "menu hide"}>
                     <div className="menu-left">
-                      <span>상품 리스트</span>
+                      <span>상품 목록</span>
                     </div>
                     <div className="menu-right" style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                       <div style={{ display: "flex" }}>
@@ -3628,12 +3625,12 @@ function ProductRegister(props: Props) {
                             </div>
                           )}
                         </div>
-                        <div style={{ display: "flex", marginTop: "40px" }}>
-                          <div className="normal-blue-btn" onClick={addProducts.PlusHandler}>
-                            <span className="text">추가</span>
+                        <div style={{ display: "flex", marginTop: "43px" }}>
+                          <div className="circle-btn-wrap2" onClick={addProducts.PlusHandler} style={{marginRight: "5px"}}>
+                            <span className="text">+</span>
                           </div>
-                          <div className="normal-blue-btn" onClick={addProducts.MinusHandler}>
-                            <span className="text">삭제</span>
+                          <div className="circle-btn-wrap2" onClick={addProducts.MinusHandler}>
+                            <span className="text">-</span>
                           </div>
                         </div>
                       </div>

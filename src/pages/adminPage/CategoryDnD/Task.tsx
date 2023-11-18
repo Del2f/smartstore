@@ -262,7 +262,6 @@ const Task = ({
                     })}
                       {provided.placeholder}
                 </>
-
               </SubTaskList>
             )}
           </Droppable>

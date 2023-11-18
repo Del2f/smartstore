@@ -449,14 +449,31 @@ function Advertise(props: Props) {
   const [adProduct, setAdProduct] = useState<any>([]);
   const [adImage, setAdImage] = useState<string>("");
 
+  // 텍스트 클릭 여부
+  const [isSubTitleClick, setIsSubTitleClick] = useState<boolean>(false);
+  const [isMainTitleClick, setIsMainTitleClick] = useState<boolean>(false);
+  const [isDetailClick, setIsDetailClick] = useState<boolean>(false);
+  const [isSubDetailClick, setIsSubDetailClick] = useState<boolean>(false);
+  
+  // 텍스트 컬러
+  const [SubTitleColor, setSubTitleColor] = useState<string>("");
+  const [MainTitleColor, setMainTitleColor] = useState<string>("");
+  const [DetailColor, setDetailColor] = useState<string>("");
+  const [SubDetailColor, setSubDetailColor] = useState<string>("");
+
+  console.log(isSubTitleClick);
+  console.log(isMainTitleClick);
+  console.log(isDetailClick);
+  console.log(isSubDetailClick);
+
   // 유효성 검사
   const [isSelected, setIsSelected] = useState<boolean>(false);
   const [isSelectedTask, setIsSelectedTask] = useState<boolean>(false);
   const [isSelectedSubTask, setIsSelectedSubTask] = useState<boolean>(false);
 
-  console.log(isSelected);
-  console.log(isSelectedTask);
-  console.log(isSelectedSubTask);
+  // console.log(isSelected);
+  // console.log(isSelectedTask);
+  // console.log(isSelectedSubTask);
 
   // 광고페이지 전환
   const [isAdvertise, setIsAdvertise] = useState<boolean>(false);
@@ -881,6 +898,8 @@ function Advertise(props: Props) {
                                     placeholder="가장 위에 들어갑니다."
                                     className="input adsubtitle adver-input-type1"
                                     onChange={Advertise.adSubTitle}
+                                    onFocus={() => setIsSubTitleClick(true)}
+                                    onBlur={() => setIsSubTitleClick(false)}
                                   />
                                   <div className={isAdSubTitle ? "error" : "error-active"}>{ErrAdSubTitle}</div>
                                 </div>
@@ -892,6 +911,8 @@ function Advertise(props: Props) {
                                     placeholder="가장 큰 제목 입니다."
                                     className="input admaintitle adver-input-type1"
                                     onChange={Advertise.adMainTitle}
+                                    onFocus={() => setIsMainTitleClick(true)}
+                                    onBlur={() => setIsMainTitleClick(false)}
                                   />
                                   <div className={isAdMainTitle ? "error" : "error-active"}>{ErrAdMainTitle}</div>
                                 </div>
@@ -903,6 +924,8 @@ function Advertise(props: Props) {
                                     className="input addetail adver-input-type1"
                                     onChange={Advertise.adDetail}
                                     style={{ backgroundColor: "transparent" }}
+                                    onFocus={() => setIsDetailClick(true)}
+                                    onBlur={() => setIsDetailClick(false)}
                                   />
                                   <div className={isAdDetail ? "error" : "error-active"}>{ErrAdDetail}</div>
                                 </div>
@@ -914,6 +937,8 @@ function Advertise(props: Props) {
                                     className="input adsubdetail adver-input-type1"
                                     onChange={Advertise.adSubDetail}
                                     style={{ backgroundColor: "transparent" }}
+                                    onFocus={() => setIsSubDetailClick(true)}
+                                    onBlur={() => setIsSubDetailClick(false)}
                                   />
                                   <div className={isAdSubDetail ? "error" : "error-active"}>{ErrAdSubDetail}</div>
                                 </div>
@@ -949,6 +974,8 @@ function Advertise(props: Props) {
                                     placeholder="가장 위에 들어갑니다."
                                     className="input adsubtitle adver-input-type1"
                                     onChange={Advertise.adSubTitle}
+                                    onFocus={() => setIsSubTitleClick(true)}
+                                    onBlur={() => setIsSubTitleClick(false)}
                                   />
                                   <div className={isAdSubTitle ? "error" : "error-active"}>{ErrAdSubTitle}</div>
                                 </div>
@@ -960,6 +987,8 @@ function Advertise(props: Props) {
                                     placeholder="가장 큰 제목 입니다."
                                     className="input admaintitle adver-input-type1"
                                     onChange={Advertise.adMainTitle}
+                                    onFocus={() => setIsMainTitleClick(true)}
+                                    onBlur={() => setIsMainTitleClick(false)}
                                   />
                                   <div className={isAdMainTitle ? "error" : "error-active"}>{ErrAdMainTitle}</div>
                                 </div>
@@ -971,6 +1000,8 @@ function Advertise(props: Props) {
                                     className="input addetail adver-input-type1"
                                     onChange={Advertise.adDetail}
                                     style={{ backgroundColor: "transparent" }}
+                                    onFocus={() => setIsDetailClick(true)}
+                                    onBlur={() => setIsDetailClick(false)}
                                   />
                                   <div className={isAdDetail ? "error" : "error-active"}>{ErrAdDetail}</div>
                                 </div>
@@ -994,6 +1025,8 @@ function Advertise(props: Props) {
                                     className="input adsubdetail adver-input-type1"
                                     onChange={Advertise.adSubDetail}
                                     style={{ backgroundColor: "transparent" }}
+                                    onFocus={() => setIsSubDetailClick(true)}
+                                    onBlur={() => setIsSubDetailClick(false)}
                                   />
                                   <div className={isAdSubDetail ? "error" : "error-active"}>{ErrAdSubDetail}</div>
                                 </div>
@@ -1009,7 +1042,7 @@ function Advertise(props: Props) {
                             )}
                             {adType === 2 && (
                               <AdverPreviewColumn adBackColor={adBackColor}>
-                                <div style={{ marginLeft: "50px" }}>
+                                <div style={{ }}>
                                   <div className="adver-input-type3-wrap" style={{ marginTop: "40px" }}>
                                     <input
                                       type="text"
@@ -1018,6 +1051,8 @@ function Advertise(props: Props) {
                                       placeholder="가장 위에 들어갑니다."
                                       className="input adsubtitle adver-input-type3"
                                       onChange={Advertise.adSubTitle}
+                                      onFocus={() => setIsSubTitleClick(true)}
+                                      onBlur={() => setIsSubTitleClick(false)}
                                     />
                                     <div className={isAdSubTitle ? "error" : "error-active"}>{ErrAdSubTitle}</div>
                                   </div>
@@ -1029,6 +1064,8 @@ function Advertise(props: Props) {
                                       placeholder="가장 큰 제목 입니다."
                                       className="input admaintitle adver-input-type3"
                                       onChange={Advertise.adMainTitle}
+                                      onFocus={() => setIsMainTitleClick(true)}
+                                      onBlur={() => setIsMainTitleClick(false)}
                                     />
                                     <div className={isAdMainTitle ? "error" : "error-active"}>{ErrAdMainTitle}</div>
                                   </div>
@@ -1040,6 +1077,8 @@ function Advertise(props: Props) {
                                       className="input addetail adver-input-type3"
                                       onChange={Advertise.adDetail}
                                       style={{ backgroundColor: "transparent" }}
+                                      onFocus={() => setIsDetailClick(true)}
+                                      onBlur={() => setIsDetailClick(false)}
                                     />
                                     <div className={isAdDetail ? "error" : "error-active"}>{ErrAdDetail}</div>
                                   </div>
@@ -1051,6 +1090,8 @@ function Advertise(props: Props) {
                                       className="input adsubdetail adver-input-type3"
                                       onChange={Advertise.adSubDetail}
                                       style={{ backgroundColor: "transparent" }}
+                                      onFocus={() => setIsSubDetailClick(true)}
+                                      onBlur={() => setIsSubDetailClick(false)}
                                     />
                                     <div className={isAdSubDetail ? "error" : "error-active"}>{ErrAdSubDetail}</div>
                                   </div>

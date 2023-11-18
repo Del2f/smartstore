@@ -1738,7 +1738,7 @@ function Category(props: Props) {
                 </h3>
               </div>
             </div>
-            <div className="panel-body flex">
+            <div className="panel-body flex" style={{paddingBottom: "30px"}}>
               <div className="box-wrap flex">
                 {!isAdvertise && (
                   <div className="box first flex flex-ju-bt flex-di-row">

@@ -5,7 +5,7 @@ import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import "./TableProductRegi.scss";
 import $ from "jquery";
-import Checkbox from '../CheckBox';
+import Checkbox from "../CheckBox";
 
 type Props = {
   optionResult?: any;
@@ -38,8 +38,7 @@ const Select = styled.div`
   user-select: none;
   font-weight: 700;
   margin-right: -1px;
-
-`
+`;
 
 interface pricetype {
   priceTypeShow: boolean;
@@ -56,14 +55,16 @@ const Selector = styled.div<pricetype>`
   user-select: none;
   font-weight: 700;
 
-
-  ${ props => props.priceTypeShow ? `
+  ${(props) =>
+    props.priceTypeShow
+      ? `
     display: block;
     
-  ` : `
+  `
+      : `
     display: none;
   `}
-`
+`;
 const List = styled.li`
   text-align: center;
   padding: 5px 0;
@@ -71,7 +72,7 @@ const List = styled.li`
   &:hover {
     background-color: #e7e7e7;
   }
-`
+`;
 
 function TableProductRegi(props: Props) {
   const rowData = [...props.optionResult];
@@ -79,7 +80,7 @@ function TableProductRegi(props: Props) {
   const [selectedRows, setSelectedRows] = useState<any>([]);
   const [selectedID, setSelectedID] = useState<string[]>([]);
   const [priceTypeSelect, setPriceTypeSelect] = useState<string>("+");
-  const [priceTypeSelector, setPriceTypeSelector] = useState<string[]>(["+","-","="]);
+  const [priceTypeSelector, setPriceTypeSelector] = useState<string[]>(["+", "-", "="]);
   const [priceTypeShow, setPriceTypeShow] = useState<boolean>(false);
 
   const [isOptionPriceCheckBox, setIsOptionPriceCheckBox] = useState<boolean>(true);
@@ -89,7 +90,7 @@ function TableProductRegi(props: Props) {
   useEffect(() => {
     const selectedID = selectedRows.map((list: any) => list.id);
     setSelectedID(selectedID);
-  },[selectedRows])
+  }, [selectedRows]);
 
   const [columnDefs, setColumnDefs] = useState<any>([
     { width: 50, checkboxSelection: true, headerCheckboxSelection: true, headerCheckboxSelectionFilteredOnly: true, resizable: false },
@@ -223,7 +224,7 @@ function TableProductRegi(props: Props) {
   const priceTypeOnChange = (e: any) => {
     const select = e.currentTarget.innerHTML;
     setPriceTypeSelect(select);
-  }
+  };
 
   // 옵션가
   const onChangePrice = (e: any) => {
@@ -257,23 +258,24 @@ function TableProductRegi(props: Props) {
 
   const option = {
     CheckBoxPriceHandler: () => {
-      console.log('CheckBoxPriceHandler');
+      console.log("CheckBoxPriceHandler");
       setIsOptionPriceCheckBox(!isOptionPriceCheckBox);
     },
     CheckBoxStockHandler: () => {
-      console.log('CheckBoxStockHandler');
+      console.log("CheckBoxStockHandler");
       setIsOptionStockCheckBox(!isOptionStockCheckBox);
     },
     CheckBoxUseHandler: () => {
-      console.log('CheckBoxUseHandler');
+      console.log("CheckBoxUseHandler");
       setIsOptionUseCheckBox(!isOptionUseCheckBox);
     },
-  }
-  
+  };
+
   // 2023-01-10 드디어 해결한 옵션.
   // 선택목록 일괄 수정을 눌렀을때 체크된 row만 값이 변하는 코드.
+  
   const onUpdateBtn = () => {
-    console.log('onUpdateBtn')
+    console.log("onUpdateBtn");
     const copy = [...rowData];
 
     const result = copy.map((list: any, index: any) => {
@@ -281,7 +283,7 @@ function TableProductRegi(props: Props) {
         let updatedOptionPrice = parseFloat(list.optionPrice);
         let updatedOptionStock = list.optionStock;
         let updatedOptionUse = list.optionUse;
-        
+
         if (isOptionPriceCheckBox) {
           if (priceTypeSelect === "+") {
             updatedOptionPrice += parseFloat(optionPriceValue);
@@ -358,9 +360,9 @@ function TableProductRegi(props: Props) {
   return (
     <>
       <div className="top flex flex-ju-bt flex-align-center">
-        <button className="delete-btn" onClick={onDeleteBtn}>
-          <span>선택삭제</span>
-        </button>
+        <div className="menu-left">
+          <span>옵션목록</span>
+        </div>
         <div className="menu-bottom-right flex">
           <div className="option-price">
             <span>옵션가</span>
@@ -368,17 +370,19 @@ function TableProductRegi(props: Props) {
               {priceTypeSelect}
               <Selector priceTypeShow={priceTypeShow} ref={pricedropmenu}>
                 {priceTypeSelector.map((list: any, index: number) => (
-                  <List key={index} onClick={priceTypeOnChange}>{list}</List>
+                  <List key={index} onClick={priceTypeOnChange}>
+                    {list}
+                  </List>
                 ))}
               </Selector>
             </Select>
             <input type="text" className="option-input" value={optionPriceValue} onChange={onChangePrice} />
-            <Checkbox checked={isOptionPriceCheckBox} onClick={option.CheckBoxPriceHandler}/>
+            <Checkbox checked={isOptionPriceCheckBox} onClick={option.CheckBoxPriceHandler} />
           </div>
           <div className="option-stock">
             <span>재고수량</span>
             <input type="text" className="option-input" value={optionStockValue} onChange={onChangeStock} />
-            <Checkbox checked={isOptionStockCheckBox} onClick={option.CheckBoxStockHandler}/>
+            <Checkbox checked={isOptionStockCheckBox} onClick={option.CheckBoxStockHandler} />
           </div>
           <div className="option-use">
             <span>사용여부</span>
@@ -399,10 +403,13 @@ function TableProductRegi(props: Props) {
                 </div>
               </div>
             </ul>
-            <Checkbox checked={isOptionUseCheckBox} onClick={option.CheckBoxUseHandler}/>
+            <Checkbox checked={isOptionUseCheckBox} onClick={option.CheckBoxUseHandler} />
           </div>
           <button className="selected-modify-btn" onClick={onUpdateBtn}>
-            <span>선택목록 일괄수정</span>
+            <span>선택 수정</span>
+          </button>
+          <button className="delete-btn" onClick={onDeleteBtn}>
+            <span>선택 삭제</span>
           </button>
         </div>
       </div>

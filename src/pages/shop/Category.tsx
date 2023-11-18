@@ -40,20 +40,11 @@ const List = styled.li`
   display: flex;
 `;
 
-// 카테고리 클릭후 나오는 상품 메인사진
-
-const AdverWrap = styled.div`
-
-  padding-bottom: 30px;
-&:first-child {
-  padding: 30px 0;
+interface AdverInnerType extends AdverInner, Type {}
+interface TypeImage extends Type, Image {}
+interface Image {
+  src: string;
 }
-`;
-
-const Adver = styled.div`
-  margin-left: auto;
-  margin-right: auto;
-`;
 
 interface AdverInner {
   backcolor: string;
@@ -63,44 +54,138 @@ interface Type {
   type: number;
 }
 
-interface AdverInnerType extends AdverInner, Type {}
+// 카테고리 클릭후 나오는 상품 메인사진
 
-const AdverInner = styled.div<AdverInnerType>`
+const AdverWrap = styled.div`
+  &:first-child {
+    /* padding: 30px 0; */
+  }
+`;
+
+const AdverWrap2 = styled.div<AdverInner>`
+  display: flex;
+  justify-content: center;
+  position: relative;
+  background-color: ${(props) => props.backcolor};
+  overflow: hidden;
+`;
+
+const AdverWidth = styled.div`
+  display: flex;
+  width: 980px;
+`;
+
+const Adver = styled.div`
+  margin-left: auto;
+  margin-right: auto;
+`;
+
+const AdverInner = styled.div<Type>`
   min-height: 672px;
   display: flex;
   flex-direction: column;
   overflow: visible;
   text-align: center;
-  background-color: ${props => props.backcolor};
+  width: 100%;
 
-  ${props => props.type === 0 && `
-  padding: 60px 0;
-  `}
-  ${props => props.type === 1 && `
-  padding: 60px 0;
-  `}
-  ${props => props.type === 2 && `
-    justify-content: space-between;
+  ${(props) =>
+    props.type === 0 &&
+    `
+    padding: 60px 0;
+    `}
+  ${(props) =>
+    props.type === 1 &&
+    `
+    padding: 60px 0;
+    `}
+  ${(props) =>
+    props.type === 2 &&
+    `
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
     flex-direction: row;
     max-width: 1440px;
-    min-height: 800px;
+    height: 800px;
     margin-left: auto;
     margin-right: auto;
-    padding-left: 30px;
-    border-radius: 18px;
   `}
 `;
 
-const AdverImageWrap = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 170px;
-  margin-bottom: 100px;
+const AdverTextWrap = styled.div<Type>`
+  ${(props) =>
+    props.type === 0 &&
+    `
+
+  `}
+  ${(props) =>
+    props.type === 1 &&
+    `
+
+  `}
+  ${(props) =>
+    props.type === 2 &&
+    `
+    display: flex;
+    flex-direction: column;
+    flex: 30%;
+    z-index: 1;
+  `}
 `;
 
-const AdverImage = styled.img`
-  position: relative;
+const AdverImageWrap = styled.div<Type>`
+  ${(props) =>
+    props.type === 0 &&
+    `
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 170px;
+    margin-bottom: 100px;
+  `}
+  ${(props) =>
+    props.type === 1 &&
+    `
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 170px;
+    margin-bottom: 100px;
+  `}
+  ${(props) =>
+    props.type === 2 &&
+    `
+    flex-basis: 70%;
+    max-width: 70%;
+    height: 100%;
+  `}
+`;
+
+const AdverImage = styled.img<TypeImage>`
+
+  ${(props) =>
+    props.type === 0 &&
+    `
+
+
+
+  `}
+  ${(props) =>
+    props.type === 1 &&
+    `
+
+  `}
+  ${(props) =>
+    props.type === 2 &&
+    `
+    position: absolute;
+    top: 0px;
+    left: 50%;
+    margin-left: -210px;
+    max-width: 1000px;
+    max-height: 800px;
+  `}
 `;
 
 const AdverMainTitle = styled.h2<Type>`
@@ -109,8 +194,12 @@ const AdverMainTitle = styled.h2<Type>`
   color: #1d1d1f;
   margin-top: 4px;
 
-  ${props => props.type === 2 && `
-    font-size: 80px;
+  ${(props) =>
+    props.type === 2 &&
+    `
+    font-size: 60px;
+    font-weight: 700;
+    letter-spacing: -3px;
     text-align: left;
   `}
 `;
@@ -120,7 +209,9 @@ const AdverSubTitle = styled.span<Type>`
   font-size: 17px;
   font-weight: 500;
 
-  ${props => props.type === 2 && `
+  ${(props) =>
+    props.type === 2 &&
+    `
     text-align: left;
   `}
 `;
@@ -133,7 +224,9 @@ const AdverSubDetail = styled.span<Type>`
   margin-top: 30px;
   line-height: 1.58824;
 
-  ${props => props.type === 2 && `
+  ${(props) =>
+    props.type === 2 &&
+    `
     text-align: left;
 
   `}
@@ -146,15 +239,34 @@ const AdverDetail = styled.span<Type>`
   font-weight: 700;
   color: #1d1d1f;
   line-height: 1.21875;
-  ${props => props.type === 2 && `
+
+  ${(props) =>
+    props.type === 2 &&
+    `
   text-align: left;
   font-size: 28px;
   max-width: 460px;
   `}
 `;
 
-const Links = styled.div`
+const Links = styled.div<Type>`
   margin-top: 14px;
+
+  ${(props) =>
+    props.type === 0 &&
+    `
+  `}
+  ${(props) =>
+    props.type === 1 &&
+    `
+  `}
+  ${(props) =>
+    props.type === 2 &&
+    `
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  `}
 `;
 
 const BuyLink = styled(Link)`
@@ -293,8 +405,7 @@ const ChapterNavWrap = styled.div`
   z-index: 1;
 `;
 
-const ChapterNavItems = styled.ul`
-`;
+const ChapterNavItems = styled.ul``;
 
 interface ChapterNavItem {
   columnName: string | undefined;
@@ -323,17 +434,16 @@ const ChapterNavItem = styled.li<ChapterNavItem>`
 
   // Watch
   ${(props) => {
-    if(props.columnName === "Watch"){
+    if (props.columnName === "Watch") {
       return `
       padding: 0 9px;
       &:last-child {
         margin-right: 0;
         padding: 0 4px 0 9px;
       }
-      `
+      `;
     }
-  }
-}
+  }}
 
   ${(props) => {
     if (props.taskName === "비교하기") {
@@ -440,167 +550,189 @@ const ChapterNavIcon = styled.figure<ChapterNavIcon>`
 
   // Mac
   ${(props) => {
-  if (props.parentID === '64ff1ccbe3ac394d8361dae7') {
-    switch (props.taskName) {
-      case "Mac Pro":
-      case "Sonoma":
-        return `
+    if (props.parentID === "64ff1ccbe3ac394d8361dae7") {
+      switch (props.taskName) {
+        case "Mac Pro":
+        case "Sonoma":
+          return `
           width: 35px;
           height: 54px;
           background-size: 35px 54px;
         `;
-      case "Mac mini":
-      case "Mac Studio":
-        return `
+        case "Mac mini":
+        case "Mac Studio":
+          return `
           width: 28px;
           height: 54px;
           background-size: 28px 54px;
         `;
-      case "MacBook Pro 13":
-        return `
+        case "MacBook Pro 13":
+          return `
           width: 54px;
           height: 54px;
           background-size: 54px 54px;
         `;
-      default:
-        return "";
+        default:
+          return "";
+      }
     }
-  }
-}}
+  }}
 
   // MacBook Air
   ${(props) => {
-  if (props.parentID === '64ff27d33c9faa3d2f6fbb9f') {
-    switch (props.taskName) {
-      case "Sonoma":
-        return `
+    if (props.parentID === "64ff27d33c9faa3d2f6fbb9f") {
+      switch (props.taskName) {
+        case "Sonoma":
+          return `
           width: 35px;
           height: 54px;
           background-size: 35px 54px;
         `;
-      default:
-        return "";
+        default:
+          return "";
+      }
     }
-  }
-}}
+  }}
 
   // MacBook Pro
   ${(props) => {
-  if (props.parentID === '64ff27dc3c9faa3d2f6fbbfb') {
-    switch (props.taskName) {
-      case "MacBook Pro 13":
-        return `
+    if (props.parentID === "64ff27dc3c9faa3d2f6fbbfb") {
+      switch (props.taskName) {
+        case "MacBook Pro 13":
+          return `
           width: 54px;
           height: 54px;
           background-size: 54px 54px;
         `;
-      default:
-        return "";
+        default:
+          return "";
+      }
     }
-  }
-}}
+  }}
 
   // iPad
   ${(props) => {
-  if (props.parentID === '64ff1cd6e3ac394d8361dc68') {
-    switch (props.taskName) {
-      case "iPad Pro":
-        return `
+    if (props.parentID === "64ff1cd6e3ac394d8361dc68") {
+      switch (props.taskName) {
+        case "iPad Pro":
+          return `
           width: 41px;
           height: 54px;
           background-size: 41px 54px;
         `;
-      case "iPad Air":
-      case "액세서리":
-      case "iPadOS 17":
-        return `
+        case "iPad Air":
+        case "액세서리":
+        case "iPadOS 17":
+          return `
           width: 30px;
           height: 54px;
           background-size: 30px 54px;
         `;
-      case "Apple Pencil":
-        return `
+        case "Apple Pencil":
+          return `
           width: 3px;
           height: 54px;
           background-size: 3px 54px;
         `;
-      case "키보드":
-        return `
+        case "키보드":
+          return `
           width: 63px;
           height: 54px;
           background-size: 63px 54px;
         `;
-      default:
-        return "";
+        default:
+          return "";
+      }
     }
-  }
-}}
+  }}
 
 // 다른 방법 기록용
 ${(props) => {
-  const sizes = {
-    "iPhone SE": { width: 19, height: 54 },
-    "AirTag": { width: 30, height: 54 },
-    "iOS 17": { width: 32, height: 54 },
-  };
+    const sizes = {
+      "iPhone SE": { width: 19, height: 54 },
+      AirTag: { width: 30, height: 54 },
+      "iOS 17": { width: 32, height: 54 },
+    };
 
-  const { taskName, parentID } = props;
+    const { taskName, parentID } = props;
 
-  if (parentID === '64ff1cdfe3ac394d8361ddee' && sizes[taskName]) {
-    const { width, height } = sizes[taskName];
-    return `
+    if (parentID === "64ff1cdfe3ac394d8361ddee" && sizes[taskName]) {
+      const { width, height } = sizes[taskName];
+      return `
       width: ${width}px;
       height: ${height}px;
       background-size: ${width}px ${height}px;
     `;
-  }
-}}
+    }
+  }}
+
+${(props) => {
+    const sizes = {
+      "iPad(10세대)": { width: 30, height: 54 },
+      "iPad(9세대)": { width: 30, height: 54 },
+      "Apple Pencil": { width: 3, height: 54 },
+      키보드: { width: 63, height: 54 },
+      액세서리: { width: 31, height: 54 },
+      "iPadOS 17": { width: 32, height: 54 },
+    };
+
+    const { taskName, parentID } = props;
+
+    if (parentID === "64ff28633c9faa3d2f6fc2ed" && sizes[taskName]) {
+      const { width, height } = sizes[taskName];
+      return `
+      width: ${width}px;
+      height: ${height}px;
+      background-size: ${width}px ${height}px;
+    `;
+    }
+  }}
 
   // Watch
   ${(props) => {
-    if(props.parentID === '64ff1d19e3ac394d8361df79'){
-      switch(props.taskName){
-        case("밴드"):
-        return`
+    if (props.parentID === "64ff1d19e3ac394d8361df79") {
+      switch (props.taskName) {
+        case "밴드":
+          return `
         width: 17px;
         height: 54px;
         background-size: 17px 54px;
-        `
-        case("watchOS 10"):
-        return`
+        `;
+        case "watchOS 10":
+          return `
         width: 35px;
         height: 54px;
         background-size: 35px 54px;
-        `
+        `;
         default:
-        return "";
+          return "";
       }
     }
   }}
 
   // TV 및 홈
   ${(props) => {
-    if(props.parentID === '64ff1d24e3ac394d8361e29e'){
-      switch(props.taskName){
-        case ("Apple TV 앱"):
-        return`
+    if (props.parentID === "64ff1d24e3ac394d8361e29e") {
+      switch (props.taskName) {
+        case "Apple TV 앱":
+          return `
         width: 50px;
         height: 54px;
         background-size: 50px 54px;
-        `
-        case ("Apple TV+"):
-        return`
+        `;
+        case "Apple TV+":
+          return `
         width: 47px;
         height: 54px;
         background-size: 47px 54px;
-        `
+        `;
       }
     }
   }}
 
 // 액세서리
   ${(props) => {
-    if (props.taskName === "iPad" && props.parentID === '64ff1d2fe3ac394d8361e5d7') {
+    if (props.taskName === "iPad" && props.parentID === "64ff1d2fe3ac394d8361e5d7") {
       return `
       width: 47px;
       height: 54px;
@@ -612,50 +744,50 @@ ${(props) => {
   // 고객지원
   ${(props) => {
     if (props.parentID === "64ff1d34e3ac394d8361e77b") {
-      switch(props.taskName){
-        case ('iPhone'):
-          return`
+      switch (props.taskName) {
+        case "iPhone":
+          return `
           width: 34px;
           height: 68px;
           background-size: 34px 68px;
-          `
-        case ('Mac'):
-          return`
+          `;
+        case "Mac":
+          return `
           width: 96px;
           height: 68px;
           background-size: 96px 68px;
-          `
-        case ('iPad'):
-          return`
+          `;
+        case "iPad":
+          return `
           width: 80px;
           height: 68px;
           background-size: 80px 68px;
-          `
-        case ('Watch'):
-          return`
+          `;
+        case "Watch":
+          return `
           width: 42px;
           height: 68px;
           background-size: 42px 68px;
-          `
-        case ('AirPods'):
-          return`
+          `;
+        case "AirPods":
+          return `
           margin-top: 8px;
           width: 66px;
           height: 60px;
           background-size: 66px 60px;
-          `
-        case ('Music'):
-          return`
+          `;
+        case "Music":
+          return `
           width: 68px;
           height: 68px;
           background-size: 68px 68px;
-          `
-        case ('TV'):
-          return`
+          `;
+        case "TV":
+          return `
           width: 72px;
           height: 68px;
           background-size: 72px 68px;
-          `
+          `;
       }
     }
   }}
@@ -749,7 +881,6 @@ function Category({ gmId, categoryList, selectedColumn, setSelectedColumn, selec
           setSelectedColumn(null);
           setSelectedTask(adminTask);
           setAdvertise(res.data.Advertises);
-
         } else {
           if (!res.data.status) {
             setIsIdNotFound(true);
@@ -900,7 +1031,12 @@ function Category({ gmId, categoryList, selectedColumn, setSelectedColumn, selec
                         taskName={taskId.name}
                         chapterNavRender={chapterNavRender}
                       >
-                        <ChapterNavLink className="ChapterNavLink" to={`/shop/products/${taskId.url}`} columnName={selectedTask.name} taskName={taskId.name}>
+                        <ChapterNavLink
+                          className="ChapterNavLink"
+                          to={`/shop/products/${taskId.url}`}
+                          columnName={selectedTask.name}
+                          taskName={taskId.name}
+                        >
                           <ChapterNavIcon
                             className="ChapterNavIcon"
                             columnName={selectedTask.name}
@@ -925,60 +1061,73 @@ function Category({ gmId, categoryList, selectedColumn, setSelectedColumn, selec
           <Adver className="ProductsWrap">
             {advertise?.map((advertise: any, index: any) => {
               return (
-                <AdverWrap key={index}>
-                {advertise.type === 0 && 
-                    <AdverInner backcolor={advertise.backcolor} type={0}>
-                      <AdverSubTitle type={0}>{advertise.subtitle}</AdverSubTitle>
-                      <AdverMainTitle type={0}>{advertise.maintitle}</AdverMainTitle>
-                      <AdverDetail type={0}>{advertise.detail}</AdverDetail>
-                      <AdverSubDetail type={0}>{advertise.subdetail}</AdverSubDetail>
-                      <Links>
-                        <BuyLink to={`/shop/products/${advertise.url}`}>구입하기</BuyLink>
-                        <DetailLink to={`/shop/products/${advertise.url}`}>더 알아보기</DetailLink>
-                      </Links>
-                      <ShippingWrap></ShippingWrap>
-                      <AdverImageWrap>
-                        <AdverImage src={advertise.image} alt="" />
-                      </AdverImageWrap>
-                    </AdverInner>
-                }
-                {advertise.type === 1 && 
-                    <AdverInner backcolor={advertise.backcolor} type={1}>
-                      <AdverSubTitle type={1}>{advertise.subtitle}</AdverSubTitle>
-                      <AdverMainTitle type={1}>{advertise.maintitle}</AdverMainTitle>
-                      <AdverDetail type={1}>{advertise.detail}</AdverDetail>
-                      <AdverSubDetail type={1}>{advertise.subdetail}</AdverSubDetail>
-                      <Links>
-                        <BuyLink to={`/shop/products/${advertise.url}`}>구입하기</BuyLink>
-                        <DetailLink to={`/shop/products/${advertise.url}`}>더 알아보기</DetailLink>
-                      </Links>
-                      <ShippingWrap></ShippingWrap>
-                      <AdverImageWrap>
-                        <AdverImage src={advertise.image} alt="" />
-                      </AdverImageWrap>
-                    </AdverInner>
-                }
-                {advertise.type === 2 && 
-                <div style={{ padding: "0 30px" }}>
+                <AdverWrap key={index} className="AdverWrap">
+                  {advertise.type === 0 && (
+                    <AdverWrap2 className="AdverWrap2" backcolor={advertise.backcolor}>
+                      <AdverWidth>
+                        <AdverInner className="AdverInner" type={0}>
+                          <AdverTextWrap type={0}>
+                            <AdverSubTitle type={0}>{advertise.subtitle}</AdverSubTitle>
+                            <AdverMainTitle type={0}>{advertise.maintitle}</AdverMainTitle>
+                            <AdverDetail type={0}>{advertise.detail}</AdverDetail>
+                            <AdverSubDetail type={0}>{advertise.subdetail}</AdverSubDetail>
+                            <Links type={0}>
+                              <BuyLink to={`/shop/products/${advertise.url}`}>구입하기</BuyLink>
+                              <DetailLink to={`/shop/products/${advertise.url}`}>더 알아보기</DetailLink>
+                            </Links>
+                          </AdverTextWrap>
+                          <ShippingWrap></ShippingWrap>
+                          <AdverImageWrap type={0}>
+                            <AdverImage type={0} src={advertise.image} />
+                          </AdverImageWrap>
+                        </AdverInner>
+                      </AdverWidth>
+                    </AdverWrap2>
+                  )}
+                  {advertise.type === 1 && (
+                    <AdverWrap2 className="AdverWrap2" backcolor={advertise.backcolor}>
+                      <AdverWidth>
+                        <AdverInner className="AdverInner" type={1}>
+                          <AdverTextWrap type={1}>
+                            <AdverSubTitle type={1}>{advertise.subtitle}</AdverSubTitle>
+                            <AdverMainTitle type={1}>{advertise.maintitle}</AdverMainTitle>
+                            <AdverDetail type={1}>{advertise.detail}</AdverDetail>
+                            <AdverSubDetail type={1}>{advertise.subdetail}</AdverSubDetail>
+                            <Links type={1}>
+                              <BuyLink to={`/shop/products/${advertise.url}`}>구입하기</BuyLink>
+                              <DetailLink to={`/shop/products/${advertise.url}`}>더 알아보기</DetailLink>
+                            </Links>
+                          </AdverTextWrap>
 
-                    <AdverInner backcolor={advertise.backcolor} type={2}>
-                      <div style={{display: "flex", flexDirection:"column", alignItems: "flex-start", justifyContent: "center", marginLeft: "100px"}}>
-                        <AdverSubTitle type={2}>{advertise.subtitle}</AdverSubTitle>
-                        <AdverMainTitle type={2}>{advertise.maintitle}</AdverMainTitle>
-                        <AdverDetail type={2}>{advertise.detail}</AdverDetail>
-                        <AdverSubDetail type={2}>{advertise.subdetail}</AdverSubDetail>
-                        <Links>
-                          <BuyLink to={`/shop/products/${advertise.url}`}>구입하기</BuyLink>
-                          <DetailLink to={`/shop/products/${advertise.url}`}>더 알아보기</DetailLink>
-                        </Links>
-                      </div>
-                      <AdverImageWrap>
-                        <AdverImage src={advertise.image} alt="" />
-                      </AdverImageWrap>
-                    </AdverInner>
-                </div>
-
-                }
+                          <ShippingWrap></ShippingWrap>
+                          <AdverImageWrap type={1}>
+                            <AdverImage type={1} src={advertise.image} />
+                          </AdverImageWrap>
+                        </AdverInner>
+                      </AdverWidth>
+                    </AdverWrap2>
+                  )}
+                  {advertise.type === 2 && (
+                    <AdverWrap2 className="AdverWrap2" backcolor={advertise.backcolor}>
+                      <AdverWidth>
+                        <AdverInner className="AdverInner" type={2}>
+                          <AdverTextWrap type={2}>
+                            <AdverSubTitle type={2}>{advertise.subtitle}</AdverSubTitle>
+                            <AdverMainTitle type={2}>{advertise.maintitle}</AdverMainTitle>
+                            <AdverDetail type={2}>{advertise.detail}</AdverDetail>
+                            <AdverSubDetail type={2}>{advertise.subdetail}</AdverSubDetail>
+                            <Links type={2}>
+                              <BuyLink to={`/shop/products/${advertise.url}`}>구입하기</BuyLink>
+                              <DetailLink to={`/shop/products/${advertise.url}`}>더 알아보기</DetailLink>
+                            </Links>
+                          </AdverTextWrap>
+                          <AdverImageWrap type={2}>
+                            <AdverImage type={2} src={advertise.image} />
+                          </AdverImageWrap>
+                        </AdverInner>
+                      </AdverWidth>
+                    </AdverWrap2>
+                  )}
                 </AdverWrap>
               );
             })}

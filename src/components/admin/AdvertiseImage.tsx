@@ -43,7 +43,7 @@ const IconLabel = styled.label`
   align-items: center;
   flex-direction: column;
   z-index: 0;
-  padding: 100px;
+  padding: 100px 30px;
 
   .ImagePreview {
     width: 100%;
@@ -77,10 +77,16 @@ const DeleteBtn = styled.button<isImage>`
   `}
 `;
 
-function ImagePreview({ imageURL, setAdBackColor, colorSelector, setIsBackColor }: any) {
-  // AWS S3에 업로드된 URL Image를 불러오면서 canvas를 적용하면 CORS 이슈가 생긴다.
-  // crossOrigin = 'Anonymous'; 추가로 해결.
+const ImagePreviewWrap = styled.div`
+  
+    
+    img {
+       height: 500px;
+    }
+`
 
+function ImagePreview({ imageURL, setAdBackColor, colorSelector, setIsBackColor }: any) {
+  
   const image = new Image();
   image.src = imageURL;
   image.crossOrigin = "Anonymous";
@@ -117,9 +123,9 @@ function ImagePreview({ imageURL, setAdBackColor, colorSelector, setIsBackColor 
 
   return (
     <>
-      <div className="ImagePreview" draggable>
+      <ImagePreviewWrap className="ImagePreview" draggable>
         <img src={imageURL} alt="preview" onClick={colorPicker} />
-      </div>
+      </ImagePreviewWrap>
     </>
   );
 }
@@ -132,7 +138,7 @@ function AdvertiseImage(props: any) {
 
   const validFileTypes = ["image/jpg", "image/jpeg", "image/png"];
 
-  console.log(props.colorSelector);
+  // console.log(props.colorSelector);
   // console.log(previewImages);
   // console.log(props.adImage);
   // console.log(props.isAdvertiseEdit);
@@ -153,7 +159,7 @@ function AdvertiseImage(props: any) {
         image.src = URL.createObjectURL(file);
 
         image.onload = async () => {
-          if (image.width <= 1500 && image.height <= 800) {
+          if (image.width <= 2200 && image.height <= 1700) {
             const reader = new FileReader();
             reader.onloadend = (e: any) => {
               let result = e.target.result;
@@ -170,7 +176,7 @@ function AdvertiseImage(props: any) {
             const URL = await axios.post("/smartstore/home/advertise/img", formData);
             props.setAdImage(URL.data.location);
           } else {
-            setErrorMessage("이미지의 가로는 1500px 이하, 세로는 800px 이하이어야 합니다.");
+            setErrorMessage("이미지의 가로는 2200px 이하, 세로는 1700px 이하이어야 합니다.");
           }
         };
       }

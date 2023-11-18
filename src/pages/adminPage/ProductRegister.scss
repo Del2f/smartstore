@@ -16,7 +16,9 @@
     }
 
     .ProductRegister-layout-wrap {
-        background-color: #EDF0F5;
+
+        min-width: 1200px;
+        padding: 25px;
 
         .error-active {
             display: inline-block;
@@ -32,11 +34,8 @@
         }
 
         .content {
-            padding: 40px 18px 63px;
             color: rgba(0, 0, 0, .93);
         }
-
-        .product-register-area {}
 
         .product-register-list {
             margin-bottom: 0px;
@@ -61,19 +60,21 @@
 
                     .text {
                         position: relative;
+                        font-size: 16px;
+                        font-weight: 600;
                     }
 
-                    .text:after {
-                        // 빨간점
-                        position: absolute;
-                        top: 6px;
-                        right: -10px;
-                        width: 6px;
-                        height: 6px;
-                        border-radius: 50%;
-                        background-color: #ff3627;
-                        content: "";
-                    }
+                    // .text:after {
+                    //     // 빨간점
+                    //     position: absolute;
+                    //     top: 6px;
+                    //     right: -10px;
+                    //     width: 6px;
+                    //     height: 6px;
+                    //     border-radius: 50%;
+                    //     background-color: #ff3627;
+                    //     content: "";
+                    // }
                 }
 
                 .btn-wrap {
@@ -126,35 +127,32 @@
                         width: 100%;
 
                         .apply-btn-wrap {
-                            margin-top: 15px;
+                            display: flex;
+                            justify-content: flex-end;
 
                             .apply-btn-active {
-                                width: 238px;
+                                width: 150px;
                                 height: 34px;
                                 color: #fff;
-                                background-color: #00c73c;
+                                background-color: rgb(9, 173, 59);
                                 border: 1px solid #00ae34;
+                                border-radius: 15px;
                             }
 
                             .apply-btn {
                                 display: block;
-                                width: 238px;
+                                width: 150px;
                                 height: 34px;
                                 color: #fff;
                                 background-color: #C6CBD5;
                                 border: 1px solid #BCC1CC;
+                                border-radius: 15px;
 
                                 .apply-btn-text {}
 
                                 .apply-btn-icon {}
                             }
                         }
-                    }
-
-
-
-                    .inner-menu-list:not(:first-child) {
-                        border-top: 1px solid #e3e7ee;
                     }
 
                     .inner-menu-list {

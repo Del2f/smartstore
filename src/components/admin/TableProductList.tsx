@@ -278,7 +278,7 @@ function TableProductList(props: Props) {
           </div>
           <div className="tableright">
             <span>페이지 노출 </span>
-            <select onChange={onPageSizeChanged} id="page-size">
+            <select className="page-size" onChange={onPageSizeChanged} >
               <option value="10" selected={true}>
                 10
               </option>

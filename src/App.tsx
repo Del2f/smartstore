@@ -31,7 +31,6 @@ function App() {
 
   useEffect(() => {
     const verifyUser = async () => {
-      console.log('쿠키 확인')
 
       if (!cookies.jwt) {
         navigate("/");

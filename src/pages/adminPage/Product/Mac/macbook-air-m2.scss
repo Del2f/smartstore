@@ -1551,6 +1551,8 @@ article.section-performance .subsection-apps .tile-content {
                     position: relative;
                     display: flex;
                     padding-top: 100px;
+                            max-width: 980px;
+                                margin: 0 auto;
 
                     .item {
                         flex: 40%;
@@ -1574,7 +1576,7 @@ article.section-performance .subsection-apps .tile-content {
                         position: absolute;
                         left: -15px;
                         bottom: 100px;
-                        justify-content: flex-start;
+                        justify-content: center;
                         width: calc(50% - 10px);
 
                         .colornav-value {
@@ -2233,10 +2235,10 @@ article.section-performance .subsection-apps .tile-content {
 }
 
 @media only screen and (min-width: 1069px) {
-    .content {
-        max-width: 980px;
-        margin: 0 auto;
-    }
+    // .content {
+    //     max-width: 980px;
+    //     margin: 0 auto;
+    // }
 
     .performance-modal-content .mx-chips .chip-speed .article-copy {
         width: 544px;

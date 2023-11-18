@@ -161,17 +161,36 @@
     width: 60px;
     height: 30px;
     border: none;
-    border-radius: 12px;
+    border-radius: 15px;
     background-color: var(--btn-blue-color);
 
     .text {
         color: #fff;
-        font-size: 15px;
-        font-weight: 700;
+        font-size: 14px;
+        font-weight: 600;
     }
 
     &:not(:last-child) {
         margin-right: 4px;
+    }
+}
+
+.circle-btn-wrap2 {
+
+    width: 25px;
+    height: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    border-radius: 20px;
+    background-color: var(--gray-color);
+
+    .text {
+        font-size: 15px;
+        font-weight: 700;
+        color: rgb(83, 83, 83);
+        margin-bottom: 2px;
     }
 }
 

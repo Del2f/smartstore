@@ -111,7 +111,6 @@ function Usersign() {
         setIsPassword(true);
       }
     },
-  
     PasswordConfirmHandler: (e: React.ChangeEvent<HTMLInputElement>) => {
       const PWC = e.target.value;
       setPasswordConfirm(PWC);
@@ -129,7 +128,6 @@ function Usersign() {
         setIsPasswordConfirm(true);
       }
     },
-  
     NameHandler: (e: React.ChangeEvent<HTMLInputElement>) => {
       setName(e.target.value);
       if (e.target.value.length < 2 || e.target.value.length > 5) {
@@ -164,7 +162,6 @@ function Usersign() {
         setIsPhone(true);
       }
     },
-  
     EmailHandler: (e: React.ChangeEvent<HTMLInputElement>) => {
       setEmail(e.target.value);
       setIsEmail(false);
@@ -193,41 +190,41 @@ function Usersign() {
       }
     },
       // 이메일 인증 버튼
-   emailAuthBtn: async (e: any) => {
-    e.preventDefault();
+    emailAuthBtn: async (e: any) => {
+      e.preventDefault();
 
-    const code = String(Math.floor(Math.random() * 1000000)).padStart(6, "0");
-    const emailData = {
-      id: Id,
-      email: Email,
-      auth: code,
-    };
+      const code = String(Math.floor(Math.random() * 1000000)).padStart(6, "0");
+      const emailData = {
+        id: Id,
+        email: Email,
+        auth: code,
+      };
 
-    try {
-      const res = await axios.post("/smartstore/commerce/usersign/sendEmail", emailData, { withCredentials: true });
-      const emailRegex = /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+      try {
+        const res = await axios.post("/smartstore/commerce/usersign/sendEmail", emailData, { withCredentials: true });
+        const emailRegex = /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
 
-      console.log(res.data);
+        console.log(res.data);
 
-      if (!emailRegex.test(Email)) {
-        setEmailMessage("올바른 이메일 형식으로 입력해 주세요.");
-        setIsEmail(false);
-        setIsEmail2(false);
+        if (!emailRegex.test(Email)) {
+          setEmailMessage("올바른 이메일 형식으로 입력해 주세요.");
+          setIsEmail(false);
+          setIsEmail2(false);
+        }
+
+        if (res.data.errorEmail == "이메일중복") {
+          setEmailMessage("이미 가입된 이메일 입니다.");
+          setIsEmail(false);
+          setIsEmail2(false);
+        } else {
+          setIsEmail(true);
+          setEmailAuthModal(true);
+          setAuthCode(code);
+        }
+      } catch (errors) {
+        console.log(errors);
       }
-
-      if (res.data.errorEmail == "이메일중복") {
-        setEmailMessage("이미 가입된 이메일 입니다.");
-        setIsEmail(false);
-        setIsEmail2(false);
-      } else {
-        setIsEmail(true);
-        setEmailAuthModal(true);
-        setAuthCode(code);
-      }
-    } catch (errors) {
-      console.log(errors);
-    }
-  },
+    },
     agree: () => {
       setAgree(!Agree);
     },
