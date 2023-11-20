@@ -68,13 +68,12 @@ map 메소드 요소에 ...을 붙이고, 해당하는 object를 원하는 값�
     const onUpdateBtn = () => {
         const result = copy.map((list: any, index: any) => {
         --------생략---------
-        return { 
-        ...list,
-        optionStatus: updatedOptionStock > 0 ? "판매" : "품절",
-        optionUse: updatedOptionUse,
-        };
+            return { 
+            ...list,
+            optionStatus: updatedOptionStock > 0 ? "판매" : "품절",
+            optionUse: updatedOptionUse,
+            };
         })
-
         props.setOptionResult(result);
     };
 
