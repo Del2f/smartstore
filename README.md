@@ -1,18 +1,12 @@
 
 # React-Apple Store Admin Page & Store Page
 
-## 프로젝트
+## 프로젝트 소개
 애플 스토어와 스토어가 연동되는 관리자 페이지를 제작.
 
-## 개발환경
-- React
-- NodeJS
-- MongoDB
-- AWS
+## 개발 과정
 
-## 제작 과정 및 상세 설명
-
-### 1. 애플 스토어 관리자 페이지
+### 애플 스토어 관리자 페이지
 
 - http://35.76.233.160/smartstore
 
@@ -119,11 +113,10 @@ const product = await Product.findOne({ url: requrl });
 
     const selectProduct = () => {
         const SelectedComponent = componentMap[URL];
-
         if (SelectedComponent) {
-        return <SelectedComponent />;
+            return <SelectedComponent />;
         } else {
-        return null;
+            return null;
         }
     };
 
@@ -292,7 +285,7 @@ cloudfront를 중간에 추가하는 방법도 있었지만 실패. (현재 코�
 라이브러리 기본 구조 Column, Task에서 SubTask를 추가하여 애플 스토어의 구조와 동일하게 하였습니다.
 
 
-### 2. 애플 스토어
+### 애플 스토어
 
 ![apple-menu](https://github.com/Del2f/smartstore/assets/92422357/b7a3d0b3-99ba-471e-a3ec-012538f52132)
 
@@ -305,32 +298,26 @@ cloudfront를 중간에 추가하는 방법도 있었지만 실패. (현재 코�
 모든 카테고리는 관리자 페이지에 연동 되어 작동합니다.
 - 유저 회원가입(이메일 인증 가능) 및 토큰 인증하는 로그인 및 로그아웃
 
+### 이슈
 
-### 3. 서버
-
-- NodeJS 로 제작.
-- AWS EC2 에서 배포.
-
-### 4. 그외 이슈
-
-AWS에서 배포를 할때 생겼던 문제인데, 평소에는 로컬에서만 테스트를 하니 node.js는
-당연히 8080 기본포트로 열게 되었다. ubuntu에도 그냥 그대로 올렸다.
+AWS에서 배포를 할때 생겼던 문제인데, 평소에는 로컬에서만 테스트를 하다보니
+node.js는 당연히 기본포트인 8080으로 열게 되었다.
 
 그런데 어느날 갑자기 작동이 안되서 뭐가 문젠지 한참 고민했다.
 
-일단 리눅스의 /dev/root의 용량이 문제였다. (용량확인 df -h)
-용량이 부족하니 MongoDB가 먹통이 되었다. AWS에서 용량을 늘려 일단 용량 문제는 해결.
+일단 리눅스의 root 용량이 문제였다. (용량확인 df -h)
+용량이 부족하니 MongoDB가 먹통이 되었다. AWS는 16기가까지 무료라 용량을 늘려 일단 해결.
 
-그런데 이것저것 건들여 서버가 작동이 안되었다.
+그런데 고치려고 이것저것 건든게 문제가 되어 해결이 안됨.
 
-일단 해결하기 위해 리버스 프록시를 해제. 괜히 헷갈리게 한다.
+일단 해결하기 위해 리버스 프록시를 해제. 헷갈리게 한다.
 sudo vi /etc/nginx/sites-enabled/smartstore.conf에서 Proxy_pass를 제거.
 
-먼저 우분투의 node.js의 포트번호를 바꿔준다. 5800으로 변경.
-포트번호는 node.js의 port를 따라가기 때문에 8080으로 하더라도 작동은 된다.
+먼저 우분투의 node.js의 포트번호를 바꿔준다. 
+어느 부분에서 어떻게 적용 되는지 잘모를땐 독립적인 값으로 바꿔주는게 좋다. 5800으로 변경.
 
-로컬은 환경변수의 PORT 값을 없애서 8080으로 그냥 그대로 간다.
-우분투는 환경변수를 PORT=5800;으로 입력해 5800으로 서버를 켠다.
+로컬은 8080, 우분투의 환경변수를 PORT=5800;으로 입력해 PORT가 감지 되면 5800으로 켜지게 한다.
+(현재 로컬은 환경변수를 입력하지 않았고 우분투에만 업로드 했다.)
 
     app.set('port', process.env.PORT || 8080);
 
@@ -338,10 +325,10 @@ sudo vi /etc/nginx/sites-enabled/smartstore.conf에서 Proxy_pass를 제거.
     console.log(`listening on ${app.get('port')}`);
     });
 
-수정 후 nginx 재시작 (sudo systemctl restart nginx)
+수정 후 nginx 재시작. (sudo systemctl restart nginx)
 
-pm2는 헷갈리니 사용하지 말고, server 폴더로 들어가 (cd server)
-node server.js 명령어로 테스트 해본다.
+pm2는 헷갈리니 사용하지 않고, server 폴더로 들어가 (cd server)
+node server.js 명령어로 직접 켜 로그를 확인한다.
 
 로컬은 listening on 8080으로 확인되며
 우분투는 listening on 5800으로 확인된다.
@@ -351,9 +338,26 @@ node server.js 명령어로 테스트 해본다.
 이제 http://AWS아이피:5800/ 을 입력하면 정상적으로 웹페이지가 나타나는데,
 이상한점은 웹페이지는 나타나지만 서버와 연동이 안된다. 서버 요청 IP가 틀린것처럼 뜬다.
 
-일단 axios가 문제다. 평소 개발 환경에서는 http://localhost:8080/ 으로 요청 해야하고
-실제 웹페이지 운영은 http://AWS아이피:5800/ 으로 요청 해야하기 때문에 axios 요청 주소를 개발,
-배포로 나눠 놓아야 하는데, 이럴때 환경 변수를 쓴다.
+일단 axios가 문제다.
+평소 개발 환경에서는 http://localhost:8080/ 으로 요청 해야하고
+실제 웹페이지 운영은 http://AWS아이피:5800/ 으로 요청 해야하기 때문에
+
+axios 요청 주소를 개발, 배포로 나눠 놓아야 하는데, 이럴때 환경 변수를 쓴다.
+이걸 처음 알았을땐 정말 감탄했다.
+
+    import axios from 'axios';
+
+    const BASE_URL = process.env.REACT_APP_HOST;
+
+    export default axios.create({
+        baseURL: BASE_URL
+    });
+
+    export const axiosPrivate = axios.create({
+        baseURL: BASE_URL,
+        headers: { 'Content-Type': 'application/json' },
+        withCredentials: true
+    });
 
 .env.development, .env.production 이런식으로 나눠서 작성하면 git에 업로드 할땐 (npm run build)
 .env.production가 적용된다. .env.production엔 당연히 AWS의 외부아이피가 들어있다.
@@ -361,7 +365,7 @@ node server.js 명령어로 테스트 해본다.
 그러면 빌드될때 모든 코드의 axios들이 http://AWS아이피:5800/ 로 전환되어 입력이 된다. 아주 편리하다.
 ubuntu에는 빌드된 코드가 실행이 되기 때문에 항상 최신화를 하면서 git pull 해야 반영이 되니 주의.
 
-그런데 문제는 AWS 아이피 뒤에 포트번호가 숨겨지지 않는것이었다. nginx 설정의 proxy_pass도 작동이 안됨.
+또 다른 문제는 AWS 아이피 뒤에 포트번호가 숨겨지지 않는것이었다.
 해결 방법은, sudo iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 5800을 입력하자.
 
 80 포트로 들어오는 트래픽을 5800 포트로 리다이렉트 시켜준다.
@@ -374,3 +378,32 @@ ubuntu에는 빌드된 코드가 실행이 되기 때문에 항상 최신화를 
 포트번호를 80으로 수정한 다음, npm run build를 해서 다시 git에 업로드후, git pull을 하자.
 그러면 서버가 정상적으로 구동된다.
 
+## 기술 스택
+
+### 프레임워크
+- React
+- NodeJS
+
+### 주요 라이브러리
+
+클라이언트
+- ag-grid-react
+- axios
+- cross-env
+- react-beautiful-dnd
+- react-cookie
+- react-router-dom
+- styled-components
+- typescript
+
+서버
+- bcrypt
+- mongoose
+- multer-s3
+- nodemailer
+
+### 데이터베이스
+- MongoDB
+
+### 배포
+- AWS
