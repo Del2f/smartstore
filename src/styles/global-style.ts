@@ -9,6 +9,9 @@ const GlobalStyles = createGlobalStyle`
         // home
         --btn-color: var(--black-color);
         --btn-blue-color: var(--blue-color);
+        --input-border-blue-color: var(--blue-color);
+        --input-border-radius: 15px;
+        --btn-border-radius: 15px;
 
         // home/category
         --input-border-color: #86868b;

@@ -1,6 +1,7 @@
 import { DefaultTheme } from "styled-components";
 
-const navrate = "240ms";
+const navRate = "240ms";
+const navVisibleRate = "240ms";
 const navColorRate = "240ms";
 
 const color = {
@@ -46,7 +47,8 @@ export const lightTheme : DefaultTheme = {
   button1: "#e3e1e3",
   button2: "908790",
   color: { ...color },
-  navrate: navrate,
+  navRate: navRate,
+  navVisibleRate: navVisibleRate,
   navColorRate: navColorRate,
 
 };
@@ -88,7 +90,8 @@ export const darkTheme : DefaultTheme = {
   button1: "#5c565c",
   button2: "#908790",
   color: { ...color },
-  navrate: navrate,
+  navRate: navRate,
+  navVisibleRate: navVisibleRate,
   navColorRate: navColorRate,
 };
 

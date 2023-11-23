@@ -141,7 +141,7 @@ function ImageUploadBox( props: any ) {
         </div>
             <div className="text_box">
               <span>{errorMessage}</span>
-              <span>드래그 또는 클릭하여 업로드 (640x640)</span>
+              <span>드래그 또는 클릭하여 업로드</span>
               <button className="delete-btn" onClick={deleteBtn}>삭제</button>
             </div>
       </div>

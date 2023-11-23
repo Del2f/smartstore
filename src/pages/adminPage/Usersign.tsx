@@ -19,15 +19,15 @@ function Usersign() {
   const [Password, setPassword] = useState("");
   const [PasswordConfirm, setPasswordConfirm] = useState("");
   const [Name, setName] = useState("");
-  const [Phone, setPhone] = useState("");
+  // const [Phone, setPhone] = useState("");
   const [Email, setEmail] = useState("");
   const [EmailAuthModal, setEmailAuthModal] = useState(false);
   const [AuthCode, setAuthCode] = useState("");
   const [AuthCodeInput, setAuthCodeInput] = useState("");
 
   // 휴대폰 국가 코드 선택
-  const [PhoneCountry, setPhoneCountry] = useState<Country | null>({ name: "대한민국", number: 82 });
-  console.log(PhoneCountry);
+  // const [PhoneCountry, setPhoneCountry] = useState<Country | null>({ name: "대한민국", number: 82 });
+  // console.log(PhoneCountry);
 
   // 오류 메시지 상태저장
   const [IdMessage, setIdMessage] = useState<string>("");
@@ -142,30 +142,31 @@ function Usersign() {
       }
     },
     // 휴대폰 국가코드 변경
-    CountryChange: (selected: Country) => {
-      setPhoneCountry(selected);
-      setShowdrop(false);
-    },
-    PhoneHandler: (e: React.ChangeEvent<HTMLInputElement>) => {
-      const phoneRegex = /^01(?:0|1|[6-9])(?:\d{3}|\d{4})\d{4}$/;
-      const phoneCurrent = e.target.value;
-      setPhone(phoneCurrent);
+    // CountryChange: (selected: Country) => {
+    //   setPhoneCountry(selected);
+    //   setShowdrop(false);
+    // },
+    // PhoneHandler: (e: React.ChangeEvent<HTMLInputElement>) => {
+    //   const phoneRegex = /^01(?:0|1|[6-9])(?:\d{3}|\d{4})\d{4}$/;
+    //   const phoneCurrent = e.target.value;
+    //   setPhone(phoneCurrent);
   
-      if (!phoneRegex.test(phoneCurrent)) {
-        setPhoneMessage("휴대전화 번호만 입력할 수 있습니다.");
-        setIsPhone(false);
-        if (e.target.value === "") {
-          setPhoneMessage("휴대전화 번호를 입력해 주세요.");
-          setIsPhone(false);
-        }
-      } else {
-        setIsPhone(true);
-      }
-    },
+    //   if (!phoneRegex.test(phoneCurrent)) {
+    //     setPhoneMessage("휴대전화 번호만 입력할 수 있습니다.");
+    //     setIsPhone(false);
+    //     if (e.target.value === "") {
+    //       setPhoneMessage("휴대전화 번호를 입력해 주세요.");
+    //       setIsPhone(false);
+    //     }
+    //   } else {
+    //     setIsPhone(true);
+    //   }
+    // },
     EmailHandler: (e: React.ChangeEvent<HTMLInputElement>) => {
       setEmail(e.target.value);
-      setIsEmail(false);
-  
+      if(e.target.value === ""){
+        setIsEmail(false);
+      }
       const emailRegex = /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
   
       if (!emailRegex.test(Email)) {
@@ -193,6 +194,15 @@ function Usersign() {
     emailAuthBtn: async (e: any) => {
       e.preventDefault();
 
+      const emailRegex = /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+
+      if (!emailRegex.test(Email)) {
+        setEmailMessage("올바른 이메일 형식으로 입력해 주세요.");
+        setIsEmail(false);
+        setIsEmail2(false);
+        return;
+      }
+
       const code = String(Math.floor(Math.random() * 1000000)).padStart(6, "0");
       const emailData = {
         id: Id,
@@ -202,15 +212,9 @@ function Usersign() {
 
       try {
         const res = await axios.post("/smartstore/commerce/usersign/sendEmail", emailData, { withCredentials: true });
-        const emailRegex = /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
-
+        
         console.log(res.data);
 
-        if (!emailRegex.test(Email)) {
-          setEmailMessage("올바른 이메일 형식으로 입력해 주세요.");
-          setIsEmail(false);
-          setIsEmail2(false);
-        }
 
         if (res.data.errorEmail == "이메일중복") {
           setEmailMessage("이미 가입된 이메일 입니다.");
@@ -265,8 +269,8 @@ function Usersign() {
     password: Password,
     passwordconfirm: PasswordConfirm,
     name: Name,
-    phoneCountry: PhoneCountry,
-    phone: Phone,
+    // phoneCountry: PhoneCountry,
+    // phone: Phone,
     email: Email,
   };
 
@@ -360,7 +364,7 @@ function Usersign() {
 
   // 모든 유효성 검사 통과 체크하기.
   useEffect(() => {
-    if (isId && isId2 && isPassword && isPasswordConfirm && isName && isPhone && isEmail && isEmail2 && Agree) {
+    if (isId && isId2 && isPassword && isPasswordConfirm && isName && isEmail && isEmail2 && Agree) {
       setSubmit(true);
     } else {
       setSubmit(false);
@@ -368,92 +372,92 @@ function Usersign() {
   });
 
   // 국가코드 데이터 모음
-  const countries: Country[] = [
-    { name: "대한민국", number: 82 },
-    { name: "중국", number: 86 },
-    { name: "미국", number: 1 },
-    { name: "영국", number: 44 },
-    { name: "이탈리아", number: 39 },
-    { name: "독일", number: 49 },
-    { name: "프랑스", number: 33 },
-    { name: "일본", number: 81 },
-    { name: "뉴질랜드", number: 64 },
-    { name: "호주", number: 61 },
-    { name: "대만", number: 886 },
-    { name: "홍콩", number: 852 },
-    { name: "싱가포르", number: 65 },
-    { name: "스위스", number: 41 },
-    { name: "캐나다", number: 1 },
-    { name: "아르헨티나", number: 54 },
-    { name: "베트남", number: 84 },
-    { name: "스페인", number: 34 },
-    { name: "인도네시아", number: 62 },
-    { name: "키르기스스탄", number: 996 },
-    { name: "필리핀", number: 63 },
-    { name: "아일랜드", number: 353 },
-    { name: "핀란드", number: 358 },
-    { name: "스웨덴", number: 46 },
-    { name: "태국", number: 66 },
-    { name: "브라질", number: 55 },
-    { name: "인도", number: 91 },
-    { name: "오스트리아", number: 43 },
-    { name: "스리랑카", number: 94 },
-    { name: "아랍에미리트", number: 971 },
-    { name: "네덜란드", number: 31 },
-    { name: "폴란드", number: 48 },
-    { name: "세르비아", number: 381 },
-    { name: "벨기에", number: 32 },
-    { name: "슬로베니아", number: 386 },
-    { name: "루마니아", number: 40 },
-    { name: "덴마크", number: 45 },
-    { name: "모로코", number: 212 },
-    { name: "니카라과", number: 505 },
-    { name: "포르투갈", number: 351 },
-    { name: "체코", number: 420 },
-    { name: "사우디아라비아", number: 966 },
-    { name: "쿠웨이트", number: 965 },
-    { name: "요르단", number: 962 },
-    { name: "카타르", number: 974 },
-    { name: "터키", number: 90 },
-    { name: "말레이시아", number: 60 },
-    { name: "불가리아", number: 359 },
-    { name: "마카오", number: 853 },
-    { name: "노르웨이", number: 47 },
-    { name: "헝가리", number: 36 },
-    { name: "과테말라", number: 502 },
-    { name: "베네수엘라", number: 58 },
-    { name: "네팔", number: 977 },
-    { name: "피지", number: 679 },
-    { name: "튀니지", number: 216 },
-    { name: "그리스", number: 30 },
-    { name: "우즈베키스탄", number: 998 },
-    { name: "몰타", number: 356 },
-    { name: "타지키스탄", number: 992 },
-    { name: "파키스탄", number: 92 },
-    { name: "남아프리카공화국", number: 27 },
-    { name: "몽골", number: 976 },
-    { name: "룩셈부르크", number: 352 },
-    { name: "쿠바", number: 53 },
-    { name: "이스라엘", number: 972 },
-    { name: "아제르바이잔", number: 994 },
-    { name: "방글라데시", number: 880 },
-    { name: "페루", number: 51 },
-    { name: "멕시코", number: 52 },
-    { name: "코스타리카", number: 506 },
-    { name: "카자흐스탄", number: 7 },
-    { name: "나이지리아", number: 234 },
-    { name: "에스토니아", number: 372 },
-    { name: "이집트", number: 20 },
-    { name: "콜롬비아", number: 57 },
-    { name: "벨라루스", number: 375 },
-    { name: "미얀마", number: 95 },
-    { name: "파라과이", number: 595 },
-    { name: "캄보디아", number: 855 },
-    { name: "우크라이나", number: 380 },
-    { name: "엘살바도르", number: 503 },
-    { name: "세인트루시아", number: 1 },
-    { name: "리투아니아", number: 370 },
-  ];
+  // const countries: Country[] = [
+  //   { name: "대한민국", number: 82 },
+  //   { name: "중국", number: 86 },
+  //   { name: "미국", number: 1 },
+  //   { name: "영국", number: 44 },
+  //   { name: "이탈리아", number: 39 },
+  //   { name: "독일", number: 49 },
+  //   { name: "프랑스", number: 33 },
+  //   { name: "일본", number: 81 },
+  //   { name: "뉴질랜드", number: 64 },
+  //   { name: "호주", number: 61 },
+  //   { name: "대만", number: 886 },
+  //   { name: "홍콩", number: 852 },
+  //   { name: "싱가포르", number: 65 },
+  //   { name: "스위스", number: 41 },
+  //   { name: "캐나다", number: 1 },
+  //   { name: "아르헨티나", number: 54 },
+  //   { name: "베트남", number: 84 },
+  //   { name: "스페인", number: 34 },
+  //   { name: "인도네시아", number: 62 },
+  //   { name: "키르기스스탄", number: 996 },
+  //   { name: "필리핀", number: 63 },
+  //   { name: "아일랜드", number: 353 },
+  //   { name: "핀란드", number: 358 },
+  //   { name: "스웨덴", number: 46 },
+  //   { name: "태국", number: 66 },
+  //   { name: "브라질", number: 55 },
+  //   { name: "인도", number: 91 },
+  //   { name: "오스트리아", number: 43 },
+  //   { name: "스리랑카", number: 94 },
+  //   { name: "아랍에미리트", number: 971 },
+  //   { name: "네덜란드", number: 31 },
+  //   { name: "폴란드", number: 48 },
+  //   { name: "세르비아", number: 381 },
+  //   { name: "벨기에", number: 32 },
+  //   { name: "슬로베니아", number: 386 },
+  //   { name: "루마니아", number: 40 },
+  //   { name: "덴마크", number: 45 },
+  //   { name: "모로코", number: 212 },
+  //   { name: "니카라과", number: 505 },
+  //   { name: "포르투갈", number: 351 },
+  //   { name: "체코", number: 420 },
+  //   { name: "사우디아라비아", number: 966 },
+  //   { name: "쿠웨이트", number: 965 },
+  //   { name: "요르단", number: 962 },
+  //   { name: "카타르", number: 974 },
+  //   { name: "터키", number: 90 },
+  //   { name: "말레이시아", number: 60 },
+  //   { name: "불가리아", number: 359 },
+  //   { name: "마카오", number: 853 },
+  //   { name: "노르웨이", number: 47 },
+  //   { name: "헝가리", number: 36 },
+  //   { name: "과테말라", number: 502 },
+  //   { name: "베네수엘라", number: 58 },
+  //   { name: "네팔", number: 977 },
+  //   { name: "피지", number: 679 },
+  //   { name: "튀니지", number: 216 },
+  //   { name: "그리스", number: 30 },
+  //   { name: "우즈베키스탄", number: 998 },
+  //   { name: "몰타", number: 356 },
+  //   { name: "타지키스탄", number: 992 },
+  //   { name: "파키스탄", number: 92 },
+  //   { name: "남아프리카공화국", number: 27 },
+  //   { name: "몽골", number: 976 },
+  //   { name: "룩셈부르크", number: 352 },
+  //   { name: "쿠바", number: 53 },
+  //   { name: "이스라엘", number: 972 },
+  //   { name: "아제르바이잔", number: 994 },
+  //   { name: "방글라데시", number: 880 },
+  //   { name: "페루", number: 51 },
+  //   { name: "멕시코", number: 52 },
+  //   { name: "코스타리카", number: 506 },
+  //   { name: "카자흐스탄", number: 7 },
+  //   { name: "나이지리아", number: 234 },
+  //   { name: "에스토니아", number: 372 },
+  //   { name: "이집트", number: 20 },
+  //   { name: "콜롬비아", number: 57 },
+  //   { name: "벨라루스", number: 375 },
+  //   { name: "미얀마", number: 95 },
+  //   { name: "파라과이", number: 595 },
+  //   { name: "캄보디아", number: 855 },
+  //   { name: "우크라이나", number: 380 },
+  //   { name: "엘살바도르", number: 503 },
+  //   { name: "세인트루시아", number: 1 },
+  //   { name: "리투아니아", number: 370 },
+  // ];
 
   return (
     <>
@@ -461,11 +465,11 @@ function Usersign() {
         <div className="usersign-layout-wrap">
           <div className="layout-inner">
             <div className="content">
-              <h2 className="signup-title">회원가입</h2>
+              <h2 className="signup-title">관리자 회원가입</h2>
               <div className="signup-area">
                 <h3 className="signup-area-title">
                   회원 정보 입력
-                  <span className="accent">필수항목</span>
+                  {/* <span className="accent">필수항목</span> */}
                 </h3>
                 <ul className="signup-list">
                   <li className="signup-item">
@@ -473,12 +477,12 @@ function Usersign() {
                       <div className="text">
                         <label className="title">
                           <span>로그인 아이디</span>
-                          <span className="icon-point" />
+                          {/* <span className="icon-point" /> */}
                         </label>
                         <div className="input-item">
                           <div className="input-area">
                             <div className="input-box" ref={inputRefID}>
-                              <div id={inputClick && inputClickNumber == 1 ? "input-inner-active" : "input-inner"}>
+                              <div className={inputClick && inputClickNumber == 1 ? "input-inner input-inner-active" : "input-inner"}>
                                 <input
                                   type="text"
                                   name="id"
@@ -493,7 +497,7 @@ function Usersign() {
                               </div>
                             </div>
                             <div className="input-btn-wrap">
-                              <button className={isId2 == true ? "input-btn-active" : "input-btn"} onClick={handlers.idAuthBtn}>
+                              <button className={isId2 == true ? "input-btn input-btn-active" : "input-btn"} onClick={handlers.idAuthBtn}>
                                 <span className="text">인증</span>
                               </button>
                             </div>
@@ -508,12 +512,12 @@ function Usersign() {
                       <div className="text">
                         <label className="title">
                           <span>비밀번호</span>
-                          <span className="icon-point" />
+                          {/* <span className="icon-point" /> */}
                         </label>
                         <div className="input-item">
                           <div className="input-area">
                             <div className="input-box" ref={inputRefPW}>
-                              <div id={inputClick && inputClickNumber == 2 ? "input-inner-active" : "input-inner"}>
+                              <div className={inputClick && inputClickNumber == 2 ? "input-inner input-inner-active" : "input-inner"}>
                                 <input
                                   type="password"
                                   name="password"
@@ -539,12 +543,12 @@ function Usersign() {
                       <div className="text">
                         <label className="title">
                           <span>비밀번호 확인</span>
-                          <span className="icon-point" />
+                          {/* <span className="icon-point" /> */}
                         </label>
                         <div className="input-item">
                           <div className="input-area">
                             <div className="input-box" ref={inputRefPW2}>
-                              <div id={inputClick && inputClickNumber == 3 ? "input-inner-active" : "input-inner"}>
+                              <div className={inputClick && inputClickNumber == 3 ? "input-inner input-inner-active" : "input-inner"}>
                                 <input
                                   type="password"
                                   name="pwcheck"
@@ -570,12 +574,12 @@ function Usersign() {
                       <div className="text">
                         <label className="title">
                           <span>이름</span>
-                          <span className="icon-point" />
+                          {/* <span className="icon-point" /> */}
                         </label>
                         <div className="input-item">
                           <div className="input-area">
                             <div className="input-box" ref={inputRefName}>
-                              <div id={inputClick && inputClickNumber == 4 ? "input-inner-active" : "input-inner"}>
+                              <div className={inputClick && inputClickNumber == 4 ? "input-inner input-inner-active" : "input-inner"}>
                                 <input
                                   type="text"
                                   name="name"
@@ -595,7 +599,7 @@ function Usersign() {
                       </div>
                     </div>
                   </li>
-                  <li className="signup-item signup-number">
+                  {/* <li className="signup-item signup-number">
                     <div className="signup-id-pc">
                       <div className="text">
                         <label className="title">
@@ -646,23 +650,22 @@ function Usersign() {
                         <div className={isPhone ? "error" : "error-active"}>{PhoneMessage}</div>
                       </div>
                     </div>
-                  </li>
+                  </li> */}
                   <li className="signup-item">
                     <div className="signup-id-pc">
                       <div className="text">
                         <label className="title">
-                          <span>본인확인 이메일</span>
-                          <span className="icon-help" />
-                          <span className="icon-point" />
+                          <span>이메일 인증</span>
+                          {/* <span className="icon-point" /> */}
                         </label>
                         <div className="input-item">
                           <div className="input-area">
                             <div className="input-box" ref={inputRefEmail}>
-                              <div id={inputClick && inputClickNumber == 6 ? "input-inner-active" : "input-inner"}>
+                              <div className={inputClick && inputClickNumber == 6 ? "input-inner input-inner-active" : "input-inner"}>
                                 <input
                                   type="text"
                                   name="email"
-                                  placeholder="본인확인 이메일"
+                                  placeholder="이메일 인증"
                                   className="input"
                                   onClick={() => {
                                     setInputClick(true);
@@ -673,7 +676,7 @@ function Usersign() {
                               </div>
                             </div>
                             <div className="input-btn-wrap">
-                              <button className={isEmail ? "input-btn-active" : "input-btn"} onClick={handlers.emailAuthBtn}>
+                              <button className={isEmail ? "input-btn input-btn-active" : "input-btn"} onClick={handlers.emailAuthBtn}>
                                 <span className="text">인증번호</span>
                               </button>
                             </div>
@@ -682,7 +685,7 @@ function Usersign() {
                         <div className={EmailAuthModal ? "input-item-mailauth-active" : "input-item-mailauth"}>
                           <div className="input-area">
                             <div className="input-box" ref={inputRefEmail2}>
-                              <div id={inputClick && inputClickNumber == 7 ? "input-inner-active" : "input-inner"}>
+                              <div className={inputClick && inputClickNumber == 7 ? "input-inner input-inner-active" : "input-inner"}>
                                 <input
                                   type="text"
                                   name="email"
@@ -697,7 +700,7 @@ function Usersign() {
                               </div>
                             </div>
                             <div className="input-btn-wrap">
-                              <button className={isEmail2 ? "input-btn-active" : "input-btn"} onClick={handlers.AuthCodeCheck}>
+                              <button className={isEmail2 ? "input-btn input-btn-active" : "input-btn"} onClick={handlers.AuthCodeCheck}>
                                 <span className="text">확인</span>
                               </button>
                             </div>

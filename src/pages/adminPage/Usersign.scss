@@ -79,8 +79,11 @@
             }
             
             .input-inner-active {
-                border: 1px solid #03c75a;
-                z-index: 1;
+                border: 1px solid #0070c9;
+                border-width: 1px;
+                box-shadow: 0 0 0 1px #0070c9;
+                outline: 0;
+                z-index: 2;
             }
 
             .input-inner-error {
@@ -168,15 +171,16 @@
             position: relative;
             padding: 1px 15px;
             border: 1px solid rgba(0,0,0,.15);
-            border-radius: 8px;
-            margin-right: 8px;
+            border-radius: var(--input-border-radius);
+            width: 100%;
+            transition: 0.32s cubic-bezier(0.4,0,0.6,1);
         }
 
         #input-inner {
             position: relative;
             padding: 1px 15px;
             border: 1px solid rgba(0,0,0,.15);
-            border-radius: 8px;
+            border-radius: var(--input-border-radius);
             background-color: #fff;
             width: 100%;
         }
@@ -186,14 +190,8 @@
         }
 
         #input-inner-active {
-            position: relative;
-            padding: 1px 15px;
-            border: 1px solid rgba(0,0,0,.15);
-            border-radius: 8px;
-            margin-right: 8px;
-            background-color: #fff;
             border: 1px solid #03c75a;
-            z-index: 20;
+            z-index: 2;
         }
         
         .input-inner-pw, .input-inner-pwcheck, .input-inner-name {
@@ -224,8 +222,9 @@
             width: 92px;
             height: 100%;
             border: none;
-            border-radius: 8px;
+            border-radius: var(--btn-border-radius);
             background-color: #e5e5e5;
+            transition: 0.32s cubic-bezier(0.4,0,0.6,1);
 
             .text {  // 인증
                 color: rgba(0,0,0,.26);
@@ -235,11 +234,6 @@
         }
 
         .input-btn-active {
-            display: block;
-            width: 92px;
-            height: 100%;
-            border: none;
-            border-radius: 8px;
             background-color: #03C75A;
 
             .text {  // 인증

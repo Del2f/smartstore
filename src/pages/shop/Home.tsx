@@ -14,25 +14,72 @@ const LineMiddle = styled.div`
   margin-left: auto;
   font-size: 13px;
   padding: 12px 0;
-  width: 100%;
-  height: 50px;
   background-color: white;
-
+  
   & > span {
     font-weight: 300;
-  }
+    text-align: center;
+    display: inline-block;
 
-  & > sup {
-    font-weight: 300;
-    top: -0.5em;
-    position: relative;
-    font-size: 0.6em;
-    vertical-align: baseline;
+    & > sup {
+      font-weight: 300;
+      top: -0.5em;
+      position: relative;
+      font-size: 0.6em;
+      vertical-align: baseline;
+    }
   }
 
   & > a {
+    margin-top: 5px;
+
     font-weight: 300;
     color: #06c;
+    white-space: nowrap;
+  }
+
+  & > a::after {
+    font-family: "SF Pro Icons";
+    color: inherit;
+    display: inline-block;
+    font-style: normal;
+    font-weight: inherit;
+    font-size: inherit;
+    line-height: 1;
+    text-decoration: underline;
+    position: relative;
+    z-index: 1;
+    content: "";
+    text-decoration: none;
+    top: -0.08em;
+    padding-left: 0.3em;
+  }
+
+
+
+  @media only screen and (max-width: 834px) {
+    & {
+      flex-direction: column;
+      max-width: 700px;
+    }
+
+    & > span {
+    }
+
+    & > a {
+      /* display: block; */
+    }
+  }
+
+  @media only screen and (max-width: 734px) {
+    & {
+      flex-direction: column;
+      max-width: 360px;
+    }
+
+    & > span {
+    }
+
   }
 `;
 
@@ -99,11 +146,11 @@ function Home() {
     <>
       <LineMiddle>
         <span>
-          iPhone&nbsp;11 이후 모델을 보상 판매하면 iPhone&nbsp;14 또는 iPhone&nbsp;14&nbsp;Pro 구입&nbsp;시 사용할&nbsp;수 있는 ₩250,000-₩790,000
+          iPhone 11 이후 모델을 보상 판매하면 iPhone 14 또는 iPhone 14 Pro 구입 시 사용할 수 있는 ₩250,000-₩790,000
           상당의 크레딧이.
+          <sup>1</sup>
         </span>
-        <sup>1</sup>
-        <a href="">&nbsp;iPhone&nbsp;쇼핑하기</a>
+        <Link to={""} className="link">iPhone 쇼핑하기</Link>
       </LineMiddle>
       <HomeImgWrap>
         <TextWrap className="TextWrap">

@@ -13,6 +13,8 @@ import Login from "./pages/Login";
 import Notfound from "./pages/Notfound";
 import Shop from "./pages/shop/Shop";
 import Buy from "./pages/shop/Buy before";
+import Usersign from "./pages/adminPage/Usersign";
+
 
 import { CookiesProvider } from "react-cookie";
 import { PersistGate } from "redux-persist/integration/react";
@@ -37,6 +39,7 @@ root.render(
             <Routes>
               {/* <Route path="/" element={<Intro />} /> */}
               <Route path="/" element={<Login />} />
+              <Route path="/signup" element={<Usersign />} />
               <Route path="/home/*" element={<App />} />
               <Route path="/shop/*" element={<Shop />} />
               <Route path="/buy/:id" element={<Buy />} />

@@ -48,7 +48,8 @@ declare module 'styled-components' {
         present: string;
         absent: string;
       };
-      navrate: string;
+      navRate: string;
+      navVisibleRate: string;
       navColorRate: string;
   }
 }

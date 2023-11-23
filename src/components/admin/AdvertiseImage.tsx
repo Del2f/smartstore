@@ -78,11 +78,11 @@ const DeleteBtn = styled.button<isImage>`
 `;
 
 const ImagePreviewWrap = styled.div`
-  
-    
+
     img {
-       height: 500px;
+      max-width: 100%;
     }
+
 `
 
 function ImagePreview({ imageURL, setAdBackColor, colorSelector, setIsBackColor }: any) {
@@ -99,31 +99,36 @@ function ImagePreview({ imageURL, setAdBackColor, colorSelector, setIsBackColor 
       return;
     }
 
+    const ImagePreviewWrap = document.getElementById("ImagePreviewWrap");
     const canvas = document.createElement("canvas");
 
-    if (canvas) {
+    if (ImagePreviewWrap && canvas) {
       const context = canvas.getContext("2d");
 
-      canvas.width = image.width;
-      canvas.height = image.height;
-      if (context) {
-        context.drawImage(image, 0, 0, image.width, image.height);
+      canvas.width = ImagePreviewWrap.clientWidth;
+      canvas.height = ImagePreviewWrap.clientHeight;
 
-        const x = e.nativeEvent.offsetX;
-        const y = e.nativeEvent.offsetY;
-        const pixelData = context.getImageData(x, y, 1, 1).data;
+      console.log(ImagePreviewWrap.clientWidth);
+      console.log(ImagePreviewWrap.clientHeight);
 
-        const color = `rgba(${pixelData[0]}, ${pixelData[1]}, ${pixelData[2]}, ${pixelData[3] / 255})`;
-        setAdBackColor(color);
-        setIsBackColor(true);
-        console.log("클릭한 픽셀의 색상:", color);
-      }
+        if (context) {
+          context.drawImage(image, 0, 0, canvas.width, canvas.height);
+  
+          const x = e.nativeEvent.offsetX;
+          const y = e.nativeEvent.offsetY;
+          const pixelData = context.getImageData(x, y, 1, 1).data;
+  
+          const color = `rgba(${pixelData[0]}, ${pixelData[1]}, ${pixelData[2]}, ${pixelData[3] / 255})`;
+          setAdBackColor(color);
+          setIsBackColor(true);
+          console.log("클릭한 픽셀의 색상:", color);
+        }
     }
   };
 
   return (
     <>
-      <ImagePreviewWrap className="ImagePreview" draggable>
+      <ImagePreviewWrap className="ImagePreview" id="ImagePreviewWrap" draggable>
         <img src={imageURL} alt="preview" onClick={colorPicker} />
       </ImagePreviewWrap>
     </>

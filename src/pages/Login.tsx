@@ -1,6 +1,5 @@
 // import axios from "../api/axios";
 // import { useState, useRef, useEffect } from "react";
-// import { Link, useNavigate } from "react-router-dom";
 // import { useDispatch, useSelector } from "react-redux";
 // import { useCookies } from "react-cookie";
 // import { AdminLogin } from "../store/adminSlice";
@@ -235,9 +234,8 @@ import axios from "../api/axios";
 import styled, { css } from "styled-components";
 import { SET_TOKEN, selectToken } from "../store/authSlice";
 import { AdminLogin } from "../store/adminSlice";
-
+import { Link, useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useCookies } from "react-cookie";
 
@@ -289,7 +287,7 @@ const LoginItem = css`
   width: 100%;
   height: 44px;
   font-size: 15px;
-  border-radius: 6px;
+  border-radius: var(--input-border-radius);
   border: 1px solid #d6d6d6;
   background: transparent;
   margin: 0;
@@ -304,7 +302,7 @@ const InputStyle = css`
   height: 100%;
   padding-left: 15px;
   padding-right: 43px;
-  border-radius: 6px;
+  border-radius: var(--input-border-radius);
   border: 0;
 
   &:focus {
@@ -425,8 +423,8 @@ const LoginList = styled.ul<LoginList>`
       ? `
 
       ${LoginItemID} {
-        border-top-left-radius: 6px;
-        border-top-right-radius: 6px;
+        border-top-left-radius: var(--input-border-radius);
+        border-top-right-radius: var(--input-border-radius);
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
       }
@@ -438,8 +436,8 @@ const LoginList = styled.ul<LoginList>`
       ${LoginItemPW} {
         border-top-left-radius: 0;
         border-top-right-radius: 0;
-        border-bottom-left-radius: 6px;
-        border-bottom-right-radius: 6px;
+        border-bottom-left-radius: var(--input-border-radius);
+        border-bottom-right-radius: var(--input-border-radius);
       }
 
       ${InputBtn}{
@@ -492,7 +490,7 @@ const LoginError = styled.div<LoginError>`
   position: absolute;
   width: 100%;
   margin-left: -50%;
-  border-radius: 5px;
+  border-radius: var(--input-border-radius);
   left: 50%;
   border: 1px solid rgba(185, 149, 1, 0.47);
   box-shadow: 0 5px 10px 2px rgba(0, 0, 0, 0.1);
@@ -569,6 +567,19 @@ const InputBtn2 = styled(InputBtn)`
     color: #494949;
   }
 `;
+
+const SignUpBtn = styled.button`
+  margin-top: 15px;
+  padding: 7px 15px;
+  border: none;
+  border-radius: 15px;
+
+  span {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--black2-color);
+  }
+`
 
 interface Props {
   // setNavCart: React.Dispatch<React.SetStateAction<cartListType[] | undefined>>;
@@ -734,7 +745,6 @@ function Login() {
     <>
       <div className="userlogin-layout-wrap">
         <LayoutInner className="LayoutInner">
-
           <SVG size={"saw"}>
             <svg id="Outlined" xmlns="http://www.w3.org/2000/svg" className="ac-gn-bagview-nav-svgicon" width="11" height="16" viewBox="0 0 16 25">
               <path
@@ -800,11 +810,17 @@ function Login() {
                   <i className="shared-icon"></i>
                 </InputBtn2>
               </LoginList>
+              <Link to={"./signup"}>
+                <SignUpBtn>
+                  <span>가입</span>
+                </SignUpBtn>
+              </Link>
+
               <LoginError isError={isError}>
-                <p className="login-error">Apple&nbsp;ID 또는 암호가 올바르지 않습니다.</p>
-                <a className="login-error under" target="_blank">
+                <p className="login-error">ID 또는 암호가 올바르지 않습니다.</p>
+                {/* <a className="login-error under" target="_blank">
                   <span className="">암호를 잊으셨습니까?</span>
-                </a>
+                </a> */}
               </LoginError>
             </LoginBox>
           </LoginArea>

@@ -1,8 +1,35 @@
-
-# React-Apple Store Admin Page & Store Page
+# 애플 스토어 관리자 페이지 및 스토어
 
 ## 프로젝트 소개
-애플 스토어와 스토어가 연동되는 관리자 페이지를 제작.
+애플 스토어와 스토어가 연동되는 관리자 페이지를 제작하였음.
+
+## 기술 스택
+
+프레임워크
+- React
+- NodeJS
+
+라이브러리
+- axios
+- typescript
+- react-router-dom
+- styled-components
+- ag-grid-react
+- cross-env
+- react-beautiful-dnd
+- react-cookie
+
+서버
+- bcrypt
+- mongoose
+- multer-s3
+- nodemailer
+
+데이터베이스
+- MongoDB
+
+배포
+- AWS
 
 ## 개발 과정
 
@@ -59,6 +86,7 @@ ag-grid 라이브러리에 웬만한 기능을 지원해서 딱히 만든건 없
 map 메소드 요소에 ...을 붙이고, 해당하는 object를 원하는 값으로 수정하는 방법, 그리고 삼항 연산자를
 사용한다면 또 다르게 바꿀 수 있다는걸 처음 알았다.
 
+
     const onUpdateBtn = () => {
         const result = copy.map((list: any, index: any) => {
         --------생략---------
@@ -71,10 +99,11 @@ map 메소드 요소에 ...을 붙이고, 해당하는 object를 원하는 값�
         props.setOptionResult(result);
     };
 
+
 그리고 ag-grid에서 체크된 옵션에 number를 더하거나, 빼거나, 원하는 수치로 바꾸는 기능을 추가했다.
 혹시나 수정을 원하지 않는 옵션은 boolean을 추가해 값이 true인 경우 제외 해준다.
 
-이미지는 AWS S3에 업로드되며 URL을 받아 mongoDB에 저장.
+이미지는 AWS S3에 업로드되며 URL을 받아 MongoDB에 저장.
 
 상품과 실제 구매 페이지의 연결도 큰 고민이었는데
 처음 제작은 상품을 등록하면서 일반 쇼핑몰처럼 다수의 이미지를 AWS S3에 업로드해
@@ -378,32 +407,3 @@ ubuntu에는 빌드된 코드가 실행이 되기 때문에 항상 최신화를 
 포트번호를 80으로 수정한 다음, npm run build를 해서 다시 git에 업로드후, git pull을 하자.
 그러면 서버가 정상적으로 구동된다.
 
-## 기술 스택
-
-### 프레임워크
-- React
-- NodeJS
-
-### 주요 라이브러리
-
-클라이언트
-- ag-grid-react
-- axios
-- cross-env
-- react-beautiful-dnd
-- react-cookie
-- react-router-dom
-- styled-components
-- typescript
-
-서버
-- bcrypt
-- mongoose
-- multer-s3
-- nodemailer
-
-### 데이터베이스
-- MongoDB
-
-### 배포
-- AWS
