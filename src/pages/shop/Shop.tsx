@@ -1,12 +1,10 @@
 import axios from "../../api/axios";
-import styled, { ThemeProvider, css } from "styled-components";
+import styled, { ThemeProvider, css, keyframes } from "styled-components";
 import { motion } from 'framer-motion';
-
 import { useEffect, useState, useRef } from "react";
 import { Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useCookies } from "react-cookie";
-
 import Home from "./Home";
 import Category from "./Category";
 import Products from "./Products";
@@ -16,10 +14,8 @@ import Login from "./Login";
 import Cart from "./Cart";
 import Buy from "./Buy";
 import Usersign from "./Usersign";
-
 import { ColumnType, TaskType, SubTaskType } from "../adminPage/Category";
 import { cartListType } from "./Cart";
-
 import { darkTheme, lightTheme } from "@styles/theme";
 import { selectCurrentUser } from "../../store/userSlice";
 import "./Shop.scss";
@@ -29,6 +25,11 @@ let currentPath = "";
 const navRate = props => props.theme.navRate;
 const navVisibleRate = props => props.theme.navVisibleRate;
 const navColorRate = props => props.theme.navColorRate;
+
+// 스마트폰 화면
+const navMobileRate = props => props.theme.navMobileRate;
+const navMobileVisibleRate = props => props.theme.navMobileVisibleRate;
+const navMobileColorRate = props => props.theme.navMobileColorRate;
 
 const navMobileBG = props => props.theme.navMobileBG;
 
@@ -40,6 +41,159 @@ interface Blur {
   isSubCateShow: boolean;
 }
 
+interface NavWrap {
+  isSubCateShow: boolean;
+}
+
+interface NavHeight {
+  height: string;
+  isSubCateShow: boolean;
+  selectedCateName: string;
+}
+
+interface NavTabMenu {
+  isSubCateShow: boolean;
+}
+
+interface NavTab {
+  name?: string;
+  selectedCateName?: string;
+  number?: number;
+  isSubCateShow?: boolean;
+  total?: number;
+  isMobile?: boolean;
+}
+
+interface NavTabLink {}
+
+interface NavTabText {
+  name: string;
+  selectedCateName: string;
+  isSubCateShow: boolean;
+}
+
+interface SubMenu {
+  name: string;
+  height: string;
+  selectedCateName: string;
+  isSubCateShow: boolean;
+}
+
+interface SubMenuHeight {
+  height: string;
+}
+
+interface SubMenuInner {
+  name: string;
+  selectedCateName: string;
+}
+
+interface SubMenuList {
+  number: number;
+  grouptotal: number;
+}
+
+interface SubMenuListItem {}
+
+interface SubMenuText {
+  isSubCateShow: boolean;
+  number: number;
+  total: number;
+}
+
+interface SubMenuLi {
+  number: number;
+  total: number;
+  name: string;
+  selectedCateName: string;
+  isSubCateShow: boolean;
+}
+
+interface SubMenuName {}
+export interface GmIdType {
+  id: string;
+}
+
+export const NavHeight = styled.div<NavHeight>`
+  --nav-height-rate: ${navRate};
+  --nav-visibility-rate: ${navVisibleRate};
+  --nav-background-color-rate: ${navColorRate};
+
+  --nav-mobile-height-rate: ${navMobileRate};
+  --nav-mobile-visibility-rate: ${navMobileVisibleRate};
+  --nav-mobile-background-color-rate: ${navMobileColorRate};
+
+  --nav-background-color: ${navMobileBG};
+
+  width: 100%;
+  z-index: 2;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  overflow: hidden;
+  ${(props) =>
+    props.isSubCateShow
+    ? ` 
+    background: ${props.theme.navSubBG};
+      height: ${props.height};
+      transition:
+      height var(--nav-height-rate) cubic-bezier(.4,0,.6,1),
+      visibility var(--nav-visibility-rate) step-start,
+      background var(--nav-background-color-rate) cubic-bezier(.4,0,.6,1);
+      
+    ` : `
+      background: ${props.theme.navBG};
+      height: 44px;
+      transition:
+      height var(--nav-height-rate) cubic-bezier(.4,0,.6,1) .12s,
+      visibility var(--nav-visibility-rate) step-end .12s,
+      background var(--nav-background-color-rate) cubic-bezier(.4,0,.6,1) .12s;
+  `};
+
+@media only screen and (max-width: 833px) {
+    & {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      /* background-color: var(--nav-background-color); */
+      /* overflow-x: hidden; */
+
+      ${props => props.isSubCateShow ? `
+        visibility: visible;
+        background: ${props.theme.navSubBG};
+        // overflow-y: scroll;
+        
+
+        height: 100dvh;
+        transition:
+        height var(--nav-mobile-height-rate) cubic-bezier(.4,0,.6,1) 80ms,
+        visibility var(--nav-mobile-visibility-rate) cubic-bezier(.4,0,.6,1),
+        background var(--nav-mobile-background-color-rate) cubic-bezier(.4,0,.6,1) 80ms;
+        ` : `
+        background: ${props.theme.navBG};
+        // overflow-y: hidden;
+
+
+        visibility: hidden;
+        height: 0px;
+        transition:
+        height var(--nav-mobile-height-rate) cubic-bezier(.4,0,.6,1) 80ms,
+        visibility var(--nav-mobile-visibility-rate) cubic-bezier(.4,0,.6,1) 1.12s,
+        background var(--nav-mobile-background-color-rate) cubic-bezier(.4,0,.6,1) 80ms;
+      `}
+    }
+
+    & .NavTab-Menu-li {
+      width: 100%;
+      justify-content: flex-start;
+      padding: 3px 48px 4px;
+    }
+  }
+`;
+
 export const MainWrap = styled.div`
 
   @media only screen and (max-width: 833px) {
@@ -50,10 +204,6 @@ export const MainWrap = styled.div`
     } 
   }
 `;
-
-interface NavWrap {
-  isSubCateShow: boolean;
-}
 
 export const NavWrap = styled.div<NavWrap>`
   display: flex;
@@ -69,9 +219,18 @@ export const NavInner = styled.div`
   padding: 0 22px;
   margin: 0 auto;
 
+  &.NavTabMobileMenu {
+      display: none;
+  }
+
   @media only screen and (max-width: 833px) {
     & {
       padding: 0;
+    }
+
+    &.NavTabMobileMenu {
+      display: flex;
+      z-index: 3;
     }
   }
 `;
@@ -81,10 +240,6 @@ export const NavFlex = styled.ul`
   align-items: center;
   width: 100%;
   justify-content: space-between;
-
-  .NavTabMobileMenu {
-      display: none;
-  }
 
   @media only screen and (max-width: 833px) {
     & {
@@ -111,10 +266,7 @@ export const NavFlex = styled.ul`
       justify-content: flex-start;
     }
 
-    .NavTabMobileMenu {
-      display: flex;
-      z-index: 3;
-    }
+
   } 
 `;
 
@@ -137,15 +289,15 @@ export const NavLogo = styled.div<NavTab>`
   }
 
 `
-interface NavTabMenu {
-  isSubCateShow: boolean;
-}
 
-export const NavTabMenuHeight = styled.ul<NavTabMenu>`
-  --nav-height-rate: ${navRate};
-  --nav-visibility-rate: ${navVisibleRate};
-  --nav-background-color-rate: ${navColorRate};
-  --nav-background-color: ${navMobileBG};
+const NavTabMenuWrap = styled.div<NavTab>`
+  --nav-mobile-height-rate: ${navMobileRate};
+
+  position: absolute;
+  width: 100%;
+  top: 0;
+  
+  overflow: hidden;
 
   @media only screen and (min-width: 834px) {
     & {
@@ -155,50 +307,30 @@ export const NavTabMenuHeight = styled.ul<NavTabMenu>`
 
   @media only screen and (max-width: 833px) {
     & {
-      position: absolute;
-      top: 0;
-      width: 100%;
-      /* background-color: var(--nav-background-color); */
-      z-index: 3;
-      /* overflow-x: hidden; */
-
       ${props => props.isSubCateShow ? `
-        visibility: visible;
-        overflow-y: scroll;
-        background: ${props.theme.navSubBG};
+      overflow-y: scroll;
+      display: flex;
+      height: 100dvh;
 
-        height: 100dvh;
-        transition:
-        height var(--nav-height-rate) cubic-bezier(.4,0,.6,1),
-        visibility var(--nav-visibility-rate) cubic-bezier(.4,0,.6,1),
-        background var(--nav-background-color-rate) cubic-bezier(.4,0,.6,1) 80ms;
-        ` : `
-        overflow-y: hidden;
-        background: ${props.theme.navBG};
+      transition:
+        height var(--nav-mobile-height-rate) cubic-bezier(.4,0,.6,1) 80ms;
+      ` : `
+      height: 0px;
 
-
-        visibility: hidden;
-        height: 48px;
-        transition:
-        height var(--nav-height-rate) cubic-bezier(.4,0,.6,1) .12s,
-        visibility var(--nav-visibility-rate) cubic-bezier(.4,0,.6,1) 1.12s,
-        background var(--nav-background-color-rate) cubic-bezier(.4,0,.6,1) .12s;
+      transition:
+        height var(--nav-mobile-height-rate) cubic-bezier(.4,0,.6,1) 80ms;
       `}
-    }
-
-    & .NavTab-Menu-li {
-      width: 100%;
-      justify-content: flex-start;
-      padding: 3px 48px 4px;
     }
   }
 `
 
 export const NavTabMenu = styled.ul<NavTabMenu>`
   --nav-height-rate: ${navRate};
-  --nav-visibility-rate: ${navVisibleRate};
+  --nav-mobile-visibility-rate: ${navMobileVisibleRate};
   --nav-background-color-rate: ${navColorRate};
   --nav-background-color: ${navMobileBG};
+
+  overflow: hidden;
 
   @media only screen and (min-width: 834px) {
     & {
@@ -219,22 +351,17 @@ export const NavTabMenu = styled.ul<NavTabMenu>`
       z-index: 3;
       padding-top: 50px;
       padding-bottom: 84px;
-      /* overflow-x: hidden;
-      overflow-y: scroll; */
-
-
-      ${props => props.isSubCateShow ? `
-      // visibility: visible;
-      transition:
-      visibility var(--nav-visibility-rate) step-start;
-
       
+      ${props => props.isSubCateShow ? `
+      visibility: visible;
+      
+      transition:
+      visibility var(--nav-mobile-visibility-rate) step-start;
       ` : `
-      // visibility: hidden;
+      visibility: hidden;
 
       transition:
-      visibility var(--nav-visibility-rate) step-end 1.12s;
-
+      visibility var(--nav-mobile-visibility-rate) step-end;
       `}
 
     }
@@ -257,14 +384,6 @@ const NavTabMenuBtn = styled.div`
   }
 `
 
-interface NavTab {
-  name: string;
-  selectedCateName: string;
-  number?: number;
-  isSubCateShow?: boolean;
-  total?: number;
-}
-
 export const NavTab = styled.li<NavTab>`
   --nav-item-number: ${(props) => props.number};
   --nav-item-total: ${(props) => props.total};
@@ -280,10 +399,19 @@ export const NavTab = styled.li<NavTab>`
 
     & {
       height: 48px;
+       z-index: 1;
+
     }
 
     & > a {
       height: 48px;
+    }
+
+    &.NavTab-Menu-li {
+      transition-property: opacity, transform, visibility;
+      transition-timing-function: cubic-bezier(.4,0,.6,1),cubic-bezier(.4,0,.6,1), step-start;
+      /* transition-delay: calc(.2s + (var(--nav-item-number) * 20ms));
+      transition-duration: .24s; */
     }
 
     ${(props) =>
@@ -291,31 +419,31 @@ export const NavTab = styled.li<NavTab>`
       ? `
       &.NavTab-Menu-li {
         opacity: 1;
-        visibility: visible;
+        pointer-events: auto;
 
+        
         transform: translateY(0px);
         transition-duration: .24s;
         transition-delay: calc(.2s + (var(--nav-item-number) * 20ms));
       }
+      
       `
       : `
       &.NavTab-Menu-li {
         opacity: 0;
+        pointer-events: none;
 
         transform: translateY(-8px);
         transition-duration: min(.16s + (20ms * calc(var(--nav-item-total) - var(--nav-item-number))), .24s);
         transition-delay: 0s;
       }
+
     `};
 
-    &.NavTab-Menu-li {
-      transition-property: opacity,transform,visibility;
-      transition-timing-function: cubic-bezier(.4,0,.6,1),cubic-bezier(.4,0,.6,1),step-start;
-      /* transition-delay: calc(.2s + (var(--nav-item-number) * 20ms));
-      transition-duration: .24s; */
-    }
+
 
     &.NavTab-Menu-li > a > span {
+
       font-size: 25px;
       font-weight: 700;
     }
@@ -346,8 +474,6 @@ export const NavTab = styled.li<NavTab>`
   }
 `;
 
-interface NavTabLink {}
-
 export const NavTabLink = styled(Link)<NavTabLink>`
   position: relative;
   height: 100%;
@@ -359,16 +485,11 @@ export const NavTabLink = styled(Link)<NavTabLink>`
   }
 `;
 
-interface NavTabText {
-  name: string;
-  selectedCateName: string;
-  isSubCateShow: boolean;
-}
-
 export const NavTabText = styled.span<NavTabText>`
   color: ${(props) => props.theme.navMain};
   transition: color 0.32s cubic-bezier(0.4, 0, 0.6, 1);
   white-space: nowrap;
+
 
   &.cart {
     position: relative;
@@ -408,6 +529,9 @@ export const NavTabText = styled.span<NavTabText>`
 
   @media only screen and (max-width: 833px) {
 
+    & {
+    }
+
     .AppleLogo {
       padding: 0 16px;
     }
@@ -437,6 +561,52 @@ export const NavTabText = styled.span<NavTabText>`
     }
   }
 `;
+
+const arrowhoverout = keyframes`
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+`;
+
+
+const NavTabArrow = styled.span<NavTab>`
+  position: absolute;
+  display: none;
+  right: 0;
+
+  @media only screen and (max-width: 833px) {
+    & {
+      height: 47px;
+      margin-top: -1px;
+      margin-inline-end: -48px;
+      padding-inline-end: 19px;
+      opacity: 0;
+      color: ${(props) => props.theme.navSub};
+      transform-origin: center; 
+      animation: ${arrowhoverout} .24s cubic-bezier(.4,0,.6,1) both;
+
+      svg {
+        fill: currentColor;
+        transform: scaleX(-1) translateZ(0);
+      }
+
+      ${(props) =>
+    props.isSubCateShow
+      ? `
+      display: block;
+
+      `
+      : `
+
+    `};
+    }
+  }
+`
 
 const Badge = styled.span`
   display: inline-block;
@@ -474,55 +644,6 @@ const BadgeNumber = styled.span`
   user-select: none;
 `;
 
-interface NavHeight {
-  height: string;
-  isSubCateShow: boolean;
-  selectedCateName: string;
-}
-
-export const NavHeight = styled.div<NavHeight>`
-  --nav-height-rate: ${navRate};
-  --nav-visibility-rate: ${navVisibleRate};
-  --nav-background-color-rate: ${navColorRate};
-
-  width: 100%;
-  z-index: 2;
-
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-
-  overflow: hidden;
-
-  ${(props) =>
-    props.isSubCateShow
-      ? ` 
-    background: ${props.theme.navSubBG};
-    height: ${props.height};
-    transition:
-    height var(--nav-height-rate) cubic-bezier(.4,0,.6,1),
-    visibility var(--nav-visibility-rate) step-start,
-    background var(--nav-background-color-rate) cubic-bezier(.4,0,.6,1);
-    `
-      : `
-    background: ${props.theme.navBG};
-    height: 44px;
-    transition:
-    height var(--nav-height-rate) cubic-bezier(.4,0,.6,1) .12s,
-    visibility var(--nav-visibility-rate) step-end .12s,
-    background var(--nav-background-color-rate) cubic-bezier(.4,0,.6,1) .12s;
-
-  `};
-`;
-
-interface SubMenu {
-  name: string;
-  height: string;
-  selectedCateName: string;
-  isSubCateShow: boolean;
-}
-
 // 상단 메뉴바
 export const SubMenu = styled.div<SubMenu>`
   --nav-height-rate: ${navRate};
@@ -559,21 +680,12 @@ export const SubMenu = styled.div<SubMenu>`
     `};
 `;
 
-interface SubMenuHeight {
-  height: string;
-}
-
 // 상단 메뉴바 높이
 export const SubMenuHeight = styled.div<SubMenuHeight>`
   --height: ${(props) => props.height};
   height: calc(var(--height) - 44px);
   overflow-y: hidden;
 `;
-
-interface SubMenuInner {
-  name: string;
-  selectedCateName: string;
-}
 
 export const SubMenuInner = styled.div<SubMenuInner>`
   display: flex;
@@ -599,11 +711,6 @@ export const SubMenuInner = styled.div<SubMenuInner>`
       : `
   `};
 `;
-
-interface SubMenuList {
-  number: number;
-  grouptotal: number;
-}
 
 export const SubMenuList = styled.div<SubMenuList>`
   --nav-group-count: 1;
@@ -634,17 +741,10 @@ export const SubMenuList = styled.div<SubMenuList>`
   }
 `;
 
-interface SubMenuListItem {}
 
 export const SubMenuListItem = styled.ul<SubMenuListItem>`
   display: inline-block;
 `;
-
-interface SubMenuText {
-  isSubCateShow: boolean;
-  number: number;
-  total: number;
-}
 
 export const SubMenuText = styled.h2<SubMenuText>`
   --nav-item-number: ${(props) => props.number};
@@ -688,14 +788,6 @@ export const SubMenuText = styled.h2<SubMenuText>`
     color: #6e6e73;
   }
 `;
-
-interface SubMenuLi {
-  number: number;
-  total: number;
-  name: string;
-  selectedCateName: string;
-  isSubCateShow: boolean;
-}
 
 export const SubMenuLi = styled.li<SubMenuLi>`
   --nav-item-number: ${(props) => props.number};
@@ -756,8 +848,6 @@ export const SubMenuLi = styled.li<SubMenuLi>`
     padding-bottom: 0;
   }
 `;
-
-interface SubMenuName {}
 
 export const SubMenuName = styled.span<SubMenuName>`
   color: ${(props) => props.theme.navMain};
@@ -902,12 +992,33 @@ const NavCart = {
 };
 
 const NavMobileMenu = {
-  Wrap: styled.div`
-    /* background-color: red; */
+  Wrap: styled.div<NavTabMenu>`
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 3;
+    
+    @media only screen and (max-width: 833px) {
+      & {
+        display: block;
+
+        ${(props) =>
+          props.isSubCateShow
+          ? `
+          inset-inline-end: 10px;
+
+            ` : `
+
+        `};
+      } 
+    }
   `,
   Btn: styled.button`
     background-color: transparent;
     border: none;
+    width: 48px;
+    height: 48px;
 
     @media only screen and (max-width: 833px) {
     & {
@@ -917,39 +1028,6 @@ const NavMobileMenu = {
   }
   `
 }
-
-// export interface categoryListType {
-//   type: "column" | "task";
-//   name: string;
-//   taskIds?: any[];
-//   user: string;
-//   _id: string;
-//   parentID?: string;
-// }
-
-export interface GmIdType {
-  id: string;
-}
-
-// type Task = {
-//   type: string;
-//   _id: string;
-//   name: string;
-//   user: string;
-//   parentID: string;
-//   icon: string;
-//   navHide: boolean;
-//   chapterNavHide: boolean;
-// };
-
-// interface categoryList {
-//   type: string;
-//   name: string;
-//   taskIds: Task[];
-//   user: string;
-//   _id: string;
-//   navHide: boolean;
-// }
 
 const FooterWrap = styled.div`
   font-size: 12px;
@@ -1116,23 +1194,7 @@ function Shop() {
   const [gmId, setGmId] = useState<GmIdType>({ id: "thanks6" });
   const [cookies, setCookie, removeCookie] = useCookies(["userjwt"]);
 
-  // 로그인, 로그아웃
-  const account = {
-    // 로그인
-    login: () => {
-      navigate("./login");
-      setHeight("44px");
-      setIsSubCateShow(false);
-    },
 
-    // 로그아웃
-    logOut: () => {
-      navigate("/shop");
-      removeCookie("userjwt", {
-        path: "/",
-      });
-    },
-  };
 
   // 카테고리 클릭시 퀵메뉴
   const [selectedColumn, setSelectedColumn] = useState<ColumnType | null>(null);
@@ -1158,10 +1220,10 @@ function Shop() {
   const [isSubCateShow, setIsSubCateShow] = useState<boolean>(false);
   const [selectedCateName, setSelectedCateName] = useState<string>("");
   const [height, setHeight] = useState<string>("44px");
+  console.log(isSubCateShow);
 
   // 모바일
   const [isMobile, setIsMobile] = useState<boolean>(false);
-  console.log(isMobile);
 
   // 모바일 하단 메뉴 켜기/닫기
   const toggleMenu = () => {
@@ -1171,18 +1233,23 @@ function Shop() {
   useEffect(() => {
     if (isMobile && isSubCateShow) {
       document.documentElement.style.overflow = "hidden";
+      document.documentElement.style.paddingRight = "10px";
     } else {
+      document.documentElement.style.paddingRight = "0px";
       document.documentElement.style.overflow = "auto";
     }
-
+    
     return () => {
+      document.documentElement.style.paddingRight = "0px";
       document.documentElement.style.overflow = "auto";
     };
   }, [isMobile && isSubCateShow]);
 
+  // 833px 이하 모바일 전환
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 833);
+      setIsSubCateShow(false);
     };
 
     // 컴포넌트가 마운트될 때 한 번 호출
@@ -1225,7 +1292,7 @@ function Shop() {
     userData();
   }, [gmId]);
 
-  // 임시로 nav 높이 설정. Ref로 높이계산은 실패. length에 곱한 높이를 계산해야겠음.
+  // 임시로 nav 높이 설정. Ref로 높이계산은 실패. length에 곱한 높이를 계산 해야겠음.
   useEffect(() => {
     if (selectedCateName == "Mac") {
       setHeight("552px");
@@ -1290,6 +1357,24 @@ function Shop() {
     };
   }, []);
 
+  // 로그인, 로그아웃
+  const account = {
+    // 로그인
+    login: () => {
+      navigate("./login");
+      setHeight("44px");
+      setIsSubCateShow(false);
+    },
+
+    // 로그아웃
+    logOut: () => {
+      navigate("/shop");
+      removeCookie("userjwt", {
+        path: "/",
+      });
+    },
+  };
+
   const updateCategoryList = (newCategoryList: any) => {
     setCategoryList(newCategoryList);
     sessionStorage.setItem("categoryList", JSON.stringify(newCategoryList));
@@ -1309,6 +1394,7 @@ function Shop() {
   // NavTab에 마우스 진입
   const timerMouseEnter = (e: any, name: string) => {
     e.stopPropagation();
+    console.log('timerMouseEnter');
 
     if((name === "search" && isSubCateShow === true) || (name === "cart" && isSubCateShow === true)){
       setIsSubCateShow(false);
@@ -1374,7 +1460,6 @@ function Shop() {
       ],
     },
   }
- 
 
   return (
     <>
@@ -1385,7 +1470,7 @@ function Shop() {
             <NavInner className="NavInner">
               <NavFlex className="NavFlex">
                 {/* 로고 */}
-                <NavTab className="NavTab NavTab-Logo" name={"apple"} selectedCateName={selectedCateName}>
+                <NavTab className="NavTab NavTab-Logo" name={"apple"} selectedCateName={selectedCateName} isMobile={isMobile}>
                   <a href="/smartstore/shop">
                     <NavTabText className="NavTabText" isSubCateShow={isSubCateShow} key={0} name={"test"} selectedCateName={selectedCateName}>
                       <span className="AppleLogo AppleLogo-medium">
@@ -1402,11 +1487,11 @@ function Shop() {
                   </a>
                 </NavTab>
                 {/* 모바일 메뉴 구현을 위해 따로 모음 */}
-                <NavTabMenuHeight className="NavTab-Menu-height" isSubCateShow={isSubCateShow}>
+                <NavTabMenuWrap isSubCateShow={isSubCateShow}>
                   <NavTabMenu className="NavTab-Menu" isSubCateShow={isSubCateShow}>
                     {categoryList.map((list: any, index: any) => {
                       if (list.navHide) return null;
-                      if (list.taskIds.length > 0) { 
+                      if (list.taskIds.length > 0) {
                         return (
                           <>
                             <NavTab
@@ -1430,6 +1515,11 @@ function Shop() {
                                 >
                                   {list.name}
                                 </NavTabText>
+                                  <NavTabArrow className="NavTabArrow" isSubCateShow={isSubCateShow}>
+                                    <svg height="48" viewBox="0 0 9 48" width="9" xmlns="http://www.w3.org/2000/svg">
+                                      <path d="m8.1155 30.358a.6.6 0 1 1 -.831.8653l-7-6.7242a.6.6 0 0 1 -.0045-.8613l7-6.8569a.6.6 0 1 1 .84.8574l-6.5582 6.4238z"></path>
+                                    </svg>
+                                  </NavTabArrow>
                               </NavTabLink>
                               <SubMenu
                                 className="SubMenu"
@@ -1583,7 +1673,8 @@ function Shop() {
                       }
                     })}
                   </NavTabMenu>
-                </NavTabMenuHeight>
+                </NavTabMenuWrap>
+
                 {/* 검색 */}
                 <NavTab
                   className="NavTab NavTab-Right"
@@ -1947,46 +2038,39 @@ function Shop() {
                   </SubMenu>
                 </NavTab>
               </NavFlex>
-                {/* 모바일 메뉴 버튼 */}
-                <NavTab
-                  className="NavTab NavTabMobileMenu NavTab-Right"
-                  onClick={toggleMenu}
-                  name={"mobileNav"}
-                  selectedCateName={selectedCateName}
-                >
-                  <NavMobileMenu.Wrap className="NavMobileMenu-Wrap">
-                    <NavMobileMenu.Btn className="NavMobileMenu-Btn">
-                      <motion.svg width="18" height="18" viewBox="0 0 18 18" >
-                        <motion.polyline
-                          variants={animation}
-                          initial="close1"
-                          animate={isSubCateShow ? "open1" : "close1"}
-                          transition={{ duration: 0.24 }}
-                          id="globalnav-menutrigger-bread-bottom"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="1.2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="globalnav-menutrigger-bread globalnav-menutrigger-bread-bottom"
-                        />
-                        <motion.polyline
-                          variants={animation}
-                          initial="close2"
-                          animate={isSubCateShow ? "open2" : "close2"}
-                          transition={{ duration: 0.24 }}
-                          id="globalnav-menutrigger-bread-top"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="1.2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="globalnav-menutrigger-bread globalnav-menutrigger-bread-top"
-                        />
-                      </motion.svg>
-                    </NavMobileMenu.Btn>
-                  </NavMobileMenu.Wrap>
-                </NavTab>
+              {/* 모바일 메뉴 버튼 */}
+              <NavMobileMenu.Wrap className="NavMobileMenu-Wrap NavTabMobileMenu" onClick={toggleMenu} isSubCateShow={isSubCateShow}>
+                <NavMobileMenu.Btn className="NavMobileMenu-Btn">
+                  <motion.svg width="18" height="18" viewBox="0 0 18 18">
+                    <motion.polyline
+                      variants={animation}
+                      initial="close1"
+                      animate={isSubCateShow ? "open1" : "close1"}
+                      transition={{ duration: 0.24 }}
+                      id="globalnav-menutrigger-bread-bottom"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="globalnav-menutrigger-bread globalnav-menutrigger-bread-bottom"
+                    />
+                    <motion.polyline
+                      variants={animation}
+                      initial="close2"
+                      animate={isSubCateShow ? "open2" : "close2"}
+                      transition={{ duration: 0.24 }}
+                      id="globalnav-menutrigger-bread-top"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="globalnav-menutrigger-bread globalnav-menutrigger-bread-top"
+                    />
+                  </motion.svg>
+                </NavMobileMenu.Btn>
+              </NavMobileMenu.Wrap>
             </NavInner>
           </NavWrap>
           <Routes>

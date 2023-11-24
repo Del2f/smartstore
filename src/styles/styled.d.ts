@@ -50,5 +50,8 @@ declare module 'styled-components' {
       navRate: string;
       navVisibleRate: string;
       navColorRate: string;
+      navMobileRate: string;
+      navMobileVisibleRate: string;
+      navMobileColorRate: string;
   }
 }

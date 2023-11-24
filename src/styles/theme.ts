@@ -4,6 +4,10 @@ const navRate = "240ms";
 const navVisibleRate = "240ms";
 const navColorRate = "240ms";
 
+const navMobileRate = "400ms";
+const navMobileVisibleRate = "263.5ms";
+const navMobileColorRate = "430ms";
+
 const color = {
   correct: "#5babab",
   present: "#fdb800",
@@ -13,7 +17,7 @@ const color = {
 export const lightTheme : DefaultTheme = {
   navMain: "rgba(0,0,0,.8)",
   navMainHover: "#000000",
-  navBG: "rgba(251, 251, 253, .8)",
+  navBG: "rgba(251, 251, 253, 0)",
   navMobileBG: "#fafafc",
   navSubBG: "#fbfbfd",
   navSubHeader: "rgb(110,110,115)",
@@ -51,6 +55,9 @@ export const lightTheme : DefaultTheme = {
   navRate: navRate,
   navVisibleRate: navVisibleRate,
   navColorRate: navColorRate,
+  navMobileRate: navMobileRate,
+  navMobileVisibleRate: navMobileVisibleRate,
+  navMobileColorRate: navMobileColorRate,
 
 };
 
@@ -95,6 +102,9 @@ export const darkTheme : DefaultTheme = {
   navRate: navRate,
   navVisibleRate: navVisibleRate,
   navColorRate: navColorRate,
+  navMobileRate: navMobileRate,
+  navMobileVisibleRate: navMobileVisibleRate,
+  navMobileColorRate: navMobileColorRate,
 };
 
 export const theme = {
