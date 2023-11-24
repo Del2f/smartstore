@@ -28,6 +28,9 @@ let currentPath = "";
 
 const navRate = props => props.theme.navRate;
 const navVisibleRate = props => props.theme.navVisibleRate;
+const navColorRate = props => props.theme.navColorRate;
+
+const navMobileBG = props => props.theme.navMobileBG;
 
 interface SubList {}
 interface ContainerUlBtn {
@@ -43,8 +46,8 @@ export const MainWrap = styled.div`
     & {
       min-height: 0px;
       max-height: none;
+      overflow: hidden;
     } 
-
   }
 `;
 
@@ -86,6 +89,7 @@ export const NavFlex = styled.ul`
   @media only screen and (max-width: 833px) {
     & {
       height: 48px;
+      padding-right: 48px;
       /* display: flex;
       flex: 1;
       position: relative;
@@ -109,13 +113,13 @@ export const NavFlex = styled.ul`
 
     .NavTabMobileMenu {
       display: flex;
+      z-index: 3;
     }
   } 
 `;
 
 export const NavLogo = styled.div<NavTab>`
   display: none;
-  z-index: 3;
 
   @media only screen and (max-width: 833px) {
     & {
@@ -137,8 +141,11 @@ interface NavTabMenu {
   isSubCateShow: boolean;
 }
 
-export const NavTabMenu = styled.div<NavTabMenu>`
---nav-height-rate: ${navRate};
+export const NavTabMenuHeight = styled.ul<NavTabMenu>`
+  --nav-height-rate: ${navRate};
+  --nav-visibility-rate: ${navVisibleRate};
+  --nav-background-color-rate: ${navColorRate};
+  --nav-background-color: ${navMobileBG};
 
   @media only screen and (min-width: 834px) {
     & {
@@ -149,20 +156,95 @@ export const NavTabMenu = styled.div<NavTabMenu>`
   @media only screen and (max-width: 833px) {
     & {
       position: absolute;
+      top: 0;
       width: 100%;
-      transition: background var(--nav-height-rate) cubic-bezier(.4,0,.6,1) 80ms;
+      /* background-color: var(--nav-background-color); */
+      z-index: 3;
+      /* overflow-x: hidden; */
 
       ${props => props.isSubCateShow ? `
-      visibility: visible;
-      
-      ` : `
-      visibility: hidden;
-      
-      `}
+        visibility: visible;
+        overflow-y: scroll;
+        background: ${props.theme.navSubBG};
 
+        height: 100dvh;
+        transition:
+        height var(--nav-height-rate) cubic-bezier(.4,0,.6,1),
+        visibility var(--nav-visibility-rate) cubic-bezier(.4,0,.6,1),
+        background var(--nav-background-color-rate) cubic-bezier(.4,0,.6,1) 80ms;
+        ` : `
+        overflow-y: hidden;
+        background: ${props.theme.navBG};
+
+
+        visibility: hidden;
+        height: 48px;
+        transition:
+        height var(--nav-height-rate) cubic-bezier(.4,0,.6,1) .12s,
+        visibility var(--nav-visibility-rate) cubic-bezier(.4,0,.6,1) 1.12s,
+        background var(--nav-background-color-rate) cubic-bezier(.4,0,.6,1) .12s;
+      `}
+    }
+
+    & .NavTab-Menu-li {
+      width: 100%;
+      justify-content: flex-start;
+      padding: 3px 48px 4px;
+    }
+  }
+`
+
+export const NavTabMenu = styled.ul<NavTabMenu>`
+  --nav-height-rate: ${navRate};
+  --nav-visibility-rate: ${navVisibleRate};
+  --nav-background-color-rate: ${navColorRate};
+  --nav-background-color: ${navMobileBG};
+
+  @media only screen and (min-width: 834px) {
+    & {
+      display: contents;
     }
   }
 
+  @media only screen and (max-width: 833px) {
+    & {
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-start;
+      flex-direction: column;
+      position: absolute;
+      top: 0;
+      width: 100%;
+      background-color: transparent;
+      z-index: 3;
+      padding-top: 50px;
+      padding-bottom: 84px;
+      /* overflow-x: hidden;
+      overflow-y: scroll; */
+
+
+      ${props => props.isSubCateShow ? `
+      // visibility: visible;
+      transition:
+      visibility var(--nav-visibility-rate) step-start;
+
+      
+      ` : `
+      // visibility: hidden;
+
+      transition:
+      visibility var(--nav-visibility-rate) step-end 1.12s;
+
+      `}
+
+    }
+
+    & .NavTab-Menu-li {
+      width: 100%;
+      justify-content: flex-start;
+      padding: 3px 48px 4px;
+    }
+  }
 `
 
 const NavTabMenuBtn = styled.div`
@@ -173,20 +255,26 @@ const NavTabMenuBtn = styled.div`
       display: block;
     }
   }
-
 `
 
 interface NavTab {
   name: string;
   selectedCateName: string;
+  number?: number;
+  isSubCateShow?: boolean;
+  total?: number;
 }
 
-export const NavTab = styled.div<NavTab>`
+export const NavTab = styled.li<NavTab>`
+  --nav-item-number: ${(props) => props.number};
+  --nav-item-total: ${(props) => props.total};
+
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   height: 44px;
+  z-index: 2;
   
   @media only screen and (max-width: 833px) {
 
@@ -198,21 +286,54 @@ export const NavTab = styled.div<NavTab>`
       height: 48px;
     }
 
-    &:not(.NavTab-Menu){
+    ${(props) =>
+    props.isSubCateShow
+      ? `
+      &.NavTab-Menu-li {
+        opacity: 1;
+        visibility: visible;
+
+        transform: translateY(0px);
+        transition-duration: .24s;
+        transition-delay: calc(.2s + (var(--nav-item-number) * 20ms));
+      }
+      `
+      : `
+      &.NavTab-Menu-li {
+        opacity: 0;
+
+        transform: translateY(-8px);
+        transition-duration: min(.16s + (20ms * calc(var(--nav-item-total) - var(--nav-item-number))), .24s);
+        transition-delay: 0s;
+      }
+    `};
+
+    &.NavTab-Menu-li {
+      transition-property: opacity,transform,visibility;
+      transition-timing-function: cubic-bezier(.4,0,.6,1),cubic-bezier(.4,0,.6,1),step-start;
+      /* transition-delay: calc(.2s + (var(--nav-item-number) * 20ms));
+      transition-duration: .24s; */
+    }
+
+    &.NavTab-Menu-li > a > span {
+      font-size: 25px;
+      font-weight: 700;
+    }
+
+    &.NavTab-Right{
       width: 48px;
     }
 
-
   } 
-
+/* 
   ${(props) =>
     props.selectedCateName === props.name
       ? `
-    z-index: 4;
+      z-index: 1;
     `
       : `
-    z-index: 5;
-  `};
+    z-index: 2;
+  `}; */
 
   // 애플, 검색, 장바구니 아이콘
   svg {
@@ -247,7 +368,6 @@ interface NavTabText {
 export const NavTabText = styled.span<NavTabText>`
   color: ${(props) => props.theme.navMain};
   transition: color 0.32s cubic-bezier(0.4, 0, 0.6, 1);
-  z-index: 6;
   white-space: nowrap;
 
   &.cart {
@@ -289,7 +409,6 @@ export const NavTabText = styled.span<NavTabText>`
   @media only screen and (max-width: 833px) {
 
     .AppleLogo {
-
       padding: 0 16px;
     }
     
@@ -364,7 +483,7 @@ interface NavHeight {
 export const NavHeight = styled.div<NavHeight>`
   --nav-height-rate: ${navRate};
   --nav-visibility-rate: ${navVisibleRate};
-  --nav-background-color-rate: ${(props) => props.theme.navColorRate};
+  --nav-background-color-rate: ${navColorRate};
 
   width: 100%;
   z-index: 2;
@@ -1040,10 +1159,43 @@ function Shop() {
   const [selectedCateName, setSelectedCateName] = useState<string>("");
   const [height, setHeight] = useState<string>("44px");
 
+  // 모바일
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+  console.log(isMobile);
+
   // 모바일 하단 메뉴 켜기/닫기
   const toggleMenu = () => {
     setIsSubCateShow(!isSubCateShow);
   };
+
+  useEffect(() => {
+    if (isMobile && isSubCateShow) {
+      document.documentElement.style.overflow = "hidden";
+    } else {
+      document.documentElement.style.overflow = "auto";
+    }
+
+    return () => {
+      document.documentElement.style.overflow = "auto";
+    };
+  }, [isMobile && isSubCateShow]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 833);
+    };
+
+    // 컴포넌트가 마운트될 때 한 번 호출
+    handleResize();
+
+    // 창 크기 변경 이벤트 리스너 등록
+    window.addEventListener('resize', handleResize);
+
+    // 컴포넌트가 언마운트될 때 리스너 해제
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     if (currentPath === location.pathname) window.location.reload();
@@ -1191,6 +1343,7 @@ function Shop() {
     }, 50);
   };
 
+  // 모바일 메뉴 애니메이션
   const animation = {
     open1: {
       points: [
@@ -1233,7 +1386,7 @@ function Shop() {
               <NavFlex className="NavFlex">
                 {/* 로고 */}
                 <NavTab className="NavTab NavTab-Logo" name={"apple"} selectedCateName={selectedCateName}>
-                  <a href="./">
+                  <a href="/smartstore/shop">
                     <NavTabText className="NavTabText" isSubCateShow={isSubCateShow} key={0} name={"test"} selectedCateName={selectedCateName}>
                       <span className="AppleLogo AppleLogo-medium">
                         <svg height="44" viewBox="0 0 14 44" xmlns="http://www.w3.org/2000/svg">
@@ -1249,185 +1402,191 @@ function Shop() {
                   </a>
                 </NavTab>
                 {/* 모바일 메뉴 구현을 위해 따로 모음 */}
-                <NavTabMenu className="NavTab-Menu" isSubCateShow={isSubCateShow}>
-                  {categoryList.map((list: any, index: any) => {
-                    if (list.navHide) return null;
-                    if (list.taskIds.length > 0) {
-                      return (
-                        <>
-                          <NavTab
-                            className="NavTab NavTab-Menu"
-                            onMouseEnter={(e: any) => timerMouseEnter(e, list.name)}
-                            onMouseLeave={timerMouseLeave}
-                            name={list.name}
-                            selectedCateName={selectedCateName}
-                          >
-                            <NavTabLink to={`./${list.url}`} className="Link">
-                              <NavTabText
-                                className="NavTabText"
+                <NavTabMenuHeight className="NavTab-Menu-height" isSubCateShow={isSubCateShow}>
+                  <NavTabMenu className="NavTab-Menu" isSubCateShow={isSubCateShow}>
+                    {categoryList.map((list: any, index: any) => {
+                      if (list.navHide) return null;
+                      if (list.taskIds.length > 0) { 
+                        return (
+                          <>
+                            <NavTab
+                              className="NavTab NavTab-Menu-li"
+                              onMouseEnter={isMobile ? undefined : (e) => timerMouseEnter(e, list.name)}
+                              onMouseLeave={isMobile ? undefined : timerMouseLeave}
+                              onClick={isMobile ? (e) => timerMouseEnter(e, list.name) : undefined}
+                              name={list.name}
+                              number={index + 1}
+                              total={categoryList.length}
+                              selectedCateName={selectedCateName}
+                              isSubCateShow={isSubCateShow}
+                            >
+                              <NavTabLink to={`./${list.url}`} className="Link">
+                                <NavTabText
+                                  className="NavTabText"
+                                  isSubCateShow={isSubCateShow}
+                                  key={index}
+                                  name={list.name}
+                                  selectedCateName={selectedCateName}
+                                >
+                                  {list.name}
+                                </NavTabText>
+                              </NavTabLink>
+                              <SubMenu
+                                className="SubMenu"
                                 isSubCateShow={isSubCateShow}
-                                key={index}
                                 name={list.name}
                                 selectedCateName={selectedCateName}
+                                height={height}
                               >
+                                <SubMenuHeight className="SubMenuHeight" height={height}>
+                                  <SubMenuInner className="SubMenuInner" name={list.name} selectedCateName={selectedCateName}>
+                                    <SubMenuList className="SubMenuList main" number={0} grouptotal={3}>
+                                      <SubMenuText className="main" isSubCateShow={isSubCateShow} number={1} total={list.taskIds.length + 1}>
+                                        {list.name}&nbsp;살펴보기
+                                      </SubMenuText>
+                                      <SubMenuListItem>
+                                        {list.taskIds.map((list2: any, index2: any) => {
+                                          if (list2.navHide) return null;
+                                          return (
+                                            <>
+                                              <SubMenuLi
+                                                name={list.name}
+                                                selectedCateName={selectedCateName}
+                                                className="SubMenuLi"
+                                                number={index2 + 2}
+                                                isSubCateShow={isSubCateShow}
+                                                total={list.taskIds.length + 1}
+                                              >
+                                                <SubMenuName className="SubMenuName main">{list2.name}</SubMenuName>
+                                              </SubMenuLi>
+                                            </>
+                                          );
+                                        })}
+                                      </SubMenuListItem>
+                                    </SubMenuList>
+                                    <SubMenuList className="SubMenuList main" number={1} grouptotal={3}>
+                                      <SubMenuText className="main" isSubCateShow={isSubCateShow} number={1} total={list.taskIds.length + 1}>
+                                        {list.name}&nbsp;쇼핑하기
+                                      </SubMenuText>
+                                      <SubMenuListItem>
+                                        <SubMenuLi
+                                          name={list.name}
+                                          selectedCateName={selectedCateName}
+                                          className="SubMenuLi sub"
+                                          number={2}
+                                          isSubCateShow={isSubCateShow}
+                                          total={list.taskIds.length + 1}
+                                        >
+                                          <SubMenuName>테스트1</SubMenuName>
+                                        </SubMenuLi>
+                                        <SubMenuLi
+                                          name={list.name}
+                                          selectedCateName={selectedCateName}
+                                          className="SubMenuLi sub"
+                                          number={3}
+                                          isSubCateShow={isSubCateShow}
+                                          total={list.taskIds.length + 1}
+                                        >
+                                          <SubMenuName>테스트2</SubMenuName>
+                                        </SubMenuLi>
+                                        <SubMenuLi
+                                          name={list.name}
+                                          selectedCateName={selectedCateName}
+                                          className="SubMenuLi sub"
+                                          number={4}
+                                          isSubCateShow={isSubCateShow}
+                                          total={list.taskIds.length + 1}
+                                        >
+                                          <SubMenuName>테스트3</SubMenuName>
+                                        </SubMenuLi>
+                                        <SubMenuLi
+                                          name={list.name}
+                                          selectedCateName={selectedCateName}
+                                          className="SubMenuLi sub"
+                                          number={5}
+                                          isSubCateShow={isSubCateShow}
+                                          total={list.taskIds.length + 1}
+                                        >
+                                          <SubMenuName>테스트4</SubMenuName>
+                                        </SubMenuLi>
+                                      </SubMenuListItem>
+                                    </SubMenuList>
+                                    <SubMenuList className="SubMenuList main" number={2} grouptotal={3}>
+                                      <SubMenuText className="main" isSubCateShow={isSubCateShow} number={1} total={list.taskIds.length + 1}>
+                                        그 외 {list.name}&nbsp;관련 항목
+                                      </SubMenuText>
+                                      <SubMenuListItem>
+                                        <SubMenuLi
+                                          name={list.name}
+                                          selectedCateName={selectedCateName}
+                                          className="SubMenuLi sub"
+                                          number={2}
+                                          isSubCateShow={isSubCateShow}
+                                          total={list.taskIds.length + 1}
+                                        >
+                                          <SubMenuName>테스트1</SubMenuName>
+                                        </SubMenuLi>
+                                        <SubMenuLi
+                                          name={list.name}
+                                          selectedCateName={selectedCateName}
+                                          className="SubMenuLi sub"
+                                          number={3}
+                                          isSubCateShow={isSubCateShow}
+                                          total={list.taskIds.length + 1}
+                                        >
+                                          <SubMenuName>테스트2</SubMenuName>
+                                        </SubMenuLi>
+                                        <SubMenuLi
+                                          name={list.name}
+                                          selectedCateName={selectedCateName}
+                                          className="SubMenuLi sub"
+                                          number={4}
+                                          isSubCateShow={isSubCateShow}
+                                          total={list.taskIds.length + 1}
+                                        >
+                                          <SubMenuName>테스트3</SubMenuName>
+                                        </SubMenuLi>
+                                        <SubMenuLi
+                                          name={list.name}
+                                          selectedCateName={selectedCateName}
+                                          className="SubMenuLi sub"
+                                          number={5}
+                                          isSubCateShow={isSubCateShow}
+                                          total={list.taskIds.length + 1}
+                                        >
+                                          <SubMenuName>테스트4</SubMenuName>
+                                        </SubMenuLi>
+                                      </SubMenuListItem>
+                                    </SubMenuList>
+                                  </SubMenuInner>
+                                </SubMenuHeight>
+                              </SubMenu>
+                            </NavTab>
+                          </>
+                        );
+                      } else {
+                        return (
+                          <NavTab
+                            className="NavTab NavTab-Menu-li"
+                            name={list.name}
+                            onMouseEnter={(e: any) => timerMouseEnter(e, list.name)}
+                            onMouseLeave={timerMouseLeave}
+                            selectedCateName={selectedCateName}
+                          >
+                            <NavTabLink to={`./${list.url}`}>
+                              <NavTabText className="NavTabText" isSubCateShow={isSubCateShow} name={list.name} selectedCateName={selectedCateName}>
                                 {list.name}
                               </NavTabText>
                             </NavTabLink>
-                            <SubMenu
-                              className="SubMenu"
-                              isSubCateShow={isSubCateShow}
-                              name={list.name}
-                              selectedCateName={selectedCateName}
-                              height={height}
-                            >
-                              <SubMenuHeight className="SubMenuHeight" height={height}>
-                                <SubMenuInner className="SubMenuInner" name={list.name} selectedCateName={selectedCateName}>
-                                  <SubMenuList className="SubMenuList main" number={0} grouptotal={3}>
-                                    <SubMenuText className="main" isSubCateShow={isSubCateShow} number={1} total={list.taskIds.length + 1}>
-                                      {list.name}&nbsp;살펴보기
-                                    </SubMenuText>
-                                    <SubMenuListItem>
-                                      {list.taskIds.map((list2: any, index2: any) => {
-                                        if (list2.navHide) return null;
-                                        return (
-                                          <>
-                                            <SubMenuLi
-                                              name={list.name}
-                                              selectedCateName={selectedCateName}
-                                              className="SubMenuLi"
-                                              number={index2 + 2}
-                                              isSubCateShow={isSubCateShow}
-                                              total={list.taskIds.length + 1}
-                                            >
-                                              <SubMenuName className="SubMenuName main">{list2.name}</SubMenuName>
-                                            </SubMenuLi>
-                                          </>
-                                        );
-                                      })}
-                                    </SubMenuListItem>
-                                  </SubMenuList>
-                                  <SubMenuList className="SubMenuList main" number={1} grouptotal={3}>
-                                    <SubMenuText className="main" isSubCateShow={isSubCateShow} number={1} total={list.taskIds.length + 1}>
-                                      {list.name}&nbsp;쇼핑하기
-                                    </SubMenuText>
-                                    <SubMenuListItem>
-                                      <SubMenuLi
-                                        name={list.name}
-                                        selectedCateName={selectedCateName}
-                                        className="SubMenuLi sub"
-                                        number={2}
-                                        isSubCateShow={isSubCateShow}
-                                        total={list.taskIds.length + 1}
-                                      >
-                                        <SubMenuName>테스트1</SubMenuName>
-                                      </SubMenuLi>
-                                      <SubMenuLi
-                                        name={list.name}
-                                        selectedCateName={selectedCateName}
-                                        className="SubMenuLi sub"
-                                        number={3}
-                                        isSubCateShow={isSubCateShow}
-                                        total={list.taskIds.length + 1}
-                                      >
-                                        <SubMenuName>테스트2</SubMenuName>
-                                      </SubMenuLi>
-                                      <SubMenuLi
-                                        name={list.name}
-                                        selectedCateName={selectedCateName}
-                                        className="SubMenuLi sub"
-                                        number={4}
-                                        isSubCateShow={isSubCateShow}
-                                        total={list.taskIds.length + 1}
-                                      >
-                                        <SubMenuName>테스트3</SubMenuName>
-                                      </SubMenuLi>
-                                      <SubMenuLi
-                                        name={list.name}
-                                        selectedCateName={selectedCateName}
-                                        className="SubMenuLi sub"
-                                        number={5}
-                                        isSubCateShow={isSubCateShow}
-                                        total={list.taskIds.length + 1}
-                                      >
-                                        <SubMenuName>테스트4</SubMenuName>
-                                      </SubMenuLi>
-                                    </SubMenuListItem>
-                                  </SubMenuList>
-                                  <SubMenuList className="SubMenuList main" number={2} grouptotal={3}>
-                                    <SubMenuText className="main" isSubCateShow={isSubCateShow} number={1} total={list.taskIds.length + 1}>
-                                      그 외 {list.name}&nbsp;관련 항목
-                                    </SubMenuText>
-                                    <SubMenuListItem>
-                                      <SubMenuLi
-                                        name={list.name}
-                                        selectedCateName={selectedCateName}
-                                        className="SubMenuLi sub"
-                                        number={2}
-                                        isSubCateShow={isSubCateShow}
-                                        total={list.taskIds.length + 1}
-                                      >
-                                        <SubMenuName>테스트1</SubMenuName>
-                                      </SubMenuLi>
-                                      <SubMenuLi
-                                        name={list.name}
-                                        selectedCateName={selectedCateName}
-                                        className="SubMenuLi sub"
-                                        number={3}
-                                        isSubCateShow={isSubCateShow}
-                                        total={list.taskIds.length + 1}
-                                      >
-                                        <SubMenuName>테스트2</SubMenuName>
-                                      </SubMenuLi>
-                                      <SubMenuLi
-                                        name={list.name}
-                                        selectedCateName={selectedCateName}
-                                        className="SubMenuLi sub"
-                                        number={4}
-                                        isSubCateShow={isSubCateShow}
-                                        total={list.taskIds.length + 1}
-                                      >
-                                        <SubMenuName>테스트3</SubMenuName>
-                                      </SubMenuLi>
-                                      <SubMenuLi
-                                        name={list.name}
-                                        selectedCateName={selectedCateName}
-                                        className="SubMenuLi sub"
-                                        number={5}
-                                        isSubCateShow={isSubCateShow}
-                                        total={list.taskIds.length + 1}
-                                      >
-                                        <SubMenuName>테스트4</SubMenuName>
-                                      </SubMenuLi>
-                                    </SubMenuListItem>
-                                  </SubMenuList>
-                                </SubMenuInner>
-                              </SubMenuHeight>
-                            </SubMenu>
                           </NavTab>
-                        </>
-                      );
-                    } else {
-                      return (
-                        <NavTab
-                          className="NavTab NavTab-Menu"
-                          name={list.name}
-                          onMouseEnter={(e: any) => timerMouseEnter(e, list.name)}
-                          onMouseLeave={timerMouseLeave}
-                          selectedCateName={selectedCateName}
-                        >
-                          <NavTabLink to={`./${list.url}`}>
-                            <NavTabText className="NavTabText" isSubCateShow={isSubCateShow} name={list.name} selectedCateName={selectedCateName}>
-                              {list.name}
-                            </NavTabText>
-                          </NavTabLink>
-                        </NavTab>
-                      );
-                    }
-                  })}
-                </NavTabMenu>
+                        );
+                      }
+                    })}
+                  </NavTabMenu>
+                </NavTabMenuHeight>
                 {/* 검색 */}
                 <NavTab
-                  className="NavTab"
+                  className="NavTab NavTab-Right"
                   name={"search"}
                   selectedCateName={selectedCateName}
                   onMouseEnter={(e: any) => subMenuClose(e, "search")}
@@ -1473,7 +1632,7 @@ function Shop() {
                 </NavTab>
                 {/* 장바구니 */}
                 <NavTab
-                  className="NavTab"
+                  className="NavTab NavTab-Right"
                   name={"cart"}
                   selectedCateName={selectedCateName}
                   onMouseEnter={(e: any) => subMenuClose(e, "cart")}
@@ -1787,9 +1946,10 @@ function Shop() {
                     </SubMenuHeight>
                   </SubMenu>
                 </NavTab>
+              </NavFlex>
                 {/* 모바일 메뉴 버튼 */}
                 <NavTab
-                  className="NavTab NavTabMobileMenu"
+                  className="NavTab NavTabMobileMenu NavTab-Right"
                   onClick={toggleMenu}
                   name={"mobileNav"}
                   selectedCateName={selectedCateName}
@@ -1827,7 +1987,6 @@ function Shop() {
                     </NavMobileMenu.Btn>
                   </NavMobileMenu.Wrap>
                 </NavTab>
-              </NavFlex>
             </NavInner>
           </NavWrap>
           <Routes>
