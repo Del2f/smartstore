@@ -296,6 +296,7 @@ const NavTabMenuWrap = styled.div<NavTab>`
   position: absolute;
   width: 100%;
   top: 0;
+  z-index: 3;
   
   overflow: hidden;
 
@@ -308,14 +309,16 @@ const NavTabMenuWrap = styled.div<NavTab>`
   @media only screen and (max-width: 833px) {
     & {
       ${props => props.isSubCateShow ? `
-      overflow-y: scroll;
       display: flex;
-      height: 100dvh;
+      height: 100%;
+      overflow-y: scroll;
 
       transition:
         height var(--nav-mobile-height-rate) cubic-bezier(.4,0,.6,1) 80ms;
       ` : `
       height: 0px;
+      overflow-y: hidden;
+
 
       transition:
         height var(--nav-mobile-height-rate) cubic-bezier(.4,0,.6,1) 80ms;
@@ -330,7 +333,14 @@ export const NavTabMenu = styled.ul<NavTabMenu>`
   --nav-background-color-rate: ${navColorRate};
   --nav-background-color: ${navMobileBG};
 
-  overflow: hidden;
+  svg {
+    fill: ${(props) => props.theme.navMain};
+    transition: fill 0.32s cubic-bezier(0.4, 0, 0.6, 1);
+  }
+
+  svg:hover {
+    fill: ${(props) => props.theme.navMainHover};
+  }
 
   @media only screen and (min-width: 834px) {
     & {
@@ -400,7 +410,6 @@ export const NavTab = styled.li<NavTab>`
     & {
       height: 48px;
        z-index: 1;
-
     }
 
     & > a {
@@ -420,7 +429,6 @@ export const NavTab = styled.li<NavTab>`
       &.NavTab-Menu-li {
         opacity: 1;
         pointer-events: auto;
-
         
         transform: translateY(0px);
         transition-duration: .24s;
@@ -440,10 +448,7 @@ export const NavTab = styled.li<NavTab>`
 
     `};
 
-
-
     &.NavTab-Menu-li > a > span {
-
       font-size: 25px;
       font-weight: 700;
     }
@@ -482,6 +487,12 @@ export const NavTabLink = styled(Link)<NavTabLink>`
 
   &.search {
     pointer-events: none;
+  }
+
+  @media only screen and (max-width: 833px) {
+    & {
+      pointer-events: none;
+    }
   }
 `;
 
@@ -678,6 +689,15 @@ export const SubMenu = styled.div<SubMenu>`
       pointer-events: none;
       z-index: 3;
     `};
+
+  @media only screen and (max-width: 833px) {
+
+    & {
+      position: absolute;
+      top: 0;
+      z-index: 3;
+    }
+  }
 `;
 
 // 상단 메뉴바 높이
@@ -924,6 +944,12 @@ export const Blur = styled.div<Blur>`
       visibility: hidden;
       transition: opacity .32s cubic-bezier(.4, 0, .6, 1) 80ms, visibility .32s step-end 80ms;
   `};
+
+  @media only screen and (max-width: 833px) {
+    & {
+      /* visibility: hidden; */
+    }
+  }
 `;
 
 const cart = css`
@@ -1019,6 +1045,23 @@ const NavMobileMenu = {
     border: none;
     width: 48px;
     height: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+
+    & > svg > polyline {
+      stroke: ${(props) => props.theme.navMain};
+      transition: stroke 0.32s cubic-bezier(0.4, 0, 0.6, 1);
+    }
+  
+
+    &:hover {
+    & > svg > polyline {
+      stroke: ${(props) => props.theme.navMainHover};
+    }
+  }
+
 
     @media only screen and (max-width: 833px) {
     & {
@@ -1232,16 +1275,16 @@ function Shop() {
 
   useEffect(() => {
     if (isMobile && isSubCateShow) {
-      document.documentElement.style.overflow = "hidden";
-      document.documentElement.style.paddingRight = "10px";
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+      document.body.style.overflow = "hidden";
     } else {
-      document.documentElement.style.paddingRight = "0px";
-      document.documentElement.style.overflow = "auto";
+      document.body.style.paddingRight = "0";
+      document.body.style.overflow = "auto";
     }
     
     return () => {
-      document.documentElement.style.paddingRight = "0px";
-      document.documentElement.style.overflow = "auto";
+      document.body.style.overflow = "auto";
     };
   }, [isMobile && isSubCateShow]);
 
@@ -2047,26 +2090,24 @@ function Shop() {
                       initial="close1"
                       animate={isSubCateShow ? "open1" : "close1"}
                       transition={{ duration: 0.24 }}
-                      id="globalnav-menutrigger-bread-bottom"
                       fill="none"
                       stroke="currentColor"
                       strokeWidth="1.2"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      className="globalnav-menutrigger-bread globalnav-menutrigger-bread-bottom"
+                      className="NavMobileMenu-buttom"
                     />
                     <motion.polyline
                       variants={animation}
                       initial="close2"
                       animate={isSubCateShow ? "open2" : "close2"}
                       transition={{ duration: 0.24 }}
-                      id="globalnav-menutrigger-bread-top"
                       fill="none"
                       stroke="currentColor"
                       strokeWidth="1.2"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      className="globalnav-menutrigger-bread globalnav-menutrigger-bread-top"
+                      className="NavMobileMenu-top"
                     />
                   </motion.svg>
                 </NavMobileMenu.Btn>
