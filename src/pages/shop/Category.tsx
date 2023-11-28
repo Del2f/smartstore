@@ -402,7 +402,6 @@ const ChapterNavWrap = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
-  z-index: 1;
 `;
 
 const ChapterNavItems = styled.ul``;
@@ -838,12 +837,12 @@ interface Props {
 function Category({ gmId, categoryList, selectedColumn, setSelectedColumn, selectedTask, setSelectedTask, setIsDarkMode }: Props) {
   const { id } = useParams();
   const navigate = useNavigate();
-  console.log(selectedTask);
+  // console.log(selectedTask);
 
   const [chapterNavRender, setRerender] = useState<boolean>(false);
   const [isIdNotFound, setIsIdNotFound] = useState<boolean>(false);
   const [advertise, setAdvertise] = useState<Advertise[]>([]);
-  console.log(advertise);
+  // console.log(advertise);
 
   useEffect(() => {
     setRerender(true);

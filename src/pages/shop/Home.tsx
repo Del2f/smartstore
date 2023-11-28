@@ -48,7 +48,6 @@ const LineMiddle = styled.div`
     line-height: 1;
     text-decoration: underline;
     position: relative;
-    z-index: 1;
     content: "";
     text-decoration: none;
     top: -0.08em;

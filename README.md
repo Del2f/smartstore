@@ -3,6 +3,9 @@
 ## 프로젝트 소개
 애플 스토어와 스토어가 연동되는 관리자 페이지를 제작하였음.
 
+### 제작자
+- 정영일
+
 ## 기술 스택
 
 프레임워크
@@ -18,6 +21,7 @@
 - cross-env
 - react-beautiful-dnd
 - react-cookie
+- framer-motion
 
 서버
 - bcrypt
