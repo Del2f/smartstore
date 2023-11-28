@@ -1371,6 +1371,8 @@ function Shop() {
   const [isNavSecondMenuShow, setIsNavSecondMenuShow] = useState<boolean>(false);
   console.log(isNavSecondMenuShow);
 
+  const submenu = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     setHeight("44px");
     setIsSubCateShow(false);
@@ -1572,6 +1574,12 @@ function Shop() {
     e.stopPropagation();
     console.log('timerMouseLeave');
 
+    console.log(e.relatedTarget);
+    console.log(submenu.current);
+    if (e.relatedTarget.classList.contains('SubMenuInner') || e.relatedTarget.classList.contains('NavHeight')) {
+      return;
+    }
+
     setIsSubCateShow(false);
     setSelectedCateName("");
 
@@ -1687,7 +1695,7 @@ function Shop() {
                               <NavTab
                                 className="NavTab NavTab-Menu-li"
                                 onMouseEnter={isMobile ? undefined : (e) => timerMouseEnter(e, list.name)}
-                                onMouseLeave={isMobile ? undefined : timerMouseLeave}
+                                onMouseLeave={isMobile ? undefined : (e) => timerMouseLeave(e)}
                                 onClick={isMobile ? (e) => timerMouseEnter(e, list.name) : undefined}
                                 name={list.name}
                                 number={index + 1}
@@ -1720,7 +1728,7 @@ function Shop() {
                                 height={height}
                               >
                                 <SubMenuHeight className="SubMenuHeight" height={height}>
-                                  <SubMenuInner className="SubMenuInner" name={list.name} selectedCateName={selectedCateName}>
+                                  <SubMenuInner className="SubMenuInner" name={list.name} selectedCateName={selectedCateName} ref={submenu}>
                                     <SubMenuList className="SubMenuList main" number={0} grouptotal={3}>
                                       {!isMobile && (
                                       <SubMenuText className="main" isSubCateShow={isSubCateShow} number={1} total={list.taskIds.length + 1}>
