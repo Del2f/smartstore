@@ -190,7 +190,7 @@ function Usersign() {
         alert("인증 코드가 일치하지 않습니다.");
       }
     },
-      // 이메일 인증 버튼
+    // 이메일 인증 버튼
     emailAuthBtn: async (e: any) => {
       e.preventDefault();
 

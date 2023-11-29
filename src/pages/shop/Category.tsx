@@ -130,7 +130,6 @@ const AdverTextWrap = styled.div<Type>`
     display: flex;
     flex-direction: column;
     flex: 30%;
-    z-index: 1;
   `}
 `;
 
@@ -396,6 +395,12 @@ const ChapterNav = styled.div<ChapterNav>`
       padding-bottom: 12px;
       `
       : ""};
+
+  @media only screen and (max-width: 833px) {
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+  }
 `;
 
 const ChapterNavWrap = styled.div`
@@ -535,9 +540,10 @@ interface ChapterNavIcon {
   width?: number;
   height?: number;
   parentID: string;
+  darkMode?: boolean;
 }
 
-const ChapterNavIcon = styled.figure<ChapterNavIcon>`
+const ChapterNavIcon = styled.svg<ChapterNavIcon>`
   display: block;
   margin: 0 auto 7px;
   width: ${(props) => props.width}px;
@@ -546,6 +552,10 @@ const ChapterNavIcon = styled.figure<ChapterNavIcon>`
   background-repeat: no-repeat;
   background-image: url(${(props) => props.icon});
   margin-bottom: 4px;
+  
+  ${props => props.darkMode && `
+    filter: brightness(100);
+  `}
 
   // Mac
   ${(props) => {
@@ -645,46 +655,46 @@ const ChapterNavIcon = styled.figure<ChapterNavIcon>`
     }
   }}
 
-// 다른 방법 기록용
-${(props) => {
-    const sizes = {
-      "iPhone SE": { width: 19, height: 54 },
-      AirTag: { width: 30, height: 54 },
-      "iOS 17": { width: 32, height: 54 },
-    };
+  // 다른 방법 기록용
+  ${(props) => {
+      const sizes = {
+        "iPhone SE": { width: 19, height: 54 },
+        AirTag: { width: 30, height: 54 },
+        "iOS 17": { width: 32, height: 54 },
+      };
 
-    const { taskName, parentID } = props;
+      const { taskName, parentID } = props;
 
-    if (parentID === "64ff1cdfe3ac394d8361ddee" && sizes[taskName]) {
-      const { width, height } = sizes[taskName];
-      return `
-      width: ${width}px;
-      height: ${height}px;
-      background-size: ${width}px ${height}px;
-    `;
-    }
+      if (parentID === "64ff1cdfe3ac394d8361ddee" && sizes[taskName]) {
+        const { width, height } = sizes[taskName];
+        return `
+        width: ${width}px;
+        height: ${height}px;
+        background-size: ${width}px ${height}px;
+      `;
+      }
   }}
 
-${(props) => {
-    const sizes = {
-      "iPad(10세대)": { width: 30, height: 54 },
-      "iPad(9세대)": { width: 30, height: 54 },
-      "Apple Pencil": { width: 3, height: 54 },
-      키보드: { width: 63, height: 54 },
-      액세서리: { width: 31, height: 54 },
-      "iPadOS 17": { width: 32, height: 54 },
-    };
+  ${(props) => {
+      const sizes = {
+        "iPad(10세대)": { width: 30, height: 54 },
+        "iPad(9세대)": { width: 30, height: 54 },
+        "Apple Pencil": { width: 3, height: 54 },
+        키보드: { width: 63, height: 54 },
+        액세서리: { width: 31, height: 54 },
+        "iPadOS 17": { width: 32, height: 54 },
+      };
 
-    const { taskName, parentID } = props;
+      const { taskName, parentID } = props;
 
-    if (parentID === "64ff28633c9faa3d2f6fc2ed" && sizes[taskName]) {
-      const { width, height } = sizes[taskName];
-      return `
-      width: ${width}px;
-      height: ${height}px;
-      background-size: ${width}px ${height}px;
-    `;
-    }
+      if (parentID === "64ff28633c9faa3d2f6fc2ed" && sizes[taskName]) {
+        const { width, height } = sizes[taskName];
+        return `
+        width: ${width}px;
+        height: ${height}px;
+        background-size: ${width}px ${height}px;
+      `;
+      }
   }}
 
   // Watch
@@ -802,6 +812,9 @@ const ChapterNavName = styled.span<ChapterNavName>`
   font-weight: 400;
   line-height: 1.33337;
   color: ${(props) => props.theme.chapterNavText};
+  white-space: normal;
+    max-width: 7em;
+    margin: 0 auto;
 
   ${(props) =>
     props.columnName === "Watch"
@@ -810,6 +823,10 @@ const ChapterNavName = styled.span<ChapterNavName>`
     max-width: 7em;
   `
       : ""};
+
+  @media only screen and (max-width: 833px) {
+
+  }
 `;
 
 const NavNew = styled.span``;
@@ -973,6 +990,7 @@ function Category({ gmId, categoryList, selectedColumn, setSelectedColumn, selec
                               icon={iconItem?.icon}
                               width={iconItem?.width}
                               height={iconItem?.height}
+                              darkMode={selectedColumn.darkMode}
                             />
                             <ChapterNavName className="ChapterNavName" columnName={selectedColumn.name}>
                               {taskId.name}
@@ -1007,6 +1025,7 @@ function Category({ gmId, categoryList, selectedColumn, setSelectedColumn, selec
                               icon={iconItem?.icon}
                               width={iconItem?.width}
                               height={iconItem?.height}
+                              darkMode={selectedColumn.darkMode}
                             />
                             <ChapterNavName className="ChapterNavName" columnName={selectedColumn.name}>
                               {taskId.name}
@@ -1044,6 +1063,7 @@ function Category({ gmId, categoryList, selectedColumn, setSelectedColumn, selec
                             icon={iconItem?.icon}
                             width={iconItem?.width}
                             height={iconItem?.height}
+                            darkMode={taskId.darkMode}
                           />
                           <ChapterNavName className="ChapterNavName" columnName={selectedTask.name}>
                             {taskId.name}

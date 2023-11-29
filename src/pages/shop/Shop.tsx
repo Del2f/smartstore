@@ -835,6 +835,9 @@ export const SubMenuList = styled.div<SubMenuList>`
   }
 `;
 
+const SubMenuLink = styled(Link)`
+  
+`
 
 export const SubMenuListItem = styled.ul<SubMenuListItem>`
   display: inline-block;
@@ -1278,7 +1281,6 @@ const FooterLocaleLink = styled.div`
 const FooterLegal = styled.div`
   position: relative;
   top: -3px;
-  z-index: 1;
   display: flex;
 `;
 
@@ -1301,7 +1303,6 @@ const LegalLinks = styled.ul`
   position: relative;
   top: -5px;
   margin-inline-start: 0;
-  z-index: 1;
   margin-right: 30px;
   float: left;
   margin-top: 5px;
@@ -1348,6 +1349,8 @@ function Shop() {
     return savedCategoryList ? JSON.parse(savedCategoryList) : [];
   });
 
+  console.log(categoryList);
+
   const [modifyTime, setModifyTime] = useState(() => {
     const savedModifyTime = sessionStorage.getItem("modifyTime");
     return savedModifyTime ? JSON.parse(savedModifyTime) : null;
@@ -1360,16 +1363,15 @@ function Shop() {
   const [selectedCateName, setSelectedCateName] = useState<string>("");
   const [height, setHeight] = useState<string>("44px");
 
-  console.log(selectedCateName);
-  console.log(isSubCateShow);
+  // console.log(selectedCateName);
+  // console.log(isSubCateShow);
 
   // 모바일
   const [isMobile, setIsMobile] = useState<boolean>(false);
-  console.log("isMobile " + isMobile);
 
   // 모바일 메뉴 2번째탭
   const [isNavSecondMenuShow, setIsNavSecondMenuShow] = useState<boolean>(false);
-  console.log(isNavSecondMenuShow);
+  // console.log(isNavSecondMenuShow);
 
   const submenu = useRef<HTMLDivElement>(null);
 
@@ -1556,7 +1558,7 @@ function Shop() {
   // NavTab에 마우스 진입
   const timerMouseEnter = (e: any, name: string) => {
     e.stopPropagation();
-    console.log('timerMouseEnter');
+    // console.log('timerMouseEnter');
 
     if((name === "search" && isSubCateShow === true) || (name === "cart" && isSubCateShow === true)){
       setIsSubCateShow(false);
@@ -1569,15 +1571,23 @@ function Shop() {
     }, 50);
   };
 
-  // NavTab에서 마우스 나감
+  // NavTab에서 마우스 나가면 
   const timerMouseLeave = (e: any) => {
     e.stopPropagation();
     console.log('timerMouseLeave');
 
-    console.log(e.relatedTarget);
-    console.log(submenu.current);
-    if (e.relatedTarget.classList.contains('SubMenuInner') || e.relatedTarget.classList.contains('NavHeight')) {
-      return;
+    // NavTab에서 마우스 나갈때 제외시킬 className
+    // 브라우저로 나갔을때는 제외한다.
+    if(e.relatedTarget && e.relatedTarget.classList){
+      
+      if (e.relatedTarget.classList.contains('SubMenuInner')) {
+        return;
+      }
+  
+      // submenu가 내려와있는 상태에서 navheight로 마우스가 나갔을때 제외
+      if(isSubCateShow && e.relatedTarget.classList.contains('NavHeight')){
+        return;
+      }
     }
 
     setIsSubCateShow(false);
@@ -1590,7 +1600,7 @@ function Shop() {
   // 서브메뉴가 내려와있을때 하단으로 나갔을 경우 height를 0으로 변경합니다.
   const subMenuClose = (e: any, name: any) => {
     e.stopPropagation();
-    console.log('subMenuClose');
+    // console.log('subMenuClose');
 
     timer = setTimeout(() => {
       if (selectedCateName === name) {
@@ -1610,7 +1620,7 @@ function Shop() {
 
   // 모바일 하단 메뉴 켜기/닫기
   const NavMobileMenuClick = () => {
-    console.log('NavMobileMenuClick');
+    // console.log('NavMobileMenuClick');
 
     setSelectedCateName("");
     setIsNavSecondMenuShow(false);
@@ -1730,30 +1740,32 @@ function Shop() {
                                 <SubMenuHeight className="SubMenuHeight" height={height}>
                                   <SubMenuInner className="SubMenuInner" name={list.name} selectedCateName={selectedCateName} ref={submenu}>
                                     <SubMenuList className="SubMenuList main" number={0} grouptotal={3}>
-                                      {!isMobile && (
-                                      <SubMenuText className="main" isSubCateShow={isSubCateShow} number={1} total={list.taskIds.length + 1}>
-                                        {list.name}&nbsp;살펴보기
-                                      </SubMenuText>
-                                      )}
-                                      <SubMenuListItem>
-                                        {list.taskIds.map((list2: any, index2: any) => {
-                                          if (list2.navHide) return null;
-                                          return (
-                                            <>
-                                              <SubMenuLi
-                                                name={list.name}
-                                                selectedCateName={selectedCateName}
-                                                className="SubMenuLi"
-                                                number={isMobile ? index2 + 1 : index2 + 2}
-                                                isSubCateShow={isSubCateShow}
-                                                total={list.taskIds.length + 1}
-                                              >
-                                                <SubMenuName className="SubMenuName main">{list2.name}</SubMenuName>
-                                              </SubMenuLi>
-                                            </>
-                                          );
-                                        })}
-                                      </SubMenuListItem>
+                                        {!isMobile && (
+                                        <SubMenuText className="main" isSubCateShow={isSubCateShow} number={1} total={list.taskIds.length + 1}>
+                                          {list.name}&nbsp;살펴보기
+                                        </SubMenuText>
+                                        )}
+                                        <SubMenuListItem>
+                                          {list.taskIds.map((list2: any, index2: any) => {
+                                            if (list2.navHide) return null;
+                                            return (
+                                              <>
+                                                <SubMenuLi
+                                                  name={list.name}
+                                                  selectedCateName={selectedCateName}
+                                                  className="SubMenuLi"
+                                                  number={isMobile ? index2 + 1 : index2 + 2}
+                                                  isSubCateShow={isSubCateShow}
+                                                  total={list.taskIds.length + 1}
+                                                >
+                                                  <SubMenuLink to={`./${list2.url}`}>
+                                                    <SubMenuName className="SubMenuName main">{list2.name}</SubMenuName>
+                                                  </SubMenuLink>
+                                                </SubMenuLi>
+                                              </>
+                                            );
+                                          })}
+                                        </SubMenuListItem>
                                     </SubMenuList>
                                     <SubMenuList className="SubMenuList main" number={1} grouptotal={3}>
                                       <SubMenuText className="main" isSubCateShow={isSubCateShow} number={1} total={list.taskIds.length + 1}>

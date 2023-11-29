@@ -2,21 +2,21 @@ import axios from "../../api/axios";
 import styled from "styled-components";
 import plus from "@img/plus1.svg";
 import { useState, useEffect } from "react";
+import { InputWrap } from "../../pages/adminPage/Category";
 
 const Icon = styled.div`
   position: relative;
 `;
 
-const IconWrap = styled.div`
+const IconInner = styled.div`
   position: relative;
   width: 100%;
   height: 100px;
-  border: 1px solid;
   border-radius: 12px;
-  border-color: var(--input-border-color);
   height: 100px;
   display: flex;
   align-items: center;
+  background-color: #f5f5f7;
 `;
 
 interface IconI {
@@ -86,6 +86,9 @@ function ImageUploadBox(props: any) {
   const [previewImages, setPreviewImages] = useState<any>([]);
   const [errorMessage, setErrorMessage] = useState<any>([]);
   const [isImage, setIsImage] = useState<boolean>(false);
+
+  console.log(props.selectedDarkMode);
+
   const validFileTypes = ["image/svg+xml", "image/png"];
 
   const handleFiles = async (files: any) => {
@@ -183,7 +186,8 @@ function ImageUploadBox(props: any) {
   return (
     <>
       <Icon className="Icon">
-        <IconWrap className="IconWrap">
+        <InputWrap className="IconWrap">
+        <IconInner className="IconInner">
           <h5 className="cateInfo-name">아이콘</h5>
           <IconI className="IconI" isImage={isImage}></IconI>
           <IconLabel className="IconLabel dragorclick" onDragOver={dragOverHandler} onDrop={dropHandler}>
@@ -195,7 +199,8 @@ function ImageUploadBox(props: any) {
               <span className="text">삭제</span>
             </button>
           </div>
-        </IconWrap>
+        </IconInner>
+        </InputWrap>
         <Error>{errorMessage}</Error>
       </Icon>
     </>

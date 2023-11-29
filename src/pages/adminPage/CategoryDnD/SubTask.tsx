@@ -19,13 +19,15 @@ const Container = styled.div<IContainer>`
   border-radius: 10px;
   padding: 6px 8px;
   margin-bottom: 3px;
+  display: flex;
+  align-items: center;
 
-  ${({column, subtask, selectedList}) => (subtask.darkMode ? `
+  ${({column, subtask, selectedList}) => (column.darkMode ? `
   color: rgba(255,255,255,.8);
-  background-color: ${subtask._id === selectedList._id ? "#1b1b1b" : "#272727"};
+  background-color: ${subtask._id === selectedList._id ? "#1b1b1b" : "#242424"};
   `:`
   color: rgba(0,0,0,.8);
-  background-color: ${subtask._id === selectedList._id ? "#c9c9c9" : "#e4e4e4"};
+  background-color: ${subtask._id === selectedList._id ? "#b4b4b4" : "#dbdbdb"};
   `)};
 
   transition: background-color 0.3s ease, color 0.3s ease;
@@ -38,6 +40,34 @@ const Container = styled.div<IContainer>`
     pointer-events: none;
   }
 `;
+
+const IconWrap = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+  pointer-events: none;
+`;
+
+interface Icon {
+  icon: string;
+  column: ColumnType;
+}
+
+const Icon = styled.svg<Icon>`
+  width: 15px;
+  height: 15px;
+  background-image: url(${(props) => props.icon});
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+
+${({column}) => (column.darkMode ? `
+  filter: brightness(100);
+  `:`
+
+  `)};
+`
 
 interface ISubTaskProps {
   subtask: SubTaskType;
@@ -170,7 +200,11 @@ const SubTask = ({
           selectedId={selectedId}
           onClick={subTaskSelected}
         >
-          {subtask.icon ? <img src={subtask.icon} style={{ width: "10px", height: "10px", marginRight: "5px" }} alt="" /> : ""}
+          {subtask.icon && 
+          <IconWrap>
+            <Icon icon={subtask.icon} column={column} />
+          </IconWrap>
+          }
           <span style={{ display: "inline-block" }}>{subtask.name}</span>
         </Container>
       )}

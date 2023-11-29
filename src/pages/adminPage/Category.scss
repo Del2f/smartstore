@@ -12,9 +12,10 @@
     .cateInfo-name {
         font-size: 15px;
         font-weight: 600;
-        margin-left: 20px;
+        padding-left: 20px;
         display: flex;
         align-items: center;
+        flex-basis: 20%;
     }
 
     .box-name {
@@ -30,7 +31,7 @@
         width: 100%;
         border-radius: 12px;
         padding: 20px;
-        height: 80px;
+        height: 60px;
         background-color: #f5f5f7;
 
         h3 {
@@ -38,11 +39,7 @@
             font-weight: 600;
         }
 
-        input {
-            background-color: #f5f5f7;
-            border-radius: 10px;
-            padding: 0 10px;
-        }
+
     }
 
     .cateInfo-input-wrap {
@@ -51,14 +48,13 @@
 
     .cateInfo-input {
         width: 100%;
-        background-color: #fff;
-        border: 1px solid;
+        background-color: #f5f5f7;
+        border: none;
         border-radius: 12px;
         border-color: var(--input-border-color);
         height: 60px;
         display: flex;
         align-items: center;
-        justify-content: space-between;
     }
 
     .adproduct-list {
@@ -150,6 +146,15 @@
         .second {
             position: relative;
             flex: 40%;
+
+
+            input {
+                background-color: #f5f5f7;
+                border-radius: 10px;
+                padding: 0 10px;
+                padding-right: 30px;
+                width: 100%;
+            }
 
             .second-product-list {
                 .wrap {

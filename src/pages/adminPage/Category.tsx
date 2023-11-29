@@ -434,6 +434,18 @@ export interface Advertise {
   product_id: string;
   image: string;
 }
+export const InputWrap = styled.div`
+  margin-top: 10px;
+
+  & > .input-text {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+`
+
+const Error = styled.div`
+  position: absolute;
+`
 
 function Category(props: Props) {
   const token = useSelector(selectToken);
@@ -469,7 +481,9 @@ function Category(props: Props) {
   const [selectedNavHide, setSelectedNavHide] = useState<boolean>(false);
   const [selectedChapNavHide, setSelectedChapNavHide] = useState<boolean>(false);
   const [selectedDarkMode, setSelectedDarkMode] = useState<boolean>(false);
+  const [selectedColumnDarkMode, setSelectedColumnDarkMode] = useState<boolean>(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  console.log(selectedColumnDarkMode);
 
   const [addColumn, setAddColumn] = useState<string>("");
 
@@ -496,10 +510,6 @@ function Category(props: Props) {
   const colorRef = useRef<any>();
   const imgRef = useRef<any>();
 
-  // 카테고리 등록된 상품
-  // const addedRefs = useRef<any>(null);
-  // const addedBtnArea = useRef<any>(null);
-
   // 카테고리 DND로 전송할 데이터
   const [dnd, setDnd] = useState<DndState>({
     columnOrder: [],
@@ -517,16 +527,16 @@ function Category(props: Props) {
   const [isAdvertiseEdit, setIsAdvertiseEdit] = useState<boolean>(false);
 
   // console.log("isAdvertise " + isAdvertise);
-  console.log("isAdvertiseEdit " + isAdvertiseEdit);
+  // console.log("isAdvertiseEdit " + isAdvertiseEdit);
 
   // 광고 목록 클릭 여부
   const [isAdverListClick, setIsAdverListClick] = useState<boolean>(false);
   const [selectedAdvertise, setSelectedAdvertise] = useState<Advertise[]>([]);
   const [selectedAdverID, setSelectedAdverID] = useState<string>("");
 
-  console.log(isAdverListClick);
-  console.log(selectedAdvertise);
-  console.log(selectedAdverID);
+  // console.log(isAdverListClick);
+  // console.log(selectedAdvertise);
+  // console.log(selectedAdverID);
 
   // 광고페이지의 광고타입을 지정합니다.
   const [adName, setAdname] = useState<string>("");
@@ -579,7 +589,7 @@ function Category(props: Props) {
 
   // 광고 등록 모달창
   const [isAdvertiseModal, setIsAdvertiseModal] = useState<boolean>(false);
-  console.log(isAdvertiseModal);
+  // console.log(isAdvertiseModal);
 
   // 광고 관련 함수 모음.
   const Advertise = {
@@ -1725,6 +1735,11 @@ function Category(props: Props) {
     };
   }, [colorSelector]);
 
+  useEffect(() => {
+    setSelectedColumnDarkMode(selectedList.darkMode);
+
+  },[selectedList])
+
   return (
     <>
       <div className="SellerSubframe home-category">
@@ -1798,7 +1813,7 @@ function Category(props: Props) {
                     <div>
                       <h3 className="cateInfo-title">카테고리 추가</h3>
                       <div className="btn-list">
-                        <div className="cateInfo-bg-input">
+                        <InputWrap className="cateInfo-bg-input">
                           <div id="input-inner" style={{ display: "flex", alignItems: "center", padding: "0px", width: "100%" }}>
                             <input
                               type="text"
@@ -1818,29 +1833,29 @@ function Category(props: Props) {
                               </button>
                             </div>
                           </div>
-                        </div>
-                        <div className={isAdd ? "error" : "error-active"}>{AddMessage}</div>
+                        </InputWrap>
+                        <Error className={isAdd ? "error-active" : "error"}>{AddMessage}</Error>
                       </div>
                       <div className="second-product-list">
                         <div className="wrap">
                           <h2 className="cateInfo-title">카테고리 정보</h2>
-                          <div className="cateInfo-input" style={{ marginTop: "15px" }}>
+                          <InputWrap className="cateInfo-input">
                             <h5 className="cateInfo-name">이름</h5>
                             <div id="input-inner">
                               <input type="text" value={selectedName} placeholder="이름을 입력하세요" className="input" onChange={onChange} />
+                              <Error className={isName ? "error-active" : "error"}>{NameMessage}</Error>
+
                             </div>
-                          </div>
-                          <div className="cateInfo-input" style={{ marginTop: "15px" }}>
+                          </InputWrap>
+                          <InputWrap className="cateInfo-input">
                             <h5 className="cateInfo-name">URL 주소</h5>
                             <div id="input-inner">
                               <input type="text" value={selectedURL} placeholder="URL 주소" className="input" onChange={onChangeURL} />
                             </div>
-                          </div>
-                          <div className={isName ? "error" : "error-active"}>{NameMessage}</div>
-                          <div style={{ position: "relative" }}>
-                            <div className="cateInfo-input">
+                          </InputWrap>
+                            <InputWrap className="cateInfo-input">
                               <h5 className="cateInfo-name">광고 목록</h5>
-                              <span>{selectedAdvertise[0]?.name}</span>
+                              <span className="input-text">{selectedAdvertise[0]?.name}</span>
                               <div>
                                 <AdvertiseBtn onClick={Advertise.advertiseListShow}>
                                   <span>광고 목록</span>
@@ -1855,8 +1870,7 @@ function Category(props: Props) {
                                   </AdvertiseBtn>
                                 )}
                               </div>
-                            </div>
-                          </div>
+                            </InputWrap>
                           <div style={{ marginTop: "10px", color: "#ff3627" }}>
                             <span>{addedErrMessage}</span>
                           </div>
@@ -1865,6 +1879,7 @@ function Category(props: Props) {
                             setIconImg={setIconImg}
                             isSelectedTask={isSelectedTask}
                             isSelectedSubTask={isSelectedSubTask}
+                            selectedDarkMode={selectedDarkMode}
                           ></CategoryIconRegi>
                           <CategoryInfoUl>
                             <CategoryInfoLi>

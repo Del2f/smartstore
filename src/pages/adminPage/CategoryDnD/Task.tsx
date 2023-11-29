@@ -39,6 +39,8 @@ interface ISubTaskList {
   isDraggingOver: boolean;
 }
 
+
+
 const SubTaskList = styled.div<ISubTaskList>`
   flex-grow: 1;
   margin: 5px 7px;
@@ -60,14 +62,42 @@ const Container = styled.div<IContainer>`
 
   ${({column, task, selectedList}) => (column.darkMode ? `
   color: rgba(255,255,255,.8);
-  background-color: ${task._id === selectedList._id ? "#1d1d1d" : "#2c2c2c"};
+  background-color: ${task._id === selectedList._id ? "#131313" : "#2c2c2c"};
   `:`
   color: rgba(0,0,0,.8);
-  background-color: ${task._id === selectedList._id ? "#dddddd" : "#ececec"};
+  background-color: ${task._id === selectedList._id ? "#c2c2c2" : "#ececec"};
   `)};
 
   transition: background-color 0.3s ease;
 `;
+
+const IconWrap = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+  pointer-events: none;
+`;
+
+interface Icon {
+  icon: string;
+  column: ColumnType;
+}
+
+const Icon = styled.svg<Icon>`
+  width: 20px;
+  height: 20px;
+  background-image: url(${(props) => props.icon});
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+
+${({column}) => (column.darkMode ? `
+  filter: brightness(100);
+  `:`
+
+  `)};
+`
 
 interface ITaskProps {
   dnd: DndState;
@@ -221,7 +251,9 @@ const Task = ({
         >
           <Title {...provided.dragHandleProps} onClick={taskSelected} task={task} selectedList={selectedList} column={column}>
             {task.icon ? (
-              <img src={task.icon} style={{height: "20px", marginRight: "8px"}} alt="" />
+              <IconWrap>
+                <Icon icon={task.icon} column={column} />
+              </IconWrap>
             ) : ""}
             <span style={{ display: "inline-block" }}>
               {task.name}

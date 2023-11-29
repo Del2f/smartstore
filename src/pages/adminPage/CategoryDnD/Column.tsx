@@ -53,7 +53,7 @@ const Container = styled.div<Container>`
 
   ${({column, selectedList}) => (column.darkMode ? `
   color: white;
-  background-color: ${(column._id === selectedList._id ? "black" : "#3b3b3b")};
+  background-color: ${(column._id === selectedList._id ? "#181818" : "#3b3b3b")};
   `:`
   color: rgba(0,0,0,.8);
   background-color: ${(column._id === selectedList._id ? "#cecece" : "#f5f5f7")};
