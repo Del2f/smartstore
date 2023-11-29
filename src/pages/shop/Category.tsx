@@ -407,6 +407,9 @@ const ChapterNavWrap = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const ChapterNavItems = styled.ul``;
@@ -982,6 +985,7 @@ function Category({ gmId, categoryList, selectedColumn, setSelectedColumn, selec
                             taskName={taskId.name}
                             type={taskId.type}
                           >
+                            {iconItem?.icon !== "" &&
                             <ChapterNavIcon
                               className="ChapterNavIcon"
                               columnName={selectedColumn.name}
@@ -992,6 +996,7 @@ function Category({ gmId, categoryList, selectedColumn, setSelectedColumn, selec
                               height={iconItem?.height}
                               darkMode={selectedColumn.darkMode}
                             />
+                            }
                             <ChapterNavName className="ChapterNavName" columnName={selectedColumn.name}>
                               {taskId.name}
                             </ChapterNavName>
@@ -1017,6 +1022,7 @@ function Category({ gmId, categoryList, selectedColumn, setSelectedColumn, selec
                             taskName={taskId.name}
                             type={taskId.type}
                           >
+                            {iconItem?.icon !== "" && 
                             <ChapterNavIcon
                               className="ChapterNavIcon"
                               columnName={selectedColumn.name}
@@ -1027,6 +1033,7 @@ function Category({ gmId, categoryList, selectedColumn, setSelectedColumn, selec
                               height={iconItem?.height}
                               darkMode={selectedColumn.darkMode}
                             />
+                            }
                             <ChapterNavName className="ChapterNavName" columnName={selectedColumn.name}>
                               {taskId.name}
                             </ChapterNavName>
