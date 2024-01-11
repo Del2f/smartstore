@@ -862,7 +862,7 @@ function Category({ gmId, categoryList, selectedColumn, setSelectedColumn, selec
   const [chapterNavRender, setRerender] = useState<boolean>(false);
   const [isIdNotFound, setIsIdNotFound] = useState<boolean>(false);
   const [advertise, setAdvertise] = useState<Advertise[]>([]);
-  // console.log(advertise);
+  // console.log(isIdNotFound);
 
   useEffect(() => {
     setRerender(true);

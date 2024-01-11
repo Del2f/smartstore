@@ -114,6 +114,9 @@ interface SubMenuLi {
 }
 
 interface SubMenuName {}
+
+
+
 export interface GmIdType {
   id: string;
 }
@@ -332,17 +335,37 @@ const NavTabMenuWrap = styled.div<NavTab>`
   }
 `
 
+const NavMenuBackOpen = keyframes`
+  0% {
+    opacity: 0;
+    transform: translate(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0px);
+  }
+`;
+
+const NavMenuBackClose = keyframes`
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+`;
+
 const NavMenuBack = styled.div<NavMenuBack>`
   display: none;
 
   @media only screen and (max-width: 833px) {
     position: absolute;
+    display: block;
     width: 48px;
     height: 48px;
-    transform: translate(0) scale(1);
-    opacity: 1;
     pointer-events: auto;
-    transition: opacity .24s cubic-bezier(.4,0,.6,1) .16s,transform .24s cubic-bezier(.4,0,.6,1) .16s,visibility .24s step-start .16s;
     z-index: 4;
 
     & > button {
@@ -353,11 +376,15 @@ const NavMenuBack = styled.div<NavMenuBack>`
       padding: 0;
     }
 
-
-    ${props => props.isNavSecondMenuShow ? `
-      display: block;
-    ` : `
-      
+    ${props => props.isNavSecondMenuShow ? css`
+      visibility: visible;
+      transition: visibility .24s step-start;
+      pointer-events: auto;
+      animation: ${NavMenuBackOpen} .24s cubic-bezier(.4,0,.6,1) both;
+      ` : css`
+      visibility: hidden;
+      transition: visibility .24s step-end;
+      animation: ${NavMenuBackClose} .24s cubic-bezier(.4,0,.6,1) both;
     `}
   }
 
@@ -443,6 +470,7 @@ export const NavTab = styled.li<NavTab>`
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
   cursor: pointer;
   height: 44px;
   z-index: 1;
@@ -463,6 +491,11 @@ export const NavTab = styled.li<NavTab>`
       transition-duration: .24s; */
     }
 
+    &.NavTab-Menu-li:hover {
+
+
+    }
+
     ${(props) =>
     props.isSubCateShow
       ? `
@@ -474,7 +507,6 @@ export const NavTab = styled.li<NavTab>`
         transition-duration: .24s;
         transition-delay: calc(.2s + (var(--nav-item-number) * 20ms));
       }
-      
       `
       : `
       &.NavTab-Menu-li {
@@ -485,9 +517,7 @@ export const NavTab = styled.li<NavTab>`
         transition-duration: min(.16s + (20ms * calc(var(--nav-item-total) - var(--nav-item-number))), .24s);
         transition-delay: 0s;
       }
-
     `};
-
 
     &.NavTab-Right{
       width: 48px;
@@ -516,7 +546,7 @@ export const NavTab = styled.li<NavTab>`
 `;
 
 export const NavTabLink = styled(Link)<NavTabLink>`
-  position: relative;
+  width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
@@ -613,6 +643,17 @@ export const NavTabText = styled.span<NavTabText>`
   }
 `;
 
+const arrowhoverin = keyframes`
+  0% {
+    opacity: 0;
+    transform: translate(-4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0px);
+  }
+`;
+
 const arrowhoverout = keyframes`
   0% {
     opacity: 1;
@@ -624,15 +665,15 @@ const arrowhoverout = keyframes`
   }
 `;
 
-
 const NavTabArrow = styled.span<NavTab>`
-  position: absolute;
-  display: none;
-  right: 0;
+
+  display: flex;
+  align-items: center;
+  height: 40px;
+  position: relative;
 
   @media only screen and (max-width: 833px) {
     & {
-      height: 47px;
       margin-top: -1px;
       margin-inline-end: -48px;
       padding-inline-end: 19px;
@@ -642,11 +683,20 @@ const NavTabArrow = styled.span<NavTab>`
       animation: ${arrowhoverout} .24s cubic-bezier(.4,0,.6,1) both;
 
       svg {
+        position: absolute;
+        right: 0;
         fill: currentColor;
         transform: scaleX(-1) translateZ(0);
       }
+      
+      .NavTab:hover & {
+      visibility: visible;
+      transition: visibility .24s step-start;
+      opacity: 1;
+      animation: ${arrowhoverin} .24s cubic-bezier(.4, 0, .6, 1) both;
+    }
 
-      ${(props) =>
+      /* ${(props) =>
     props.isSubCateShow
       ? `
       display: block;
@@ -654,7 +704,7 @@ const NavTabArrow = styled.span<NavTab>`
       `
       : `
 
-    `};
+    `}; */
     }
   }
 `
@@ -687,7 +737,6 @@ const Badge = styled.span`
     border-radius: 1.3em;
   }
 `;
-
 const BadgeNumber = styled.span`
   display: block;
   position: relative;
@@ -740,7 +789,7 @@ export const SubMenu = styled.div<SubMenu>`
       right: 0;
       z-index: 3;
       margin-top: 0;
-      height: 100dvh;
+      min-height: 100dvh;
       padding-top: 50px;
 
       ${(props) =>
@@ -836,7 +885,7 @@ export const SubMenuList = styled.div<SubMenuList>`
 `;
 
 const SubMenuLink = styled(Link)`
-  
+  display: flex;
 `
 
 export const SubMenuListItem = styled.ul<SubMenuListItem>`
@@ -1363,7 +1412,7 @@ function Shop() {
   const [selectedCateName, setSelectedCateName] = useState<string>("");
   const [height, setHeight] = useState<string>("44px");
 
-  // console.log(selectedCateName);
+  console.log(selectedCateName);
   // console.log(isSubCateShow);
 
   // 모바일
@@ -1446,6 +1495,10 @@ function Shop() {
   // 임시로 nav 높이 설정. Ref로 높이계산은 실패. length에 곱한 높이를 계산 해야겠음.
   useEffect(() => {
     if(!isMobile){
+      if (selectedCateName === "스토어") {
+        setHeight("476px");
+        return;
+      }
       if (selectedCateName === "Mac") {
         setHeight("552px");
         return;
@@ -1723,12 +1776,12 @@ function Shop() {
                                   >
                                     {list.name}
                                   </NavTabText>
-                                  <NavTabArrow className="NavTabArrow" isSubCateShow={isSubCateShow}>
+                                </NavTabLink>
+                                  <NavTabArrow className="NavTabArrow" isSubCateShow={isSubCateShow} number={index + 1}>
                                     <svg height="48" viewBox="0 0 9 48" width="9" xmlns="http://www.w3.org/2000/svg">
                                       <path d="m8.1155 30.358a.6.6 0 1 1 -.831.8653l-7-6.7242a.6.6 0 0 1 -.0045-.8613l7-6.8569a.6.6 0 1 1 .84.8574l-6.5582 6.4238z"></path>
                                     </svg>
                                   </NavTabArrow>
-                                </NavTabLink>
                               </NavTab>
                               <SubMenu
                                 className="SubMenu"
@@ -1746,24 +1799,43 @@ function Shop() {
                                         </SubMenuText>
                                         )}
                                         <SubMenuListItem>
-                                          {list.taskIds.map((list2: any, index2: any) => {
-                                            if (list2.navHide) return null;
-                                            return (
-                                              <>
-                                                <SubMenuLi
-                                                  name={list.name}
-                                                  selectedCateName={selectedCateName}
-                                                  className="SubMenuLi"
-                                                  number={isMobile ? index2 + 1 : index2 + 2}
-                                                  isSubCateShow={isSubCateShow}
-                                                  total={list.taskIds.length + 1}
-                                                >
-                                                  <SubMenuLink to={`./${list2.url}`}>
-                                                    <SubMenuName className="SubMenuName main">{list2.name}</SubMenuName>
-                                                  </SubMenuLink>
-                                                </SubMenuLi>
-                                              </>
-                                            );
+                                          {list.taskIds.map((taskId: any, index2: any) => {
+                                            if (taskId.navHide) return null;
+                                            if (taskId.subTaskIds && taskId.subTaskIds.length > 0) {
+                                              return (
+                                                <>
+                                                  <SubMenuLi
+                                                    name={list.name}
+                                                    selectedCateName={selectedCateName}
+                                                    className="SubMenuLi"
+                                                    number={isMobile ? index2 + 1 : index2 + 2}
+                                                    isSubCateShow={isSubCateShow}
+                                                    total={list.taskIds.length + 1}
+                                                  >
+                                                    <SubMenuLink to={`./${taskId.url}`}>
+                                                      <SubMenuName className="SubMenuName main">{taskId.name}</SubMenuName>
+                                                    </SubMenuLink>
+                                                  </SubMenuLi>
+                                                </>
+                                              );
+                                            } else {
+                                              return (
+                                                <>
+                                                  <SubMenuLi
+                                                    name={list.name}
+                                                    selectedCateName={selectedCateName}
+                                                    className="SubMenuLi"
+                                                    number={isMobile ? index2 + 1 : index2 + 2}
+                                                    isSubCateShow={isSubCateShow}
+                                                    total={list.taskIds.length + 1}
+                                                  >
+                                                    <SubMenuLink to={`./products/${taskId.url}`}>
+                                                      <SubMenuName className="SubMenuName main">{taskId.name}</SubMenuName>
+                                                    </SubMenuLink>
+                                                  </SubMenuLi>
+                                                </>
+                                              );
+                                            }
                                           })}
                                         </SubMenuListItem>
                                     </SubMenuList>
@@ -1870,12 +1942,16 @@ function Shop() {
                       } else {
                         return (
                           <NavTab
-                            className="NavTab NavTab-Menu-li"
-                            name={list.name}
-                            onMouseEnter={(e: any) => timerMouseEnter(e, list.name)}
-                            onMouseLeave={timerMouseLeave}
-                            selectedCateName={selectedCateName}
-                          >
+                          className="NavTab NavTab-Menu-li"
+                          onMouseEnter={isMobile ? undefined : (e) => timerMouseEnter(e, list.name)}
+                          onMouseLeave={isMobile ? undefined : (e) => timerMouseLeave(e)}
+                          onClick={isMobile ? (e) => timerMouseEnter(e, list.name) : undefined}
+                          name={list.name}
+                          number={index + 1}
+                          total={categoryList.length}
+                          selectedCateName={selectedCateName}
+                          isSubCateShow={isSubCateShow}
+                        >
                             <NavTabLink to={`./${list.url}`}>
                               <NavTabText className="NavTabText" isSubCateShow={isSubCateShow} name={list.name} selectedCateName={selectedCateName}>
                                 {list.name}
@@ -1895,7 +1971,7 @@ function Shop() {
                   selectedCateName={selectedCateName}
                   onMouseEnter={(e: any) => subMenuClose(e, "search")}
                   onClick={(e: any) => timerMouseEnter(e, "search")}
-                  onMouseLeave={timerMouseLeave}
+                  onMouseLeave={isMobile ? undefined : (e) => timerMouseLeave(e)}
                 >
                   <NavTabText className="NavTabText" isSubCateShow={isSubCateShow} key={0} name={"search"} selectedCateName={selectedCateName}>
                     <span className="Search Search-medium">
@@ -1941,7 +2017,7 @@ function Shop() {
                   selectedCateName={selectedCateName}
                   onMouseEnter={(e: any) => subMenuClose(e, "cart")}
                   onClick={(e: any) => timerMouseEnter(e, "cart")}
-                  onMouseLeave={timerMouseLeave}
+                  onMouseLeave={isMobile ? undefined : (e) => timerMouseLeave(e)}
                 >
                   <NavTabText className="NavTabText" isSubCateShow={isSubCateShow} key={0} name={"cart"} selectedCateName={selectedCateName}>
                     <span className="Cart Cart-medium">
@@ -1979,7 +2055,6 @@ function Shop() {
                                 >
                                   <NavCart.H2 className="cart-main-h2">장바구니</NavCart.H2>
                                 </SubMenuLi>
-
                                 {navCart &&
                                   navCart.map((list: any, index: any) => {
                                     if (index < 3) {
