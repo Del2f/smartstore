@@ -300,7 +300,7 @@ function AdvertiseImage(props: any) {
         <Error>{errorMessage}</Error>
         <DeleteBtn
             className="modal-close-button"
-            style={{ position: "absolute", right: "0px", zIndex: "1" }}
+            style={{ position: "absolute", right: "0px", zIndex: "0" }}
             isAdImage={props.isAdImage}
             onClick={IconDelete}
           >

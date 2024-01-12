@@ -1,10 +1,12 @@
 import axios from "../../api/axios";
-import { useCallback, useRef, useEffect, useState, Dispatch, SetStateAction } from "react";
+import { useCallback, useRef, useEffect, useState, Dispatch, SetStateAction, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { AgGridReact } from "ag-grid-react";
 import { useSelector } from "react-redux";
 import { selectToken } from "../../store/authSlice";
 import { Advertise } from "../../pages/adminPage/Category";
+import { AG_GRID_LOCALE_KO } from "../../api/locale.ko";
+
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import "./TableProductList.scss";
@@ -173,10 +175,10 @@ function TableProductList(props: Props) {
 
   // 카테고리에 등록된 광고의 product._id를 Product에서 검색후 해당하는 상품을 선택합니다.
   useEffect(() => {
-    console.log('tableproductlist adproduct')
+    console.log("tableproductlist adproduct");
 
-    if(rowData && props.selectedAdvertise?.[0]){
-      console.log('등록')
+    if (rowData && props.selectedAdvertise?.[0]) {
+      console.log("등록");
       const test = rowData?.filter((list: any) => list._id === props.selectedAdvertise?.[0].product_id);
       props.setSelectedProductList && props.setSelectedProductList(test);
       props.setAdProduct && props.setAdProduct(test);
@@ -202,7 +204,6 @@ function TableProductList(props: Props) {
       document.removeEventListener("mousedown", clickOutside);
     };
   }, [inputClick]);
-  
 
   // 초기화
   // useEffect(() => {
@@ -233,6 +234,32 @@ function TableProductList(props: Props) {
       document.removeEventListener("mousedown", clickOutside);
     };
   }, [deleteAgreeModal]);
+
+  // ag-grid 한글화
+  const localeText = useMemo(() => {
+    return AG_GRID_LOCALE_KO;
+  }, []);
+
+  // ag-grid bottom 디자인 변경
+  const slash = document.getElementById("ag-10-of-page");
+  if (slash) {
+    slash.textContent = "/"; // 페이지 1 의 10 => 페이지 1 / 10
+  }
+
+  const slash2 = document.getElementById("ag-10-of");
+  if (slash2) {
+    slash2.textContent = "/"; // 1 의 10 => 페이지 10 / 100
+  }
+
+  const to = document.getElementById("ag-10-to");
+  if (to) {
+    to.textContent = "-"; // 1 의 10 => 페이지 10 / 100
+  }
+
+  // 페이지 크기 커스텀
+  const paginationPageSizeSelector = useMemo(() => {
+    return [10, 20, 50, 100];
+  }, []);
 
   return (
     <>
@@ -278,7 +305,7 @@ function TableProductList(props: Props) {
           </div>
           <div className="tableright">
             <span>페이지 노출 </span>
-            <select className="page-size" onChange={onPageSizeChanged} >
+            <select className="page-size" onChange={onPageSizeChanged}>
               <option value="10" selected={true}>
                 10
               </option>
@@ -292,12 +319,14 @@ function TableProductList(props: Props) {
       <div style={{ height: "500px", marginTop: "10px", borderRadius: "20px" }} className="ag-theme-alpine">
         <AgGridReact
           ref={gridRef}
+          localeText={localeText}
           rowData={rowData}
           columnDefs={props.isAdvertise ? advertise : columnDefs}
           rowSelection={props.isAdvertise ? "single" : "multiple"}
           onSelectionChanged={onSelectionChanged}
           pagination={true}
           paginationPageSize={10}
+          // paginationPageSizeSelector={paginationPageSizeSelector}
           paginationNumberFormatter={paginationNumberFormatter}
           onGridReady={onGridReady}
           onCellClicked={(params: any) => {}}

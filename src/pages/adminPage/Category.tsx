@@ -235,7 +235,7 @@ const AdverListWrap = styled.div<showAdverList>`
       opacity: 0;
       visibility: hidden;
    `}
-  transition: opacity 0.32s cubic-bezier(0.4, 0, 0.6, 1) 80ms, visibility 0.32s step-start 80ms;
+  transition: opacity 0.32s cubic-bezier(0.4, 0, 0.6, 1) 80ms, visibility 0.32s 80ms;
 `;
 
 const AdverList = styled.div`
@@ -249,13 +249,13 @@ const AdverList = styled.div`
 `;
 
 const AdverBlur = styled.div<showAdverList>`
-  backdrop-filter: blur(20px);
   position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
   z-index: 1;
+  backdrop-filter: blur(20px);
 
   ${(props) =>
     props.isAdverListShow
@@ -267,7 +267,7 @@ const AdverBlur = styled.div<showAdverList>`
       opacity: 0;
       visibility: hidden;
   `}
-  transition: opacity 0.32s cubic-bezier(0.4, 0, 0.6, 1) 80ms, visibility 0.32s step-start 80ms;
+  transition: opacity 0.32s cubic-bezier(0.4, 0, 0.6, 1) 80ms, visibility 0.32s 80ms;
 `;
 
 const AdverBlurWrap = styled.div<showAdverList>`
@@ -2001,7 +2001,7 @@ function Category(props: Props) {
               )}
             </AdverList>
           </AdverListWrap>
-          <AdverBlur isAdverListShow={isAdverListShow}></AdverBlur>
+          <AdverBlur className="AdverBlur" isAdverListShow={isAdverListShow}></AdverBlur>
         </AdverBlurWrap>
         <Modal isAdvertiseModal={isAdvertiseModal} className="modal">
           <ModalInner isAdvertiseModal={isAdvertiseModal} ref={AdvertiseModalRef}>

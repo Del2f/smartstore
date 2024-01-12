@@ -1,6 +1,6 @@
 import axios from "../../api/axios";
 import styled, { ThemeProvider, css, keyframes } from "styled-components";
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
 import { useEffect, useState, useRef } from "react";
 import { Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -22,16 +22,16 @@ import "./Shop.scss";
 
 let currentPath = "";
 
-const navRate = props => props.theme.navRate;
-const navVisibleRate = props => props.theme.navVisibleRate;
-const navColorRate = props => props.theme.navColorRate;
+const navRate = (props) => props.theme.navRate;
+const navVisibleRate = (props) => props.theme.navVisibleRate;
+const navColorRate = (props) => props.theme.navColorRate;
 
 // 스마트폰 화면
-const navMobileRate = props => props.theme.navMobileRate;
-const navMobileVisibleRate = props => props.theme.navMobileVisibleRate;
-const navMobileColorRate = props => props.theme.navMobileColorRate;
+const navMobileRate = (props) => props.theme.navMobileRate;
+const navMobileVisibleRate = (props) => props.theme.navMobileVisibleRate;
+const navMobileColorRate = (props) => props.theme.navMobileColorRate;
 
-const navMobileBG = props => props.theme.navMobileBG;
+const navMobileBG = (props) => props.theme.navMobileBG;
 
 interface SubList {}
 interface ContainerUlBtn {
@@ -115,8 +115,6 @@ interface SubMenuLi {
 
 interface SubMenuName {}
 
-
-
 export interface GmIdType {
   id: string;
 }
@@ -143,7 +141,7 @@ export const NavHeight = styled.div<NavHeight>`
   overflow: hidden;
   ${(props) =>
     props.isSubCateShow
-    ? ` 
+      ? ` 
     background: ${props.theme.navSubBG};
       height: ${props.height};
       transition:
@@ -151,7 +149,8 @@ export const NavHeight = styled.div<NavHeight>`
       visibility var(--nav-visibility-rate) step-start,
       background var(--nav-background-color-rate) cubic-bezier(.4,0,.6,1);
       
-    ` : `
+    `
+      : `
       background: ${props.theme.navBG};
       height: 44px;
       transition:
@@ -160,7 +159,7 @@ export const NavHeight = styled.div<NavHeight>`
       background var(--nav-background-color-rate) cubic-bezier(.4,0,.6,1) .12s;
   `};
 
-@media only screen and (max-width: 833px) {
+  @media only screen and (max-width: 833px) {
     & {
       position: absolute;
       top: 0;
@@ -169,7 +168,9 @@ export const NavHeight = styled.div<NavHeight>`
       /* background-color: var(--nav-background-color); */
       /* overflow-x: hidden; */
 
-      ${props => props.isSubCateShow ? `
+      ${(props) =>
+        props.isSubCateShow
+          ? `
         visibility: visible;
         background: ${props.theme.navSubBG};
         // overflow-y: scroll;
@@ -180,7 +181,8 @@ export const NavHeight = styled.div<NavHeight>`
         height var(--nav-mobile-height-rate) cubic-bezier(.4,0,.6,1) 80ms,
         visibility var(--nav-mobile-visibility-rate) cubic-bezier(.4,0,.6,1),
         background var(--nav-mobile-background-color-rate) cubic-bezier(.4,0,.6,1) 80ms;
-        ` : `
+        `
+          : `
         background: ${props.theme.navBG};
         // overflow-y: hidden;
 
@@ -203,13 +205,12 @@ export const NavHeight = styled.div<NavHeight>`
 `;
 
 export const MainWrap = styled.div`
-
   @media only screen and (max-width: 833px) {
     & {
       min-height: 0px;
       max-height: none;
       overflow: hidden;
-    } 
+    }
   }
 `;
 
@@ -227,7 +228,7 @@ export const NavInner = styled.div`
   margin: 0 auto;
 
   &.NavTabMobileMenu {
-      display: none;
+    display: none;
   }
 
   @media only screen and (max-width: 833px) {
@@ -268,15 +269,13 @@ export const NavFlex = styled.ul`
       box-sizing: border-box;
       padding-inline-end: calc(48px + max(0px,calc(var(--r-globalnav-safe-area-inset-end) - 16px)));
       -webkit-overflow-scrolling: touch; */
-    } 
+    }
 
     .NavTab-Logo {
       flex-grow: 1;
       justify-content: flex-start;
     }
-
-
-  } 
+  }
 `;
 
 export const NavLogo = styled.div<NavTab>`
@@ -296,8 +295,7 @@ export const NavLogo = styled.div<NavTab>`
   svg:hover {
     fill: ${(props) => props.theme.navMainHover};
   }
-
-`
+`;
 
 const NavTabMenuWrap = styled.div<NavTab>`
   --nav-mobile-height-rate: ${navMobileRate};
@@ -306,7 +304,7 @@ const NavTabMenuWrap = styled.div<NavTab>`
   width: 100%;
   top: 0;
   z-index: 3;
-  
+
   overflow: hidden;
 
   @media only screen and (min-width: 834px) {
@@ -317,14 +315,17 @@ const NavTabMenuWrap = styled.div<NavTab>`
 
   @media only screen and (max-width: 833px) {
     & {
-      ${props => props.isSubCateShow ? `
+      ${(props) =>
+        props.isSubCateShow
+          ? `
       // display: flex;
       height: 100dvh;
       overflow-y: scroll;
 
       transition:
         height var(--nav-mobile-height-rate) cubic-bezier(.4,0,.6,1) 80ms;
-      ` : `
+      `
+          : `
       overflow-y: hidden;
       height: 0px;
 
@@ -333,7 +334,7 @@ const NavTabMenuWrap = styled.div<NavTab>`
       `}
     }
   }
-`
+`;
 
 const NavMenuBackOpen = keyframes`
   0% {
@@ -367,6 +368,15 @@ const NavMenuBack = styled.div<NavMenuBack>`
     height: 48px;
     pointer-events: auto;
     z-index: 4;
+    fill: ${(props) => props.theme.navSub};
+
+    svg {
+      transition: fill 0.32s cubic-bezier(0.4, 0, 0.6, 1);
+    }
+
+    &:hover {
+      fill: ${(props) => props.theme.navMainHover};
+    }
 
     & > button {
       width: 100%;
@@ -376,19 +386,21 @@ const NavMenuBack = styled.div<NavMenuBack>`
       padding: 0;
     }
 
-    ${props => props.isNavSecondMenuShow ? css`
-      visibility: visible;
-      transition: visibility .24s step-start;
-      pointer-events: auto;
-      animation: ${NavMenuBackOpen} .24s cubic-bezier(.4,0,.6,1) both;
-      ` : css`
-      visibility: hidden;
-      transition: visibility .24s step-end;
-      animation: ${NavMenuBackClose} .24s cubic-bezier(.4,0,.6,1) both;
-    `}
+    ${(props) =>
+      props.isNavSecondMenuShow
+        ? css`
+            visibility: visible;
+            transition: visibility 0.24s step-start;
+            pointer-events: auto;
+            animation: ${NavMenuBackOpen} 0.24s cubic-bezier(0.4, 0, 0.6, 1) both;
+          `
+        : css`
+            visibility: hidden;
+            transition: visibility 0.24s step-end;
+            animation: ${NavMenuBackClose} 0.24s cubic-bezier(0.4, 0, 0.6, 1) both;
+          `}
   }
-
-`
+`;
 
 export const NavTabMenu = styled.div<NavTabMenu>`
   --nav-height-rate: ${navRate};
@@ -422,19 +434,21 @@ export const NavTabMenu = styled.div<NavTabMenu>`
       z-index: 3;
       padding-top: 50px;
       padding-bottom: 84px;
-      
-      ${props => props.isSubCateShow ? `
+
+      ${(props) =>
+        props.isSubCateShow
+          ? `
       visibility: visible;
       
       transition:
       visibility var(--nav-mobile-visibility-rate) step-start;
-      ` : `
+      `
+          : `
       visibility: hidden;
 
       transition:
       visibility var(--nav-mobile-visibility-rate) step-end;
       `}
-
     }
 
     & .NavTab-Menu-li {
@@ -443,25 +457,25 @@ export const NavTabMenu = styled.div<NavTabMenu>`
       padding: 3px 48px 4px;
     }
   }
-`
+`;
 
 const NavTabMenuBtn = styled.div`
   display: none;
-  
+
   @media only screen and (max-width: 833px) {
     & {
       display: block;
     }
   }
-`
+`;
 
 const NavTabWrap = styled.div`
   z-index: 1;
-  
+
   @media only screen and (max-width: 833px) {
     width: 100%;
   }
-`
+`;
 
 export const NavTab = styled.li<NavTab>`
   --nav-item-number: ${(props) => props.number};
@@ -474,9 +488,8 @@ export const NavTab = styled.li<NavTab>`
   cursor: pointer;
   height: 44px;
   z-index: 1;
-  
-  @media only screen and (max-width: 833px) {
 
+  @media only screen and (max-width: 833px) {
     & {
       height: 100%;
     }
@@ -486,19 +499,17 @@ export const NavTab = styled.li<NavTab>`
 
     &.NavTab-Menu-li {
       transition-property: opacity, transform, visibility;
-      transition-timing-function: cubic-bezier(.4,0,.6,1),cubic-bezier(.4,0,.6,1), step-start;
+      transition-timing-function: cubic-bezier(0.4, 0, 0.6, 1), cubic-bezier(0.4, 0, 0.6, 1), step-start;
       /* transition-delay: calc(.2s + (var(--nav-item-number) * 20ms));
       transition-duration: .24s; */
     }
 
     &.NavTab-Menu-li:hover {
-
-
     }
 
     ${(props) =>
-    props.isSubCateShow
-      ? `
+      props.isSubCateShow
+        ? `
       &.NavTab-Menu-li {
         opacity: 1;
         pointer-events: auto;
@@ -508,7 +519,7 @@ export const NavTab = styled.li<NavTab>`
         transition-delay: calc(.2s + (var(--nav-item-number) * 20ms));
       }
       `
-      : `
+        : `
       &.NavTab-Menu-li {
         opacity: 0;
         pointer-events: none;
@@ -519,12 +530,11 @@ export const NavTab = styled.li<NavTab>`
       }
     `};
 
-    &.NavTab-Right{
+    &.NavTab-Right {
       width: 48px;
     }
-
-  } 
-/* 
+  }
+  /* 
   ${(props) =>
     props.selectedCateName === props.name
       ? `
@@ -567,7 +577,6 @@ export const NavTabText = styled.span<NavTabText>`
   transition: color 0.32s cubic-bezier(0.4, 0, 0.6, 1);
   white-space: nowrap;
 
-
   &.cart {
     position: relative;
   }
@@ -580,32 +589,31 @@ export const NavTabText = styled.span<NavTabText>`
       : `
   `};
 
-    .AppleLogo-medium {
-      display: block;
-    }
+  .AppleLogo-medium {
+    display: block;
+  }
 
-    .AppleLogo-large {
-      display: none;
-    }
+  .AppleLogo-large {
+    display: none;
+  }
 
-    .Search-medium {
-      display: block;
-    }
-    
-    .Search-large {
-      display: none;
-    }
+  .Search-medium {
+    display: block;
+  }
 
-    .Cart-medium {
-      display: block;
-    }
+  .Search-large {
+    display: none;
+  }
 
-    .Cart-large {
-      display: none;
-    }
+  .Cart-medium {
+    display: block;
+  }
+
+  .Cart-large {
+    display: none;
+  }
 
   @media only screen and (max-width: 833px) {
-
     & {
       font-size: 26px;
       font-weight: 700;
@@ -616,7 +624,7 @@ export const NavTabText = styled.span<NavTabText>`
     .AppleLogo {
       padding: 0 16px;
     }
-    
+
     .AppleLogo-medium {
       display: none;
     }
@@ -628,7 +636,7 @@ export const NavTabText = styled.span<NavTabText>`
     .Search-medium {
       display: none;
     }
-    
+
     .Search-large {
       display: block;
     }
@@ -666,11 +674,14 @@ const arrowhoverout = keyframes`
 `;
 
 const NavTabArrow = styled.span<NavTab>`
-
   display: flex;
   align-items: center;
   height: 40px;
   position: relative;
+
+  svg {
+    visibility: hidden;
+  }
 
   @media only screen and (max-width: 833px) {
     & {
@@ -679,35 +690,36 @@ const NavTabArrow = styled.span<NavTab>`
       padding-inline-end: 19px;
       opacity: 0;
       color: ${(props) => props.theme.navSub};
-      transform-origin: center; 
-      animation: ${arrowhoverout} .24s cubic-bezier(.4,0,.6,1) both;
+      transform-origin: center;
+      animation: ${arrowhoverout} 0.24s cubic-bezier(0.4, 0, 0.6, 1) both;
 
       svg {
+        visibility: visible;
         position: absolute;
         right: 0;
         fill: currentColor;
         transform: scaleX(-1) translateZ(0);
       }
-      
+
       .NavTab:hover & {
-      visibility: visible;
-      transition: visibility .24s step-start;
-      opacity: 1;
-      animation: ${arrowhoverin} .24s cubic-bezier(.4, 0, .6, 1) both;
-    }
+        visibility: visible;
+        transition: visibility 0.24s step-start;
+        opacity: 1;
+        animation: ${arrowhoverin} 0.24s cubic-bezier(0.4, 0, 0.6, 1) both;
+      }
 
       /* ${(props) =>
-    props.isSubCateShow
-      ? `
+        props.isSubCateShow
+          ? `
       display: block;
 
       `
-      : `
+          : `
 
     `}; */
     }
   }
-`
+`;
 
 const Badge = styled.span`
   display: inline-block;
@@ -780,7 +792,6 @@ export const SubMenu = styled.div<SubMenu>`
     `};
 
   @media only screen and (max-width: 833px) {
-
     & {
       width: 100%;
       position: absolute;
@@ -794,9 +805,10 @@ export const SubMenu = styled.div<SubMenu>`
 
       ${(props) =>
         props.isSubCateShow
-        ? ` 
+          ? ` 
         background: ${props.theme.navSubBG};
-        ` : `
+        `
+          : `
           background: ${props.theme.navBG};
       `};
     }
@@ -846,7 +858,6 @@ export const SubMenuInner = styled.div<SubMenuInner>`
     flex-wrap: wrap;
     height: auto;
   }
-
 `;
 
 export const SubMenuList = styled.div<SubMenuList>`
@@ -886,7 +897,7 @@ export const SubMenuList = styled.div<SubMenuList>`
 
 const SubMenuLink = styled(Link)`
   display: flex;
-`
+`;
 
 export const SubMenuListItem = styled.ul<SubMenuListItem>`
   display: inline-block;
@@ -940,7 +951,7 @@ export const SubMenuText = styled.h2<SubMenuText>`
   }
 
   @media only screen and (max-width: 833px) {
-      &.main {
+    &.main {
       font-size: 16px;
       margin-bottom: 15px;
     }
@@ -1183,20 +1194,21 @@ const NavMobileMenu = {
     /* top: 0; */
     /* right: 0; */
     z-index: 3;
-    
+
     @media only screen and (max-width: 833px) {
       & {
         display: block;
 
         ${(props) =>
           props.isSubCateShow
-          ? `
+            ? `
           // inset-inline-end: 10px;
 
-            ` : `
+            `
+            : `
 
         `};
-      } 
+      }
     }
   `,
   Btn: styled.button`
@@ -1213,23 +1225,20 @@ const NavMobileMenu = {
       stroke: ${(props) => props.theme.navMain};
       transition: stroke 0.32s cubic-bezier(0.4, 0, 0.6, 1);
     }
-  
 
     &:hover {
-    & > svg > polyline {
-      stroke: ${(props) => props.theme.navMainHover};
+      & > svg > polyline {
+        stroke: ${(props) => props.theme.navMainHover};
+      }
     }
-  }
-
 
     @media only screen and (max-width: 833px) {
-    & {
-      /* display: block; */
-    } 
-
-  }
-  `
-}
+      & {
+        /* display: block; */
+      }
+    }
+  `,
+};
 
 const FooterWrap = styled.div`
   font-size: 12px;
@@ -1439,7 +1448,7 @@ function Shop() {
       document.body.style.paddingRight = "0";
       document.body.style.overflow = "auto";
     }
-    
+
     return () => {
       document.body.style.overflow = "auto";
     };
@@ -1456,11 +1465,11 @@ function Shop() {
     handleResize();
 
     // 창 크기 변경 이벤트 리스너 등록
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     // 컴포넌트가 언마운트될 때 리스너 해제
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
@@ -1494,7 +1503,7 @@ function Shop() {
 
   // 임시로 nav 높이 설정. Ref로 높이계산은 실패. length에 곱한 높이를 계산 해야겠음.
   useEffect(() => {
-    if(!isMobile){
+    if (!isMobile) {
       if (selectedCateName === "스토어") {
         setHeight("476px");
         return;
@@ -1551,21 +1560,19 @@ function Shop() {
     } else {
       setHeight("100%");
     }
-
   }, [selectedCateName]);
 
   // 서브 메뉴가 내려와 있을때 브라우저로 나갔을 경우 height를 0으로 변경합니다.
   useEffect(() => {
     const blowserOut = (e: any) => {
-      console.log('blowserOut');
+      console.log("blowserOut");
 
-      if(isMobile){
+      if (isMobile) {
         return;
       }
 
-        setIsSubCateShow(false);
-        setSelectedCateName("");
-
+      setIsSubCateShow(false);
+      setSelectedCateName("");
     };
     document.addEventListener("mouseleave", blowserOut);
     return () => {
@@ -1613,7 +1620,7 @@ function Shop() {
     e.stopPropagation();
     // console.log('timerMouseEnter');
 
-    if((name === "search" && isSubCateShow === true) || (name === "cart" && isSubCateShow === true)){
+    if ((name === "search" && isSubCateShow === true) || (name === "cart" && isSubCateShow === true)) {
       setIsSubCateShow(false);
       setSelectedCateName("");
       return;
@@ -1624,21 +1631,20 @@ function Shop() {
     }, 50);
   };
 
-  // NavTab에서 마우스 나가면 
+  // NavTab에서 마우스 나가면
   const timerMouseLeave = (e: any) => {
     e.stopPropagation();
-    console.log('timerMouseLeave');
+    console.log("timerMouseLeave");
 
     // NavTab에서 마우스 나갈때 제외시킬 className
     // 브라우저로 나갔을때는 제외한다.
-    if(e.relatedTarget && e.relatedTarget.classList){
-      
-      if (e.relatedTarget.classList.contains('SubMenuInner')) {
+    if (e.relatedTarget && e.relatedTarget.classList) {
+      if (e.relatedTarget.classList.contains("SubMenuInner")) {
         return;
       }
-  
+
       // submenu가 내려와있는 상태에서 navheight로 마우스가 나갔을때 제외
-      if(isSubCateShow && e.relatedTarget.classList.contains('NavHeight')){
+      if (isSubCateShow && e.relatedTarget.classList.contains("NavHeight")) {
         return;
       }
     }
@@ -1669,7 +1675,7 @@ function Shop() {
   const NavMenuBackClick = () => {
     setSelectedCateName("");
     setIsNavSecondMenuShow(false);
-  }
+  };
 
   // 모바일 하단 메뉴 켜기/닫기
   const NavMobileMenuClick = () => {
@@ -1683,34 +1689,18 @@ function Shop() {
   // 모바일 메뉴 애니메이션
   const animation = {
     open1: {
-      points: [
-        "2 12, 16 12",
-        "2 9, 16 9",
-        "3.5 15, 15 3.5",
-      ],
+      points: ["2 12, 16 12", "2 9, 16 9", "3.5 15, 15 3.5"],
     },
     close1: {
-      points: [
-        "3.5 15, 15 3.5",
-        "2 9, 16 9",
-        "2 12, 16 12",
-      ],
+      points: ["3.5 15, 15 3.5", "2 9, 16 9", "2 12, 16 12"],
     },
     open2: {
-      points: [
-        "2 5, 16 5",
-        "2 9, 16 9",
-        "3.5 3.5, 15 15",
-      ],
+      points: ["2 5, 16 5", "2 9, 16 9", "3.5 3.5, 15 15"],
     },
     close2: {
-      points: [
-        "3.5 3.5, 15 15",
-        "2 9, 16 9",
-        "2 5, 16 5",
-      ],
+      points: ["3.5 3.5, 15 15", "2 9, 16 9", "2 5, 16 5"],
     },
-  }
+  };
 
   return (
     <>
@@ -1777,11 +1767,11 @@ function Shop() {
                                     {list.name}
                                   </NavTabText>
                                 </NavTabLink>
-                                  <NavTabArrow className="NavTabArrow" isSubCateShow={isSubCateShow} number={index + 1}>
-                                    <svg height="48" viewBox="0 0 9 48" width="9" xmlns="http://www.w3.org/2000/svg">
-                                      <path d="m8.1155 30.358a.6.6 0 1 1 -.831.8653l-7-6.7242a.6.6 0 0 1 -.0045-.8613l7-6.8569a.6.6 0 1 1 .84.8574l-6.5582 6.4238z"></path>
-                                    </svg>
-                                  </NavTabArrow>
+                                <NavTabArrow className="NavTabArrow" isSubCateShow={isSubCateShow} number={index + 1}>
+                                  <svg height="48" viewBox="0 0 9 48" width="9" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="m8.1155 30.358a.6.6 0 1 1 -.831.8653l-7-6.7242a.6.6 0 0 1 -.0045-.8613l7-6.8569a.6.6 0 1 1 .84.8574l-6.5582 6.4238z"></path>
+                                  </svg>
+                                </NavTabArrow>
                               </NavTab>
                               <SubMenu
                                 className="SubMenu"
@@ -1793,51 +1783,51 @@ function Shop() {
                                 <SubMenuHeight className="SubMenuHeight" height={height}>
                                   <SubMenuInner className="SubMenuInner" name={list.name} selectedCateName={selectedCateName} ref={submenu}>
                                     <SubMenuList className="SubMenuList main" number={0} grouptotal={3}>
-                                        {!isMobile && (
+                                      {!isMobile && (
                                         <SubMenuText className="main" isSubCateShow={isSubCateShow} number={1} total={list.taskIds.length + 1}>
                                           {list.name}&nbsp;살펴보기
                                         </SubMenuText>
-                                        )}
-                                        <SubMenuListItem>
-                                          {list.taskIds.map((taskId: any, index2: any) => {
-                                            if (taskId.navHide) return null;
-                                            if (taskId.subTaskIds && taskId.subTaskIds.length > 0) {
-                                              return (
-                                                <>
-                                                  <SubMenuLi
-                                                    name={list.name}
-                                                    selectedCateName={selectedCateName}
-                                                    className="SubMenuLi"
-                                                    number={isMobile ? index2 + 1 : index2 + 2}
-                                                    isSubCateShow={isSubCateShow}
-                                                    total={list.taskIds.length + 1}
-                                                  >
-                                                    <SubMenuLink to={`./${taskId.url}`}>
-                                                      <SubMenuName className="SubMenuName main">{taskId.name}</SubMenuName>
-                                                    </SubMenuLink>
-                                                  </SubMenuLi>
-                                                </>
-                                              );
-                                            } else {
-                                              return (
-                                                <>
-                                                  <SubMenuLi
-                                                    name={list.name}
-                                                    selectedCateName={selectedCateName}
-                                                    className="SubMenuLi"
-                                                    number={isMobile ? index2 + 1 : index2 + 2}
-                                                    isSubCateShow={isSubCateShow}
-                                                    total={list.taskIds.length + 1}
-                                                  >
-                                                    <SubMenuLink to={`./products/${taskId.url}`}>
-                                                      <SubMenuName className="SubMenuName main">{taskId.name}</SubMenuName>
-                                                    </SubMenuLink>
-                                                  </SubMenuLi>
-                                                </>
-                                              );
-                                            }
-                                          })}
-                                        </SubMenuListItem>
+                                      )}
+                                      <SubMenuListItem>
+                                        {list.taskIds.map((taskId: any, index2: any) => {
+                                          if (taskId.navHide) return null;
+                                          if (taskId.subTaskIds && taskId.subTaskIds.length > 0) {
+                                            return (
+                                              <>
+                                                <SubMenuLi
+                                                  name={list.name}
+                                                  selectedCateName={selectedCateName}
+                                                  className="SubMenuLi"
+                                                  number={isMobile ? index2 + 1 : index2 + 2}
+                                                  isSubCateShow={isSubCateShow}
+                                                  total={list.taskIds.length + 1}
+                                                >
+                                                  <SubMenuLink to={`./${taskId.url}`}>
+                                                    <SubMenuName className="SubMenuName main">{taskId.name}</SubMenuName>
+                                                  </SubMenuLink>
+                                                </SubMenuLi>
+                                              </>
+                                            );
+                                          } else {
+                                            return (
+                                              <>
+                                                <SubMenuLi
+                                                  name={list.name}
+                                                  selectedCateName={selectedCateName}
+                                                  className="SubMenuLi"
+                                                  number={isMobile ? index2 + 1 : index2 + 2}
+                                                  isSubCateShow={isSubCateShow}
+                                                  total={list.taskIds.length + 1}
+                                                >
+                                                  <SubMenuLink to={`./products/${taskId.url}`}>
+                                                    <SubMenuName className="SubMenuName main">{taskId.name}</SubMenuName>
+                                                  </SubMenuLink>
+                                                </SubMenuLi>
+                                              </>
+                                            );
+                                          }
+                                        })}
+                                      </SubMenuListItem>
                                     </SubMenuList>
                                     <SubMenuList className="SubMenuList main" number={1} grouptotal={3}>
                                       <SubMenuText className="main" isSubCateShow={isSubCateShow} number={1} total={list.taskIds.length + 1}>
@@ -1942,16 +1932,16 @@ function Shop() {
                       } else {
                         return (
                           <NavTab
-                          className="NavTab NavTab-Menu-li"
-                          onMouseEnter={isMobile ? undefined : (e) => timerMouseEnter(e, list.name)}
-                          onMouseLeave={isMobile ? undefined : (e) => timerMouseLeave(e)}
-                          onClick={isMobile ? (e) => timerMouseEnter(e, list.name) : undefined}
-                          name={list.name}
-                          number={index + 1}
-                          total={categoryList.length}
-                          selectedCateName={selectedCateName}
-                          isSubCateShow={isSubCateShow}
-                        >
+                            className="NavTab NavTab-Menu-li"
+                            onMouseEnter={isMobile ? undefined : (e) => timerMouseEnter(e, list.name)}
+                            onMouseLeave={isMobile ? undefined : (e) => timerMouseLeave(e)}
+                            onClick={isMobile ? (e) => timerMouseEnter(e, list.name) : undefined}
+                            name={list.name}
+                            number={index + 1}
+                            total={categoryList.length}
+                            selectedCateName={selectedCateName}
+                            isSubCateShow={isSubCateShow}
+                          >
                             <NavTabLink to={`./${list.url}`}>
                               <NavTabText className="NavTabText" isSubCateShow={isSubCateShow} name={list.name} selectedCateName={selectedCateName}>
                                 {list.name}

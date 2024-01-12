@@ -2,7 +2,7 @@ import axios from "../../api/axios";
 import styled from "styled-components";
 import React, { useState, useRef, useEffect, SetStateAction, useCallback } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate, useLocation  } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { selectToken } from "../../store/authSlice";
 import TableProductList from "../../components/admin/TableProductList";
 import AdvertiseImage from "../../components/admin/AdvertiseImage";
@@ -161,7 +161,7 @@ visibility: visible;
 opacity: 0;
 visibility: hidden;
    `}
-  transition: opacity 0.32s cubic-bezier(0.4, 0, 0.6, 1) 80ms, visibility 0.32s step-start 80ms;
+  transition: opacity 0.32s cubic-bezier(0.4, 0, 0.6, 1) 80ms, visibility 0.32s 80ms;
 `;
 const ProductList = styled.div`
   position: relative;
@@ -187,7 +187,7 @@ const Blur = styled.div<showProductList>`
       opacity: 0;
       visibility: hidden;
   `}
-  transition: opacity 0.32s cubic-bezier(0.4, 0, 0.6, 1) 80ms, visibility 0.32s step-start 80ms;
+  transition: opacity 0.32s cubic-bezier(0.4, 0, 0.6, 1) 80ms, visibility 0.32s 80ms;
 `;
 
 const BlurWrap = styled.div<showProductList>`
@@ -385,9 +385,9 @@ function Advertise(props: Props) {
   const token = useSelector(selectToken);
   const navigate = useNavigate();
   const location = useLocation();
-  
+
   useEffect(() => {
-    if(!location.state?.selectedList){
+    if (!location.state?.selectedList) {
       setIsError(true);
       setTimeout(() => {
         navigate("../category");
@@ -399,15 +399,15 @@ function Advertise(props: Props) {
       setIsAdvertise(true);
       setIsAdvertiseEdit(data.isAdvertiseEdit);
 
-      if(data.selectedList.type === 'column'){
+      if (data.selectedList.type === "column") {
         setIsSelected(true);
-      } else if (data.selectedList.type === 'task') {
+      } else if (data.selectedList.type === "task") {
         setIsSelectedTask(true);
-      } else if (data.selectedList.type === 'subtask') {
+      } else if (data.selectedList.type === "subtask") {
         setIsSelectedSubTask(true);
       }
 
-      if(data.isAdvertiseEdit){
+      if (data.isAdvertiseEdit) {
         setSelectedAdverID(data.selectedAdverID);
         setSelectedAdvertise(data.advertise);
 
@@ -433,7 +433,7 @@ function Advertise(props: Props) {
 
       setSelectedList(data.selectedList);
     }
-  },[])
+  }, []);
 
   const [selectedList, setSelectedList] = useState<any>([]);
   console.log(selectedList);
@@ -454,7 +454,7 @@ function Advertise(props: Props) {
   const [isMainTitleClick, setIsMainTitleClick] = useState<boolean>(false);
   const [isDetailClick, setIsDetailClick] = useState<boolean>(false);
   const [isSubDetailClick, setIsSubDetailClick] = useState<boolean>(false);
-  
+
   // 텍스트 컬러
   const [SubTitleColor, setSubTitleColor] = useState<string>("");
   const [MainTitleColor, setMainTitleColor] = useState<string>("");
@@ -632,10 +632,10 @@ function Advertise(props: Props) {
     adSubmit: async (e: any) => {
       e.preventDefault();
 
-      console.log('adSubmit');
+      console.log("adSubmit");
 
       if (isSelectedSubTask) {
-        console.log('subTask는 광고를 노출 할 수 없습니다.');
+        console.log("subTask는 광고를 노출 할 수 없습니다.");
         setIsAdFinish(false);
         setErrAdFinish("해당 카테고리는 광고를 노출 할 수 없습니다.");
         return;
@@ -680,7 +680,7 @@ function Advertise(props: Props) {
           }
           console.log(newAdvertise);
 
-          console.log('업로드전');
+          console.log("업로드전");
           try {
             const res = await axios.post(
               "/smartstore/home/category/advertise",
@@ -688,11 +688,11 @@ function Advertise(props: Props) {
               { withCredentials: true }
             );
             const { success, Advertises } = res.data;
-            console.log('업로드후');
+            console.log("업로드후");
 
             console.log(res);
             if (success) {
-              console.log('success');
+              console.log("success");
 
               setAdvertise(Advertises);
               setIsAdvertise(false);
@@ -705,18 +705,18 @@ function Advertise(props: Props) {
             console.log(err);
           }
         } else {
-          console.log('내용을 전부 입력해주세요.');
+          console.log("내용을 전부 입력해주세요.");
           setIsAdFinish(false);
           setErrAdFinish("내용을 전부 입력해주세요.");
         }
       } else {
-        console.log('카테고리를 선택 해주세요.');
+        console.log("카테고리를 선택 해주세요.");
         setIsAdFinish(false);
         setErrAdFinish("카테고리를 선택 해주세요.");
       }
 
       if (!adProduct[0]) {
-        console.log('상품을 선택해주세요.');
+        console.log("상품을 선택해주세요.");
         setErrAdFinish("상품을 선택 해주세요.");
         setIsAdURL(false);
         return;
@@ -830,14 +830,14 @@ function Advertise(props: Props) {
       <div className="SellerSubframe home-category">
         <div className="product-list">
           <div className="panel panel-seller">
-          {isError && (
-            <div className="modal blur">
-              <div className="modalpage">
-                <h1>정상적인 페이지가 아닙니다.</h1>
-                <span>카테고리를 선택후 광고 등록을 해주세요.</span>
+            {isError && (
+              <div className="modal blur">
+                <div className="modalpage">
+                  <h1>정상적인 페이지가 아닙니다.</h1>
+                  <span>카테고리를 선택후 광고 등록을 해주세요.</span>
+                </div>
               </div>
-            </div>
-          ) }
+            )}
             <div className="panel-heading">
               <div className="pull-left">
                 <h3 className="panel-title">
@@ -1042,7 +1042,7 @@ function Advertise(props: Props) {
                             )}
                             {adType === 2 && (
                               <AdverPreviewColumn adBackColor={adBackColor}>
-                                <div style={{ }}>
+                                <div style={{}}>
                                   <div className="adver-input-type3-wrap" style={{ marginTop: "40px" }}>
                                     <input
                                       type="text"
