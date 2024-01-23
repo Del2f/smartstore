@@ -39,7 +39,7 @@
 
 ### 애플 스토어 관리자 페이지
 
-- http://35.76.233.160/smartstore
+- http://57.181.111.217/smartstore
 
 관리자 계정
 - ID: thanks6
@@ -322,7 +322,7 @@ cloudfront를 중간에 추가하는 방법도 있었지만 실패. (현재 코�
 
 ![apple-menu](https://github.com/Del2f/smartstore/assets/92422357/b7a3d0b3-99ba-471e-a3ec-012538f52132)
 
-- http://35.76.233.160/smartstore/shop
+- http://57.181.111.217/smartstore/shop
 
 테스트 유저 계정
 - ID: user

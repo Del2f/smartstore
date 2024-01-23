@@ -484,7 +484,7 @@ export const NavTab = styled.li<NavTab>`
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
+  /* position: relative; */
   cursor: pointer;
   height: 44px;
   z-index: 1;
@@ -523,6 +523,7 @@ export const NavTab = styled.li<NavTab>`
       &.NavTab-Menu-li {
         opacity: 0;
         pointer-events: none;
+
 
         transform: translateY(-8px);
         transition-duration: min(.16s + (20ms * calc(var(--nav-item-total) - var(--nav-item-number))), .24s);
@@ -1021,6 +1022,22 @@ export const SubMenuLi = styled.li<SubMenuLi>`
     display: flex;
     padding: 3px 0px 4px;
     height: 100%;
+
+    ${(props) =>
+      props.isSubCateShow
+        ? `
+      opacity: 1;
+      transform: translateX(0px);
+      transition-duration: .32s;
+      transition-delay: calc(var(--nav-group-delay) + var(--nav-item-number) * 20ms + 80ms);
+      `
+        : `
+      opacity: 0;
+      transform: translateX(-4px);
+      transition-duration: min(.16s + (20ms * calc(var(--nav-item-total) - var(--nav-item-number))), .24s);
+
+      transition-delay: 0s;
+  `};
   }
 `;
 
@@ -1618,7 +1635,7 @@ function Shop() {
   // NavTab에 마우스 진입
   const timerMouseEnter = (e: any, name: string) => {
     e.stopPropagation();
-    // console.log('timerMouseEnter');
+    console.log('timerMouseEnter');
 
     if ((name === "search" && isSubCateShow === true) || (name === "cart" && isSubCateShow === true)) {
       setIsSubCateShow(false);

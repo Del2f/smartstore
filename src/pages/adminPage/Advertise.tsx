@@ -166,6 +166,9 @@ visibility: hidden;
 const ProductList = styled.div`
   position: relative;
   width: 1000px;
+  background-color: white;
+  padding: 20px 40px;
+  border-radius: 20px;
 `;
 
 const Blur = styled.div<showProductList>`
@@ -224,15 +227,16 @@ const AdverListWrap = styled.div<showAdverList>`
   ${(props) =>
     props.isAdverListShow
       ? `
-opacity: 1;
-visibility: visible;
-`
+      opacity: 1;
+      visibility: visible;
+      `
       : `
-opacity: 0;
-visibility: hidden;
+      opacity: 0;
+      visibility: hidden;
    `}
   transition: opacity 0.32s cubic-bezier(0.4, 0, 0.6, 1) 80ms, visibility 0.32s step-start 80ms;
 `;
+
 const AdverList = styled.div`
   position: relative;
   width: 600px;
@@ -1143,44 +1147,46 @@ function Advertise(props: Props) {
                           <div className="cateInfo-input-wrap">
                             <div className="cateInfo-input">
                               <h5 className="cateInfo-name">상품 연결</h5>
-                              {adProduct &&
-                                adProduct.map((list: any, index: any) => {
-                                  return (
-                                    <li
-                                      key={index}
-                                      value={list.name}
-                                      className="adproduct-list"
-                                      // style={{
-                                      //   backgroundColor: isProductClick ? "#f5f5f7" : "#fff",
-                                      // }}
-                                      // onClick={() => setIsProductClick((boolean) => !boolean)}
-                                    >
-                                      <div className="edit flex flex-ju-center flex-align-center" style={{ padding: "0 15px" }}>
-                                        <img src={list.mainImage[0]} style={{ width: "40px", marginRight: "5px", padding: "5px" }}></img>
-                                        <span>{list.name}</span>
-                                      </div>
-                                      {/* <DeleteBtn
-                                        className="modal-close-button"
-                                        style={{ position: "absolute", right: "0px", zIndex: "10" }}
-                                        isAdImage={props.isAdImage}
-                                        onClick={Advertise.ProductDelete}
+                              <div style={{ display: "flex" }}>
+                                {adProduct &&
+                                  adProduct.map((list: any, index: any) => {
+                                    return (
+                                      <li
+                                        key={index}
+                                        value={list.name}
+                                        className="adproduct-list"
+                                        // style={{
+                                        //   backgroundColor: isProductClick ? "#f5f5f7" : "#fff",
+                                        // }}
+                                        // onClick={() => setIsProductClick((boolean) => !boolean)}
                                       >
-                                        <span className="modal-close-icon">
-                                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                            <path d="M12.12,10l4.07-4.06a1.5,1.5,0,1,0-2.11-2.12L10,7.88,5.94,3.81A1.5,1.5,0,1,0,3.82,5.93L7.88,10,3.81,14.06a1.5,1.5,0,0,0,0,2.12,1.51,1.51,0,0,0,2.13,0L10,12.12l4.06,4.07a1.45,1.45,0,0,0,1.06.44,1.5,1.5,0,0,0,1.06-2.56Z"></path>
-                                          </svg>
-                                        </span>
-                                      </DeleteBtn> */}
-                                    </li>
-                                  );
-                                })}
-                              <div className="text-btn-wrap" style={{ marginRight: "10px" }}>
-                                <button className="text-btn" onClick={Advertise.ProductListShow}>
-                                  <span className="text">추가</span>
-                                </button>
-                                <button className="text-btn" onClick={Advertise.ProductDelete}>
-                                  <span className="text">삭제</span>
-                                </button>
+                                        <div className="edit flex flex-ju-center flex-align-center" style={{ padding: "0 15px" }}>
+                                          <img src={list.mainImage[0]} style={{ width: "40px", marginRight: "5px", padding: "5px" }}></img>
+                                          <span>{list.name}</span>
+                                        </div>
+                                        {/* <DeleteBtn
+                                          className="modal-close-button"
+                                          style={{ position: "absolute", right: "0px", zIndex: "10" }}
+                                          isAdImage={props.isAdImage}
+                                          onClick={Advertise.ProductDelete}
+                                        >
+                                          <span className="modal-close-icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                              <path d="M12.12,10l4.07-4.06a1.5,1.5,0,1,0-2.11-2.12L10,7.88,5.94,3.81A1.5,1.5,0,1,0,3.82,5.93L7.88,10,3.81,14.06a1.5,1.5,0,0,0,0,2.12,1.51,1.51,0,0,0,2.13,0L10,12.12l4.06,4.07a1.45,1.45,0,0,0,1.06.44,1.5,1.5,0,0,0,1.06-2.56Z"></path>
+                                            </svg>
+                                          </span>
+                                        </DeleteBtn> */}
+                                      </li>
+                                    );
+                                  })}
+                                <div className="text-btn-wrap" style={{ marginRight: "10px" }}>
+                                  <button className="text-btn" onClick={Advertise.ProductListShow}>
+                                    <span className="text">추가</span>
+                                  </button>
+                                  <button className="text-btn" onClick={Advertise.ProductDelete}>
+                                    <span className="text">삭제</span>
+                                  </button>
+                                </div>
                               </div>
                             </div>
                           </div>

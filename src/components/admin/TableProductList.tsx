@@ -41,7 +41,7 @@ function TableProductList(props: Props) {
       headerName: "메인사진",
       width: 100,
       resizable: false,
-      cellRendererFramework: (params: any) => {
+      cellRenderer: (params: any) => {
         return (
           <div className="edit flex flex-ju-center flex-align-center">
             <img src={params.data.mainImage[0]} style={{ width: "50px" }}></img>
@@ -53,7 +53,7 @@ function TableProductList(props: Props) {
       headerName: "수정",
       width: 80,
       resizable: false,
-      cellRendererFramework: (params: any) => {
+      cellRenderer: (params: any) => {
         return (
           <Link to={params.data._id} style={{ display: "flex", alignItems: "center" }}>
             <button className="editBtn" data-action="edit">
@@ -98,7 +98,7 @@ function TableProductList(props: Props) {
       headerName: "메인사진",
       width: 100,
       resizable: false,
-      cellRendererFramework: (params: any) => {
+      cellRenderer: (params: any) => {
         return (
           <div className="edit flex flex-ju-center flex-align-center">
             <img src={params.data.mainImage[0]} style={{ width: "50px" }}></img>
@@ -113,9 +113,9 @@ function TableProductList(props: Props) {
     { field: "url", headerName: "URL", width: 70, resizable: true },
   ]);
 
-  const paginationNumberFormatter = useCallback((params: any) => {
-    return "[" + params.value.toLocaleString() + "]";
-  }, []);
+  // const paginationNumberFormatter = useCallback((params: any) => {
+  //   return "[" + params.value.toLocaleString() + "]";
+  // }, []);
 
   const onGridReady = async (params?: any) => {
     try {
@@ -241,17 +241,17 @@ function TableProductList(props: Props) {
   }, []);
 
   // ag-grid bottom 디자인 변경
-  const slash = document.getElementById("ag-10-of-page");
+  const slash = document.getElementById("ag-79-of-page");
   if (slash) {
     slash.textContent = "/"; // 페이지 1 의 10 => 페이지 1 / 10
   }
 
-  const slash2 = document.getElementById("ag-10-of");
+  const slash2 = document.getElementById("ag-79-of");
   if (slash2) {
     slash2.textContent = "/"; // 1 의 10 => 페이지 10 / 100
   }
 
-  const to = document.getElementById("ag-10-to");
+  const to = document.getElementById("ag-79-to");
   if (to) {
     to.textContent = "-"; // 1 의 10 => 페이지 10 / 100
   }
@@ -261,21 +261,26 @@ function TableProductList(props: Props) {
     return [10, 20, 50, 100];
   }, []);
 
+  // 페이지 크기 커스텀
+  const pagination = useMemo(() => {
+    return (
+      <div className="tableright">
+        <span>페이지 노출 </span>
+        <select className="page-size" onChange={onPageSizeChanged}>
+          <option value="10" selected={true}>
+            10
+          </option>
+          <option value="20">20</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+        </select>
+      </div>
+    );
+  }, []);
+
   return (
     <>
-      {props.isAdvertise ? (
-        <div className="tableright">
-          <span>페이지 노출 </span>
-          <select onChange={onPageSizeChanged} id="page-size">
-            <option value="10" selected={true}>
-              10
-            </option>
-            <option value="100">100</option>
-            <option value="500">500</option>
-            <option value="1000">1000</option>
-          </select>
-        </div>
-      ) : (
+      {!props.isAdvertise && (
         <div className="flex flex-ju-bt flex-align-center">
           <div className="left">
             <button className="delete-btn" onClick={selectedDelete}>
@@ -303,17 +308,7 @@ function TableProductList(props: Props) {
               </button>
             </div>
           </div>
-          <div className="tableright">
-            <span>페이지 노출 </span>
-            <select className="page-size" onChange={onPageSizeChanged}>
-              <option value="10" selected={true}>
-                10
-              </option>
-              <option value="100">100</option>
-              <option value="500">500</option>
-              <option value="1000">1000</option>
-            </select>
-          </div>
+          {/* {pagination} */}
         </div>
       )}
       <div style={{ height: "500px", marginTop: "10px", borderRadius: "20px" }} className="ag-theme-alpine">
@@ -326,8 +321,8 @@ function TableProductList(props: Props) {
           onSelectionChanged={onSelectionChanged}
           pagination={true}
           paginationPageSize={10}
-          // paginationPageSizeSelector={paginationPageSizeSelector}
-          paginationNumberFormatter={paginationNumberFormatter}
+          paginationPageSizeSelector={paginationPageSizeSelector}
+          // paginationNumberFormatter={paginationNumberFormatter}
           onGridReady={onGridReady}
           onCellClicked={(params: any) => {}}
         ></AgGridReact>
