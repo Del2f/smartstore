@@ -1,12 +1,10 @@
 import axios from "../../api/axios";
 import styled, { css } from "styled-components";
-
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { UserLogin } from "../../store/userSlice";
 import { useCookies } from "react-cookie";
-
 import { cartListType } from "../shop/Cart";
 
 const LayoutInner = styled.div`
@@ -53,7 +51,6 @@ const LoginItem = css`
   margin: 0;
   vertical-align: top;
   transition: 0.32s cubic-bezier(0.4, 0, 0.6, 1);
-  z-index: 1;
 `;
 
 const InputStyle = css`
@@ -119,39 +116,32 @@ const LoginList = styled.ul<LoginList>`
 
   ${(props) =>
     props.InputFocus === "id"
-      ? `
-  ${LoginItemID}{
-    border: 1px solid #0070c9;
-      border-width: 1px;
-      box-shadow: 0 0 0 1px #0070c9;
-      outline: 0;
-      z-index: 2;
-    }
-    
-    ${InputBtn}{
-        z-index: 2;
-      }
+      ? css`
+          ${LoginItemID} {
+            border: 1px solid #0070c9;
+            border-width: 1px;
+            box-shadow: 0 0 0 1px #0070c9;
+            outline: 0;
+          }
 
+          ${InputBtn} {
+          }
+        `
+      : css`
+          ${LoginItemPW} {
+            border: 1px solid #0070c9;
+            border-width: 1px;
+            box-shadow: 0 0 0 1px #0070c9;
+            outline: 0;
+          }
 
-
-    `
-      : `
-${LoginItemPW}{
-  border: 1px solid #0070c9;
-  border-width: 1px;
-  box-shadow: 0 0 0 1px #0070c9;
-  outline: 0;
-  z-index: 2;
-}
-
-${InputBtn2}{
-        z-index: 2;
-      }
-`}
+          ${InputBtn2} {
+          }
+        `}
 
   ${(props) =>
     props.pwInputShow === false && props.Id.length > 0
-      ? `
+      ? css`
       ${InputBtn}{
         cursor: pointer;
         & > i { 
@@ -165,7 +155,7 @@ ${InputBtn2}{
 
   ${(props) =>
     props.pwInputShow === true && props.Password.length > 0
-      ? `
+      ? css`
       ${InputBtn2}{
         cursor: pointer;
         & > i { 
@@ -173,7 +163,7 @@ ${InputBtn2}{
         }
       }
       `
-      : `
+      : css`
       ${InputBtn2}{
         cursor: pointer;
         & > i { 
@@ -184,7 +174,7 @@ ${InputBtn2}{
 
   ${(props) =>
     props.pwInputShow
-      ? `
+      ? css`
 
       ${LoginItemID} {
         border-top-left-radius: 6px;
@@ -216,7 +206,7 @@ ${InputBtn2}{
         transition: opacity .32s cubic-bezier(.4, 0, .6, 1) 80ms, visibility .32s step-start 80ms;
       }
       `
-      : `
+      : css`
       ${LoginItemPW} {
         opacity: 0;
       }
@@ -242,10 +232,10 @@ interface LoginError {
 const LoginError = styled.div<LoginError>`
   ${(props) =>
     props.isError
-      ? `
+      ? css`
       display: block;
       `
-      : `
+      : css`
       display: none;
   `};
 
@@ -358,7 +348,6 @@ function Login({ setNavCart }: Props) {
 
   // 유효성 검사
   const [isError, setIsError] = useState<boolean>(false);
-  console.log(isError);
 
   // 유저의 로그인 상태를 확인.
   useEffect(() => {
@@ -370,7 +359,7 @@ function Login({ setNavCart }: Props) {
       try {
         const res = await axios.post("/smartstore/user/login", {}, { withCredentials: true });
         console.log(res);
-        if (res.data.status == false) {
+        if (!res.data.status) {
           window.onpopstate = function (event) {
             if (event) {
               event.preventDefault();
@@ -403,7 +392,6 @@ function Login({ setNavCart }: Props) {
     // 패스워드 인풋 X아이콘 유무
     if (e.target.value) {
       setPWDeleteIconShow(true);
-      
     } else if (!e.target.value) {
       setPWDeleteIconShow(false);
       setIsError(false);
@@ -435,7 +423,7 @@ function Login({ setNavCart }: Props) {
   const LoginBtn = async (e: any) => {
     e.preventDefault();
 
-    if (pwInputShow === false) {
+    if (!pwInputShow) {
       setPwInputShow(true);
       return;
     }
@@ -449,7 +437,7 @@ function Login({ setNavCart }: Props) {
       const res = await axios.post("/smartstore/user/loginbtn", userdata, { withCredentials: true });
       console.log(res.data);
 
-      if (res.data.error == "아이디및비밀번호오류") {
+      if (res.data.error === "아이디및비밀번호오류") {
         setErrorMessage("아이디 혹은 비밀번호가 틀렸습니다.");
         setIsError(true);
         return;
@@ -531,7 +519,7 @@ function Login({ setNavCart }: Props) {
                       onBlur={handleBlur}
                       onChange={IdHandler}
                     />
-                    <span className={IDDeleteIconShow == false ? "delete-icon-none delete-icon" : "delete-icon"} onClick={IDinputDelete}></span>
+                    <span className={!IDDeleteIconShow ? "delete-icon-none delete-icon" : "delete-icon"} onClick={IDinputDelete}></span>
                   </LoginItemID>
                   <LoginItemPW className="LoginItem PW">
                     <LoginInputPW
@@ -548,7 +536,7 @@ function Login({ setNavCart }: Props) {
                       onBlur={handleBlur}
                       onChange={PasswordHandler}
                     />
-                    <span className={PWDeleteIconShow == false ? "delete-icon-none delete-icon" : "delete-icon"} onClick={PWinputDelete}></span>
+                    <span className={!PWDeleteIconShow? "delete-icon-none delete-icon" : "delete-icon"} onClick={PWinputDelete}></span>
                   </LoginItemPW>
                   <InputBtn type="submit" className="id">
                     <i className="shared-icon"></i>

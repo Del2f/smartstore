@@ -282,7 +282,7 @@ function Usersign() {
     console.log(AuthCode);
     console.log(AuthCodeInput);
 
-    if (AuthCodeInput == AuthCode) {
+    if (AuthCodeInput === AuthCode) {
       setIsEmail2(true);
       alert("이메일 인증에 성공하셨습니다");
     } else {
@@ -299,7 +299,7 @@ function Usersign() {
       setSubmit(false);
       return;
     }
-  });
+  }, [isId, isId2, isPassword, isPasswordConfirm, isName, isPhone, isEmail, isEmail2, isAddress, Agree]);
 
   // 가입하기 버튼
   const handleSubmit = async (e: any) => {
@@ -449,7 +449,7 @@ function Usersign() {
       // Cleanup the event listener
       document.removeEventListener("mousedown", clickOutside);
     };
-  }, [inputClick]);
+  }, [inputClick, inputClickNumber]);
 
   return (
     <>
@@ -986,7 +986,7 @@ function Usersign() {
                               </div>
                             </div>
                             <div className="input-btn-wrap">
-                              <button className={isEmail == true ? "input-btn-active" : "input-btn"} onClick={emailAuthBtn}>
+                              <button className={isEmail === true ? "input-btn-active" : "input-btn"} onClick={emailAuthBtn}>
                                 <span className="text">인증번호</span>
                               </button>
                             </div>
@@ -995,7 +995,7 @@ function Usersign() {
                         <div className={EmailAuthModal ? "input-item-mailauth-active" : "input-item-mailauth"}>
                           <div className="input-area">
                             <div className="input-box" ref={inputRefEmail2}>
-                              <div id={inputClick && inputClickNumber == 8 ? "input-inner-active" : "input-inner"}>
+                              <div id={inputClick && inputClickNumber === 8 ? "input-inner-active" : "input-inner"}>
                                 <input
                                   type="text"
                                   name="email"
@@ -1010,7 +1010,7 @@ function Usersign() {
                               </div>
                             </div>
                             <div className="input-btn-wrap">
-                              <button className={isEmail2 == true ? "input-btn-active" : "input-btn"} onClick={AuthCodeCheck}>
+                              <button className={isEmail2 === true ? "input-btn-active" : "input-btn"} onClick={AuthCodeCheck}>
                                 <span className="text">확인</span>
                               </button>
                             </div>

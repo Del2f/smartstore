@@ -22,7 +22,6 @@
     "ag-grid-react": "^31.0.1",
     "axios": "^1.0.0",
     "bootstrap": "^5.2.2",
-    "cross-env": "^7.0.3",
     "framer-motion": "^10.16.5",
     "gh-pages": "^4.0.0",
     "highcharts": "^10.2.1",

@@ -15,8 +15,6 @@ const Container = styled.div`
 
 function Buy() {
   const { id } = useParams();
-  console.log(id);
-
   const [product, setProduct] = useState<productList | null>();
   console.log(product);
 
@@ -61,7 +59,7 @@ function Buy() {
           </div>
         </div>
         <div className="pb">
-          {/* <ProductCarousel mainimg={product?.mainImage} mainimg={product?.mainImage}></ProductCarousel> */}
+          <ProductCarousel mainimage={product?.mainImage} subimage={product?.subImage}></ProductCarousel>
         </div>
       </Container>
     </>
