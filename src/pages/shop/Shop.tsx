@@ -191,7 +191,7 @@ export const NavHeight = styled.div<NavHeightType>`
               /* visibility: visible; */
               background: ${props.theme.navSubBG};
               /* background: red; */
-              height: 100dvh;
+              height: auto;
               transition: height var(--nav-mobile-height-rate) cubic-bezier(0.4, 0, 0.6, 1) 80ms,
                 /* visibility var(--nav-mobile-visibility-rate) cubic-bezier(0.4, 0, 0.6, 1), */
                 opacity ${(props) => props.theme.navMobileOpacityRate} cubic-bezier(0.4, 0, 0.6, 1) 0.1s,
