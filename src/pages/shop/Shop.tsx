@@ -164,7 +164,7 @@ export const NavHeight = styled.div<NavHeightType>`
 
   @media only screen and (max-width: 833px) {
     & {
-      position: fixed;
+      position: absolute;
       top: 0;
       width: 100%;
       z-index: 4;
@@ -185,7 +185,7 @@ export const NavHeight = styled.div<NavHeightType>`
               opacity: 1;
               /* visibility: visible; */
               background: ${props.theme.navSubBG};
-              height: 100svh;
+              height: 100dvh;
               transition: height var(--nav-mobile-height-rate) cubic-bezier(0.4, 0, 0.6, 1) 80ms,
                 /* visibility var(--nav-mobile-visibility-rate) cubic-bezier(0.4, 0, 0.6, 1), */ opacity
                   ${(props) => props.theme.navMobileOpacityRate} cubic-bezier(0.4, 0, 0.6, 1) 0.1s,
