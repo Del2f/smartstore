@@ -1204,6 +1204,7 @@ export const Blur = styled.div<BlurType>`
   left: 0;
   width: 100%;
   height: 100%;
+  z-index: 1;
 
   ${(props) =>
     props.boolean
@@ -1221,8 +1222,6 @@ export const Blur = styled.div<BlurType>`
   @media only screen and (max-width: 833px) {
     & {
       z-index: 3;
-
-      /* visibility: hidden; */
     }
   }
 `;
