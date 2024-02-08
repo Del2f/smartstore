@@ -156,7 +156,7 @@ export const NavHeight = styled.div<NavHeightType>`
             background var(--nav-background-color-rate) cubic-bezier(0.4, 0, 0.6, 1);
 
           html {
-            overflow-x: hidden;
+            overflow: hidden;
           }
         `
       : css`
@@ -172,8 +172,17 @@ export const NavHeight = styled.div<NavHeightType>`
       top: 0;
       width: 100%;
       z-index: 4;
-      /* background-color: var(--nav-background-color); */
       overflow-x: hidden;
+      /* background-color: var(--nav-background-color); */
+      /* display: flex;
+      flex-direction: column;
+      overflow: scroll;
+      z-index: 3;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%; */
 
       ${(props) =>
         props.isSubCateShow
@@ -1732,6 +1741,7 @@ function Shop() {
   const [isNavFirstMenuShow, setIsNavFirstMenuShow] = useState<boolean>(false); // 모바일 메뉴 1번째 탭
   const [isNavSecondMenuShow, setIsNavSecondMenuShow] = useState<boolean>(false); // 모바일 메뉴 2번째 탭
 
+  console.log("isMobile " + isMobile);
   // console.log("selectedCateName " + selectedCateName);
   // console.log("isSubCateShow " + isSubCateShow);
   // console.log("isNavFirstMenuShow " + isNavFirstMenuShow);
@@ -1739,9 +1749,6 @@ function Shop() {
 
   // footer columns
   const [selectedFooterName, setSelectedFooterName] = useState<string>(""); // footer 선택된 이름
-  const [isFooterShow, setIsFooterShow] = useState<boolean>(false); // footer 접기
-
-  console.log(selectedFooterName);
 
   const submenu = useRef<HTMLDivElement>(null);
 
@@ -1775,7 +1782,7 @@ function Shop() {
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 833);
-      setIsSubCateShow(false);
+      // setIsSubCateShow(false);
     };
 
     // 컴포넌트가 마운트될 때 한 번 호출
@@ -2003,12 +2010,10 @@ function Shop() {
   const SelectFooter = (name: string) => {
     if (name === selectedFooterName) {
       setSelectedFooterName("");
-      setIsFooterShow(false);
       return;
     }
 
     setSelectedFooterName(name);
-    setIsFooterShow(true);
   };
 
   // 모바일 메뉴 애니메이션
