@@ -830,7 +830,7 @@ export const SubMenu = styled.div<SubMenuType>`
           transition-duration: 0.32s;
           transition-delay: 0s;
           pointer-events: auto;
-          z-index: 3;
+          z-index: 5;
         `
       : css`
           opacity: 0;
@@ -838,7 +838,7 @@ export const SubMenu = styled.div<SubMenuType>`
           transition-duration: 0.32s;
           transition-delay: 0s;
           pointer-events: none;
-          z-index: 3;
+          z-index: 4;
         `};
 
   @media only screen and (max-width: 833px) {
@@ -851,16 +851,6 @@ export const SubMenu = styled.div<SubMenuType>`
       margin-top: 0;
       min-height: 100dvh;
       padding-top: 50px;
-      visibility: hidden;
-
-      ${(props) =>
-        props.selectedCateName === props.name
-          ? css`
-              visibility: visible;
-            `
-          : css`
-              visibility: hidden;
-            `};
 
       ${(props) =>
         props.isNavFirstMenuShow &&
@@ -1214,7 +1204,6 @@ export const Blur = styled.div<BlurType>`
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 3;
 
   ${(props) =>
     props.boolean
@@ -1231,6 +1220,8 @@ export const Blur = styled.div<BlurType>`
 
   @media only screen and (max-width: 833px) {
     & {
+      z-index: 3;
+
       /* visibility: hidden; */
     }
   }
