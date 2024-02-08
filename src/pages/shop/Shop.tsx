@@ -168,7 +168,7 @@ export const NavHeight = styled.div<NavHeightType>`
 
   @media only screen and (max-width: 833px) {
     & {
-      position: absolute;
+      position: fixed;
       top: 0;
       width: 100%;
       z-index: 4;
