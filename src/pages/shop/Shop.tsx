@@ -1758,7 +1758,7 @@ function Shop() {
     setIsSubCateShow(false);
   }, [location]);
 
-  // 모바일 메뉴에서 휠스크롤 방지
+  // 모바일 메뉴에서 휠스크롤 숨기기 및 우측 padding 계산
   useEffect(() => {
     if (isMobile && isSubCateShow) {
       const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
@@ -1770,6 +1770,9 @@ function Shop() {
       document.body.style.paddingRight = "0";
       document.body.style.overflow = "auto";
       document.documentElement.style.overflow = "auto";
+      // setIsSubCateShow(false);
+      // setIsNavFirstMenuShow(false);
+      // setIsNavSecondMenuShow(false);
     }
 
     return () => {
