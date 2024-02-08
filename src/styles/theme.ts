@@ -6,6 +6,7 @@ const navColorRate = "240ms";
 
 const navMobileRate = "400ms";
 const navMobileVisibleRate = "263.5ms";
+const navMobileOpacityRate = "0.6s";
 const navMobileColorRate = "430ms";
 
 const color = {
@@ -14,10 +15,10 @@ const color = {
   absent: "#908790",
 };
 
-export const lightTheme : DefaultTheme = {
+export const lightTheme: DefaultTheme = {
   navMain: "rgba(0,0,0,.8)",
   navMainHover: "#000000",
-  navBG: "rgba(251, 251, 253, 0)",
+  navBG: "#fafafc",
   navMobileBG: "#fafafc",
   navSubBG: "#fbfbfd",
   navSubHeader: "rgb(110,110,115)",
@@ -30,15 +31,14 @@ export const lightTheme : DefaultTheme = {
   chapterNavBG: "#fff",
   chapterNavText: "#1d1d1f",
   chapterNavTextHover: "#06c",
-  footerBG: "#f5f5f7",
+  footerBG: "rgb(245,245,247)",
   footerTextColor: "#6e6e73",
   footerDirectoryTitleColor: "#1d1d1f",
   footerDirectoryTitleColorHover: "#1d1d1f",
   footerPipeColor: "#424245",
-  footerLinkColor: "#424245",
+  footerLinkColor: "rgba(0,0,0,.72)",
   footerShopLinkColor: "#06c",
   footerBorderColor: "#d2d2d7",
-
 
   background1: "#fefefe",
   background2: "#fefefe", // 다이얼로그
@@ -57,17 +57,17 @@ export const lightTheme : DefaultTheme = {
   navColorRate: navColorRate,
   navMobileRate: navMobileRate,
   navMobileVisibleRate: navMobileVisibleRate,
+  navMobileOpacityRate: navMobileOpacityRate,
   navMobileColorRate: navMobileColorRate,
-
 };
 
-export const darkTheme : DefaultTheme = {
+export const darkTheme: DefaultTheme = {
   navMain: "rgba(255,255,255,.8)",
   navMainHover: "#ffffff",
   navBG: "black",
   navMobileBG: "#161617",
   navSubBG: "#161617",
-  navSubHeader: "rgb(134,134,139)", 
+  navSubHeader: "rgb(134,134,139)",
   navSub: "#E8E8ED",
   navCartBtnBG: "rgb(0, 113, 227)",
   navCartBtnBGHover: "#0077ED",
@@ -86,7 +86,6 @@ export const darkTheme : DefaultTheme = {
   footerShopLinkColor: "#06c",
   footerBorderColor: "#d2d2d7",
 
-
   background1: "#202124",
   background2: "#38393e", // 다이얼로그
   text: "rgba(255,255,255,.8)",
@@ -104,6 +103,7 @@ export const darkTheme : DefaultTheme = {
   navColorRate: navColorRate,
   navMobileRate: navMobileRate,
   navMobileVisibleRate: navMobileVisibleRate,
+  navMobileOpacityRate: navMobileOpacityRate,
   navMobileColorRate: navMobileColorRate,
 };
 

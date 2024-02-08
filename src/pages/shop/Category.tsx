@@ -1,5 +1,5 @@
 import axios from "../../api/axios";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
@@ -72,7 +72,7 @@ const AdverWrap2 = styled.div<AdverInner>`
 
 const AdverWidth = styled.div`
   display: flex;
-  width: 980px;
+  /* width: 980px; */
 `;
 
 const Adver = styled.div`
@@ -90,27 +90,44 @@ const AdverInner = styled.div<Type>`
 
   ${(props) =>
     props.type === 0 &&
-    `
-    padding: 60px 0;
+    css`
+      padding: 60px 0;
     `}
+
   ${(props) =>
     props.type === 1 &&
-    `
-    padding: 60px 0;
+    css`
+      padding: 60px 0;
     `}
+
   ${(props) =>
     props.type === 2 &&
-    `
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
+    css`
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
 
-    flex-direction: row;
-    max-width: 1440px;
-    height: 800px;
-    margin-left: auto;
-    margin-right: auto;
-  `}
+      flex-direction: row;
+      /* max-width: 1440px; */
+      height: 800px;
+    `}
+
+    @media only screen and (max-width: 1000px) {
+    ${(props) =>
+      props.type === 2 &&
+      css`
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        flex-direction: column;
+        max-width: 1440px;
+        height: 800px;
+        /* margin-left: auto; */
+        /* margin-right: auto; */
+        margin-bottom: 100px;
+      `}
+  }
 `;
 
 const AdverTextWrap = styled.div<Type>`
@@ -126,49 +143,73 @@ const AdverTextWrap = styled.div<Type>`
   `}
   ${(props) =>
     props.type === 2 &&
-    `
-    display: flex;
-    flex-direction: column;
-    flex: 30%;
-  `}
+    css`
+      display: flex;
+      flex-direction: column;
+      flex: 50%;
+    `}
+
+      @media only screen and (max-width: 1000px) {
+    ${(props) =>
+      props.type === 2 &&
+      css`
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        /* margin-bottom: 200px; */
+      `}
+  }
 `;
 
 const AdverImageWrap = styled.div<Type>`
   ${(props) =>
     props.type === 0 &&
-    `
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 170px;
-    margin-bottom: 100px;
-  `}
+    css`
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 170px;
+      margin-bottom: 100px;
+    `}
+
   ${(props) =>
     props.type === 1 &&
-    `
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 170px;
-    margin-bottom: 100px;
-  `}
+    css`
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 170px;
+      margin-bottom: 100px;
+    `}
+
   ${(props) =>
     props.type === 2 &&
-    `
-    flex-basis: 70%;
-    max-width: 70%;
-    height: 100%;
-  `}
+    css`
+      flex-basis: 50%;
+      max-width: 50%;
+      height: 100%;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    `}
+
+      @media only screen and (max-width: 1000px) {
+    ${(props) =>
+      props.type === 2 &&
+      css`
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      `}
+  }
 `;
 
 const AdverImage = styled.img<TypeImage>`
-
   ${(props) =>
     props.type === 0 &&
     `
 
-
-
   `}
   ${(props) =>
     props.type === 1 &&
@@ -177,14 +218,31 @@ const AdverImage = styled.img<TypeImage>`
   `}
   ${(props) =>
     props.type === 2 &&
-    `
-    position: absolute;
-    top: 0px;
-    left: 50%;
-    margin-left: -210px;
-    max-width: 1000px;
-    max-height: 800px;
-  `}
+    css`
+      /* position: absolute; */
+      /* left: 50%; */
+      /* margin-left: -210px; */
+      max-width: 700px;
+      max-height: 800px;
+    `}
+
+      @media only screen and (max-width: 1000px) {
+    ${(props) =>
+      props.type === 2 &&
+      css`
+        max-width: 400px;
+        max-height: 800px;
+      `}
+  }
+
+  @media only screen and (max-width: 1250px) {
+    ${(props) =>
+      props.type === 2 &&
+      css`
+        max-width: 500px;
+        max-height: 800px;
+      `}
+  }
 `;
 
 const AdverMainTitle = styled.h2<Type>`
@@ -195,12 +253,12 @@ const AdverMainTitle = styled.h2<Type>`
 
   ${(props) =>
     props.type === 2 &&
-    `
-    font-size: 60px;
-    font-weight: 700;
-    letter-spacing: -3px;
-    text-align: left;
-  `}
+    css`
+      font-size: 60px;
+      font-weight: 700;
+      letter-spacing: -3px;
+      text-align: left;
+    `}
 `;
 
 const AdverSubTitle = styled.span<Type>`
@@ -210,9 +268,9 @@ const AdverSubTitle = styled.span<Type>`
 
   ${(props) =>
     props.type === 2 &&
-    `
-    text-align: left;
-  `}
+    css`
+      text-align: left;
+    `}
 `;
 
 const AdverSubDetail = styled.span<Type>`
@@ -225,10 +283,17 @@ const AdverSubDetail = styled.span<Type>`
 
   ${(props) =>
     props.type === 2 &&
-    `
-    text-align: left;
+    css`
+      text-align: left;
+    `}
 
-  `}
+  @media only screen and (max-width: 1000px) {
+    ${(props) =>
+      props.type === 2 &&
+      css`
+        margin-top: 20px;
+      `}
+  }
 `;
 
 const AdverDetail = styled.span<Type>`
@@ -241,11 +306,21 @@ const AdverDetail = styled.span<Type>`
 
   ${(props) =>
     props.type === 2 &&
-    `
-  text-align: left;
-  font-size: 28px;
-  max-width: 460px;
-  `}
+    css`
+      text-align: left;
+      font-size: 28px;
+      max-width: 460px;
+    `}
+
+  @media only screen and (max-width: 1000px) {
+    ${(props) =>
+      props.type === 2 &&
+      css`
+      margin-top: 20px;
+        font-size: 20px;
+        max-width: 320px;
+      `}
+  }
 `;
 
 const Links = styled.div<Type>`
@@ -261,11 +336,11 @@ const Links = styled.div<Type>`
   `}
   ${(props) =>
     props.type === 2 &&
-    `
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-  `}
+    css`
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+    `}
 `;
 
 const BuyLink = styled(Link)`
@@ -379,12 +454,10 @@ interface ChapterNav {
 
 // 아이콘 네비게이션
 const ChapterNav = styled.div<ChapterNav>`
-  padding: 0;
-  padding-top: 8px;
-  padding-bottom: 8px;
+  padding: 24px 0;
   text-align: center;
   width: 100%;
-  height: 115px;
+  /* height: 115px; */
   position: relative;
   background-color: ${(props) => props.theme.navBG};
 
@@ -412,7 +485,10 @@ const ChapterNavWrap = styled.div`
   justify-content: center;
 `;
 
-const ChapterNavItems = styled.ul``;
+const ChapterNavItems = styled.ul`
+  display: flex;
+  gap: 7px;
+`;
 
 interface ChapterNavItem {
   columnName: string | undefined;
@@ -442,35 +518,35 @@ const ChapterNavItem = styled.li<ChapterNavItem>`
   // Watch
   ${(props) => {
     if (props.columnName === "Watch") {
-      return `
-      padding: 0 9px;
-      &:last-child {
-        margin-right: 0;
-        padding: 0 4px 0 9px;
-      }
+      return css`
+        padding: 0 9px;
+        &:last-child {
+          margin-right: 0;
+          padding: 0 4px 0 9px;
+        }
       `;
     }
   }}
 
   ${(props) => {
     if (props.taskName === "비교하기") {
-      return `
-      padding: 0 16px;
+      return css`
+        padding: 0 16px;
       `;
     }
     if (props.taskName === "밴드") {
-      return `
-      padding: 0 15px;
+      return css`
+        padding: 0 15px;
       `;
     }
     if (props.taskName === "AirPods") {
-      return `
-      padding: 0 20px;
+      return css`
+        padding: 0 20px;
       `;
     }
     if (props.taskName === "watchOS 10") {
-      return `
-      padding: 0 20px;
+      return css`
+        padding: 0 20px;
       `;
     }
   }}
@@ -478,27 +554,27 @@ const ChapterNavItem = styled.li<ChapterNavItem>`
   // 엔터테인먼트
   ${(props) =>
     props.columnName === "엔터테인먼트"
-      ? `
-      padding: 0 15px;
-      `
+      ? css`
+          padding: 0 15px;
+        `
       : ""};
 
   // 고객지원
   ${(props) =>
     props.columnName === "고객지원"
-      ? `
-      width: 130px;
-      padding: 0 10px;
-      opacity: 1;
-      transform: translateX(0);
-      
-      &:first-child {
-        padding: 0 10px;
-      }
-      &:last-child {
-        padding: 0 10px;
-      }
-      `
+      ? css`
+          width: 130px;
+          padding: 0 10px;
+          opacity: 1;
+          transform: translateX(0);
+
+          &:first-child {
+            padding: 0 10px;
+          }
+          &:last-child {
+            padding: 0 10px;
+          }
+        `
       : ""};
 `;
 
@@ -518,13 +594,13 @@ const ChapterNavLink = styled(Link)<ChapterNavLink>`
   // 고객지원
   ${(props) => {
     if (props.columnName === "고객지원") {
-      return `
-      gap: 16px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-around;
-      align-items: center;
+      return css`
+        gap: 16px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
       `;
 
       if (props.taskName === "iPhone") {
@@ -555,10 +631,12 @@ const ChapterNavIcon = styled.svg<ChapterNavIcon>`
   background-repeat: no-repeat;
   background-image: url(${(props) => props.icon});
   margin-bottom: 4px;
-  
-  ${props => props.darkMode && `
-    filter: brightness(100);
-  `}
+
+  ${(props) =>
+    props.darkMode &&
+    css`
+      filter: brightness(100);
+    `}
 
   // Mac
   ${(props) => {
@@ -566,24 +644,24 @@ const ChapterNavIcon = styled.svg<ChapterNavIcon>`
       switch (props.taskName) {
         case "Mac Pro":
         case "Sonoma":
-          return `
-          width: 35px;
-          height: 54px;
-          background-size: 35px 54px;
-        `;
+          return css`
+            width: 35px;
+            height: 54px;
+            background-size: 35px 54px;
+          `;
         case "Mac mini":
         case "Mac Studio":
-          return `
-          width: 28px;
-          height: 54px;
-          background-size: 28px 54px;
-        `;
+          return css`
+            width: 28px;
+            height: 54px;
+            background-size: 28px 54px;
+          `;
         case "MacBook Pro 13":
-          return `
-          width: 54px;
-          height: 54px;
-          background-size: 54px 54px;
-        `;
+          return css`
+            width: 54px;
+            height: 54px;
+            background-size: 54px 54px;
+          `;
         default:
           return "";
       }
@@ -595,11 +673,11 @@ const ChapterNavIcon = styled.svg<ChapterNavIcon>`
     if (props.parentID === "64ff27d33c9faa3d2f6fbb9f") {
       switch (props.taskName) {
         case "Sonoma":
-          return `
-          width: 35px;
-          height: 54px;
-          background-size: 35px 54px;
-        `;
+          return css`
+            width: 35px;
+            height: 54px;
+            background-size: 35px 54px;
+          `;
         default:
           return "";
       }
@@ -611,11 +689,11 @@ const ChapterNavIcon = styled.svg<ChapterNavIcon>`
     if (props.parentID === "64ff27dc3c9faa3d2f6fbbfb") {
       switch (props.taskName) {
         case "MacBook Pro 13":
-          return `
-          width: 54px;
-          height: 54px;
-          background-size: 54px 54px;
-        `;
+          return css`
+            width: 54px;
+            height: 54px;
+            background-size: 54px 54px;
+          `;
         default:
           return "";
       }
@@ -627,31 +705,31 @@ const ChapterNavIcon = styled.svg<ChapterNavIcon>`
     if (props.parentID === "64ff1cd6e3ac394d8361dc68") {
       switch (props.taskName) {
         case "iPad Pro":
-          return `
-          width: 41px;
-          height: 54px;
-          background-size: 41px 54px;
-        `;
+          return css`
+            width: 41px;
+            height: 54px;
+            background-size: 41px 54px;
+          `;
         case "iPad Air":
         case "액세서리":
         case "iPadOS 17":
-          return `
-          width: 30px;
-          height: 54px;
-          background-size: 30px 54px;
-        `;
+          return css`
+            width: 30px;
+            height: 54px;
+            background-size: 30px 54px;
+          `;
         case "Apple Pencil":
-          return `
-          width: 3px;
-          height: 54px;
-          background-size: 3px 54px;
-        `;
+          return css`
+            width: 3px;
+            height: 54px;
+            background-size: 3px 54px;
+          `;
         case "키보드":
-          return `
-          width: 63px;
-          height: 54px;
-          background-size: 63px 54px;
-        `;
+          return css`
+            width: 63px;
+            height: 54px;
+            background-size: 63px 54px;
+          `;
         default:
           return "";
       }
@@ -660,44 +738,44 @@ const ChapterNavIcon = styled.svg<ChapterNavIcon>`
 
   // 다른 방법 기록용
   ${(props) => {
-      const sizes = {
-        "iPhone SE": { width: 19, height: 54 },
-        AirTag: { width: 30, height: 54 },
-        "iOS 17": { width: 32, height: 54 },
-      };
+    const sizes = {
+      "iPhone SE": { width: 19, height: 54 },
+      AirTag: { width: 30, height: 54 },
+      "iOS 17": { width: 32, height: 54 },
+    };
 
-      const { taskName, parentID } = props;
+    const { taskName, parentID } = props;
 
-      if (parentID === "64ff1cdfe3ac394d8361ddee" && sizes[taskName]) {
-        const { width, height } = sizes[taskName];
-        return `
+    if (parentID === "64ff1cdfe3ac394d8361ddee" && sizes[taskName]) {
+      const { width, height } = sizes[taskName];
+      return css`
         width: ${width}px;
         height: ${height}px;
         background-size: ${width}px ${height}px;
       `;
-      }
+    }
   }}
 
   ${(props) => {
-      const sizes = {
-        "iPad(10세대)": { width: 30, height: 54 },
-        "iPad(9세대)": { width: 30, height: 54 },
-        "Apple Pencil": { width: 3, height: 54 },
-        키보드: { width: 63, height: 54 },
-        액세서리: { width: 31, height: 54 },
-        "iPadOS 17": { width: 32, height: 54 },
-      };
+    const sizes = {
+      "iPad(10세대)": { width: 30, height: 54 },
+      "iPad(9세대)": { width: 30, height: 54 },
+      "Apple Pencil": { width: 3, height: 54 },
+      키보드: { width: 63, height: 54 },
+      액세서리: { width: 31, height: 54 },
+      "iPadOS 17": { width: 32, height: 54 },
+    };
 
-      const { taskName, parentID } = props;
+    const { taskName, parentID } = props;
 
-      if (parentID === "64ff28633c9faa3d2f6fc2ed" && sizes[taskName]) {
-        const { width, height } = sizes[taskName];
-        return `
+    if (parentID === "64ff28633c9faa3d2f6fc2ed" && sizes[taskName]) {
+      const { width, height } = sizes[taskName];
+      return css`
         width: ${width}px;
         height: ${height}px;
         background-size: ${width}px ${height}px;
       `;
-      }
+    }
   }}
 
   // Watch
@@ -705,17 +783,17 @@ const ChapterNavIcon = styled.svg<ChapterNavIcon>`
     if (props.parentID === "64ff1d19e3ac394d8361df79") {
       switch (props.taskName) {
         case "밴드":
-          return `
-        width: 17px;
-        height: 54px;
-        background-size: 17px 54px;
-        `;
+          return css`
+            width: 17px;
+            height: 54px;
+            background-size: 17px 54px;
+          `;
         case "watchOS 10":
-          return `
-        width: 35px;
-        height: 54px;
-        background-size: 35px 54px;
-        `;
+          return css`
+            width: 35px;
+            height: 54px;
+            background-size: 35px 54px;
+          `;
         default:
           return "";
       }
@@ -727,17 +805,17 @@ const ChapterNavIcon = styled.svg<ChapterNavIcon>`
     if (props.parentID === "64ff1d24e3ac394d8361e29e") {
       switch (props.taskName) {
         case "Apple TV 앱":
-          return `
-        width: 50px;
-        height: 54px;
-        background-size: 50px 54px;
-        `;
+          return css`
+            width: 50px;
+            height: 54px;
+            background-size: 50px 54px;
+          `;
         case "Apple TV+":
-          return `
-        width: 47px;
-        height: 54px;
-        background-size: 47px 54px;
-        `;
+          return css`
+            width: 47px;
+            height: 54px;
+            background-size: 47px 54px;
+          `;
       }
     }
   }}
@@ -745,11 +823,11 @@ const ChapterNavIcon = styled.svg<ChapterNavIcon>`
 // 액세서리
   ${(props) => {
     if (props.taskName === "iPad" && props.parentID === "64ff1d2fe3ac394d8361e5d7") {
-      return `
-      width: 47px;
-      height: 54px;
-      background-size: 47px 54px;
-    `;
+      return css`
+        width: 47px;
+        height: 54px;
+        background-size: 47px 54px;
+      `;
     }
   }}
 
@@ -758,47 +836,47 @@ const ChapterNavIcon = styled.svg<ChapterNavIcon>`
     if (props.parentID === "64ff1d34e3ac394d8361e77b") {
       switch (props.taskName) {
         case "iPhone":
-          return `
-          width: 34px;
-          height: 68px;
-          background-size: 34px 68px;
+          return css`
+            width: 34px;
+            height: 68px;
+            background-size: 34px 68px;
           `;
         case "Mac":
-          return `
-          width: 96px;
-          height: 68px;
-          background-size: 96px 68px;
+          return css`
+            width: 96px;
+            height: 68px;
+            background-size: 96px 68px;
           `;
         case "iPad":
-          return `
-          width: 80px;
-          height: 68px;
-          background-size: 80px 68px;
+          return css`
+            width: 80px;
+            height: 68px;
+            background-size: 80px 68px;
           `;
         case "Watch":
-          return `
-          width: 42px;
-          height: 68px;
-          background-size: 42px 68px;
+          return css`
+            width: 42px;
+            height: 68px;
+            background-size: 42px 68px;
           `;
         case "AirPods":
-          return `
-          margin-top: 8px;
-          width: 66px;
-          height: 60px;
-          background-size: 66px 60px;
+          return css`
+            margin-top: 8px;
+            width: 66px;
+            height: 60px;
+            background-size: 66px 60px;
           `;
         case "Music":
-          return `
-          width: 68px;
-          height: 68px;
-          background-size: 68px 68px;
+          return css`
+            width: 68px;
+            height: 68px;
+            background-size: 68px 68px;
           `;
         case "TV":
-          return `
-          width: 72px;
-          height: 68px;
-          background-size: 72px 68px;
+          return css`
+            width: 72px;
+            height: 68px;
+            background-size: 72px 68px;
           `;
       }
     }
@@ -812,23 +890,22 @@ interface ChapterNavName {
 const ChapterNavName = styled.span<ChapterNavName>`
   display: inline-block;
   font-size: 12px;
-  font-weight: 400;
+  font-weight: 300;
   line-height: 1.33337;
   color: ${(props) => props.theme.chapterNavText};
   white-space: normal;
-    max-width: 7em;
-    margin: 0 auto;
+  max-width: 7em;
+  margin: 0 auto;
 
   ${(props) =>
     props.columnName === "Watch"
-      ? `
-    display: block;
-    max-width: 7em;
-  `
+      ? css`
+          display: block;
+          max-width: 7em;
+        `
       : ""};
 
   @media only screen and (max-width: 833px) {
-
   }
 `;
 
@@ -857,12 +934,10 @@ interface Props {
 function Category({ gmId, categoryList, selectedColumn, setSelectedColumn, selectedTask, setSelectedTask, setIsDarkMode }: Props) {
   const { id } = useParams();
   const navigate = useNavigate();
-  // console.log(selectedTask);
 
   const [chapterNavRender, setRerender] = useState<boolean>(false);
   const [isIdNotFound, setIsIdNotFound] = useState<boolean>(false);
   const [advertise, setAdvertise] = useState<Advertise[]>([]);
-  // console.log(isIdNotFound);
 
   useEffect(() => {
     setRerender(true);
@@ -985,18 +1060,18 @@ function Category({ gmId, categoryList, selectedColumn, setSelectedColumn, selec
                             taskName={taskId.name}
                             type={taskId.type}
                           >
-                            {iconItem?.icon !== "" &&
-                            <ChapterNavIcon
-                              className="ChapterNavIcon"
-                              columnName={selectedColumn.name}
-                              taskName={taskId.name}
-                              parentID={taskId.parentID}
-                              icon={iconItem?.icon}
-                              width={iconItem?.width}
-                              height={iconItem?.height}
-                              darkMode={selectedColumn.darkMode}
-                            />
-                            }
+                            {iconItem?.icon !== "" && (
+                              <ChapterNavIcon
+                                className="ChapterNavIcon"
+                                columnName={selectedColumn.name}
+                                taskName={taskId.name}
+                                parentID={taskId.parentID}
+                                icon={iconItem?.icon}
+                                width={iconItem?.width}
+                                height={iconItem?.height}
+                                darkMode={selectedColumn.darkMode}
+                              />
+                            )}
                             <ChapterNavName className="ChapterNavName" columnName={selectedColumn.name}>
                               {taskId.name}
                             </ChapterNavName>
@@ -1022,18 +1097,18 @@ function Category({ gmId, categoryList, selectedColumn, setSelectedColumn, selec
                             taskName={taskId.name}
                             type={taskId.type}
                           >
-                            {iconItem?.icon !== "" && 
-                            <ChapterNavIcon
-                              className="ChapterNavIcon"
-                              columnName={selectedColumn.name}
-                              taskName={taskId.name}
-                              parentID={taskId.parentID}
-                              icon={iconItem?.icon}
-                              width={iconItem?.width}
-                              height={iconItem?.height}
-                              darkMode={selectedColumn.darkMode}
-                            />
-                            }
+                            {iconItem?.icon !== "" && (
+                              <ChapterNavIcon
+                                className="ChapterNavIcon"
+                                columnName={selectedColumn.name}
+                                taskName={taskId.name}
+                                parentID={taskId.parentID}
+                                icon={iconItem?.icon}
+                                width={iconItem?.width}
+                                height={iconItem?.height}
+                                darkMode={selectedColumn.darkMode}
+                              />
+                            )}
                             <ChapterNavName className="ChapterNavName" columnName={selectedColumn.name}>
                               {taskId.name}
                             </ChapterNavName>
