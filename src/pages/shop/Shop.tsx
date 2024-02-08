@@ -154,10 +154,6 @@ export const NavHeight = styled.div<NavHeightType>`
           height: ${props.height};
           transition: height var(--nav-height-rate) cubic-bezier(0.4, 0, 0.6, 1), visibility var(--nav-visibility-rate) step-start,
             background var(--nav-background-color-rate) cubic-bezier(0.4, 0, 0.6, 1);
-
-          html {
-            overflow: hidden;
-          }
         `
       : css`
           background: ${props.theme.navBG};
@@ -172,7 +168,6 @@ export const NavHeight = styled.div<NavHeightType>`
       top: 0;
       width: 100%;
       z-index: 4;
-      overflow-x: hidden;
       /* background-color: var(--nav-background-color); */
       /* display: flex;
       flex-direction: column;
@@ -190,12 +185,17 @@ export const NavHeight = styled.div<NavHeightType>`
               opacity: 1;
               /* visibility: visible; */
               background: ${props.theme.navSubBG};
-              /* background: red; */
-              height: auto;
+              height: 100dvh;
               transition: height var(--nav-mobile-height-rate) cubic-bezier(0.4, 0, 0.6, 1) 80ms,
-                /* visibility var(--nav-mobile-visibility-rate) cubic-bezier(0.4, 0, 0.6, 1), */
-                opacity ${(props) => props.theme.navMobileOpacityRate} cubic-bezier(0.4, 0, 0.6, 1) 0.1s,
+                /* visibility var(--nav-mobile-visibility-rate) cubic-bezier(0.4, 0, 0.6, 1), */ opacity
+                  ${(props) => props.theme.navMobileOpacityRate} cubic-bezier(0.4, 0, 0.6, 1) 0.1s,
                 background var(--nav-mobile-background-color-rate) cubic-bezier(0.4, 0, 0.6, 1) 80ms;
+              overflow-x: hidden;
+              overflow-y: scroll;
+
+              html {
+                overflow: hidden;
+              }
             `
           : css`
               opacity: 0;
@@ -203,8 +203,8 @@ export const NavHeight = styled.div<NavHeightType>`
               /* visibility: hidden; */
               height: 0px;
               transition: height var(--nav-mobile-height-rate) cubic-bezier(0.4, 0, 0.6, 1) 80ms,
-                /* visibility var(--nav-mobile-visibility-rate) cubic-bezier(0.4, 0, 0.6, 1) 1.12s, */
-                opacity ${(props) => props.theme.navMobileOpacityRate} cubic-bezier(0.4, 0, 0.6, 1) 0.1s,
+                /* visibility var(--nav-mobile-visibility-rate) cubic-bezier(0.4, 0, 0.6, 1) 1.12s, */ opacity
+                  ${(props) => props.theme.navMobileOpacityRate} cubic-bezier(0.4, 0, 0.6, 1) 0.1s,
                 background var(--nav-mobile-background-color-rate) cubic-bezier(0.4, 0, 0.6, 1) 80ms;
             `}
     }
@@ -1765,19 +1765,19 @@ function Shop() {
 
       document.body.style.paddingRight = `${scrollbarWidth}px`;
       document.body.style.overflow = "hidden";
-      document.documentElement.style.overflow = "hidden";
+      // document.documentElement.style.overflow = "hidden";
     } else {
       document.body.style.paddingRight = "0";
       document.body.style.overflow = "auto";
-      document.documentElement.style.overflow = "auto";
+      // document.documentElement.style.overflow = "auto";
       // setIsSubCateShow(false);
       // setIsNavFirstMenuShow(false);
       // setIsNavSecondMenuShow(false);
     }
 
     return () => {
-      document.body.style.overflow = "auto";
-      document.documentElement.style.overflow = "auto";
+      // document.body.style.overflow = "auto";
+      // document.documentElement.style.overflow = "auto";
     };
   }, [isMobile, isSubCateShow]);
 
