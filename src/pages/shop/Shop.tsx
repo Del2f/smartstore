@@ -185,17 +185,15 @@ export const NavHeight = styled.div<NavHeightType>`
               opacity: 1;
               /* visibility: visible; */
               background: ${props.theme.navSubBG};
-              height: 100lvh;
+              height: 100dvh;
+              overflow-x: hidden;
+              overflow-y: scroll;
               transition: height var(--nav-mobile-height-rate) cubic-bezier(0.4, 0, 0.6, 1) 80ms,
                 /* visibility var(--nav-mobile-visibility-rate) cubic-bezier(0.4, 0, 0.6, 1), */ opacity
                   ${(props) => props.theme.navMobileOpacityRate} cubic-bezier(0.4, 0, 0.6, 1) 0.1s,
                 background var(--nav-mobile-background-color-rate) cubic-bezier(0.4, 0, 0.6, 1) 80ms;
-              overflow-x: hidden;
-              overflow-y: hidden;
 
-              html {
-                overflow: hidden;
-              }
+
             `
           : css`
               opacity: 0;
@@ -217,13 +215,24 @@ export const NavHeight = styled.div<NavHeightType>`
   }
 `;
 
-export const MainWrap = styled.div`
+interface mainwrap {
+  isMobile: boolean;
+  isSubCateShow: boolean;
+}
+
+export const MainWrap = styled.div<mainwrap>`
   @media only screen and (max-width: 833px) {
     & {
       min-height: 0px;
       max-height: none;
       /* overflow: hidden; */
       /* height: 1000px; */
+      
+      ${props => props.isMobile && props.isSubCateShow ? `
+
+      ` : `
+        
+      `}
     }
   }
 `;
@@ -317,6 +326,8 @@ const NavTabMenuWrap = styled.div<NavTabType>`
 
   @media only screen and (max-width: 833px) {
     & {
+        height: 100dvh;
+
       ${(props) =>
         props.isNavFirstMenuShow
           ? css`
@@ -451,6 +462,7 @@ export const NavTabMenu = styled.div<NavTabMenuType>`
       padding-top: 50px;
       padding-bottom: 84px;
       position: relative;
+      height: auto;
 
       ${(props) =>
         props.isNavSecondMenuShow
@@ -1750,7 +1762,6 @@ function Shop() {
   // footer columns
   const [selectedFooterName, setSelectedFooterName] = useState<string>(""); // footer 선택된 이름
 
-  const navHeight = useRef<HTMLDivElement>(null);
   const submenu = useRef<HTMLDivElement>(null);
 
   // 페이지 이동시 카테고리 닫기
@@ -1759,27 +1770,6 @@ function Shop() {
     setIsSubCateShow(false);
   }, [location]);
 
-  useEffect(() => {
-    const handleScroll = () => {
-
-      if (navHeight.current) {
-        const viewportHeight = window.innerHeight;
-        const menuHeight = navHeight.current.offsetHeight;
-        const maxHeight = viewportHeight - menuHeight;
-  
-        if (window.scrollY > maxHeight) {
-          window.scrollTo(0, maxHeight);
-        }
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
   // 모바일 메뉴에서 휠스크롤 숨기기 및 우측 padding 계산
   useEffect(() => {
     if (isMobile && isSubCateShow) {
@@ -1787,19 +1777,19 @@ function Shop() {
 
       document.body.style.paddingRight = `${scrollbarWidth}px`;
       document.body.style.overflow = "hidden";
-      // document.documentElement.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
     } else {
       document.body.style.paddingRight = "0";
       document.body.style.overflow = "auto";
-      // document.documentElement.style.overflow = "auto";
+      document.documentElement.style.overflow = "auto";
       // setIsSubCateShow(false);
       // setIsNavFirstMenuShow(false);
       // setIsNavSecondMenuShow(false);
     }
 
     return () => {
-      // document.body.style.overflow = "auto";
-      // document.documentElement.style.overflow = "auto";
+      document.body.style.overflow = "auto";
+      document.documentElement.style.overflow = "auto";
     };
   }, [isMobile, isSubCateShow]);
 
@@ -2165,15 +2155,9 @@ function Shop() {
   return (
     <>
       <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
-        <MainWrap className="MainWrap">
+        <MainWrap className="MainWrap" isMobile={isMobile} isSubCateShow={isSubCateShow}>
           <Blur className="Blur" boolean={isSubCateShow} onMouseEnter={(e: any) => subMenuClose(e, "blur")}></Blur>
-          <NavHeight
-            className="NavHeight"
-            ref={navHeight}
-            height={height}
-            selectedCateName={selectedCateName}
-            isSubCateShow={isSubCateShow}
-          ></NavHeight>
+          <NavHeight className="NavHeight" height={height} selectedCateName={selectedCateName} isSubCateShow={isSubCateShow}></NavHeight>
           <NavWrap className="NavWrap" isSubCateShow={isSubCateShow}>
             <NavInner className="NavInner">
               <NavFlex className="NavFlex">
