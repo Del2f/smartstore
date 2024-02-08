@@ -191,7 +191,7 @@ export const NavHeight = styled.div<NavHeightType>`
                   ${(props) => props.theme.navMobileOpacityRate} cubic-bezier(0.4, 0, 0.6, 1) 0.1s,
                 background var(--nav-mobile-background-color-rate) cubic-bezier(0.4, 0, 0.6, 1) 80ms;
               overflow-x: hidden;
-              overflow-y: scroll;
+              overflow-y: hidden;
 
               html {
                 overflow: hidden;
@@ -1750,6 +1750,7 @@ function Shop() {
   // footer columns
   const [selectedFooterName, setSelectedFooterName] = useState<string>(""); // footer 선택된 이름
 
+  const navHeight = useRef<HTMLDivElement>(null);
   const submenu = useRef<HTMLDivElement>(null);
 
   // 페이지 이동시 카테고리 닫기
@@ -1757,6 +1758,27 @@ function Shop() {
     setHeight("44px");
     setIsSubCateShow(false);
   }, [location]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+
+      if (navHeight.current) {
+        const viewportHeight = window.innerHeight;
+        const menuHeight = navHeight.current.offsetHeight;
+        const maxHeight = viewportHeight - menuHeight;
+  
+        if (window.scrollY > maxHeight) {
+          window.scrollTo(0, maxHeight);
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   // 모바일 메뉴에서 휠스크롤 숨기기 및 우측 padding 계산
   useEffect(() => {
@@ -2145,7 +2167,13 @@ function Shop() {
       <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
         <MainWrap className="MainWrap">
           <Blur className="Blur" boolean={isSubCateShow} onMouseEnter={(e: any) => subMenuClose(e, "blur")}></Blur>
-          <NavHeight className="NavHeight" height={height} selectedCateName={selectedCateName} isSubCateShow={isSubCateShow}></NavHeight>
+          <NavHeight
+            className="NavHeight"
+            ref={navHeight}
+            height={height}
+            selectedCateName={selectedCateName}
+            isSubCateShow={isSubCateShow}
+          ></NavHeight>
           <NavWrap className="NavWrap" isSubCateShow={isSubCateShow}>
             <NavInner className="NavInner">
               <NavFlex className="NavFlex">
@@ -3293,10 +3321,7 @@ function Shop() {
           </NavWrap>
           <Routes>
             <Route path="/buy/:id" element={<Buy />} />
-            <Route
-              path="/products/:id"
-              element={<Products gmId={gmId} categoryList={categoryList} setNavCart={setNavCart} isMobile={isMobile}/>}
-            />
+            <Route path="/products/:id" element={<Products gmId={gmId} categoryList={categoryList} setNavCart={setNavCart} isMobile={isMobile} />} />
             <Route path="/products/*" element={<NotFound />} />
             <Route path="/*" element={<NotFound />} />
             <Route
