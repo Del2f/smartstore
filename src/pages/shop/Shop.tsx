@@ -185,6 +185,7 @@ export const NavHeight = styled.div<NavHeightType>`
               opacity: 1;
               /* visibility: visible; */
               background: ${props.theme.navSubBG};
+              height: 100vh;
               height: 100dvh;
               overflow-x: hidden;
               overflow-y: scroll;
