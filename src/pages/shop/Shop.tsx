@@ -189,7 +189,8 @@ export const NavHeight = styled.div<NavHeightType>`
               height: 100dvh;
               overflow-x: hidden;
               overflow-y: scroll;
-              transition: height var(--nav-mobile-height-rate) cubic-bezier(0.4, 0, 0.6, 1) 80ms,
+              transition:
+              /* height var(--nav-mobile-height-rate) cubic-bezier(0.4, 0, 0.6, 1) 80ms, */
                 /* visibility var(--nav-mobile-visibility-rate) cubic-bezier(0.4, 0, 0.6, 1), */ opacity
                   ${(props) => props.theme.navMobileOpacityRate} cubic-bezier(0.4, 0, 0.6, 1) 0.1s,
                 background var(--nav-mobile-background-color-rate) cubic-bezier(0.4, 0, 0.6, 1) 80ms;
@@ -199,7 +200,8 @@ export const NavHeight = styled.div<NavHeightType>`
               background: ${props.theme.navBG};
               /* visibility: hidden; */
               height: 0px;
-              transition: height var(--nav-mobile-height-rate) cubic-bezier(0.4, 0, 0.6, 1) 80ms,
+              transition:
+              /* height var(--nav-mobile-height-rate) cubic-bezier(0.4, 0, 0.6, 1) 80ms, */
                 /* visibility var(--nav-mobile-visibility-rate) cubic-bezier(0.4, 0, 0.6, 1) 1.12s, */ opacity
                   ${(props) => props.theme.navMobileOpacityRate} cubic-bezier(0.4, 0, 0.6, 1) 0.1s,
                 background var(--nav-mobile-background-color-rate) cubic-bezier(0.4, 0, 0.6, 1) 80ms;
@@ -325,8 +327,7 @@ const NavTabMenuWrap = styled.div<NavTabType>`
 
   @media only screen and (max-width: 833px) {
     & {
-        height: 100dvh;
-
+      
       ${(props) =>
         props.isNavFirstMenuShow
           ? css`
