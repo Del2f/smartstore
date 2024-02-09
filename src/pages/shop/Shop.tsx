@@ -190,7 +190,7 @@ export const NavHeight = styled.div<NavHeightType>`
               overflow-x: hidden;
               overflow-y: scroll;
               transition:
-              /* height var(--nav-mobile-height-rate) cubic-bezier(0.4, 0, 0.6, 1) 80ms, */
+              height var(--nav-mobile-height-rate) cubic-bezier(0.4, 0, 0.6, 1) 80ms,
                 /* visibility var(--nav-mobile-visibility-rate) cubic-bezier(0.4, 0, 0.6, 1), */ opacity
                   ${(props) => props.theme.navMobileOpacityRate} cubic-bezier(0.4, 0, 0.6, 1) 0.1s,
                 background var(--nav-mobile-background-color-rate) cubic-bezier(0.4, 0, 0.6, 1) 80ms;
@@ -201,7 +201,7 @@ export const NavHeight = styled.div<NavHeightType>`
               /* visibility: hidden; */
               height: 0px;
               transition:
-              /* height var(--nav-mobile-height-rate) cubic-bezier(0.4, 0, 0.6, 1) 80ms, */
+              height var(--nav-mobile-height-rate) cubic-bezier(0.4, 0, 0.6, 1) 80ms,
                 /* visibility var(--nav-mobile-visibility-rate) cubic-bezier(0.4, 0, 0.6, 1) 1.12s, */ opacity
                   ${(props) => props.theme.navMobileOpacityRate} cubic-bezier(0.4, 0, 0.6, 1) 0.1s,
                 background var(--nav-mobile-background-color-rate) cubic-bezier(0.4, 0, 0.6, 1) 80ms;
@@ -1224,7 +1224,7 @@ export const Blur = styled.div<BlurType>`
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 100dvh;
   z-index: 1;
 
   ${(props) =>
@@ -1755,8 +1755,8 @@ function Shop() {
 
   console.log("isMobile " + isMobile);
   // console.log("selectedCateName " + selectedCateName);
-  // console.log("isSubCateShow " + isSubCateShow);
-  // console.log("isNavFirstMenuShow " + isNavFirstMenuShow);
+  console.log("isSubCateShow " + isSubCateShow);
+  console.log("isNavFirstMenuShow " + isNavFirstMenuShow);
   // console.log("isNavSecondMenuShow " + isNavSecondMenuShow);
 
   // footer columns
@@ -1986,7 +1986,11 @@ function Shop() {
   // 서브메뉴가 내려와있을때 하단으로 나갔을 경우 height를 0으로 변경합니다.
   const subMenuClose = (e: any, name: any) => {
     e.stopPropagation();
-    // console.log('subMenuClose');
+    console.log('subMenuClose');
+
+    if (isMobile) {
+      return;
+    }
 
     timer = setTimeout(() => {
       if (selectedCateName === name) {
