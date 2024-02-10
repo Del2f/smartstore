@@ -49,7 +49,6 @@ interface NavHeightType {
   height?: string;
   isSubCateShow?: boolean;
   selectedCateName?: string;
-  isSubCateResize?: Boolean;
 }
 
 interface NavMenuBackType {
@@ -181,12 +180,6 @@ export const NavHeight = styled.div<NavHeightType>`
       height: 100%; */
     }
 
-    /* ${(props) =>
-      props.isSubCateResize &&
-      css`
-        transition: height var(--nav-mobile-height-rate) cubic-bezier(0.4, 0, 0.6, 1) 80ms;
-      `} */
-
     ${(props) =>
       props.isSubCateShow &&
       css`
@@ -220,23 +213,6 @@ export const NavHeight = styled.div<NavHeightType>`
       justify-content: flex-start;
       padding: 3px 48px 4px;
     }
-  }
-`;
-
-const NavHeightCover = styled.div<NavHeightType>`
-  @media only screen and (max-width: 833px) {
-    position: fixed;
-    display: none;
-    width: 100%;
-    height: 100dvh;
-    background: ${(props) => props.theme.navSubBG};
-    z-index: 3;
-
-    ${(props) =>
-      props.isSubCateResize &&
-      css`
-        display: block;
-      `}
   }
 `;
 
@@ -1767,7 +1743,6 @@ function Shop() {
   const [navCart, setNavCart] = useState<cartListType[]>();
 
   const [isSubCateShow, setIsSubCateShow] = useState<boolean>(false); // 하단 메뉴 켜기/닫기
-  const [isSubCateResize, setIsSubCateResize] = useState<boolean>(false); // 모바일 메뉴 켜고 transition height 로 인한 리사이즈 방지
   const [selectedCateName, setSelectedCateName] = useState<string>(""); // 선택된 카테고리
   const [height, setHeight] = useState<string>("44px"); // 하단 메뉴 높이 PC전용
 
@@ -1778,7 +1753,6 @@ function Shop() {
   // console.log("isMobile " + isMobile);
   // console.log("selectedCateName " + selectedCateName);
   console.log("isSubCateShow " + isSubCateShow);
-  console.log("isSubCateResize " + isSubCateResize);
   // console.log("isNavFirstMenuShow " + isNavFirstMenuShow);
   // console.log("isNavSecondMenuShow " + isNavSecondMenuShow);
 
@@ -2047,18 +2021,7 @@ function Shop() {
       return;
     }
 
-    setTimeout(() => {
-      if (!isSubCateShow) {
-        setIsSubCateResize(true);
-        
-      }
-    }, 600);
-
     setIsSubCateShow(!isSubCateShow);
-
-              if (isSubCateShow) {
-                setIsSubCateResize(false);
-              }
     setIsNavFirstMenuShow(!isNavFirstMenuShow);
     setIsNavSecondMenuShow(false);
     setSelectedCateName("");
@@ -2205,7 +2168,6 @@ function Shop() {
             height={height}
             selectedCateName={selectedCateName}
             isSubCateShow={isSubCateShow}
-            isSubCateResize={isSubCateResize}
           >
             {/* 모바일 메뉴 */}
             {isMobile && (
@@ -2904,7 +2866,6 @@ function Shop() {
                 </SubMenu>
               </NavTabMenuWrap>
             )}
-            <NavHeightCover isSubCateResize={isSubCateResize}></NavHeightCover>
           </NavHeight>
           <NavWrap className="NavWrap" isSubCateShow={isSubCateShow}>
             <NavInner className="NavInner">
