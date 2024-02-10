@@ -228,7 +228,7 @@ const NavHeightCover = styled.div<NavHeightType>`
     position: fixed;
     display: none;
     width: 100%;
-    height: calc(100dvh + 100px);
+    height: calc(100dvh + 200px);
     background: ${(props) => props.theme.navSubBG};
     z-index: 3;
 
