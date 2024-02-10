@@ -228,7 +228,7 @@ const NavHeightCover = styled.div<NavHeightType>`
     position: fixed;
     display: none;
     width: 100%;
-    height: calc(100dvh + 200px);
+    height: 100dvh;
     background: ${(props) => props.theme.navSubBG};
     z-index: 3;
 
@@ -1804,21 +1804,21 @@ function Shop() {
     if (isMobile && isSubCateShow) {
       const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
 
-      document.body.style.paddingRight = `${scrollbarWidth}px`;
-      document.body.style.overflow = "hidden";
-      document.documentElement.style.overflow = "hidden";
+      // document.body.style.paddingRight = `${scrollbarWidth}px`;
+      // document.body.style.overflow = "hidden";
+      // document.documentElement.style.overflow = "hidden";
     } else {
-      document.body.style.paddingRight = "0";
-      document.body.style.overflow = "auto";
-      document.documentElement.style.overflow = "auto";
+      // document.body.style.paddingRight = "0";
+      // document.body.style.overflow = "auto";
+      // document.documentElement.style.overflow = "auto";
       // setIsSubCateShow(false);
       // setIsNavFirstMenuShow(false);
       // setIsNavSecondMenuShow(false);
     }
 
     return () => {
-      document.body.style.overflow = "auto";
-      document.documentElement.style.overflow = "auto";
+      // document.body.style.overflow = "auto";
+      // document.documentElement.style.overflow = "auto";
     };
   }, [isMobile, isSubCateShow]);
 
