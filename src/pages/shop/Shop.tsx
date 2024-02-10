@@ -46,9 +46,10 @@ interface NavWrapType {
 }
 
 interface NavHeightType {
-  height: string;
-  isSubCateShow: boolean;
-  selectedCateName: string;
+  height?: string;
+  isSubCateShow?: boolean;
+  selectedCateName?: string;
+  isSubCateResize?: Boolean;
 }
 
 interface NavMenuBackType {
@@ -178,38 +179,64 @@ export const NavHeight = styled.div<NavHeightType>`
       left: 0;
       width: 100%;
       height: 100%; */
-
-      ${(props) =>
-        props.isSubCateShow
-          ? css`
-              opacity: 1;
-              /* visibility: visible; */
-              background: ${props.theme.navSubBG};
-              height: calc(100dvh + 100px);
-              overflow-x: hidden;
-              overflow-y: scroll;
-              transition: height var(--nav-mobile-height-rate) cubic-bezier(0.4, 0, 0.6, 1) 80ms,
-                /* visibility var(--nav-mobile-visibility-rate) cubic-bezier(0.4, 0, 0.6, 1), */ opacity
-                  ${(props) => props.theme.navMobileOpacityRate} cubic-bezier(0.4, 0, 0.6, 1) 0.1s,
-                background var(--nav-mobile-background-color-rate) cubic-bezier(0.4, 0, 0.6, 1) 80ms;
-            `
-          : css`
-              opacity: 0;
-              background: ${props.theme.navBG};
-              /* visibility: hidden; */
-              height: 0px;
-              transition: height var(--nav-mobile-height-rate) cubic-bezier(0.4, 0, 0.6, 1) 80ms,
-                /* visibility var(--nav-mobile-visibility-rate) cubic-bezier(0.4, 0, 0.6, 1) 1.12s, */ opacity
-                  ${(props) => props.theme.navMobileOpacityRate} cubic-bezier(0.4, 0, 0.6, 1) 0.1s,
-                background var(--nav-mobile-background-color-rate) cubic-bezier(0.4, 0, 0.6, 1) 80ms;
-            `}
     }
+
+    /* ${(props) =>
+      props.isSubCateResize &&
+      css`
+        transition: height var(--nav-mobile-height-rate) cubic-bezier(0.4, 0, 0.6, 1) 80ms;
+      `} */
+
+    ${(props) =>
+      props.isSubCateShow &&
+      css`
+        opacity: 1;
+        background: ${props.theme.navSubBG};
+        height: 100dvh;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        transition:
+        height var(--nav-mobile-height-rate) cubic-bezier(0.4, 0, 0.6, 1) 80ms,
+          opacity ${(props) => props.theme.navMobileOpacityRate} cubic-bezier(0.4, 0, 0.6, 1) 0.1s,
+          background var(--nav-mobile-background-color-rate) cubic-bezier(0.4, 0, 0.6, 1) 80ms;
+      `}
+
+    ${(props) =>
+      !props.isSubCateShow &&
+      css`
+        opacity: 0;
+        background: ${props.theme.navBG};
+        height: 0px;
+        transition:
+        height var(--nav-mobile-height-rate) cubic-bezier(0.4, 0, 0.6, 1) 80ms,
+          opacity ${(props) => props.theme.navMobileOpacityRate} cubic-bezier(0.4, 0, 0.6, 1) 0.1s,
+          background var(--nav-mobile-background-color-rate) cubic-bezier(0.4, 0, 0.6, 1) 80ms;
+      `}
+
+
 
     & .NavTab-Menu-li {
       width: 100%;
       justify-content: flex-start;
       padding: 3px 48px 4px;
     }
+  }
+`;
+
+const NavHeightCover = styled.div<NavHeightType>`
+  @media only screen and (max-width: 833px) {
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    background: ${props => props.theme.navSubBG};
+    z-index: 3;
+
+    ${(props) =>
+      props.isSubCateResize &&
+      css`
+        display: block;
+      `}
   }
 `;
 
@@ -324,7 +351,8 @@ const NavTabMenuWrap = styled.div<NavTabType>`
 
   @media only screen and (max-width: 833px) {
     & {
-      
+      height: 100%;
+
       ${(props) =>
         props.isNavFirstMenuShow
           ? css`
@@ -460,30 +488,6 @@ export const NavTabMenu = styled.div<NavTabMenuType>`
       padding-bottom: 84px;
       position: relative;
       height: auto;
-
-      ${(props) =>
-        props.isNavSecondMenuShow
-          ? css`
-              /* visibility: hidden; */
-              animation: ${NavTabMenuAnimationOut} 0.5s cubic-bezier(0.4, 0, 0.6, 1) both;
-              /* opacity: 0; */
-              /* transform: translateX(-20px); */
-              /* transition-duration: 0.3s; */
-            `
-          : css`
-              /* visibility: visible; */
-              animation: ${NavTabMenuAnimationIn} 0.5s cubic-bezier(0.4, 0, 0.6, 1) both;
-              /* opacity: 1; */
-              /* transform: translateX(0px); */
-              /* transition-duration: 0.3s; */
-            `}/* ${(props) =>
-        props.isSubCateShow
-          ? css`
-              opacity: 1;
-            `
-          : css`
-              opacity: 0;
-            `} */
     }
 
     & .NavTab-Menu-li {
@@ -494,11 +498,32 @@ export const NavTabMenu = styled.div<NavTabMenuType>`
   }
 `;
 
-const NavTabWrap = styled.div`
+const NavTabWrap = styled.div<NavTabMenuType>`
   z-index: 1;
 
   @media only screen and (max-width: 833px) {
     width: 100%;
+    background-color: transparent;
+    z-index: 5;
+    position: relative;
+    height: auto;
+
+    ${(props) =>
+      props.isNavSecondMenuShow
+        ? css`
+            /* visibility: hidden; */
+            animation: ${NavTabMenuAnimationOut} 0.5s cubic-bezier(0.4, 0, 0.6, 1) both;
+            /* opacity: 0; */
+            /* transform: translateX(-20px); */
+            /* transition-duration: 0.3s; */
+          `
+        : css`
+            /* visibility: visible; */
+            animation: ${NavTabMenuAnimationIn} 0.5s cubic-bezier(0.4, 0, 0.6, 1) both;
+            /* opacity: 1; */
+            /* transform: translateX(0px); */
+            /* transition-duration: 0.3s; */
+          `}
   }
 `;
 
@@ -867,7 +892,6 @@ export const SubMenu = styled.div<SubMenuType>`
       left: 0;
       right: 0;
       margin-top: 0;
-      min-height: 100dvh;
       padding-top: 50px;
 
       ${(props) =>
@@ -946,12 +970,12 @@ export const SubMenuInner = styled.div<SubMenuInnerType>`
   height: 100%;
   padding: 40px 22px 84px 22px;
 
-  ${(props) =>
+  /* ${(props) =>
     props.selectedCateName === props.name
       ? `
     `
       : `
-  `};
+  `}; */
 
   ${(props) =>
     props.name === "cart"
@@ -1743,6 +1767,7 @@ function Shop() {
   const [navCart, setNavCart] = useState<cartListType[]>();
 
   const [isSubCateShow, setIsSubCateShow] = useState<boolean>(false); // 하단 메뉴 켜기/닫기
+  const [isSubCateResize, setIsSubCateResize] = useState<boolean>(false); // 모바일 메뉴 켜고 transition height 로 인한 리사이즈 방지
   const [selectedCateName, setSelectedCateName] = useState<string>(""); // 선택된 카테고리
   const [height, setHeight] = useState<string>("44px"); // 하단 메뉴 높이 PC전용
 
@@ -1750,10 +1775,11 @@ function Shop() {
   const [isNavFirstMenuShow, setIsNavFirstMenuShow] = useState<boolean>(false); // 모바일 메뉴 1번째 탭
   const [isNavSecondMenuShow, setIsNavSecondMenuShow] = useState<boolean>(false); // 모바일 메뉴 2번째 탭
 
-  console.log("isMobile " + isMobile);
+  // console.log("isMobile " + isMobile);
   // console.log("selectedCateName " + selectedCateName);
   console.log("isSubCateShow " + isSubCateShow);
-  console.log("isNavFirstMenuShow " + isNavFirstMenuShow);
+  console.log("isSubCateResize " + isSubCateResize);
+  // console.log("isNavFirstMenuShow " + isNavFirstMenuShow);
   // console.log("isNavSecondMenuShow " + isNavSecondMenuShow);
 
   // footer columns
@@ -1766,6 +1792,12 @@ function Shop() {
     setHeight("44px");
     setIsSubCateShow(false);
   }, [location]);
+
+  useEffect(() => {
+      setIsSubCateShow(false);
+      setIsNavFirstMenuShow(false);
+      setIsNavSecondMenuShow(false);
+  }, [isMobile])
 
   // 모바일 메뉴에서 휠스크롤 숨기기 및 우측 padding 계산
   useEffect(() => {
@@ -1794,7 +1826,6 @@ function Shop() {
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 833);
-      // setIsSubCateShow(false);
     };
 
     // 컴포넌트가 마운트될 때 한 번 호출
@@ -1861,35 +1892,32 @@ function Shop() {
 
     const defaultHeight = "423px";
 
-    if (!isMobile) {
       if (selectedCateName === "cart" && navCart) {
         const newHeight = 423 + navCart.length * 60;
         setHeight(`${newHeight}px`);
       } else {
         setHeight(categoryHeightMap[selectedCateName] || defaultHeight);
       }
-    } else {
-      setHeight("100%");
-    }
-  }, [selectedCateName, isMobile, navCart]);
+  }, [selectedCateName, navCart]);
 
-  // 서브 메뉴가 내려와 있을때 브라우저로 나갔을 경우 height를 0으로 변경합니다.
+  // PC전용 - 서브 메뉴가 내려와 있을때 브라우저로 나갔을 경우 height를 0으로 변경합니다.
   useEffect(() => {
     const blowserOut = (e: any) => {
-      console.log("blowserOut");
+      console.log("blowser Out");
 
-      if (isMobile) {
-        return;
+      if (!isMobile) {
+        setIsSubCateShow(false);
+        setIsNavFirstMenuShow(false);
+        setIsNavSecondMenuShow(false);
+        setSelectedCateName("");
       }
 
-      setIsSubCateShow(false);
-      setSelectedCateName("");
     };
     document.addEventListener("mouseleave", blowserOut);
     return () => {
       document.removeEventListener("mouseleave", blowserOut);
     };
-  }, [isSubCateShow, isMobile]);
+  }, [isSubCateShow]);
 
   // 로그인, 로그아웃
   const account = {
@@ -2016,7 +2044,19 @@ function Shop() {
       setSelectedCateName("");
       return;
     }
+
+    setTimeout(() => {
+      if (!isSubCateShow) {
+        setIsSubCateResize(true);
+        
+      }
+    }, 600);
+
     setIsSubCateShow(!isSubCateShow);
+
+              if (isSubCateShow) {
+                setIsSubCateResize(false);
+              }
     setIsNavFirstMenuShow(!isNavFirstMenuShow);
     setIsNavSecondMenuShow(false);
     setSelectedCateName("");
@@ -2158,7 +2198,13 @@ function Shop() {
       <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
         <MainWrap className="MainWrap" isMobile={isMobile} isSubCateShow={isSubCateShow}>
           <Blur className="Blur" boolean={isSubCateShow} onMouseEnter={(e: any) => subMenuClose(e, "blur")}></Blur>
-          <NavHeight className="NavHeight" height={height} selectedCateName={selectedCateName} isSubCateShow={isSubCateShow}>
+          <NavHeight
+            className="NavHeight"
+            height={height}
+            selectedCateName={selectedCateName}
+            isSubCateShow={isSubCateShow}
+            isSubCateResize={isSubCateResize}
+          >
             {/* 모바일 메뉴 */}
             {isMobile && (
               <NavTabMenuWrap className="NavTabMenuWrap" isNavFirstMenuShow={isNavFirstMenuShow}>
@@ -2177,10 +2223,10 @@ function Shop() {
                     if (list.taskIds.length > 0) {
                       return (
                         <>
-                          <NavTabWrap className="NavTabWrap">
+                          <NavTabWrap className="NavTabWrap" isNavSecondMenuShow={isNavSecondMenuShow}>
                             <NavTab
                               className="NavTab NavTab-Menu-li"
-                              onClick={isMobile ? (e) => timerMouseEnter(e, list.name) : undefined}
+                              onClick={(e) => timerMouseEnter(e, list.name)}
                               name={list.name}
                               number={index + 1}
                               total={categoryList.length}
@@ -2205,166 +2251,159 @@ function Shop() {
                                 </svg>
                               </NavTabArrow>
                             </NavTab>
-                            {!isMobile && (
-                              <SubMenu
-                                className="SubMenu"
-                                isSubCateShow={isSubCateShow}
-                                name={list.name}
-                                selectedCateName={selectedCateName}
-                                height={height}
-                                isNavFirstMenuShow={isNavFirstMenuShow}
-                                isNavSecondMenuShow={isNavSecondMenuShow}
-                              >
-                                <SubMenuHeight className="SubMenuHeight" height={height} isNavSecondMenuShow={isNavSecondMenuShow}>
-                                  <SubMenuInner className="SubMenuInner" name={list.name} selectedCateName={selectedCateName} ref={submenu}>
-                                    <SubMenuList className="SubMenuList main" number={0} grouptotal={3}>
-                                      {!isMobile && (
-                                        <SubMenuText className="main" isSubCateShow={isSubCateShow} number={1} total={list.taskIds.length + 1}>
-                                          {list.name}&nbsp;살펴보기
-                                        </SubMenuText>
-                                      )}
-                                      <SubMenuListItem>
-                                        {list.taskIds.map((taskId: any, index2: any) => {
-                                          if (taskId.navHide) return null;
-                                          if (taskId.subTaskIds && taskId.subTaskIds.length > 0) {
-                                            return (
-                                              <>
-                                                <SubMenuLi
-                                                  name={list.name}
-                                                  selectedCateName={selectedCateName}
-                                                  className="SubMenuLi"
-                                                  number={isMobile ? index2 + 1 : index2 + 2}
-                                                  isSubCateShow={isSubCateShow}
-                                                  total={list.taskIds.length + 1}
-                                                  isNavSecondMenuShow={isNavSecondMenuShow}
-                                                >
-                                                  <SubMenuLink to={`./${taskId.url}`}>
-                                                    <SubMenuName className="SubMenuName main">{taskId.name}</SubMenuName>
-                                                  </SubMenuLink>
-                                                </SubMenuLi>
-                                              </>
-                                            );
-                                          } else {
-                                            return (
-                                              <>
-                                                <SubMenuLi
-                                                  name={list.name}
-                                                  selectedCateName={selectedCateName}
-                                                  className="SubMenuLi"
-                                                  number={isMobile ? index2 + 1 : index2 + 2}
-                                                  isSubCateShow={isSubCateShow}
-                                                  total={list.taskIds.length + 1}
-                                                  isNavSecondMenuShow={isNavSecondMenuShow}
-                                                >
-                                                  <SubMenuLink to={`./products/${taskId.url}`}>
-                                                    <SubMenuName className="SubMenuName main">{taskId.name}</SubMenuName>
-                                                  </SubMenuLink>
-                                                </SubMenuLi>
-                                              </>
-                                            );
-                                          }
-                                        })}
-                                      </SubMenuListItem>
-                                    </SubMenuList>
-                                    <SubMenuList className="SubMenuList main" number={1} grouptotal={3}>
-                                      <SubMenuText className="main" isSubCateShow={isSubCateShow} number={1} total={list.taskIds.length + 1}>
-                                        {list.name}&nbsp;쇼핑하기
-                                      </SubMenuText>
-                                      <SubMenuListItem>
-                                        <SubMenuLi
-                                          name={list.name}
-                                          selectedCateName={selectedCateName}
-                                          className="SubMenuLi sub"
-                                          number={2}
-                                          isSubCateShow={isSubCateShow}
-                                          total={list.taskIds.length + 1}
-                                        >
-                                          <SubMenuName className="subtext">테스트1</SubMenuName>
-                                        </SubMenuLi>
-                                        <SubMenuLi
-                                          name={list.name}
-                                          selectedCateName={selectedCateName}
-                                          className="SubMenuLi sub"
-                                          number={3}
-                                          isSubCateShow={isSubCateShow}
-                                          total={list.taskIds.length + 1}
-                                        >
-                                          <SubMenuName className="subtext">테스트2</SubMenuName>
-                                        </SubMenuLi>
-                                        <SubMenuLi
-                                          name={list.name}
-                                          selectedCateName={selectedCateName}
-                                          className="SubMenuLi sub"
-                                          number={4}
-                                          isSubCateShow={isSubCateShow}
-                                          total={list.taskIds.length + 1}
-                                        >
-                                          <SubMenuName className="subtext">테스트3</SubMenuName>
-                                        </SubMenuLi>
-                                        <SubMenuLi
-                                          name={list.name}
-                                          selectedCateName={selectedCateName}
-                                          className="SubMenuLi sub"
-                                          number={5}
-                                          isSubCateShow={isSubCateShow}
-                                          total={list.taskIds.length + 1}
-                                        >
-                                          <SubMenuName className="subtext">테스트4</SubMenuName>
-                                        </SubMenuLi>
-                                      </SubMenuListItem>
-                                    </SubMenuList>
-                                    <SubMenuList className="SubMenuList main" number={2} grouptotal={3}>
-                                      <SubMenuText className="main" isSubCateShow={isSubCateShow} number={1} total={list.taskIds.length + 1}>
-                                        그 외 {list.name}&nbsp;관련 항목
-                                      </SubMenuText>
-                                      <SubMenuListItem>
-                                        <SubMenuLi
-                                          name={list.name}
-                                          selectedCateName={selectedCateName}
-                                          className="SubMenuLi sub"
-                                          number={2}
-                                          isSubCateShow={isSubCateShow}
-                                          total={list.taskIds.length + 1}
-                                        >
-                                          <SubMenuName className="subtext">테스트1</SubMenuName>
-                                        </SubMenuLi>
-                                        <SubMenuLi
-                                          name={list.name}
-                                          selectedCateName={selectedCateName}
-                                          className="SubMenuLi sub"
-                                          number={3}
-                                          isSubCateShow={isSubCateShow}
-                                          total={list.taskIds.length + 1}
-                                        >
-                                          <SubMenuName className="subtext">테스트2</SubMenuName>
-                                        </SubMenuLi>
-                                        <SubMenuLi
-                                          name={list.name}
-                                          selectedCateName={selectedCateName}
-                                          className="SubMenuLi sub"
-                                          number={4}
-                                          isSubCateShow={isSubCateShow}
-                                          total={list.taskIds.length + 1}
-                                        >
-                                          <SubMenuName className="subtext">테스트3</SubMenuName>
-                                        </SubMenuLi>
-                                        <SubMenuLi
-                                          name={list.name}
-                                          selectedCateName={selectedCateName}
-                                          className="SubMenuLi sub"
-                                          number={5}
-                                          isSubCateShow={isSubCateShow}
-                                          total={list.taskIds.length + 1}
-                                        >
-                                          <SubMenuName className="subtext">테스트4</SubMenuName>
-                                        </SubMenuLi>
-                                      </SubMenuListItem>
-                                    </SubMenuList>
-                                  </SubMenuInner>
-                                </SubMenuHeight>
-                              </SubMenu>
-                            )}
                           </NavTabWrap>
+                          <SubMenu
+                            className="SubMenu"
+                            isSubCateShow={isSubCateShow}
+                            name={list.name}
+                            selectedCateName={selectedCateName}
+                            height={height}
+                            isNavFirstMenuShow={isNavFirstMenuShow}
+                            isNavSecondMenuShow={isNavSecondMenuShow}
+                          >
+                            <SubMenuHeight className="SubMenuHeight" height={height} isNavSecondMenuShow={isNavSecondMenuShow}>
+                              <SubMenuInner className="SubMenuInner" name={list.name} selectedCateName={selectedCateName} ref={submenu}>
+                                <SubMenuList className="SubMenuList main" number={0} grouptotal={3}>
+                                  <SubMenuListItem>
+                                    {list.taskIds.map((taskId: any, index2: any) => {
+                                      if (taskId.navHide) return null;
+                                      if (taskId.subTaskIds && taskId.subTaskIds.length > 0) {
+                                        return (
+                                          <>
+                                            <SubMenuLi
+                                              name={list.name}
+                                              selectedCateName={selectedCateName}
+                                              className="SubMenuLi"
+                                              number={index2 + 1}
+                                              isSubCateShow={isSubCateShow}
+                                              total={list.taskIds.length + 1}
+                                              isNavSecondMenuShow={isNavSecondMenuShow}
+                                            >
+                                              <SubMenuLink to={`./${taskId.url}`}>
+                                                <SubMenuName className="SubMenuName main">{taskId.name}</SubMenuName>
+                                              </SubMenuLink>
+                                            </SubMenuLi>
+                                          </>
+                                        );
+                                      } else {
+                                        return (
+                                          <>
+                                            <SubMenuLi
+                                              name={list.name}
+                                              selectedCateName={selectedCateName}
+                                              className="SubMenuLi"
+                                              number={index2 + 1}
+                                              isSubCateShow={isSubCateShow}
+                                              total={list.taskIds.length + 1}
+                                              isNavSecondMenuShow={isNavSecondMenuShow}
+                                            >
+                                              <SubMenuLink to={`./products/${taskId.url}`}>
+                                                <SubMenuName className="SubMenuName main">{taskId.name}</SubMenuName>
+                                              </SubMenuLink>
+                                            </SubMenuLi>
+                                          </>
+                                        );
+                                      }
+                                    })}
+                                  </SubMenuListItem>
+                                </SubMenuList>
+                                <SubMenuList className="SubMenuList main" number={1} grouptotal={3}>
+                                  <SubMenuText className="main" isSubCateShow={isSubCateShow} number={1} total={list.taskIds.length + 1}>
+                                    {list.name}&nbsp;쇼핑하기
+                                  </SubMenuText>
+                                  <SubMenuListItem>
+                                    <SubMenuLi
+                                      name={list.name}
+                                      selectedCateName={selectedCateName}
+                                      className="SubMenuLi sub"
+                                      number={2}
+                                      isSubCateShow={isSubCateShow}
+                                      total={list.taskIds.length + 1}
+                                    >
+                                      <SubMenuName className="subtext">테스트1</SubMenuName>
+                                    </SubMenuLi>
+                                    <SubMenuLi
+                                      name={list.name}
+                                      selectedCateName={selectedCateName}
+                                      className="SubMenuLi sub"
+                                      number={3}
+                                      isSubCateShow={isSubCateShow}
+                                      total={list.taskIds.length + 1}
+                                    >
+                                      <SubMenuName className="subtext">테스트2</SubMenuName>
+                                    </SubMenuLi>
+                                    <SubMenuLi
+                                      name={list.name}
+                                      selectedCateName={selectedCateName}
+                                      className="SubMenuLi sub"
+                                      number={4}
+                                      isSubCateShow={isSubCateShow}
+                                      total={list.taskIds.length + 1}
+                                    >
+                                      <SubMenuName className="subtext">테스트3</SubMenuName>
+                                    </SubMenuLi>
+                                    <SubMenuLi
+                                      name={list.name}
+                                      selectedCateName={selectedCateName}
+                                      className="SubMenuLi sub"
+                                      number={5}
+                                      isSubCateShow={isSubCateShow}
+                                      total={list.taskIds.length + 1}
+                                    >
+                                      <SubMenuName className="subtext">테스트4</SubMenuName>
+                                    </SubMenuLi>
+                                  </SubMenuListItem>
+                                </SubMenuList>
+                                <SubMenuList className="SubMenuList main" number={2} grouptotal={3}>
+                                  <SubMenuText className="main" isSubCateShow={isSubCateShow} number={1} total={list.taskIds.length + 1}>
+                                    그 외 {list.name}&nbsp;관련 항목
+                                  </SubMenuText>
+                                  <SubMenuListItem>
+                                    <SubMenuLi
+                                      name={list.name}
+                                      selectedCateName={selectedCateName}
+                                      className="SubMenuLi sub"
+                                      number={2}
+                                      isSubCateShow={isSubCateShow}
+                                      total={list.taskIds.length + 1}
+                                    >
+                                      <SubMenuName className="subtext">테스트1</SubMenuName>
+                                    </SubMenuLi>
+                                    <SubMenuLi
+                                      name={list.name}
+                                      selectedCateName={selectedCateName}
+                                      className="SubMenuLi sub"
+                                      number={3}
+                                      isSubCateShow={isSubCateShow}
+                                      total={list.taskIds.length + 1}
+                                    >
+                                      <SubMenuName className="subtext">테스트2</SubMenuName>
+                                    </SubMenuLi>
+                                    <SubMenuLi
+                                      name={list.name}
+                                      selectedCateName={selectedCateName}
+                                      className="SubMenuLi sub"
+                                      number={4}
+                                      isSubCateShow={isSubCateShow}
+                                      total={list.taskIds.length + 1}
+                                    >
+                                      <SubMenuName className="subtext">테스트3</SubMenuName>
+                                    </SubMenuLi>
+                                    <SubMenuLi
+                                      name={list.name}
+                                      selectedCateName={selectedCateName}
+                                      className="SubMenuLi sub"
+                                      number={5}
+                                      isSubCateShow={isSubCateShow}
+                                      total={list.taskIds.length + 1}
+                                    >
+                                      <SubMenuName className="subtext">테스트4</SubMenuName>
+                                    </SubMenuLi>
+                                  </SubMenuListItem>
+                                </SubMenuList>
+                              </SubMenuInner>
+                            </SubMenuHeight>
+                          </SubMenu>
                         </>
                       );
                     } else {
@@ -2389,7 +2428,7 @@ function Shop() {
                     }
                   })}
                 </NavTabMenu>
-                {categoryList.map((list: any, index: any) => {
+                {/* {categoryList.map((list: any, index: any) => {
                     if (list.navHide) return null; // 숨겨진 메뉴는 출력 하지 않음.
                     if (list.taskIds.length > 0) {
                       return (
@@ -2551,135 +2590,129 @@ function Shop() {
                     } else {
                       return <div></div>;
                     }
-                  })}
-                    <SubMenu
-                      className="SubMenu-Mobile"
-                      isSubCateShow={isSubCateShow}
-                      name={"search"}
-                      selectedCateName={selectedCateName}
-                      height={height}
-                    >
-                      <SubMenuHeight className="SubMenuHeight firstmenu" height={height} isSubCateShow={isSubCateShow}>
-                        <SubMenuInner className="SubMenuInner" name={"search"} selectedCateName={selectedCateName}>
-                          <SubMenuList className="SubMenuList" number={0} grouptotal={3}>
-                            <SubMenuText isSubCateShow={isSubCateShow} number={0} total={9}>
-                              검색
-                            </SubMenuText>
-                            <SubMenuListItem>
+                  })} */}
+                <SubMenu className="SubMenu-Mobile" isSubCateShow={isSubCateShow} name={"search"} selectedCateName={selectedCateName} height={height}>
+                  <SubMenuHeight className="SubMenuHeight firstmenu" height={height} isSubCateShow={isSubCateShow}>
+                    <SubMenuInner className="SubMenuInner" name={"search"} selectedCateName={selectedCateName}>
+                      <SubMenuList className="SubMenuList" number={0} grouptotal={3}>
+                        <SubMenuText isSubCateShow={isSubCateShow} number={0} total={9}>
+                          검색
+                        </SubMenuText>
+                        <SubMenuListItem>
+                          <SubMenuLi
+                            name={"search"}
+                            selectedCateName={selectedCateName}
+                            className="SubMenuLi"
+                            number={1}
+                            isSubCateShow={isSubCateShow}
+                            total={9}
+                          ></SubMenuLi>
+                        </SubMenuListItem>
+                      </SubMenuList>
+                    </SubMenuInner>
+                  </SubMenuHeight>
+                </SubMenu>
+                <SubMenu className="SubMenu-Mobile" isSubCateShow={isSubCateShow} name={"cart"} selectedCateName={selectedCateName} height={height}>
+                  <SubMenuHeight className="SubMenuHeight firstmenu" height={height} isSubCateShow={isSubCateShow}>
+                    <SubMenuInner className="SubMenuInner" name={"cart"} selectedCateName={selectedCateName}>
+                      {navCart && navCart.length !== 0 ? (
+                        <>
+                          <SubMenuList className="SubMenuList cart" number={0} grouptotal={3}>
+                            <div className="left">
                               <SubMenuLi
-                                name={"search"}
+                                name={"cart"}
                                 selectedCateName={selectedCateName}
-                                className="SubMenuLi"
-                                number={1}
+                                className="SubMenuLi cart-h2"
+                                number={0}
                                 isSubCateShow={isSubCateShow}
-                                total={9}
-                              ></SubMenuLi>
-                            </SubMenuListItem>
-                          </SubMenuList>
-                        </SubMenuInner>
-                      </SubMenuHeight>
-                    </SubMenu>
-                    <SubMenu className="SubMenu-Mobile" isSubCateShow={isSubCateShow} name={"cart"} selectedCateName={selectedCateName} height={height}>
-                      <SubMenuHeight className="SubMenuHeight firstmenu" height={height} isSubCateShow={isSubCateShow}>
-                        <SubMenuInner className="SubMenuInner" name={"cart"} selectedCateName={selectedCateName}>
-                          {navCart && navCart.length !== 0 ? (
-                            <>
-                              <SubMenuList className="SubMenuList cart" number={0} grouptotal={3}>
-                                <div className="left">
-                                  <SubMenuLi
-                                    name={"cart"}
-                                    selectedCateName={selectedCateName}
-                                    className="SubMenuLi cart-h2"
-                                    number={0}
-                                    isSubCateShow={isSubCateShow}
-                                    total={7}
-                                  >
-                                    <NavCart.H2 className="cart-main-h2">장바구니</NavCart.H2>
-                                  </SubMenuLi>
-                                  {navCart &&
-                                    navCart.map((list: any, index: any) => {
-                                      if (index < 3) {
-                                        return (
-                                          <SubMenuLi
-                                            name={"cart"}
-                                            selectedCateName={selectedCateName}
-                                            className="SubMenuLi cart"
-                                            number={index + 1}
-                                            isSubCateShow={isSubCateShow}
-                                            total={7}
-                                          >
-                                            <NavCart.Link to={""} className="NavCart.Link">
-                                              <img src={list.product.mainImage} width="64" height="64" alt="" />
-                                              <NavCart.Name className="NavCart.Name">{list.product.name}</NavCart.Name>
-                                            </NavCart.Link>
-                                          </SubMenuLi>
-                                        );
-                                      } else {
-                                        return null;
-                                      }
-                                    })}
-                                  {navCart.length > 3 && (
-                                    <SubMenuLi
-                                      name={"cart"}
-                                      className="SubMenuLi"
-                                      isSubCateShow={isSubCateShow}
-                                      selectedCateName={selectedCateName}
-                                      number={4}
-                                      total={7}
-                                    >
-                                      <div className="globalnav-flyout-item ac-gn-bagview-message">
-                                        <span className="ac-gn-bagview-message-text">장바구니에 제품이 1개 더 있음</span>
-                                      </div>
-                                    </SubMenuLi>
-                                  )}
-                                </div>
-                                <div className="right">
-                                  <SubMenuLi
-                                    name={"cart"}
-                                    selectedCateName={selectedCateName}
-                                    className="SubMenuLi cart"
-                                    number={navCart.length >= 4 ? 5 : navCart.length + 1}
-                                    isSubCateShow={isSubCateShow}
-                                    total={7}
-                                  >
-                                    <NavCart.Link to={"./cart"} className="cartcheck">
-                                      장바구니 확인
-                                    </NavCart.Link>
-                                  </SubMenuLi>
-                                </div>
-                              </SubMenuList>
-                            </>
-                          ) : (
-                            <>
-                              <SubMenuList className="SubMenuList" number={0} grouptotal={3}>
-                                <SubMenuText className="cart-main-h2" isSubCateShow={isSubCateShow} number={0} total={7}>
-                                  장바구니가 비어있습니다.
-                                </SubMenuText>
+                                total={7}
+                              >
+                                <NavCart.H2 className="cart-main-h2">장바구니</NavCart.H2>
+                              </SubMenuLi>
+                              {navCart &&
+                                navCart.map((list: any, index: any) => {
+                                  if (index < 3) {
+                                    return (
+                                      <SubMenuLi
+                                        name={"cart"}
+                                        selectedCateName={selectedCateName}
+                                        className="SubMenuLi cart"
+                                        number={index + 1}
+                                        isSubCateShow={isSubCateShow}
+                                        total={7}
+                                      >
+                                        <NavCart.Link to={""} className="NavCart.Link">
+                                          <img src={list.product.mainImage} width="64" height="64" alt="" />
+                                          <NavCart.Name className="NavCart.Name">{list.product.name}</NavCart.Name>
+                                        </NavCart.Link>
+                                      </SubMenuLi>
+                                    );
+                                  } else {
+                                    return null;
+                                  }
+                                })}
+                              {navCart.length > 3 && (
                                 <SubMenuLi
                                   name={"cart"}
-                                  selectedCateName={selectedCateName}
-                                  className="SubMenuLi cart"
-                                  number={1}
+                                  className="SubMenuLi"
                                   isSubCateShow={isSubCateShow}
+                                  selectedCateName={selectedCateName}
+                                  number={4}
                                   total={7}
                                 >
-                                  {cookies.userjwt ? (
-                                    <SubMenuName className="cart">지금 쇼핑하기</SubMenuName>
-                                  ) : (
-                                    <SubMenuName className="cart">
-                                      저장해둔 항목이 있는지 확인하려면
-                                      <span className="login" onClick={account.login}>
-                                        &nbsp;로그인&nbsp;
-                                      </span>
-                                      하세요.
-                                    </SubMenuName>
-                                  )}
+                                  <div className="globalnav-flyout-item ac-gn-bagview-message">
+                                    <span className="ac-gn-bagview-message-text">장바구니에 제품이 1개 더 있음</span>
+                                  </div>
                                 </SubMenuLi>
-                              </SubMenuList>
-                            </>
-                          )}
+                              )}
+                            </div>
+                            <div className="right">
+                              <SubMenuLi
+                                name={"cart"}
+                                selectedCateName={selectedCateName}
+                                className="SubMenuLi cart"
+                                number={navCart.length >= 4 ? 5 : navCart.length + 1}
+                                isSubCateShow={isSubCateShow}
+                                total={7}
+                              >
+                                <NavCart.Link to={"./cart"} className="cartcheck">
+                                  장바구니 확인
+                                </NavCart.Link>
+                              </SubMenuLi>
+                            </div>
+                          </SubMenuList>
+                        </>
+                      ) : (
+                        <>
+                          <SubMenuList className="SubMenuList" number={0} grouptotal={3}>
+                            <SubMenuText className="cart-main-h2" isSubCateShow={isSubCateShow} number={0} total={7}>
+                              장바구니가 비어있습니다.
+                            </SubMenuText>
+                            <SubMenuLi
+                              name={"cart"}
+                              selectedCateName={selectedCateName}
+                              className="SubMenuLi cart"
+                              number={1}
+                              isSubCateShow={isSubCateShow}
+                              total={7}
+                            >
+                              {cookies.userjwt ? (
+                                <SubMenuName className="cart">지금 쇼핑하기</SubMenuName>
+                              ) : (
+                                <SubMenuName className="cart">
+                                  저장해둔 항목이 있는지 확인하려면
+                                  <span className="login" onClick={account.login}>
+                                    &nbsp;로그인&nbsp;
+                                  </span>
+                                  하세요.
+                                </SubMenuName>
+                              )}
+                            </SubMenuLi>
+                          </SubMenuList>
+                        </>
+                      )}
 
-                          {/* <SubMenuList className="SubMenuList cart2" number={1} grouptotal={3}>
+                      {/* <SubMenuList className="SubMenuList cart2" number={1} grouptotal={3}>
                               <SubMenuListItem>
                                 <SubMenuLi
                                   name={"cart"}
@@ -2701,20 +2734,100 @@ function Shop() {
                               </SubMenuListItem>
                             </SubMenuList> */}
 
-                          <SubMenuList className="SubMenuList" number={2} grouptotal={3}>
-                            <SubMenuText className="cart-profile-text" isSubCateShow={isSubCateShow} number={2} total={7}>
-                              내 프로필
-                            </SubMenuText>
-                            <SubMenuListItem>
-                              <SubMenuLi
-                                name={"cart"}
-                                selectedCateName={selectedCateName}
-                                className="SubMenuLi cart-profile"
-                                number={3}
-                                isSubCateShow={isSubCateShow}
-                                total={7}
+                      <SubMenuList className="SubMenuList" number={2} grouptotal={3}>
+                        <SubMenuText className="cart-profile-text" isSubCateShow={isSubCateShow} number={2} total={7}>
+                          내 프로필
+                        </SubMenuText>
+                        <SubMenuListItem>
+                          <SubMenuLi
+                            name={"cart"}
+                            selectedCateName={selectedCateName}
+                            className="SubMenuLi cart-profile"
+                            number={3}
+                            isSubCateShow={isSubCateShow}
+                            total={7}
+                          >
+                            <NavCart.ProfileLink to={""} className="profile">
+                              <svg
+                                id="Outlined"
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="ac-gn-bagview-nav-svgicon"
+                                width="11"
+                                height="16"
+                                viewBox="0 0 16 25"
                               >
-                                <NavCart.ProfileLink to={""} className="profile">
+                                <path
+                                  id="art_"
+                                  d="M14.5146,9.5234a2.56,2.56,0,0,0-1.11-1.4228l-4.25-2.3975a2.3909,2.3909,0,0,0-2.31,0l-4.25,2.3975a2.2971,2.2971,0,0,0-.6025.5107A2.2684,2.2684,0,0,0,1.4,10.1475v4.705a2.3546,2.3546,0,0,0,1.1953,2.0469l4.25,2.3975a2.3541,2.3541,0,0,0,2.31,0l4.25-2.3975A2.3546,2.3546,0,0,0,14.6,14.8525v-4.705A2.3322,2.3322,0,0,0,14.5146,9.5234ZM7.4,12.9453v5.2871L3.1851,15.8545a1.153,1.153,0,0,1-.585-1.002L2.603,10.24Zm.6-1.04L3.147,9.17a.4347.4347,0,0,1,.0385-.0244l1.7623-.9941,4.895,2.7158Zm5.4-1.666v4.6132a1.153,1.153,0,0,1-.585,1.002L8.6,18.2324V12.9453ZM8.5649,6.748l4.25,2.3975a.4347.4347,0,0,1,.0385.0244l-1.7842,1.0059L6.1733,7.46l1.2618-.712A1.1731,1.1731,0,0,1,8.5649,6.748Z"
+                                  fill="6E6E73"
+                                ></path>
+                              </svg>
+                              <SubMenuName className="cartprofile">주문</SubMenuName>
+                            </NavCart.ProfileLink>
+                          </SubMenuLi>
+                          <SubMenuLi
+                            name={"cart"}
+                            selectedCateName={selectedCateName}
+                            className="SubMenuLi cart-profile"
+                            number={4}
+                            isSubCateShow={isSubCateShow}
+                            total={7}
+                          >
+                            <NavCart.ProfileLink to={""} className="profile">
+                              <svg
+                                id="Outlined"
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="ac-gn-bagview-nav-svgicon"
+                                width="11"
+                                height="16"
+                                viewBox="0 0 16 25"
+                              >
+                                <path
+                                  id="art_"
+                                  d="M10.3,5.15H5.7a2.3022,2.3022,0,0,0-2.3,2.3V19.0381a.8642.8642,0,0,0,.19.5869.67.67,0,0,0,.5313.2246.7441.7441,0,0,0,.438-.1465,4.8685,4.8685,0,0,0,.5366-.4765l2.8931-2.8858,2.9165,2.8867a6.4062,6.4062,0,0,0,.5307.4717.7286.7286,0,0,0,.4429.15.6684.6684,0,0,0,.5308-.2246.8619.8619,0,0,0,.19-.5869V7.45A2.3022,2.3022,0,0,0,10.3,5.15ZM4.6,7.45A1.102,1.102,0,0,1,5.7,6.35h4.6A1.102,1.102,0,0,1,11.4,7.45l-.0005,10.5781L8.832,15.4863a1.186,1.186,0,0,0-1.665.001L4.6,18.0293Z"
+                                  fill="6E6E73"
+                                ></path>
+                              </svg>
+                              <SubMenuName className="cartprofile">관심목록</SubMenuName>
+                            </NavCart.ProfileLink>
+                          </SubMenuLi>
+                          <SubMenuLi
+                            name={"cart"}
+                            selectedCateName={selectedCateName}
+                            className="SubMenuLi cart-profile"
+                            number={5}
+                            isSubCateShow={isSubCateShow}
+                            total={7}
+                          >
+                            <NavCart.ProfileLink to={""} className="profile">
+                              <svg
+                                id="Outlined"
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="ac-gn-bagview-nav-svgicon"
+                                width="11"
+                                height="16"
+                                viewBox="0 0 16 25"
+                              >
+                                <path
+                                  id="art_"
+                                  d="M15.6094,12.3252a.5142.5142,0,0,0-.2959-.2959l-.5972-.2324a6.6665,6.6665,0,0,0-.16-.917l.4809-.42a.5172.5172,0,0,0-.3291-.9073l-.6372-.0136c-.0654-.1377-.1343-.2784-.2139-.4151s-.1635-.2636-.2519-.3935l.3076-.5576a.517.517,0,0,0-.62-.7393l-.6035.2051a6.68,6.68,0,0,0-.7134-.5977l.0986-.6328a.5172.5172,0,0,0-.43-.5918.54.54,0,0,0-.4052.1084l-.5015.4033A6.911,6.911,0,0,0,9.87,6.01l-.124-.6328a.5178.5178,0,0,0-.9512-.167l-.333.5507a7.2576,7.2576,0,0,0-.92.0039L7.2056,5.207a.518.518,0,0,0-.9512.167l-.125.6377a6.6192,6.6192,0,0,0-.8652.31l-.501-.4063a.5176.5176,0,0,0-.8364.4834l.0991.6358a6.6073,6.6073,0,0,0-.7017.5947L2.71,7.417a.5173.5173,0,0,0-.6211.7392l.3134.5694a6.7192,6.7192,0,0,0-.4653.7959l-.6421.0117a.516.516,0,0,0-.5083.5264.52.52,0,0,0,.1763.38l.4849.4238a6.8261,6.8261,0,0,0-.16.9111l-.6006.23a.5176.5176,0,0,0-.001.9658l.5972.2324a6.6665,6.6665,0,0,0,.16.917l-.4809.419a.5184.5184,0,0,0-.05.7314.52.52,0,0,0,.3789.1758l.6367.0137c.063.1318.1333.2754.2144.416.0673.1172.143.2246.2163.3281l.04.0566-.312.5664a.5176.5176,0,0,0,.2036.7032.52.52,0,0,0,.416.0361l.5967-.2031a6.82,6.82,0,0,0,.7207.5937l-.0991.6348a.5153.5153,0,0,0,.0933.3857.5187.5187,0,0,0,.7421.0977l.5064-.4082a6.6137,6.6137,0,0,0,.8628.3193l.1245.6358a.5139.5139,0,0,0,.22.33.53.53,0,0,0,.3877.0782.5193.5193,0,0,0,.3433-.24l.3388-.56.0577.0049a4.8076,4.8076,0,0,0,.7871.0019l.0669-.0058.3383.5625a.518.518,0,0,0,.9512-.167l.1245-.6348a6.6152,6.6152,0,0,0,.8589-.3193l.5088.4131a.5176.5176,0,0,0,.8364-.4834l-.0991-.6358a6.6173,6.6173,0,0,0,.7017-.5947l.6142.2119a.5174.5174,0,0,0,.6211-.7392l-.3135-.5694a6.6548,6.6548,0,0,0,.4649-.7959l.6421-.0117a.5168.5168,0,0,0,.5088-.5264.5166.5166,0,0,0-.1768-.38l-.4849-.4238a6.6694,6.6694,0,0,0,.16-.9111l.6006-.2315a.5177.5177,0,0,0,.2969-.6689ZM6.4941,13.9043,4.7666,16.8926a5.4449,5.4449,0,0,1,.0044-8.792L6.5,11.0986A2.0525,2.0525,0,0,0,6.4941,13.9043Zm2.1646-1.7822a.7608.7608,0,1,1-.4609-.3555A.7543.7543,0,0,1,8.6587,12.1221ZM7.54,10.499,5.8154,7.5068A5.4579,5.4579,0,0,1,7.9907,7.041h.0239a5.4693,5.4693,0,0,1,5.4068,4.8633l-3.457-.0029a2.0363,2.0363,0,0,0-.18-.43A2.0586,2.0586,0,0,0,7.54,10.499Zm-.0058,4.0049a2.0556,2.0556,0,0,0,2.435-1.4023l3.4512.0029a5.4455,5.4455,0,0,1-7.6147,4.3877Z"
+                                  fill="6E6E73"
+                                ></path>
+                              </svg>
+                              <SubMenuName className="cartprofile">계정</SubMenuName>
+                            </NavCart.ProfileLink>
+                          </SubMenuLi>
+                          <SubMenuLi
+                            name={"cart"}
+                            selectedCateName={selectedCateName}
+                            className="SubMenuLi cart-profile"
+                            number={6}
+                            isSubCateShow={isSubCateShow}
+                            total={7}
+                          >
+                            {!cookies.userjwt ? (
+                              <>
+                                <NavCart.ProfileLink to="./login" className="profile">
                                   <svg
                                     id="Outlined"
                                     xmlns="http://www.w3.org/2000/svg"
@@ -2725,22 +2838,18 @@ function Shop() {
                                   >
                                     <path
                                       id="art_"
-                                      d="M14.5146,9.5234a2.56,2.56,0,0,0-1.11-1.4228l-4.25-2.3975a2.3909,2.3909,0,0,0-2.31,0l-4.25,2.3975a2.2971,2.2971,0,0,0-.6025.5107A2.2684,2.2684,0,0,0,1.4,10.1475v4.705a2.3546,2.3546,0,0,0,1.1953,2.0469l4.25,2.3975a2.3541,2.3541,0,0,0,2.31,0l4.25-2.3975A2.3546,2.3546,0,0,0,14.6,14.8525v-4.705A2.3322,2.3322,0,0,0,14.5146,9.5234ZM7.4,12.9453v5.2871L3.1851,15.8545a1.153,1.153,0,0,1-.585-1.002L2.603,10.24Zm.6-1.04L3.147,9.17a.4347.4347,0,0,1,.0385-.0244l1.7623-.9941,4.895,2.7158Zm5.4-1.666v4.6132a1.153,1.153,0,0,1-.585,1.002L8.6,18.2324V12.9453ZM8.5649,6.748l4.25,2.3975a.4347.4347,0,0,1,.0385.0244l-1.7842,1.0059L6.1733,7.46l1.2618-.712A1.1731,1.1731,0,0,1,8.5649,6.748Z"
+                                      d="M15.09,12.5a7.1,7.1,0,1,1-7.1-7.1A7.1077,7.1077,0,0,1,15.09,12.5ZM7.99,6.6a5.89,5.89,0,0,0-4.4609,9.7471c.6069-.9658,2.48-1.6787,4.4609-1.6787s3.8545.7129,4.4615,1.6787A5.89,5.89,0,0,0,7.99,6.6ZM7.99,8.4A2.5425,2.5425,0,0,0,5.5151,11,2.5425,2.5425,0,0,0,7.99,13.6,2.5424,2.5424,0,0,0,10.4653,11,2.5424,2.5424,0,0,0,7.99,8.4Z"
                                       fill="6E6E73"
                                     ></path>
                                   </svg>
-                                  <SubMenuName className="cartprofile">주문</SubMenuName>
+                                  <SubMenuName className="cartprofile" onClick={account.login}>
+                                    로그인
+                                  </SubMenuName>
                                 </NavCart.ProfileLink>
-                              </SubMenuLi>
-                              <SubMenuLi
-                                name={"cart"}
-                                selectedCateName={selectedCateName}
-                                className="SubMenuLi cart-profile"
-                                number={4}
-                                isSubCateShow={isSubCateShow}
-                                total={7}
-                              >
-                                <NavCart.ProfileLink to={""} className="profile">
+                              </>
+                            ) : (
+                              <>
+                                <NavCart.ProfileLink to={""} onClick={account.logOut}>
                                   <svg
                                     id="Outlined"
                                     xmlns="http://www.w3.org/2000/svg"
@@ -2751,124 +2860,49 @@ function Shop() {
                                   >
                                     <path
                                       id="art_"
-                                      d="M10.3,5.15H5.7a2.3022,2.3022,0,0,0-2.3,2.3V19.0381a.8642.8642,0,0,0,.19.5869.67.67,0,0,0,.5313.2246.7441.7441,0,0,0,.438-.1465,4.8685,4.8685,0,0,0,.5366-.4765l2.8931-2.8858,2.9165,2.8867a6.4062,6.4062,0,0,0,.5307.4717.7286.7286,0,0,0,.4429.15.6684.6684,0,0,0,.5308-.2246.8619.8619,0,0,0,.19-.5869V7.45A2.3022,2.3022,0,0,0,10.3,5.15ZM4.6,7.45A1.102,1.102,0,0,1,5.7,6.35h4.6A1.102,1.102,0,0,1,11.4,7.45l-.0005,10.5781L8.832,15.4863a1.186,1.186,0,0,0-1.665.001L4.6,18.0293Z"
+                                      d="M15.09,12.5a7.1,7.1,0,1,1-7.1-7.1A7.1077,7.1077,0,0,1,15.09,12.5ZM7.99,6.6a5.89,5.89,0,0,0-4.4609,9.7471c.6069-.9658,2.48-1.6787,4.4609-1.6787s3.8545.7129,4.4615,1.6787A5.89,5.89,0,0,0,7.99,6.6ZM7.99,8.4A2.5425,2.5425,0,0,0,5.5151,11,2.5425,2.5425,0,0,0,7.99,13.6,2.5424,2.5424,0,0,0,10.4653,11,2.5424,2.5424,0,0,0,7.99,8.4Z"
                                       fill="6E6E73"
                                     ></path>
                                   </svg>
-                                  <SubMenuName className="cartprofile">관심목록</SubMenuName>
+                                  <SubMenuName className="cartprofile">{user.name}&nbsp;로그아웃</SubMenuName>
                                 </NavCart.ProfileLink>
-                              </SubMenuLi>
-                              <SubMenuLi
-                                name={"cart"}
-                                selectedCateName={selectedCateName}
-                                className="SubMenuLi cart-profile"
-                                number={5}
-                                isSubCateShow={isSubCateShow}
-                                total={7}
+                              </>
+                            )}
+                          </SubMenuLi>
+                          <SubMenuLi
+                            name={"cart"}
+                            selectedCateName={selectedCateName}
+                            className="SubMenuLi cart-profile"
+                            number={7}
+                            isSubCateShow={isSubCateShow}
+                            total={7}
+                          >
+                            <NavCart.ProfileLink to="../" className="profile">
+                              <svg
+                                id="Outlined"
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="ac-gn-bagview-nav-svgicon"
+                                width="11"
+                                height="16"
+                                viewBox="0 0 16 25"
                               >
-                                <NavCart.ProfileLink to={""} className="profile">
-                                  <svg
-                                    id="Outlined"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="ac-gn-bagview-nav-svgicon"
-                                    width="11"
-                                    height="16"
-                                    viewBox="0 0 16 25"
-                                  >
-                                    <path
-                                      id="art_"
-                                      d="M15.6094,12.3252a.5142.5142,0,0,0-.2959-.2959l-.5972-.2324a6.6665,6.6665,0,0,0-.16-.917l.4809-.42a.5172.5172,0,0,0-.3291-.9073l-.6372-.0136c-.0654-.1377-.1343-.2784-.2139-.4151s-.1635-.2636-.2519-.3935l.3076-.5576a.517.517,0,0,0-.62-.7393l-.6035.2051a6.68,6.68,0,0,0-.7134-.5977l.0986-.6328a.5172.5172,0,0,0-.43-.5918.54.54,0,0,0-.4052.1084l-.5015.4033A6.911,6.911,0,0,0,9.87,6.01l-.124-.6328a.5178.5178,0,0,0-.9512-.167l-.333.5507a7.2576,7.2576,0,0,0-.92.0039L7.2056,5.207a.518.518,0,0,0-.9512.167l-.125.6377a6.6192,6.6192,0,0,0-.8652.31l-.501-.4063a.5176.5176,0,0,0-.8364.4834l.0991.6358a6.6073,6.6073,0,0,0-.7017.5947L2.71,7.417a.5173.5173,0,0,0-.6211.7392l.3134.5694a6.7192,6.7192,0,0,0-.4653.7959l-.6421.0117a.516.516,0,0,0-.5083.5264.52.52,0,0,0,.1763.38l.4849.4238a6.8261,6.8261,0,0,0-.16.9111l-.6006.23a.5176.5176,0,0,0-.001.9658l.5972.2324a6.6665,6.6665,0,0,0,.16.917l-.4809.419a.5184.5184,0,0,0-.05.7314.52.52,0,0,0,.3789.1758l.6367.0137c.063.1318.1333.2754.2144.416.0673.1172.143.2246.2163.3281l.04.0566-.312.5664a.5176.5176,0,0,0,.2036.7032.52.52,0,0,0,.416.0361l.5967-.2031a6.82,6.82,0,0,0,.7207.5937l-.0991.6348a.5153.5153,0,0,0,.0933.3857.5187.5187,0,0,0,.7421.0977l.5064-.4082a6.6137,6.6137,0,0,0,.8628.3193l.1245.6358a.5139.5139,0,0,0,.22.33.53.53,0,0,0,.3877.0782.5193.5193,0,0,0,.3433-.24l.3388-.56.0577.0049a4.8076,4.8076,0,0,0,.7871.0019l.0669-.0058.3383.5625a.518.518,0,0,0,.9512-.167l.1245-.6348a6.6152,6.6152,0,0,0,.8589-.3193l.5088.4131a.5176.5176,0,0,0,.8364-.4834l-.0991-.6358a6.6173,6.6173,0,0,0,.7017-.5947l.6142.2119a.5174.5174,0,0,0,.6211-.7392l-.3135-.5694a6.6548,6.6548,0,0,0,.4649-.7959l.6421-.0117a.5168.5168,0,0,0,.5088-.5264.5166.5166,0,0,0-.1768-.38l-.4849-.4238a6.6694,6.6694,0,0,0,.16-.9111l.6006-.2315a.5177.5177,0,0,0,.2969-.6689ZM6.4941,13.9043,4.7666,16.8926a5.4449,5.4449,0,0,1,.0044-8.792L6.5,11.0986A2.0525,2.0525,0,0,0,6.4941,13.9043Zm2.1646-1.7822a.7608.7608,0,1,1-.4609-.3555A.7543.7543,0,0,1,8.6587,12.1221ZM7.54,10.499,5.8154,7.5068A5.4579,5.4579,0,0,1,7.9907,7.041h.0239a5.4693,5.4693,0,0,1,5.4068,4.8633l-3.457-.0029a2.0363,2.0363,0,0,0-.18-.43A2.0586,2.0586,0,0,0,7.54,10.499Zm-.0058,4.0049a2.0556,2.0556,0,0,0,2.435-1.4023l3.4512.0029a5.4455,5.4455,0,0,1-7.6147,4.3877Z"
-                                      fill="6E6E73"
-                                    ></path>
-                                  </svg>
-                                  <SubMenuName className="cartprofile">계정</SubMenuName>
-                                </NavCart.ProfileLink>
-                              </SubMenuLi>
-                              <SubMenuLi
-                                name={"cart"}
-                                selectedCateName={selectedCateName}
-                                className="SubMenuLi cart-profile"
-                                number={6}
-                                isSubCateShow={isSubCateShow}
-                                total={7}
-                              >
-                                {!cookies.userjwt ? (
-                                  <>
-                                    <NavCart.ProfileLink to="./login" className="profile">
-                                      <svg
-                                        id="Outlined"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        className="ac-gn-bagview-nav-svgicon"
-                                        width="11"
-                                        height="16"
-                                        viewBox="0 0 16 25"
-                                      >
-                                        <path
-                                          id="art_"
-                                          d="M15.09,12.5a7.1,7.1,0,1,1-7.1-7.1A7.1077,7.1077,0,0,1,15.09,12.5ZM7.99,6.6a5.89,5.89,0,0,0-4.4609,9.7471c.6069-.9658,2.48-1.6787,4.4609-1.6787s3.8545.7129,4.4615,1.6787A5.89,5.89,0,0,0,7.99,6.6ZM7.99,8.4A2.5425,2.5425,0,0,0,5.5151,11,2.5425,2.5425,0,0,0,7.99,13.6,2.5424,2.5424,0,0,0,10.4653,11,2.5424,2.5424,0,0,0,7.99,8.4Z"
-                                          fill="6E6E73"
-                                        ></path>
-                                      </svg>
-                                      <SubMenuName className="cartprofile" onClick={account.login}>
-                                        로그인
-                                      </SubMenuName>
-                                    </NavCart.ProfileLink>
-                                  </>
-                                ) : (
-                                  <>
-                                    <NavCart.ProfileLink to={""} onClick={account.logOut}>
-                                      <svg
-                                        id="Outlined"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        className="ac-gn-bagview-nav-svgicon"
-                                        width="11"
-                                        height="16"
-                                        viewBox="0 0 16 25"
-                                      >
-                                        <path
-                                          id="art_"
-                                          d="M15.09,12.5a7.1,7.1,0,1,1-7.1-7.1A7.1077,7.1077,0,0,1,15.09,12.5ZM7.99,6.6a5.89,5.89,0,0,0-4.4609,9.7471c.6069-.9658,2.48-1.6787,4.4609-1.6787s3.8545.7129,4.4615,1.6787A5.89,5.89,0,0,0,7.99,6.6ZM7.99,8.4A2.5425,2.5425,0,0,0,5.5151,11,2.5425,2.5425,0,0,0,7.99,13.6,2.5424,2.5424,0,0,0,10.4653,11,2.5424,2.5424,0,0,0,7.99,8.4Z"
-                                          fill="6E6E73"
-                                        ></path>
-                                      </svg>
-                                      <SubMenuName className="cartprofile">{user.name}&nbsp;로그아웃</SubMenuName>
-                                    </NavCart.ProfileLink>
-                                  </>
-                                )}
-                              </SubMenuLi>
-                              <SubMenuLi
-                                name={"cart"}
-                                selectedCateName={selectedCateName}
-                                className="SubMenuLi cart-profile"
-                                number={7}
-                                isSubCateShow={isSubCateShow}
-                                total={7}
-                              >
-                                <NavCart.ProfileLink to="../" className="profile">
-                                  <svg
-                                    id="Outlined"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="ac-gn-bagview-nav-svgicon"
-                                    width="11"
-                                    height="16"
-                                    viewBox="0 0 16 25"
-                                  >
-                                    <path
-                                      id="art_"
-                                      d="M15.6094,12.3252a.5142.5142,0,0,0-.2959-.2959l-.5972-.2324a6.6665,6.6665,0,0,0-.16-.917l.4809-.42a.5172.5172,0,0,0-.3291-.9073l-.6372-.0136c-.0654-.1377-.1343-.2784-.2139-.4151s-.1635-.2636-.2519-.3935l.3076-.5576a.517.517,0,0,0-.62-.7393l-.6035.2051a6.68,6.68,0,0,0-.7134-.5977l.0986-.6328a.5172.5172,0,0,0-.43-.5918.54.54,0,0,0-.4052.1084l-.5015.4033A6.911,6.911,0,0,0,9.87,6.01l-.124-.6328a.5178.5178,0,0,0-.9512-.167l-.333.5507a7.2576,7.2576,0,0,0-.92.0039L7.2056,5.207a.518.518,0,0,0-.9512.167l-.125.6377a6.6192,6.6192,0,0,0-.8652.31l-.501-.4063a.5176.5176,0,0,0-.8364.4834l.0991.6358a6.6073,6.6073,0,0,0-.7017.5947L2.71,7.417a.5173.5173,0,0,0-.6211.7392l.3134.5694a6.7192,6.7192,0,0,0-.4653.7959l-.6421.0117a.516.516,0,0,0-.5083.5264.52.52,0,0,0,.1763.38l.4849.4238a6.8261,6.8261,0,0,0-.16.9111l-.6006.23a.5176.5176,0,0,0-.001.9658l.5972.2324a6.6665,6.6665,0,0,0,.16.917l-.4809.419a.5184.5184,0,0,0-.05.7314.52.52,0,0,0,.3789.1758l.6367.0137c.063.1318.1333.2754.2144.416.0673.1172.143.2246.2163.3281l.04.0566-.312.5664a.5176.5176,0,0,0,.2036.7032.52.52,0,0,0,.416.0361l.5967-.2031a6.82,6.82,0,0,0,.7207.5937l-.0991.6348a.5153.5153,0,0,0,.0933.3857.5187.5187,0,0,0,.7421.0977l.5064-.4082a6.6137,6.6137,0,0,0,.8628.3193l.1245.6358a.5139.5139,0,0,0,.22.33.53.53,0,0,0,.3877.0782.5193.5193,0,0,0,.3433-.24l.3388-.56.0577.0049a4.8076,4.8076,0,0,0,.7871.0019l.0669-.0058.3383.5625a.518.518,0,0,0,.9512-.167l.1245-.6348a6.6152,6.6152,0,0,0,.8589-.3193l.5088.4131a.5176.5176,0,0,0,.8364-.4834l-.0991-.6358a6.6173,6.6173,0,0,0,.7017-.5947l.6142.2119a.5174.5174,0,0,0,.6211-.7392l-.3135-.5694a6.6548,6.6548,0,0,0,.4649-.7959l.6421-.0117a.5168.5168,0,0,0,.5088-.5264.5166.5166,0,0,0-.1768-.38l-.4849-.4238a6.6694,6.6694,0,0,0,.16-.9111l.6006-.2315a.5177.5177,0,0,0,.2969-.6689ZM6.4941,13.9043,4.7666,16.8926a5.4449,5.4449,0,0,1,.0044-8.792L6.5,11.0986A2.0525,2.0525,0,0,0,6.4941,13.9043Zm2.1646-1.7822a.7608.7608,0,1,1-.4609-.3555A.7543.7543,0,0,1,8.6587,12.1221ZM7.54,10.499,5.8154,7.5068A5.4579,5.4579,0,0,1,7.9907,7.041h.0239a5.4693,5.4693,0,0,1,5.4068,4.8633l-3.457-.0029a2.0363,2.0363,0,0,0-.18-.43A2.0586,2.0586,0,0,0,7.54,10.499Zm-.0058,4.0049a2.0556,2.0556,0,0,0,2.435-1.4023l3.4512.0029a5.4455,5.4455,0,0,1-7.6147,4.3877Z"
-                                      fill="6E6E73"
-                                    ></path>
-                                  </svg>
-                                  <SubMenuName className="cartprofile">관리자 페이지</SubMenuName>
-                                </NavCart.ProfileLink>
-                              </SubMenuLi>
-                            </SubMenuListItem>
-                          </SubMenuList>
-                        </SubMenuInner>
-                      </SubMenuHeight>
-                    </SubMenu>
+                                <path
+                                  id="art_"
+                                  d="M15.6094,12.3252a.5142.5142,0,0,0-.2959-.2959l-.5972-.2324a6.6665,6.6665,0,0,0-.16-.917l.4809-.42a.5172.5172,0,0,0-.3291-.9073l-.6372-.0136c-.0654-.1377-.1343-.2784-.2139-.4151s-.1635-.2636-.2519-.3935l.3076-.5576a.517.517,0,0,0-.62-.7393l-.6035.2051a6.68,6.68,0,0,0-.7134-.5977l.0986-.6328a.5172.5172,0,0,0-.43-.5918.54.54,0,0,0-.4052.1084l-.5015.4033A6.911,6.911,0,0,0,9.87,6.01l-.124-.6328a.5178.5178,0,0,0-.9512-.167l-.333.5507a7.2576,7.2576,0,0,0-.92.0039L7.2056,5.207a.518.518,0,0,0-.9512.167l-.125.6377a6.6192,6.6192,0,0,0-.8652.31l-.501-.4063a.5176.5176,0,0,0-.8364.4834l.0991.6358a6.6073,6.6073,0,0,0-.7017.5947L2.71,7.417a.5173.5173,0,0,0-.6211.7392l.3134.5694a6.7192,6.7192,0,0,0-.4653.7959l-.6421.0117a.516.516,0,0,0-.5083.5264.52.52,0,0,0,.1763.38l.4849.4238a6.8261,6.8261,0,0,0-.16.9111l-.6006.23a.5176.5176,0,0,0-.001.9658l.5972.2324a6.6665,6.6665,0,0,0,.16.917l-.4809.419a.5184.5184,0,0,0-.05.7314.52.52,0,0,0,.3789.1758l.6367.0137c.063.1318.1333.2754.2144.416.0673.1172.143.2246.2163.3281l.04.0566-.312.5664a.5176.5176,0,0,0,.2036.7032.52.52,0,0,0,.416.0361l.5967-.2031a6.82,6.82,0,0,0,.7207.5937l-.0991.6348a.5153.5153,0,0,0,.0933.3857.5187.5187,0,0,0,.7421.0977l.5064-.4082a6.6137,6.6137,0,0,0,.8628.3193l.1245.6358a.5139.5139,0,0,0,.22.33.53.53,0,0,0,.3877.0782.5193.5193,0,0,0,.3433-.24l.3388-.56.0577.0049a4.8076,4.8076,0,0,0,.7871.0019l.0669-.0058.3383.5625a.518.518,0,0,0,.9512-.167l.1245-.6348a6.6152,6.6152,0,0,0,.8589-.3193l.5088.4131a.5176.5176,0,0,0,.8364-.4834l-.0991-.6358a6.6173,6.6173,0,0,0,.7017-.5947l.6142.2119a.5174.5174,0,0,0,.6211-.7392l-.3135-.5694a6.6548,6.6548,0,0,0,.4649-.7959l.6421-.0117a.5168.5168,0,0,0,.5088-.5264.5166.5166,0,0,0-.1768-.38l-.4849-.4238a6.6694,6.6694,0,0,0,.16-.9111l.6006-.2315a.5177.5177,0,0,0,.2969-.6689ZM6.4941,13.9043,4.7666,16.8926a5.4449,5.4449,0,0,1,.0044-8.792L6.5,11.0986A2.0525,2.0525,0,0,0,6.4941,13.9043Zm2.1646-1.7822a.7608.7608,0,1,1-.4609-.3555A.7543.7543,0,0,1,8.6587,12.1221ZM7.54,10.499,5.8154,7.5068A5.4579,5.4579,0,0,1,7.9907,7.041h.0239a5.4693,5.4693,0,0,1,5.4068,4.8633l-3.457-.0029a2.0363,2.0363,0,0,0-.18-.43A2.0586,2.0586,0,0,0,7.54,10.499Zm-.0058,4.0049a2.0556,2.0556,0,0,0,2.435-1.4023l3.4512.0029a5.4455,5.4455,0,0,1-7.6147,4.3877Z"
+                                  fill="6E6E73"
+                                ></path>
+                              </svg>
+                              <SubMenuName className="cartprofile">관리자 페이지</SubMenuName>
+                            </NavCart.ProfileLink>
+                          </SubMenuLi>
+                        </SubMenuListItem>
+                      </SubMenuList>
+                    </SubMenuInner>
+                  </SubMenuHeight>
+                </SubMenu>
               </NavTabMenuWrap>
-            ) }
+            )}
+            <NavHeightCover isSubCateResize={isSubCateResize}></NavHeightCover>
           </NavHeight>
           <NavWrap className="NavWrap" isSubCateShow={isSubCateShow}>
             <NavInner className="NavInner">
