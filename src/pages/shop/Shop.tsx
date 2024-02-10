@@ -1804,21 +1804,21 @@ function Shop() {
     if (isMobile && isSubCateShow) {
       const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
 
-      // document.body.style.paddingRight = `${scrollbarWidth}px`;
-      // document.body.style.overflow = "hidden";
-      // document.documentElement.style.overflow = "hidden";
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
     } else {
-      // document.body.style.paddingRight = "0";
-      // document.body.style.overflow = "auto";
-      // document.documentElement.style.overflow = "auto";
+      document.body.style.paddingRight = "0";
+      document.body.style.overflow = "auto";
+      document.documentElement.style.overflow = "auto";
       // setIsSubCateShow(false);
       // setIsNavFirstMenuShow(false);
       // setIsNavSecondMenuShow(false);
     }
 
     return () => {
-      // document.body.style.overflow = "auto";
-      // document.documentElement.style.overflow = "auto";
+      document.body.style.overflow = "auto";
+      document.documentElement.style.overflow = "auto";
     };
   }, [isMobile, isSubCateShow]);
 
@@ -2428,6 +2428,17 @@ function Shop() {
                     }
                   })}
                 </NavTabMenu>
+                {isMobile ? "isMobile true" : "isMobile false"}
+                <br></br>
+                {isSubCateShow ? "isSubCateShow true" : "isSubCateShow false"}
+                <br></br>
+                {isSubCateResize ? "isSubCateResize true" : "isSubCateResize false"}
+                <br></br>
+                {isNavFirstMenuShow ? "isNavFirstMenuShow true" : "isNavFirstMenuShow false"}
+                <br></br>
+                {isNavSecondMenuShow ? "isNavSecondMenuShow true" : "isNavSecondMenuShow false"}
+                <br></br>
+
                 {/* {categoryList.map((list: any, index: any) => {
                     if (list.navHide) return null; // 숨겨진 메뉴는 출력 하지 않음.
                     if (list.taskIds.length > 0) {
