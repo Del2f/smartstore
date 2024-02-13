@@ -90,7 +90,7 @@ ag-grid 라이브러리에 웬만한 기능을 지원해서 딱히 만든건 없
 map 메소드 요소에 ...을 붙이고, 해당하는 object를 원하는 값으로 수정하는 방법, 그리고 삼항 연산자를
 사용한다면 또 다르게 바꿀 수 있다는걸 처음 알았다.
 
-
+````
     const onUpdateBtn = () => {
         const result = copy.map((list: any, index: any) => {
         --------생략---------
@@ -102,7 +102,7 @@ map 메소드 요소에 ...을 붙이고, 해당하는 object를 원하는 값�
         })
         props.setOptionResult(result);
     };
-
+````
 
 그리고 ag-grid에서 체크된 옵션에 number를 더하거나, 빼거나, 원하는 수치로 바꾸는 기능을 추가했다.
 혹시나 수정을 원하지 않는 옵션은 boolean을 추가해 값이 true인 경우 제외 해준다.
@@ -138,6 +138,7 @@ const product = await Product.findOne({ url: requrl });
 이렇게 되면 URL이 상품페이지를 정하게 된다.
 아직은 이렇게 밖에 못하겠다.
 
+````
     import MacBookAirM2 from "../adminPage/Product/Mac/macbook-air-m2";
 
     const componentMap = {
@@ -152,6 +153,7 @@ const product = await Product.findOne({ url: requrl });
             return null;
         }
     };
+````
 
 모든 Input을 정상적으로 입력 했을때 유효성 검사에서 true를 반환하며 상품 등록이 된다.
 
@@ -169,6 +171,7 @@ ag-grid는 입력한 배열을 쉽고 간단하게 출력 할 수 있어 매우 
 아직도 어떤 방법이 가장 편리한지 잘 모르겠다. 한참전에 입력했던 class는 갑자기 나중에 꼬이질 않나 조금 번거롭다.
 현재는 scss와 styled-components를 같이 사용 하고 있다.
 
+````
     {
         headerName: "메인사진",
             cellRendererFramework: (params: any) => {
@@ -179,28 +182,35 @@ ag-grid는 입력한 배열을 쉽고 간단하게 출력 할 수 있어 매우 
             );
         },
     },
+````
 
 아무래도 상품인지라 수정이 불가피하다. 수정 버튼을 추가해주고,
 react-router-dom의 Link를 사용해 상품의 _id를 기반으로 다시 상품 등록 페이지로 이동해준다.
 
+````
     <Link to={params.data._id} style={{ display: "flex", alignItems: "center" }}>
         <button className="editBtn" data-action="edit">
             <span>수정</span>
         </button>
     </Link>
+````
 
 상품 등록은 잘 만들었지만, 수정은 어떻게 해야할까 고민을 많이했다.
 실제로 등록과 수정은 거의 차이가 없다. 다만, Input에 값을 새로 넣는것이 등록이고, 이미 작성이 되어 있다면 수정 일것이다.
 먼저 useParams를 사용하여 상품 등록 페이지에 진입 했다면 값이 감지 된다. 첫 상품 등록 이라면 당연히 없다.
 
+````
     const { id } = useParams();
+````
 
 그리고 useEffect를 사용해 매개변수로 id를 작성해, id가 확인될때만 코드가 실행되게 한다.
 
+````
     const { id } = req.params; // 서버에서 받아온 req.params.
 
     const dataList = await Product.findById(id); // 모든 상품이 담겨있는 Product 모델에서 findById로 id를 검색한다.
     res.send({ productEdit: dataList }); // 상품의 정보를 다시 클라이언트로 보낸다.
+````
 
 상품명, 상품 가격등 해당하는 state에 값을 전부 setState로 입력해주면 수정도 완성된다.
 모든 boolean도 미리 true로 만들어주고, 상품 수정시 true가 되는 [edit, setEdit] 같은 boolean을
@@ -258,7 +268,9 @@ color picker 라이브러리 같은 기능인데, 조금 다르다. 준비된 �
 AWS S3에서 가져온 URL을 불러와 canvas로 만든다.
 그리고 클릭한 부위의 x좌표, y좌표에 해당하는 픽셀 데이터를 사용해 변수로 만든다.
 
+````
     const color = `rgba(${pixelData[0]}, ${pixelData[1]}, ${pixelData[2]}, ${pixelData[3] / 255})`;
+````
 
 광고에 백그라운드 컬러로 사용되어 이미지의 배경과 광고의 배경이 어색하지 않게 해준다.
 실은 이미지가 광고 사이즈 만큼 큰 해상도로 작업이 되어있다면 크게 필요한 기능은 아니지만..
@@ -268,6 +280,7 @@ AWS S3에서 가져온 URL을 불러와 canvas로 만든다.
 
 처음엔 S3에서 CORS 설정을 하면 된다는 이야기가 많아 아래와 같이 작성을 했는데 전혀 작동 하지 않았다.
 
+````
     [
         {
         "AllowedHeaders": [
@@ -288,11 +301,14 @@ AWS S3에서 가져온 URL을 불러와 canvas로 만든다.
         "MaxAgeSeconds": 3000
         }
     ]
+````
 
 구글링을 통해서 찾은 방법은, AWS S3에서 CORS를 설정해도 해결이 안된다는것 이었다.
 해결 방법은
 
+````
     image.crossOrigin = "Anonymous"; 
+````
 
 위 코드를 canvas로 만들기 전에 넣어주면 된다.
 찜찜한 방법인데 일단 작동은 된다. (..)
@@ -359,11 +375,13 @@ sudo vi /etc/nginx/sites-enabled/smartstore.conf에서 Proxy_pass를 제거.
 로컬은 8080, 우분투의 환경변수를 PORT=5800;으로 입력해 PORT가 감지 되면 5800으로 켜지게 한다.
 (현재 로컬은 환경변수를 입력하지 않았고 우분투에만 업로드 했다.)
 
+````
     app.set('port', process.env.PORT || 8080);
 
     app.listen(app.get('port'), function () {
     console.log(`listening on ${app.get('port')}`);
     });
+````
 
 수정 후 nginx 재시작. (sudo systemctl restart nginx)
 
@@ -385,6 +403,7 @@ node server.js 명령어로 직접 켜 로그를 확인한다.
 axios 요청 주소를 개발, 배포로 나눠 놓아야 하는데, 이럴때 환경 변수를 쓴다.
 이걸 처음 알았을땐 정말 감탄했다.
 
+````
     import axios from 'axios';
 
     const BASE_URL = process.env.REACT_APP_HOST;
@@ -398,6 +417,7 @@ axios 요청 주소를 개발, 배포로 나눠 놓아야 하는데, 이럴때 �
         headers: { 'Content-Type': 'application/json' },
         withCredentials: true
     });
+````
 
 .env.development, .env.production 이런식으로 나눠서 작성하면 git에 업로드 할땐 (npm run build)
 .env.production가 적용된다. .env.production엔 당연히 AWS의 외부아이피가 들어있다.
@@ -419,3 +439,27 @@ ubuntu에는 빌드된 코드가 실행이 되기 때문에 항상 최신화를 
 그러면 서버가 정상적으로 구동된다.
 
 2) 모바일 메뉴
+
+모바일 메뉴를 만들때 생겼던 문제이다.
+모바일 해상도를 PC 크롬이나 모바일 크롬으로 테스트 할때는 아무 이상이 없지만,
+iOS 사파리를 사용할때는 생기는 문제였다. 
+
+````
+    document.body.style.overflow = "hidden";
+````
+
+위 코드가 PC에서는 정상 작동하지만, 사파리에서는 작동 하지 않는다.
+
+![apple-menu2](https://github.com/Del2f/smartstore/assets/92422357/1933b90f-6b3e-45c9-a37c-19317ab59f37)
+
+사파리의 하단 주소창을 드래그할때 body의 스크롤이 작동 하게된다.
+의도한것은, 모바일 메뉴가 나타나면 body의 스크롤이 어떠한 경우에도 작동하면 안된다.
+
+````
+    document.body.style.position = "fixed";
+    document.body.style.top = "0px";
+    document.body.style.left = "0px";
+    document.body.style.right = "0px";
+````
+
+body의 position을 fixed로 고정시켜 스크롤의 작동을 막을수 있었다.

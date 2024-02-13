@@ -188,8 +188,7 @@ export const NavHeight = styled.div<NavHeightType>`
         height: 100dvh;
         overflow-x: hidden;
         overflow-y: scroll;
-        transition:
-        height var(--nav-mobile-height-rate) cubic-bezier(0.4, 0, 0.6, 1) 80ms,
+        transition: height var(--nav-mobile-height-rate) cubic-bezier(0.4, 0, 0.6, 1) 80ms,
           opacity ${(props) => props.theme.navMobileOpacityRate} cubic-bezier(0.4, 0, 0.6, 1) 0.1s,
           background var(--nav-mobile-background-color-rate) cubic-bezier(0.4, 0, 0.6, 1) 80ms;
       `}
@@ -200,8 +199,7 @@ export const NavHeight = styled.div<NavHeightType>`
         opacity: 0;
         background: ${props.theme.navBG};
         height: 0px;
-        transition:
-        height var(--nav-mobile-height-rate) cubic-bezier(0.4, 0, 0.6, 1) 80ms,
+        transition: height var(--nav-mobile-height-rate) cubic-bezier(0.4, 0, 0.6, 1) 80ms,
           opacity ${(props) => props.theme.navMobileOpacityRate} cubic-bezier(0.4, 0, 0.6, 1) 0.1s,
           background var(--nav-mobile-background-color-rate) cubic-bezier(0.4, 0, 0.6, 1) 80ms;
       `}
@@ -228,10 +226,13 @@ export const MainWrap = styled.div<mainwrap>`
       max-height: none;
       /* overflow: hidden; */
       /* height: 1000px; */
-      
-      ${props => props.isMobile && props.isSubCateShow ? `
 
-      ` : `
+      ${(props) =>
+        props.isMobile && props.isSubCateShow
+          ? `
+
+      `
+          : `
         
       `}
     }
@@ -1768,10 +1769,10 @@ function Shop() {
   }, [location]);
 
   useEffect(() => {
-      setIsSubCateShow(false);
-      setIsNavFirstMenuShow(false);
-      setIsNavSecondMenuShow(false);
-  }, [isMobile])
+    setIsSubCateShow(false);
+    setIsNavFirstMenuShow(false);
+    setIsNavSecondMenuShow(false);
+  }, [isMobile]);
 
   // 모바일 메뉴에서 휠스크롤 숨기기 및 우측 padding 계산
   useEffect(() => {
@@ -1785,24 +1786,21 @@ function Shop() {
       document.body.style.paddingRight = `${scrollbarWidth}px`;
       document.body.style.overflow = "hidden";
       document.body.style.position = "fixed";
-            // document.body.style.top = `-${pageY}px`;
-            document.body.style.top = "0px";
-            document.body.style.left = "0px";
-            document.body.style.right = "0px";
-            document.body.style.bottom = "0px";
+      // document.body.style.top = `-${pageY}px`;
+      document.body.style.top = "0px";
+      document.body.style.left = "0px";
+      document.body.style.right = "0px";
+      // document.body.style.bottom = "0px";
       document.documentElement.style.overflow = "hidden";
     } else {
       document.body.style.paddingRight = "0";
       document.body.style.overflow = "auto";
       document.body.style.removeProperty("position");
-            document.body.style.removeProperty("top");
-            document.body.style.removeProperty("left");
-            document.body.style.removeProperty("right");
-            document.body.style.removeProperty("bottom");
+      document.body.style.removeProperty("top");
+      document.body.style.removeProperty("left");
+      document.body.style.removeProperty("right");
+      document.body.style.removeProperty("bottom");
       document.documentElement.style.overflow = "auto";
-      // setIsSubCateShow(false);
-      // setIsNavFirstMenuShow(false);
-      // setIsNavSecondMenuShow(false);
     }
 
     return () => {
@@ -1881,12 +1879,12 @@ function Shop() {
 
     const defaultHeight = "423px";
 
-      if (selectedCateName === "cart" && navCart) {
-        const newHeight = 423 + navCart.length * 60;
-        setHeight(`${newHeight}px`);
-      } else {
-        setHeight(categoryHeightMap[selectedCateName] || defaultHeight);
-      }
+    if (selectedCateName === "cart" && navCart) {
+      const newHeight = 423 + navCart.length * 60;
+      setHeight(`${newHeight}px`);
+    } else {
+      setHeight(categoryHeightMap[selectedCateName] || defaultHeight);
+    }
   }, [selectedCateName, navCart]);
 
   // PC전용 - 서브 메뉴가 내려와 있을때 브라우저로 나갔을 경우 height를 0으로 변경합니다.
@@ -1900,7 +1898,6 @@ function Shop() {
         setIsNavSecondMenuShow(false);
         setSelectedCateName("");
       }
-
     };
     document.addEventListener("mouseleave", blowserOut);
     return () => {
@@ -2000,7 +1997,7 @@ function Shop() {
   // 서브메뉴가 내려와있을때 하단으로 나갔을 경우 height를 0으로 변경합니다.
   const subMenuClose = (e: any, name: any) => {
     e.stopPropagation();
-    console.log('subMenuClose');
+    console.log("subMenuClose");
 
     if (isMobile) {
       return;
@@ -2176,12 +2173,7 @@ function Shop() {
       <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
         <MainWrap className="MainWrap" isMobile={isMobile} isSubCateShow={isSubCateShow}>
           <Blur className="Blur" boolean={isSubCateShow} onMouseEnter={(e: any) => subMenuClose(e, "blur")}></Blur>
-          <NavHeight
-            className="NavHeight"
-            height={height}
-            selectedCateName={selectedCateName}
-            isSubCateShow={isSubCateShow}
-          >
+          <NavHeight className="NavHeight" height={height} selectedCateName={selectedCateName} isSubCateShow={isSubCateShow}>
             {/* 모바일 메뉴 */}
             {isMobile && (
               <NavTabMenuWrap className="NavTabMenuWrap" isNavFirstMenuShow={isNavFirstMenuShow}>
