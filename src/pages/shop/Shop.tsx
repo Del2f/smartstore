@@ -1784,20 +1784,21 @@ function Shop() {
 
       document.body.style.paddingRight = `${scrollbarWidth}px`;
       document.body.style.overflow = "hidden";
-      // document.body.style.position = "fixed";
-      //       document.body.style.top = `-${pageY}px`;
-      //       document.body.style.left = "0px";
-      //       document.body.style.right = "0px";
-      //       document.body.style.bottom = "0px";
+      document.body.style.position = "fixed";
+            // document.body.style.top = `-${pageY}px`;
+            document.body.style.top = "0px";
+            document.body.style.left = "0px";
+            document.body.style.right = "0px";
+            document.body.style.bottom = "0px";
       document.documentElement.style.overflow = "hidden";
     } else {
       document.body.style.paddingRight = "0";
       document.body.style.overflow = "auto";
-      // document.body.style.removeProperty("position");
-      //       document.body.style.removeProperty("top");
-      //       document.body.style.removeProperty("left");
-      //       document.body.style.removeProperty("right");
-      //       document.body.style.removeProperty("bottom");
+      document.body.style.removeProperty("position");
+            document.body.style.removeProperty("top");
+            document.body.style.removeProperty("left");
+            document.body.style.removeProperty("right");
+            document.body.style.removeProperty("bottom");
       document.documentElement.style.overflow = "auto";
       // setIsSubCateShow(false);
       // setIsNavFirstMenuShow(false);
