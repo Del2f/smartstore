@@ -462,4 +462,6 @@ iOS 사파리를 사용할때는 생기는 문제였다.
     document.body.style.right = "0px";
 ````
 
+![apple-menu3](https://github.com/Del2f/smartstore/assets/92422357/7edb865b-8863-41f3-83a0-045975380a96)
+
 body의 position을 fixed로 고정시켜 스크롤의 작동을 막을수 있었다.
