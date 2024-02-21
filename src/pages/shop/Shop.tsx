@@ -418,6 +418,9 @@ const NavTabMenuAnimationIn = keyframes`
     opacity: 0;
     transform: translate(-20px);
   }
+  70% {
+    opacity: 1;
+  }
   100% {
     opacity: 1;
     transform: translate(0px);
@@ -428,6 +431,9 @@ const NavTabMenuAnimationOut = keyframes`
   0% {
     opacity: 1;
     transform: translate(0px);
+  }
+  70% {
+    opacity: 0;
   }
   100% {
     opacity: 0;
@@ -475,28 +481,30 @@ export const NavTabMenu = styled.div<NavTabMenuType>`
   }
 `;
 
+const NavTabSubMenuWrap = styled.div`
+  
+`
+
 const NavTabWrap = styled.div<NavTabMenuType>`
   z-index: 1;
 
   @media only screen and (max-width: 833px) {
     width: 100%;
     background-color: transparent;
-    position: relative;
     height: auto;
 
     ${(props) =>
       props.isNavSecondMenuShow
         ? css`
+            /* z-index: 3; */
             /* visibility: hidden; */
-            z-index: 3;
             animation: ${NavTabMenuAnimationOut} 0.5s cubic-bezier(0.4, 0, 0.6, 1) both;
             /* opacity: 0; */
             /* transform: translateX(-20px); */
             /* transition-duration: 0.3s; */
           `
         : css`
-            z-index: 5;
-
+            /* z-index: 5; */
             /* visibility: visible; */
             animation: ${NavTabMenuAnimationIn} 0.5s cubic-bezier(0.4, 0, 0.6, 1) both;
             /* opacity: 1; */
@@ -525,8 +533,24 @@ export const NavTab = styled.li<NavTabType>`
       z-index: 0;
     }
 
-    & > a {
-    }
+    ${(props) =>
+      props.isNavSecondMenuShow
+        ? css`
+            /* visibility: hidden; */
+            /* z-index: 3; */
+            /* animation: ${NavTabMenuAnimationOut} 0.5s cubic-bezier(0.4, 0, 0.6, 1) both; */
+            /* opacity: 0; */
+            /* transform: translateX(-20px); */
+            /* transition-duration: 0.3s; */
+          `
+        : css`
+            /* z-index: 5; */
+            /* visibility: visible; */
+            /* animation: ${NavTabMenuAnimationIn} 0.5s cubic-bezier(0.4, 0, 0.6, 1) both; */
+            /* opacity: 1; */
+            /* transform: translateX(0px); */
+            /* transition-duration: 0.3s; */
+          `}
 
     &.NavTab-Menu-li {
       /* transition-property: opacity, transform, visibility; */
@@ -797,6 +821,9 @@ const SubMenuAnimationIn = keyframes`
     opacity: 0;
     transform: translate(20px);
   }
+  30% {
+    opacity: 0;
+  }
   100% {
     opacity: 1;
     transform: translate(0px);
@@ -882,7 +909,7 @@ export const SubMenu = styled.div<SubMenuType>`
       ${(props) =>
         props.isNavSecondMenuShow &&
         css`
-          animation: ${SubMenuAnimationIn} 0.4s cubic-bezier(0.4, 0, 0.6, 1) both;
+          animation: ${SubMenuAnimationIn} 0.5s cubic-bezier(0.4, 0, 0.6, 1) both;
         `}
 
       ${(props) =>
@@ -2193,34 +2220,36 @@ function Shop() {
                     if (list.navHide) return null; // 숨겨진 메뉴는 출력 하지 않음.
                       return (
                         <>
-                          <NavTabWrap className="NavTabWrap" isNavSecondMenuShow={isNavSecondMenuShow} key={index}>
-                            <NavTab
-                              className="NavTab NavTab-Menu-li"
-                              onClick={list.taskIds.length > 0 ? (e) => timerMouseEnter(e, list.name) : () => navigate(`./${list.url}`)}
-                              name={list.name}
-                              number={index + 1}
-                              total={categoryList.length}
-                              selectedCateName={selectedCateName}
-                              isNavFirstMenuShow={isNavFirstMenuShow}
-                              isNavSecondMenuShow={isNavSecondMenuShow}
-                            >
-                              <NavTabLink to={`./${list.url}`} className="Link">
-                                <NavTabText
-                                  className="NavTabText"
-                                  isSubCateShow={isSubCateShow}
-                                  key={index}
-                                  name={list.name}
-                                  selectedCateName={selectedCateName}
-                                >
-                                  {list.name}
-                                </NavTabText>
-                              </NavTabLink>
-                              <NavTabArrow className="NavTabArrow" isSubCateShow={isSubCateShow} number={index + 1}>
-                                <svg height="48" viewBox="0 0 9 48" width="9" xmlns="http://www.w3.org/2000/svg">
-                                  <path d="m8.1155 30.358a.6.6 0 1 1 -.831.8653l-7-6.7242a.6.6 0 0 1 -.0045-.8613l7-6.8569a.6.6 0 1 1 .84.8574l-6.5582 6.4238z"></path>
-                                </svg>
-                              </NavTabArrow>
-                            </NavTab>
+                          <NavTabSubMenuWrap className="NavTabSubMenuWrap">
+                            <NavTabWrap className="NavTabWrap" isNavSecondMenuShow={isNavSecondMenuShow} key={index}>
+                              <NavTab
+                                className="NavTab NavTab-Menu-li"
+                                onClick={list.taskIds.length > 0 ? (e) => timerMouseEnter(e, list.name) : () => navigate(`./${list.url}`)}
+                                name={list.name}
+                                number={index + 1}
+                                total={categoryList.length}
+                                selectedCateName={selectedCateName}
+                                isNavFirstMenuShow={isNavFirstMenuShow}
+                                isNavSecondMenuShow={isNavSecondMenuShow}
+                              >
+                                <NavTabLink to={`./${list.url}`} className="Link">
+                                  <NavTabText
+                                    className="NavTabText"
+                                    isSubCateShow={isSubCateShow}
+                                    key={index}
+                                    name={list.name}
+                                    selectedCateName={selectedCateName}
+                                  >
+                                    {list.name}
+                                  </NavTabText>
+                                </NavTabLink>
+                                <NavTabArrow className="NavTabArrow" isSubCateShow={isSubCateShow} number={index + 1}>
+                                  <svg height="48" viewBox="0 0 9 48" width="9" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="m8.1155 30.358a.6.6 0 1 1 -.831.8653l-7-6.7242a.6.6 0 0 1 -.0045-.8613l7-6.8569a.6.6 0 1 1 .84.8574l-6.5582 6.4238z"></path>
+                                  </svg>
+                                </NavTabArrow>
+                              </NavTab>
+                            </NavTabWrap>
                             <SubMenu
                               className="SubMenu"
                               isSubCateShow={isSubCateShow}
@@ -2236,26 +2265,26 @@ function Shop() {
                                     <SubMenuListItem>
                                       {list.taskIds.map((taskId: any, index2: any) => {
                                         if (taskId.navHide) return null;
-                                          return (
-                                            <>
-                                              <SubMenuLi
-                                                key={index2}
-                                                name={list.name}
-                                                selectedCateName={selectedCateName}
-                                                className="SubMenuLi"
-                                                number={index2 + 1}
-                                                isSubCateShow={isSubCateShow}
-                                                total={list.taskIds.length + 1}
-                                                isNavSecondMenuShow={isNavSecondMenuShow}
+                                        return (
+                                          <>
+                                            <SubMenuLi
+                                              key={index2}
+                                              name={list.name}
+                                              selectedCateName={selectedCateName}
+                                              className="SubMenuLi"
+                                              number={index2 + 1}
+                                              isSubCateShow={isSubCateShow}
+                                              total={list.taskIds.length + 1}
+                                              isNavSecondMenuShow={isNavSecondMenuShow}
+                                            >
+                                              <SubMenuLink
+                                                to={`./${taskId.subTaskIds && taskId.subTaskIds.length > 0 ? "" : "products/"}${taskId.url}`}
                                               >
-                                                <SubMenuLink
-                                                  to={`./${taskId.subTaskIds && taskId.subTaskIds.length > 0 ? "" : "products/"}${taskId.url}`}
-                                                >
-                                                  <SubMenuName className="SubMenuName main">{taskId.name}</SubMenuName>
-                                                </SubMenuLink>
-                                              </SubMenuLi>
-                                            </>
-                                          );
+                                                <SubMenuName className="SubMenuName main">{taskId.name}</SubMenuName>
+                                              </SubMenuLink>
+                                            </SubMenuLi>
+                                          </>
+                                        );
                                       })}
                                     </SubMenuListItem>
                                   </SubMenuList>
@@ -2356,7 +2385,7 @@ function Shop() {
                                 </SubMenuInner>
                               </SubMenuHeight>
                             </SubMenu>
-                          </NavTabWrap>
+                          </NavTabSubMenuWrap>
                         </>
                       );
                   })}
