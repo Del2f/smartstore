@@ -1,7 +1,7 @@
 import axios from "../../api/axios";
 import styled, { css } from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { ObjectId } from "mongodb";
 import { GmIdType } from "./Shop";
@@ -316,7 +316,7 @@ const AdverDetail = styled.span<Type>`
     ${(props) =>
       props.type === 2 &&
       css`
-      margin-top: 20px;
+        margin-top: 20px;
         font-size: 20px;
         max-width: 320px;
       `}
@@ -448,46 +448,113 @@ export interface productList {
   __v: number;
 }
 
-interface ChapterNav {
-  columnName: string | undefined;
-}
+// interface ChapterNav {
+//   columnname: string | undefined;
+// }
 
 // 아이콘 네비게이션
-const ChapterNav = styled.div<ChapterNav>`
-  padding: 24px 0;
+const ChapterNav = styled.div`
+  padding: 8px 0;
   text-align: center;
   width: 100%;
-  /* height: 115px; */
+  height: 115px;
   position: relative;
-  background-color: ${(props) => props.theme.navBG};
-
-  ${(props) =>
-    props.columnName === "Watch"
-      ? `
-      padding-top: 12px;
-      padding-bottom: 12px;
-      `
-      : ""};
+  background-color: ${(props) => props.theme.chapterNavBG};
+  overflow: hidden;
+  white-space: nowrap;
+  transition: transform 0.3s ease;
 
   @media only screen and (max-width: 833px) {
-    overflow-x: auto;
-    overflow-y: hidden;
-    white-space: nowrap;
   }
 `;
 
 const ChapterNavWrap = styled.div`
-  position: relative;
-  width: 100%;
   height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  position: relative;
+  /* display: flex; */
+  /* align-items: center; */
+  /* justify-content: center; */
+  /* overflow: hidden; */
+  transition: transform 0.3s ease;
 `;
 
 const ChapterNavItems = styled.ul`
-  display: flex;
-  gap: 7px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  padding-bottom: 50px;
+  margin: 0 34px;
+  /* transition: transform 0.3s ease; */
+`;
+
+const Buttons = styled.button`
+  border: 0 solid ${(props) => props.theme.chapterNavArrowBorderColor};
+  border-radius: 0;
+  /* color: ${(props) => props.theme.chapterNavArrowColor}; */
+  opacity: 0.8;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  text-align: center;
+  width: calc(34px - 1px);
+  transition: opacity ${(props) => props.theme.navMobileColorRate} ease-out;
+  background-color: transparent;
+`;
+
+interface ChapterNavButtonsType {
+  isChapterNavScroll: boolean;
+}
+
+const ChapterNavButtons = styled.div<ChapterNavButtonsType>`
+  display: ${(props) => (props.isChapterNavScroll ? "block" : "none")};
+`;
+
+interface ButtonsType {
+  scrollLeft?: number | null;
+  scrollWidth?: number;
+  clientWidth?: number;
+}
+
+const LeftButton = styled(Buttons)<ButtonsType>`
+  left: 0;
+  border-right-width: 1px;
+  opacity: ${({ scrollLeft }) => (scrollLeft === 0 ? 0 : 1)};
+
+  &::after {
+    content: "";
+    font-family: SF Pro Icons;
+  }
+
+  &:hover {
+    ${(props) =>
+      props.scrollLeft !== 0 &&
+      css`
+        opacity: 1;
+        transition: opacity ${(props) => props.theme.chapterNavButtonHoverRate} linear;
+      `}
+  }
+`;
+
+const RightButton = styled(Buttons)<ButtonsType>`
+  right: 0;
+  border-left-width: 1px;
+
+  opacity: ${({ scrollLeft, clientWidth, scrollWidth }) =>
+    scrollLeft && clientWidth && scrollWidth && scrollLeft + clientWidth === scrollWidth ? 0 : 1};
+
+  &::after {
+    content: "";
+    font-family: SF Pro Icons;
+  }
+
+  &:hover {
+    ${(props) =>
+      props.scrollLeft === 0 &&
+      css`
+        opacity: 1;
+        transition: opacity ${(props) => props.theme.chapterNavButtonHoverRate} linear;
+      `}
+  }
 `;
 
 interface ChapterNavItem {
@@ -497,10 +564,10 @@ interface ChapterNavItem {
 }
 
 const ChapterNavItem = styled.li<ChapterNavItem>`
+  display: inline-block;
   opacity: ${(props) => (props.chapterNavRender ? "0" : "1")};
   transform: ${(props) => (props.chapterNavRender ? "translateX(160px);" : "translateX(0);")};
   transition: transform 0.28s cubic-bezier(0.4, 0, 0.6, 1);
-  display: inline-block;
   vertical-align: top;
   margin: 0 -0.1176470588em;
   padding: 0 20px;
@@ -894,8 +961,9 @@ const ChapterNavName = styled.span<ChapterNavName>`
   line-height: 1.33337;
   color: ${(props) => props.theme.chapterNavText};
   white-space: normal;
-  max-width: 7em;
+  /* max-width: 7em; */
   margin: 0 auto;
+  user-select: none;
 
   ${(props) =>
     props.columnName === "Watch"
@@ -934,28 +1002,38 @@ interface Props {
 function Category({ gmId, categoryList, selectedColumn, setSelectedColumn, selectedTask, setSelectedTask, setIsDarkMode }: Props) {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [scrollLeft, setScrollLeft] = useState<number>(0);
+  const [clientWidth, setClientWidth] = useState<number>(0);
+  const [scrollWidth, setScrollWidth] = useState<number>(0);
 
   const [chapterNavRender, setRerender] = useState<boolean>(false);
   const [isIdNotFound, setIsIdNotFound] = useState<boolean>(false);
   const [advertise, setAdvertise] = useState<Advertise[]>([]);
 
+  const [isChapterNavScroll, setIsChapterNavScroll] = useState<boolean>(false);
+  // console.log(isChapterNavScroll);
+
+  const scrollWrapRef = useRef<HTMLUListElement | null>(null);
+  const scrollListRef = useRef<HTMLLIElement | null>(null);
+
+
   useEffect(() => {
-    setRerender(true);
-    setTimeout(() => setRerender(false), 200);
+    // setRerender(true);
+    // setTimeout(() => setRerender(false), 200);
   }, [selectedColumn && selectedColumn.taskIds && selectedColumn.taskIds.length]);
 
   useEffect(() => {
     const categoryData = async () => {
       try {
         const res = await axios.post(`/smartstore/shop/${id}`, { gmId, selectedTask }, { withCredentials: true });
-        console.log(res.data);
+        // console.log(res.data);
 
         setIsIdNotFound(false);
         setIsDarkMode(false);
 
         if (res.data.findColumn) {
           const adminColumn = res.data.findColumn;
-          console.log(adminColumn);
+          // console.log(adminColumn);
 
           if (adminColumn.darkMode) {
             setIsDarkMode(adminColumn.darkMode);
@@ -966,7 +1044,7 @@ function Category({ gmId, categoryList, selectedColumn, setSelectedColumn, selec
           setAdvertise(res.data.Advertises);
         } else if (res.data.findTask) {
           const adminTask = res.data.findTask;
-          console.log(adminTask);
+          // console.log(adminTask);
 
           if (adminTask.darkMode) {
             setIsDarkMode(adminTask.darkMode);
@@ -1033,29 +1111,89 @@ function Category({ gmId, categoryList, selectedColumn, setSelectedColumn, selec
     loadAllImageSizes();
   }, [selectedColumn, selectedTask]);
 
+  const handleScroll = (direction) => {
+    const scrollAmount = scrollWidth / 2; // Adjust this value as needed
+    const scrollableElement = scrollWrapRef.current;
+
+    if (scrollableElement) {
+      if (direction === "left") {
+        // console.log("왼쪽");
+        scrollableElement.scrollLeft -= scrollAmount;
+        setScrollLeft(scrollableElement.scrollLeft);
+      } else {
+        // console.log("오른쪽");
+        scrollableElement.scrollLeft += scrollAmount;
+        setScrollLeft(scrollableElement.scrollLeft);
+      }
+    }
+  };
+
+  const touchScroll = (e: any) => {
+    const scrollLeft = e.target.scrollLeft;
+    setScrollLeft(scrollLeft);
+  };
+
+  useEffect(() => {
+    const handleResize = () => {
+      const scrollableElement = scrollWrapRef.current;
+    const listRef = scrollListRef.current;
+
+      if (scrollableElement && listRef) {
+        console.log("최초실행");
+        // console.log(scrollableElement.scrollLeft);
+        console.log(scrollableElement.clientWidth);
+        // console.log(scrollableElement.scrollWidth);
+        // console.log(window.innerWidth);
+        setClientWidth(scrollableElement.clientWidth!);
+        setScrollWidth(scrollableElement.scrollWidth!);
+        setIsChapterNavScroll(scrollableElement.scrollWidth > scrollableElement.clientWidth);
+        // console.log(scrollWidth);
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    const scrollableElement = scrollWrapRef.current;
+    const listRef = scrollListRef.current;
+    if (scrollableElement && listRef) {
+      // console.log(scrollLeft);
+      // console.log(scrollableElement.scrollWidth);
+      console.log(scrollableElement.clientWidth);
+      // setIsChapterNavScroll(scrollableElement.scrollWidth > scrollableElement.clientWidth);
+    }
+  }, [selectedColumn?.taskIds]);
+
   return (
     <>
       {!isIdNotFound ? (
         <>
-          <ChapterNav className="ChapterNav" columnName={selectedColumn ? selectedColumn.name : ""}>
+          <ChapterNav className="ChapterNav">
             <ChapterNavWrap className="ChapterNavWrap">
-              <ChapterNavItems className="ChapterNavItems">
-                {selectedColumn?.taskIds?.map((taskId: any) => {
+              <ChapterNavItems className="ChapterNavItems" ref={scrollWrapRef} onScroll={touchScroll}>
+                {selectedColumn?.taskIds?.map((taskId: any, index: number) => {
                   if (taskId.chapterNavHide) return null;
                   const iconItem = iconSize.find((item) => item.name === taskId.name);
                   // taskId.subTaskIds 배열이 비어있지 않으면
-                  if (taskId.subTaskIds && taskId.subTaskIds.length > 0) {
                     return (
                       <>
                         <ChapterNavItem
+                          key={index}
                           className="ChapterNavItem"
                           columnName={selectedColumn.name}
                           taskName={taskId.name}
                           chapterNavRender={chapterNavRender}
+                          ref={scrollListRef}
                         >
                           <ChapterNavLink
                             className="ChapterNavLink"
-                            to={`../${taskId.url}`}
+                            to={`${taskId.subTaskIds && taskId.subTaskIds.length > 0 ? '../' : '/shop/products/'}${taskId.url}`}
                             columnName={selectedColumn.name}
                             taskName={taskId.name}
                             type={taskId.type}
@@ -1080,44 +1218,6 @@ function Category({ gmId, categoryList, selectedColumn, setSelectedColumn, selec
                         </ChapterNavItem>
                       </>
                     );
-                  } else {
-                    // taskId.subTaskIds 배열이 비어있으면
-                    return (
-                      <>
-                        <ChapterNavItem
-                          className="ChapterNavItem"
-                          columnName={selectedColumn.name}
-                          taskName={taskId.name}
-                          chapterNavRender={chapterNavRender}
-                        >
-                          <ChapterNavLink
-                            className="ChapterNavLink"
-                            to={`/shop/products/${taskId.url}`}
-                            columnName={selectedColumn.name}
-                            taskName={taskId.name}
-                            type={taskId.type}
-                          >
-                            {iconItem?.icon !== "" && (
-                              <ChapterNavIcon
-                                className="ChapterNavIcon"
-                                columnName={selectedColumn.name}
-                                taskName={taskId.name}
-                                parentID={taskId.parentID}
-                                icon={iconItem?.icon}
-                                width={iconItem?.width}
-                                height={iconItem?.height}
-                                darkMode={selectedColumn.darkMode}
-                              />
-                            )}
-                            <ChapterNavName className="ChapterNavName" columnName={selectedColumn.name}>
-                              {taskId.name}
-                            </ChapterNavName>
-                            {/* <span className="chapternav-new">New</span> */}
-                          </ChapterNavLink>
-                        </ChapterNavItem>
-                      </>
-                    );
-                  }
                 })}
 
                 {selectedTask?.subTaskIds?.map((taskId: any) => {
@@ -1130,6 +1230,7 @@ function Category({ gmId, categoryList, selectedColumn, setSelectedColumn, selec
                         columnName={selectedTask.name}
                         taskName={taskId.name}
                         chapterNavRender={chapterNavRender}
+                        ref={scrollListRef}
                       >
                         <ChapterNavLink
                           className="ChapterNavLink"
@@ -1157,6 +1258,21 @@ function Category({ gmId, categoryList, selectedColumn, setSelectedColumn, selec
                   );
                 })}
               </ChapterNavItems>
+              <ChapterNavButtons className="ChapterNavButtons" isChapterNavScroll={isChapterNavScroll}>
+                <LeftButton
+                  className="ChapterNavButton ChapterNavButton-Left"
+                  onClick={() => handleScroll("left")}
+                  scrollLeft={scrollLeft}
+                  // scrollWidth={scrollWidth}
+                ></LeftButton>
+                <RightButton
+                  className="ChapterNavButton ChapterNavButton-Right"
+                  onClick={() => handleScroll("right")}
+                  scrollLeft={scrollLeft}
+                  clientWidth={clientWidth}
+                  scrollWidth={scrollWidth}
+                ></RightButton>
+              </ChapterNavButtons>
             </ChapterNavWrap>
           </ChapterNav>
           <Adver className="ProductsWrap">

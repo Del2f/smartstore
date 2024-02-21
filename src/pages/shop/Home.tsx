@@ -12,17 +12,19 @@ const LineMiddle = styled.div`
   align-items: center;
   margin-right: auto;
   margin-left: auto;
-  font-size: 13px;
+  font-size: 13.5px;
   padding: 12px 0;
   background-color: white;
+  color: ${(props) => props.theme.chapterNavText};
   
-  & > span {
-    font-weight: 300;
+   & > span {
+    font-weight: 400;
     text-align: center;
     display: inline-block;
+    line-height: 20px;
 
     & > sup {
-      font-weight: 300;
+      font-weight: 400;
       top: -0.5em;
       position: relative;
       font-size: 0.6em;
@@ -30,15 +32,15 @@ const LineMiddle = styled.div`
     }
   }
 
-  & > a {
+  a {
     margin-top: 5px;
 
-    font-weight: 300;
+    font-weight: 400;
     color: #06c;
     white-space: nowrap;
   }
 
-  & > a::after {
+  a::after {
     font-family: "SF Pro Icons";
     color: inherit;
     display: inline-block;
@@ -53,8 +55,6 @@ const LineMiddle = styled.div`
     top: -0.08em;
     padding-left: 0.3em;
   }
-
-
 
   @media only screen and (max-width: 834px) {
     & {
@@ -73,12 +73,11 @@ const LineMiddle = styled.div`
   @media only screen and (max-width: 734px) {
     & {
       flex-direction: column;
-      max-width: 360px;
+      max-width: 300px;
     }
 
     & > span {
     }
-
   }
 `;
 
@@ -145,11 +144,12 @@ function Home() {
     <>
       <LineMiddle>
         <span>
-          iPhone 11 이후 모델을 보상 판매하면 iPhone 14 또는 iPhone 14 Pro 구입 시 사용할 수 있는 ₩250,000-₩790,000
-          상당의 크레딧이.
-          <sup>1</sup>
+          교육 할인가로 Mac 또는 iPad를 더욱 부담 없이. 여기에 Mac 구입 시 AirPods을, iPad 구입 시<br></br> Apple Pencil을 받을 수 있습니다.**&nbsp;
+
+        <Link to={""} className="link">
+          지금 쇼핑하기
+        </Link>
         </span>
-        <Link to={""} className="link">iPhone 쇼핑하기</Link>
       </LineMiddle>
       <HomeImgWrap>
         <TextWrap className="TextWrap">

@@ -336,12 +336,11 @@ cloudfront를 중간에 추가하는 방법도 있었지만 실패. (현재 코�
 
 ### 애플 스토어
 
-- PC
 ![apple-menu](https://github.com/Del2f/smartstore/assets/92422357/b7a3d0b3-99ba-471e-a3ec-012538f52132)
+- PC
 
-- 모바일
 ![apple-menu](https://github.com/Del2f/smartstore/assets/92422357/ba50c9f6-bbe6-432c-905d-51afec09ebc5)
-24-02-13 모바일 메뉴 추가
+- 모바일
 
 - http://57.181.111.217/smartstore/shop
 

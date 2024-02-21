@@ -481,7 +481,6 @@ const NavTabWrap = styled.div<NavTabMenuType>`
   @media only screen and (max-width: 833px) {
     width: 100%;
     background-color: transparent;
-    z-index: 5;
     position: relative;
     height: auto;
 
@@ -489,12 +488,15 @@ const NavTabWrap = styled.div<NavTabMenuType>`
       props.isNavSecondMenuShow
         ? css`
             /* visibility: hidden; */
+            z-index: 3;
             animation: ${NavTabMenuAnimationOut} 0.5s cubic-bezier(0.4, 0, 0.6, 1) both;
             /* opacity: 0; */
             /* transform: translateX(-20px); */
             /* transition-duration: 0.3s; */
           `
         : css`
+            z-index: 5;
+
             /* visibility: visible; */
             animation: ${NavTabMenuAnimationIn} 0.5s cubic-bezier(0.4, 0, 0.6, 1) both;
             /* opacity: 1; */
@@ -2189,13 +2191,12 @@ function Shop() {
                 <NavTabMenu className="NavTab-Menu" isNavSecondMenuShow={isNavSecondMenuShow}>
                   {categoryList.map((list: any, index: any) => {
                     if (list.navHide) return null; // 숨겨진 메뉴는 출력 하지 않음.
-                    if (list.taskIds.length > 0) {
                       return (
                         <>
-                          <NavTabWrap className="NavTabWrap" isNavSecondMenuShow={isNavSecondMenuShow}>
+                          <NavTabWrap className="NavTabWrap" isNavSecondMenuShow={isNavSecondMenuShow} key={index}>
                             <NavTab
                               className="NavTab NavTab-Menu-li"
-                              onClick={(e) => timerMouseEnter(e, list.name)}
+                              onClick={list.taskIds.length > 0 ? (e) => timerMouseEnter(e, list.name) : () => navigate(`./${list.url}`)}
                               name={list.name}
                               number={index + 1}
                               total={categoryList.length}
@@ -2220,346 +2221,146 @@ function Shop() {
                                 </svg>
                               </NavTabArrow>
                             </NavTab>
+                            <SubMenu
+                              className="SubMenu"
+                              isSubCateShow={isSubCateShow}
+                              name={list.name}
+                              selectedCateName={selectedCateName}
+                              height={height}
+                              isNavFirstMenuShow={isNavFirstMenuShow}
+                              isNavSecondMenuShow={isNavSecondMenuShow}
+                            >
+                              <SubMenuHeight className="SubMenuHeight" height={height} isNavSecondMenuShow={isNavSecondMenuShow}>
+                                <SubMenuInner className="SubMenuInner" name={list.name} selectedCateName={selectedCateName} ref={submenu}>
+                                  <SubMenuList className="SubMenuList main" number={0} grouptotal={3}>
+                                    <SubMenuListItem>
+                                      {list.taskIds.map((taskId: any, index2: any) => {
+                                        if (taskId.navHide) return null;
+                                          return (
+                                            <>
+                                              <SubMenuLi
+                                                key={index2}
+                                                name={list.name}
+                                                selectedCateName={selectedCateName}
+                                                className="SubMenuLi"
+                                                number={index2 + 1}
+                                                isSubCateShow={isSubCateShow}
+                                                total={list.taskIds.length + 1}
+                                                isNavSecondMenuShow={isNavSecondMenuShow}
+                                              >
+                                                <SubMenuLink
+                                                  to={`./${taskId.subTaskIds && taskId.subTaskIds.length > 0 ? "" : "products/"}${taskId.url}`}
+                                                >
+                                                  <SubMenuName className="SubMenuName main">{taskId.name}</SubMenuName>
+                                                </SubMenuLink>
+                                              </SubMenuLi>
+                                            </>
+                                          );
+                                      })}
+                                    </SubMenuListItem>
+                                  </SubMenuList>
+                                  <SubMenuList className="SubMenuList main" number={1} grouptotal={3}>
+                                    <SubMenuText className="main" isSubCateShow={isSubCateShow} number={1} total={list.taskIds.length + 1}>
+                                      {list.name}&nbsp;쇼핑하기
+                                    </SubMenuText>
+                                    <SubMenuListItem>
+                                      <SubMenuLi
+                                        name={list.name}
+                                        selectedCateName={selectedCateName}
+                                        className="SubMenuLi sub"
+                                        number={2}
+                                        isSubCateShow={isSubCateShow}
+                                        total={list.taskIds.length + 1}
+                                      >
+                                        <SubMenuName className="subtext">테스트1</SubMenuName>
+                                      </SubMenuLi>
+                                      <SubMenuLi
+                                        name={list.name}
+                                        selectedCateName={selectedCateName}
+                                        className="SubMenuLi sub"
+                                        number={3}
+                                        isSubCateShow={isSubCateShow}
+                                        total={list.taskIds.length + 1}
+                                      >
+                                        <SubMenuName className="subtext">테스트2</SubMenuName>
+                                      </SubMenuLi>
+                                      <SubMenuLi
+                                        name={list.name}
+                                        selectedCateName={selectedCateName}
+                                        className="SubMenuLi sub"
+                                        number={4}
+                                        isSubCateShow={isSubCateShow}
+                                        total={list.taskIds.length + 1}
+                                      >
+                                        <SubMenuName className="subtext">테스트3</SubMenuName>
+                                      </SubMenuLi>
+                                      <SubMenuLi
+                                        name={list.name}
+                                        selectedCateName={selectedCateName}
+                                        className="SubMenuLi sub"
+                                        number={5}
+                                        isSubCateShow={isSubCateShow}
+                                        total={list.taskIds.length + 1}
+                                      >
+                                        <SubMenuName className="subtext">테스트4</SubMenuName>
+                                      </SubMenuLi>
+                                    </SubMenuListItem>
+                                  </SubMenuList>
+                                  <SubMenuList className="SubMenuList main" number={2} grouptotal={3}>
+                                    <SubMenuText className="main" isSubCateShow={isSubCateShow} number={1} total={list.taskIds.length + 1}>
+                                      그 외 {list.name}&nbsp;관련 항목
+                                    </SubMenuText>
+                                    <SubMenuListItem>
+                                      <SubMenuLi
+                                        name={list.name}
+                                        selectedCateName={selectedCateName}
+                                        className="SubMenuLi sub"
+                                        number={2}
+                                        isSubCateShow={isSubCateShow}
+                                        total={list.taskIds.length + 1}
+                                      >
+                                        <SubMenuName className="subtext">테스트1</SubMenuName>
+                                      </SubMenuLi>
+                                      <SubMenuLi
+                                        name={list.name}
+                                        selectedCateName={selectedCateName}
+                                        className="SubMenuLi sub"
+                                        number={3}
+                                        isSubCateShow={isSubCateShow}
+                                        total={list.taskIds.length + 1}
+                                      >
+                                        <SubMenuName className="subtext">테스트2</SubMenuName>
+                                      </SubMenuLi>
+                                      <SubMenuLi
+                                        name={list.name}
+                                        selectedCateName={selectedCateName}
+                                        className="SubMenuLi sub"
+                                        number={4}
+                                        isSubCateShow={isSubCateShow}
+                                        total={list.taskIds.length + 1}
+                                      >
+                                        <SubMenuName className="subtext">테스트3</SubMenuName>
+                                      </SubMenuLi>
+                                      <SubMenuLi
+                                        name={list.name}
+                                        selectedCateName={selectedCateName}
+                                        className="SubMenuLi sub"
+                                        number={5}
+                                        isSubCateShow={isSubCateShow}
+                                        total={list.taskIds.length + 1}
+                                      >
+                                        <SubMenuName className="subtext">테스트4</SubMenuName>
+                                      </SubMenuLi>
+                                    </SubMenuListItem>
+                                  </SubMenuList>
+                                </SubMenuInner>
+                              </SubMenuHeight>
+                            </SubMenu>
                           </NavTabWrap>
-                          <SubMenu
-                            className="SubMenu"
-                            isSubCateShow={isSubCateShow}
-                            name={list.name}
-                            selectedCateName={selectedCateName}
-                            height={height}
-                            isNavFirstMenuShow={isNavFirstMenuShow}
-                            isNavSecondMenuShow={isNavSecondMenuShow}
-                          >
-                            <SubMenuHeight className="SubMenuHeight" height={height} isNavSecondMenuShow={isNavSecondMenuShow}>
-                              <SubMenuInner className="SubMenuInner" name={list.name} selectedCateName={selectedCateName} ref={submenu}>
-                                <SubMenuList className="SubMenuList main" number={0} grouptotal={3}>
-                                  <SubMenuListItem>
-                                    {list.taskIds.map((taskId: any, index2: any) => {
-                                      if (taskId.navHide) return null;
-                                      if (taskId.subTaskIds && taskId.subTaskIds.length > 0) {
-                                        return (
-                                          <>
-                                            <SubMenuLi
-                                              name={list.name}
-                                              selectedCateName={selectedCateName}
-                                              className="SubMenuLi"
-                                              number={index2 + 1}
-                                              isSubCateShow={isSubCateShow}
-                                              total={list.taskIds.length + 1}
-                                              isNavSecondMenuShow={isNavSecondMenuShow}
-                                            >
-                                              <SubMenuLink to={`./${taskId.url}`}>
-                                                <SubMenuName className="SubMenuName main">{taskId.name}</SubMenuName>
-                                              </SubMenuLink>
-                                            </SubMenuLi>
-                                          </>
-                                        );
-                                      } else {
-                                        return (
-                                          <>
-                                            <SubMenuLi
-                                              name={list.name}
-                                              selectedCateName={selectedCateName}
-                                              className="SubMenuLi"
-                                              number={index2 + 1}
-                                              isSubCateShow={isSubCateShow}
-                                              total={list.taskIds.length + 1}
-                                              isNavSecondMenuShow={isNavSecondMenuShow}
-                                            >
-                                              <SubMenuLink to={`./products/${taskId.url}`}>
-                                                <SubMenuName className="SubMenuName main">{taskId.name}</SubMenuName>
-                                              </SubMenuLink>
-                                            </SubMenuLi>
-                                          </>
-                                        );
-                                      }
-                                    })}
-                                  </SubMenuListItem>
-                                </SubMenuList>
-                                <SubMenuList className="SubMenuList main" number={1} grouptotal={3}>
-                                  <SubMenuText className="main" isSubCateShow={isSubCateShow} number={1} total={list.taskIds.length + 1}>
-                                    {list.name}&nbsp;쇼핑하기
-                                  </SubMenuText>
-                                  <SubMenuListItem>
-                                    <SubMenuLi
-                                      name={list.name}
-                                      selectedCateName={selectedCateName}
-                                      className="SubMenuLi sub"
-                                      number={2}
-                                      isSubCateShow={isSubCateShow}
-                                      total={list.taskIds.length + 1}
-                                    >
-                                      <SubMenuName className="subtext">테스트1</SubMenuName>
-                                    </SubMenuLi>
-                                    <SubMenuLi
-                                      name={list.name}
-                                      selectedCateName={selectedCateName}
-                                      className="SubMenuLi sub"
-                                      number={3}
-                                      isSubCateShow={isSubCateShow}
-                                      total={list.taskIds.length + 1}
-                                    >
-                                      <SubMenuName className="subtext">테스트2</SubMenuName>
-                                    </SubMenuLi>
-                                    <SubMenuLi
-                                      name={list.name}
-                                      selectedCateName={selectedCateName}
-                                      className="SubMenuLi sub"
-                                      number={4}
-                                      isSubCateShow={isSubCateShow}
-                                      total={list.taskIds.length + 1}
-                                    >
-                                      <SubMenuName className="subtext">테스트3</SubMenuName>
-                                    </SubMenuLi>
-                                    <SubMenuLi
-                                      name={list.name}
-                                      selectedCateName={selectedCateName}
-                                      className="SubMenuLi sub"
-                                      number={5}
-                                      isSubCateShow={isSubCateShow}
-                                      total={list.taskIds.length + 1}
-                                    >
-                                      <SubMenuName className="subtext">테스트4</SubMenuName>
-                                    </SubMenuLi>
-                                  </SubMenuListItem>
-                                </SubMenuList>
-                                <SubMenuList className="SubMenuList main" number={2} grouptotal={3}>
-                                  <SubMenuText className="main" isSubCateShow={isSubCateShow} number={1} total={list.taskIds.length + 1}>
-                                    그 외 {list.name}&nbsp;관련 항목
-                                  </SubMenuText>
-                                  <SubMenuListItem>
-                                    <SubMenuLi
-                                      name={list.name}
-                                      selectedCateName={selectedCateName}
-                                      className="SubMenuLi sub"
-                                      number={2}
-                                      isSubCateShow={isSubCateShow}
-                                      total={list.taskIds.length + 1}
-                                    >
-                                      <SubMenuName className="subtext">테스트1</SubMenuName>
-                                    </SubMenuLi>
-                                    <SubMenuLi
-                                      name={list.name}
-                                      selectedCateName={selectedCateName}
-                                      className="SubMenuLi sub"
-                                      number={3}
-                                      isSubCateShow={isSubCateShow}
-                                      total={list.taskIds.length + 1}
-                                    >
-                                      <SubMenuName className="subtext">테스트2</SubMenuName>
-                                    </SubMenuLi>
-                                    <SubMenuLi
-                                      name={list.name}
-                                      selectedCateName={selectedCateName}
-                                      className="SubMenuLi sub"
-                                      number={4}
-                                      isSubCateShow={isSubCateShow}
-                                      total={list.taskIds.length + 1}
-                                    >
-                                      <SubMenuName className="subtext">테스트3</SubMenuName>
-                                    </SubMenuLi>
-                                    <SubMenuLi
-                                      name={list.name}
-                                      selectedCateName={selectedCateName}
-                                      className="SubMenuLi sub"
-                                      number={5}
-                                      isSubCateShow={isSubCateShow}
-                                      total={list.taskIds.length + 1}
-                                    >
-                                      <SubMenuName className="subtext">테스트4</SubMenuName>
-                                    </SubMenuLi>
-                                  </SubMenuListItem>
-                                </SubMenuList>
-                              </SubMenuInner>
-                            </SubMenuHeight>
-                          </SubMenu>
                         </>
                       );
-                    } else {
-                      return (
-                        <NavTab
-                          className="NavTab NavTab-Menu-li"
-                          onClick={(e) => timerMouseEnter(e, list.name)}
-                          name={list.name}
-                          number={index + 1}
-                          total={categoryList.length}
-                          selectedCateName={selectedCateName}
-                          isSubCateShow={isSubCateShow}
-                          isNavSecondMenuShow={isNavSecondMenuShow}
-                        >
-                          <NavTabLink to={`./${list.url}`}>
-                            <NavTabText className="NavTabText" isSubCateShow={isSubCateShow} name={list.name} selectedCateName={selectedCateName}>
-                              {list.name}
-                            </NavTabText>
-                          </NavTabLink>
-                        </NavTab>
-                      );
-                    }
                   })}
                 </NavTabMenu>
-                {/* {categoryList.map((list: any, index: any) => {
-                    if (list.navHide) return null; // 숨겨진 메뉴는 출력 하지 않음.
-                    if (list.taskIds.length > 0) {
-                      return (
-                        <>
-                          <SubMenu
-                            className="SubMenu-Mobile"
-                            isSubCateShow={isSubCateShow}
-                            name={list.name}
-                            selectedCateName={selectedCateName}
-                            height={height}
-                            isNavFirstMenuShow={isNavFirstMenuShow}
-                            isNavSecondMenuShow={isNavSecondMenuShow}
-                          >
-                            <SubMenuHeight className="SubMenuHeight" height={height} isNavSecondMenuShow={isNavSecondMenuShow}>
-                              <SubMenuInner className="SubMenuInner" name={list.name} selectedCateName={selectedCateName} ref={submenu}>
-                                <SubMenuList className="SubMenuList main" number={0} grouptotal={3}>
-                                  <SubMenuListItem>
-                                    {list.taskIds.map((taskId: any, index2: any) => {
-                                      if (taskId.navHide) return null;
-                                      if (taskId.subTaskIds && taskId.subTaskIds.length > 0) {
-                                        return (
-                                          <>
-                                            <SubMenuLi
-                                              name={list.name}
-                                              selectedCateName={selectedCateName}
-                                              className="SubMenuLi"
-                                              number={isMobile ? index2 + 1 : index2 + 2}
-                                              isSubCateShow={isSubCateShow}
-                                              total={list.taskIds.length + 1}
-                                              isNavSecondMenuShow={isNavSecondMenuShow}
-                                            >
-                                              <SubMenuLink to={`./${taskId.url}`}>
-                                                <SubMenuName className="SubMenuName main">{taskId.name}</SubMenuName>
-                                              </SubMenuLink>
-                                            </SubMenuLi>
-                                          </>
-                                        );
-                                      } else {
-                                        return (
-                                          <>
-                                            <SubMenuLi
-                                              name={list.name}
-                                              selectedCateName={selectedCateName}
-                                              className="SubMenuLi"
-                                              number={index2 + 1}
-                                              isSubCateShow={isSubCateShow}
-                                              total={list.taskIds.length + 1}
-                                              isNavSecondMenuShow={isNavSecondMenuShow}
-                                            >
-                                              <SubMenuLink to={`./products/${taskId.url}`}>
-                                                <SubMenuName className="SubMenuName main">{taskId.name}</SubMenuName>
-                                              </SubMenuLink>
-                                            </SubMenuLi>
-                                          </>
-                                        );
-                                      }
-                                    })}
-                                  </SubMenuListItem>
-                                </SubMenuList>
-                                <SubMenuList className="SubMenuList main" number={1} grouptotal={3}>
-                                  <SubMenuText className="main" isSubCateShow={isSubCateShow} number={1} total={list.taskIds.length + 1}>
-                                    {list.name}&nbsp;쇼핑하기
-                                  </SubMenuText>
-                                  <SubMenuListItem>
-                                    <SubMenuLi
-                                      name={list.name}
-                                      selectedCateName={selectedCateName}
-                                      className="SubMenuLi sub"
-                                      number={2}
-                                      isSubCateShow={isSubCateShow}
-                                      total={list.taskIds.length + 1}
-                                    >
-                                      <SubMenuName className="subtext">테스트1</SubMenuName>
-                                    </SubMenuLi>
-                                    <SubMenuLi
-                                      name={list.name}
-                                      selectedCateName={selectedCateName}
-                                      className="SubMenuLi sub"
-                                      number={3}
-                                      isSubCateShow={isSubCateShow}
-                                      total={list.taskIds.length + 1}
-                                    >
-                                      <SubMenuName className="subtext">테스트2</SubMenuName>
-                                    </SubMenuLi>
-                                    <SubMenuLi
-                                      name={list.name}
-                                      selectedCateName={selectedCateName}
-                                      className="SubMenuLi sub"
-                                      number={4}
-                                      isSubCateShow={isSubCateShow}
-                                      total={list.taskIds.length + 1}
-                                    >
-                                      <SubMenuName className="subtext">테스트3</SubMenuName>
-                                    </SubMenuLi>
-                                    <SubMenuLi
-                                      name={list.name}
-                                      selectedCateName={selectedCateName}
-                                      className="SubMenuLi sub"
-                                      number={5}
-                                      isSubCateShow={isSubCateShow}
-                                      total={list.taskIds.length + 1}
-                                    >
-                                      <SubMenuName className="subtext">테스트4</SubMenuName>
-                                    </SubMenuLi>
-                                  </SubMenuListItem>
-                                </SubMenuList>
-                                <SubMenuList className="SubMenuList main" number={2} grouptotal={3}>
-                                  <SubMenuText className="main" isSubCateShow={isSubCateShow} number={1} total={list.taskIds.length + 1}>
-                                    그 외 {list.name}&nbsp;관련 항목
-                                  </SubMenuText>
-                                  <SubMenuListItem>
-                                    <SubMenuLi
-                                      name={list.name}
-                                      selectedCateName={selectedCateName}
-                                      className="SubMenuLi sub"
-                                      number={2}
-                                      isSubCateShow={isSubCateShow}
-                                      total={list.taskIds.length + 1}
-                                    >
-                                      <SubMenuName className="subtext">테스트1</SubMenuName>
-                                    </SubMenuLi>
-                                    <SubMenuLi
-                                      name={list.name}
-                                      selectedCateName={selectedCateName}
-                                      className="SubMenuLi sub"
-                                      number={3}
-                                      isSubCateShow={isSubCateShow}
-                                      total={list.taskIds.length + 1}
-                                    >
-                                      <SubMenuName className="subtext">테스트2</SubMenuName>
-                                    </SubMenuLi>
-                                    <SubMenuLi
-                                      name={list.name}
-                                      selectedCateName={selectedCateName}
-                                      className="SubMenuLi sub"
-                                      number={4}
-                                      isSubCateShow={isSubCateShow}
-                                      total={list.taskIds.length + 1}
-                                    >
-                                      <SubMenuName className="subtext">테스트3</SubMenuName>
-                                    </SubMenuLi>
-                                    <SubMenuLi
-                                      name={list.name}
-                                      selectedCateName={selectedCateName}
-                                      className="SubMenuLi sub"
-                                      number={5}
-                                      isSubCateShow={isSubCateShow}
-                                      total={list.taskIds.length + 1}
-                                    >
-                                      <SubMenuName className="subtext">테스트4</SubMenuName>
-                                    </SubMenuLi>
-                                  </SubMenuListItem>
-                                </SubMenuList>
-                              </SubMenuInner>
-                            </SubMenuHeight>
-                          </SubMenu>
-                        </>
-                      );
-                    } else {
-                      return <div></div>;
-                    }
-                  })} */}
                 <SubMenu className="SubMenu-Mobile" isSubCateShow={isSubCateShow} name={"search"} selectedCateName={selectedCateName} height={height}>
                   <SubMenuHeight className="SubMenuHeight firstmenu" height={height} isSubCateShow={isSubCateShow}>
                     <SubMenuInner className="SubMenuInner" name={"search"} selectedCateName={selectedCateName}>
@@ -2603,6 +2404,7 @@ function Shop() {
                                   if (index < 3) {
                                     return (
                                       <SubMenuLi
+                                        key={index}
                                         name={"cart"}
                                         selectedCateName={selectedCateName}
                                         className="SubMenuLi cart"
@@ -2910,7 +2712,7 @@ function Shop() {
                         if (list.taskIds.length > 0) {
                           return (
                             <>
-                              <NavTabWrap className="NavTabWrap">
+                              <NavTabWrap className="NavTabWrap" key={index}>
                                 <NavTab
                                   className="NavTab NavTab-Menu-li"
                                   onMouseEnter={(e) => timerMouseEnter(e, list.name)}
@@ -2964,6 +2766,7 @@ function Shop() {
                                                 return (
                                                   <>
                                                     <SubMenuLi
+                                                      key={index2}
                                                       name={list.name}
                                                       selectedCateName={selectedCateName}
                                                       className="SubMenuLi"
@@ -2982,6 +2785,7 @@ function Shop() {
                                                 return (
                                                   <>
                                                     <SubMenuLi
+                                                      key={index2}
                                                       name={list.name}
                                                       selectedCateName={selectedCateName}
                                                       className="SubMenuLi"

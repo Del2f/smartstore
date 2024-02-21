@@ -9,6 +9,9 @@ const navMobileVisibleRate = "263.5ms";
 const navMobileOpacityRate = "0.6s";
 const navMobileColorRate = "430ms";
 
+const chapterNavRate = "150ms";
+const chapterNavButtonHoverRate = "200ms";
+
 const color = {
   correct: "#5babab",
   present: "#fdb800",
@@ -18,19 +21,25 @@ const color = {
 export const lightTheme: DefaultTheme = {
   navMain: "rgba(0,0,0,.8)",
   navMainHover: "#000000",
-  navBG: "#fafafc",
-  navMobileBG: "#fafafc",
+  navBG: "#fff",
+  navMobileBG: "#fff",
+
   navSubBG: "#fbfbfd",
   navSubHeader: "rgb(110,110,115)",
   navSub: "#333336",
+
   navCartBtnBG: "rgb(0, 113, 227)",
   navCartBtnBGHover: "#0077ED",
   navCartBtn: "rgb(255, 255, 255)",
   navCartBadgeBG: "rgb(0, 0, 0)",
   navCartBadge: "rgb(255, 255, 255)",
-  chapterNavBG: "#fff",
+
+  chapterNavBG: "rgba(245,245,247,.6)",
   chapterNavText: "#1d1d1f",
   chapterNavTextHover: "#06c",
+  chapterNavArrowColor: "rgb(210,210,215)",
+  chapterNavArrowBorderColor: "#d2d2d7",
+
   footerBG: "rgb(245,245,247)",
   footerTextColor: "#6e6e73",
   footerDirectoryTitleColor: "#1d1d1f",
@@ -52,6 +61,7 @@ export const lightTheme: DefaultTheme = {
   button1: "#e3e1e3",
   button2: "908790",
   color: { ...color },
+
   navRate: navRate,
   navVisibleRate: navVisibleRate,
   navColorRate: navColorRate,
@@ -59,6 +69,8 @@ export const lightTheme: DefaultTheme = {
   navMobileVisibleRate: navMobileVisibleRate,
   navMobileOpacityRate: navMobileOpacityRate,
   navMobileColorRate: navMobileColorRate,
+  chapterNavRate: chapterNavRate,
+  chapterNavButtonHoverRate: chapterNavButtonHoverRate,
 };
 
 export const darkTheme: DefaultTheme = {
@@ -66,17 +78,23 @@ export const darkTheme: DefaultTheme = {
   navMainHover: "#ffffff",
   navBG: "black",
   navMobileBG: "#161617",
+
   navSubBG: "#161617",
   navSubHeader: "rgb(134,134,139)",
   navSub: "#E8E8ED",
+
   navCartBtnBG: "rgb(0, 113, 227)",
   navCartBtnBGHover: "#0077ED",
   navCartBtn: "rgb(255, 255, 255)",
   navCartBadgeBG: "rgb(0, 0, 0)",
   navCartBadge: "rgb(255, 255, 255)",
+
   chapterNavBG: "black",
   chapterNavText: "#f5f5f7",
   chapterNavTextHover: "#2997ff",
+  chapterNavArrowColor: "#f5f5f7",
+  chapterNavArrowBorderColor: "#424245",
+
   footerBG: "#f5f5f7",
   footerTextColor: "#6e6e73",
   footerDirectoryTitleColor: "#1d1d1f",
@@ -98,6 +116,7 @@ export const darkTheme: DefaultTheme = {
   button1: "#5c565c",
   button2: "#908790",
   color: { ...color },
+
   navRate: navRate,
   navVisibleRate: navVisibleRate,
   navColorRate: navColorRate,
@@ -105,6 +124,8 @@ export const darkTheme: DefaultTheme = {
   navMobileVisibleRate: navMobileVisibleRate,
   navMobileOpacityRate: navMobileOpacityRate,
   navMobileColorRate: navMobileColorRate,
+  chapterNavRate: chapterNavRate,
+  chapterNavButtonHoverRate: chapterNavButtonHoverRate,
 };
 
 export const theme = {

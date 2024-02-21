@@ -1,4 +1,5 @@
 import axios from "../../api/axios";
+import { AxiosError } from "axios";
 import styled from "styled-components";
 import React, { useState, useRef, useEffect, SetStateAction, useCallback } from "react";
 import { useSelector } from "react-redux";
@@ -891,8 +892,11 @@ function Category(props: Props) {
           console.log(res.data);
           setAdvertise(updatedAdvertise);
         }
-      } catch (err) {
+      } catch (err: unknown) {
         console.log(err);
+        if ((err as AxiosError).response && (err as AxiosError).response?.status === 401) {
+          navigate("../home");
+        }
       }
 
       // if (isSelectedSubTask) {
@@ -1000,8 +1004,11 @@ function Category(props: Props) {
         setSelectedList([]);
 
         setDnd(sendingDND);
-      } catch (err) {
+      } catch (err: unknown) {
         console.log(err);
+        if ((err as AxiosError).response && (err as AxiosError).response?.status === 401) {
+          navigate("../home");
+        }
       }
     };
     get();
@@ -1075,8 +1082,11 @@ function Category(props: Props) {
         // setSubCategoryList(res.data.sub);
         setDnd(sendingDND);
         setAddColumn("");
-      } catch (err) {
+      } catch (err: unknown) {
         console.log(err);
+        if ((err as AxiosError).response && (err as AxiosError).response?.status === 401) {
+          navigate("../home");
+        }
       }
     } else if (isSelectedTask) {
       console.log("서브테스크 카테고리 추가");
@@ -1097,8 +1107,11 @@ function Category(props: Props) {
 
         setDnd(sendingDND);
         setAddColumn("");
-      } catch (err) {
+      } catch (err: unknown) {
         console.log(err);
+        if ((err as AxiosError).response && (err as AxiosError).response?.status === 401) {
+          navigate("../home");
+        }
       }
     } else {
       try {
@@ -1119,8 +1132,11 @@ function Category(props: Props) {
         // setCategoryList(res.data);
         setDnd(sendingDND);
         setAddColumn("");
-      } catch (err) {
+      } catch (err: unknown) {
         console.log(err);
+        if ((err as AxiosError).response && (err as AxiosError).response?.status === 401) {
+          navigate("../home");
+        }
       }
     }
   };
@@ -1150,8 +1166,11 @@ function Category(props: Props) {
 
       try {
         await axios.post("/smartstore/home/category/delete", { updatedDnd, selectedList }, { withCredentials: true });
-      } catch (err) {
+      } catch (err: unknown) {
         console.log(err);
+        if ((err as AxiosError).response && (err as AxiosError).response?.status === 401) {
+          navigate("../home");
+        }
       }
     } else if (isSelectedTask) {
       console.log("Task 삭제");
@@ -1173,8 +1192,11 @@ function Category(props: Props) {
 
         try {
           await axios.post("/smartstore/home/category/delete", { updatedDnd, selectedList }, { withCredentials: true });
-        } catch (err) {
+        } catch (err: unknown) {
           console.log(err);
+          if ((err as AxiosError).response && (err as AxiosError).response?.status === 401) {
+            navigate("../home");
+          }
         }
       }
 
@@ -1214,8 +1236,11 @@ function Category(props: Props) {
 
       try {
         await axios.post("/smartstore/home/category/delete", { updatedDnd, selectedList }, { withCredentials: true });
-      } catch (err) {
+      } catch (err: unknown) {
         console.log(err);
+        if ((err as AxiosError).response && (err as AxiosError).response?.status === 401) {
+          navigate("../home");
+        }
       }
     } else {
       setAddMessage("삭제할 카테고리를 선택 해주세요.");
@@ -1299,8 +1324,12 @@ function Category(props: Props) {
 
       try {
         await axios.post("/smartstore/home/category/edit", { updatedDnd, selectedList, selectedName }, { withCredentials: true });
-      } catch (err) {
+      } catch (err: unknown) {
         console.log(err);
+        if ((err as AxiosError).response && (err as AxiosError).response?.status === 401) {
+          navigate("../home");
+        }
+
       }
     } else if (isSelectedTask) {
       console.log("Task 저장");
@@ -1358,8 +1387,11 @@ function Category(props: Props) {
 
       try {
         await axios.post("/smartstore/home/category/edit", { updatedDnd, selectedList, selectedName }, { withCredentials: true });
-      } catch (err) {
+      } catch (err: unknown) {
         console.log(err);
+        if ((err as AxiosError).response && (err as AxiosError).response?.status === 401) {
+          navigate("../home");
+        }
       }
     } else if (isSelectedSubTask) {
       console.log("SubTask 저장");
@@ -1420,8 +1452,11 @@ function Category(props: Props) {
 
       try {
         await axios.post("/smartstore/home/category/edit", { updatedDnd, selectedList, selectedName }, { withCredentials: true });
-      } catch (err) {
+      } catch (err: unknown) {
         console.log(err);
+        if ((err as AxiosError).response && (err as AxiosError).response?.status === 401) {
+          navigate("../home");
+        }
       }
     } else {
       console.log("아무것도 선택하지 않았을때 저장");
@@ -1431,40 +1466,14 @@ function Category(props: Props) {
 
       try {
         await axios.post("/smartstore/home/category/edit", { updatedDnd }, { withCredentials: true });
-      } catch (err) {
+      } catch (err: unknown) {
         console.log(err);
+        if ((err as AxiosError).response && (err as AxiosError).response?.status === 401) {
+          navigate("../home");
+        }
       }
     }
   };
-
-  // 카테고리 리스트 바깥 클릭시 선택 해제
-  // useEffect(() => {
-  //   const clickOutside = (e: any) => {
-  //     if (listRef.current && !listRef.current.contains(e.target) && !inputRef.current.contains(e.target) && !blurWrapRef.current.contains(e.target) && !AdverBlurRef.current.contains(e.target) && !isAdverListShow) {
-  //       setIsSelected(false);
-  //       setIsSelectedTask(false);
-  //       setIsSelectedSubTask(false);
-  //       setSelectedId(null);
-  //       setSelectedList([]);
-  //       setAddedProductList([]);
-  //       setAdvertise([]);
-  //       setSelectedAdvertise([]);
-  //       setSelectedAdverName("");
-  //       setIsAdverListClick(false);
-  //       setSelectedName("");
-  //       setSelectedURL("");
-  //       setIconImg("");
-  //       setSelectedNavHide(false);
-  //       setSelectedChapNavHide(false);
-  //       setSelectedDarkMode(false);
-  //     }
-  //   };
-  //   document.addEventListener("mousedown", clickOutside);
-  //   return () => {
-  //     // Cleanup the event listener
-  //     document.removeEventListener("mousedown", clickOutside);
-  //   };
-  // }, [selectedList]);
 
   // 상품 목록에서 바깥 클릭시 닫힘 기능
   useEffect(() => {
@@ -1508,24 +1517,6 @@ function Category(props: Props) {
     };
   }, [isAdvertiseModal]);
 
-  // // 카테고리 등록된 상품 리스트 선택 해제
-  // useEffect(() => {
-  //   const clickOutside = (e: any) => {
-  //     if (isAddedSelected && addedRefs.current && !addedRefs.current.contains(e.target)) {
-  //       setAddedSelectedName(null);
-  //       setIsAddedSelected(false);
-  //       setAddedSelected("");
-  //     }
-  //   };
-
-  //   document.addEventListener("mousedown", clickOutside);
-
-  //   return () => {
-  //     // Cleanup the event listener
-  //     document.removeEventListener("mousedown", clickOutside);
-  //   };
-  // }, [addedBtnArea]);
-
   // 카테고리 드래그시 dnd 업데이트
   const onDragEnd = useCallback(
     async (result: DropResult) => {
@@ -1557,8 +1548,11 @@ function Category(props: Props) {
         // 이동한 카테고리를 저장하면서 dnd를 업데이트 합니다.
         try {
           await axios.post("/smartstore/home/category/order", { newDnd }, { withCredentials: true });
-        } catch (err) {
+        } catch (err: unknown) {
           console.log(err);
+          if ((err as AxiosError).response && (err as AxiosError).response?.status === 401) {
+            navigate("../home");
+          }
         }
       }
 
@@ -1622,8 +1616,11 @@ function Category(props: Props) {
           // 이동한 카테고리를 저장하면서 dnd를 업데이트 합니다.
           try {
             await axios.post("/smartstore/home/category/order", { newDnd }, { withCredentials: true });
-          } catch (err) {
+          } catch (err: unknown) {
             console.log(err);
+            if ((err as AxiosError).response && (err as AxiosError).response?.status === 401) {
+              navigate("../home");
+            }
           }
         }
       }
@@ -1682,8 +1679,11 @@ function Category(props: Props) {
             try {
               await axios.post("/smartstore/home/category/order", { newDnd }, { withCredentials: true });
               // setDnd({ ...dnd, columns: res.data.category, tasks: res.data.subcategory });
-            } catch (err) {
+            } catch (err: unknown) {
               console.log(err);
+              if ((err as AxiosError).response && (err as AxiosError).response?.status === 401) {
+                navigate("../home");
+              }
             }
           } else {
             // 다른 카테고리로 서브 카테고리를 이동 시켰을때
@@ -1709,8 +1709,11 @@ function Category(props: Props) {
               // 이동한 카테고리를 저장하면서 dnd를 업데이트 합니다.
               try {
                 await axios.post("/smartstore/home/category/order", { newDnd }, { withCredentials: true });
-              } catch (err) {
+              } catch (err: unknown) {
                 console.log(err);
+                if ((err as AxiosError).response && (err as AxiosError).response?.status === 401) {
+                  navigate("../home");
+                }
               }
             }
           }

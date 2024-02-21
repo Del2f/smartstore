@@ -20,6 +20,8 @@ declare module 'styled-components' {
     chapterNavBG: string;
     chapterNavText: string;
     chapterNavTextHover: string;
+    chapterNavArrowColor: string;
+    chapterNavArrowBorderColor: string;
 
     footerBG: string;
     footerTextColor: string;
@@ -53,5 +55,7 @@ declare module 'styled-components' {
     navMobileVisibleRate: string;
     navMobileOpacityRate: string;
     navMobileColorRate: string;
+    chapterNavRate: string;
+    chapterNavButtonHoverRate: string;
   }
 }
