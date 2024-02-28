@@ -454,10 +454,10 @@ export interface productList {
 
 // 아이콘 네비게이션
 const ChapterNav = styled.div`
-  padding: 8px 0;
+  padding: 16px 0;
   text-align: center;
   width: 100%;
-  height: 115px;
+  height: 120px;
   position: relative;
   background-color: ${(props) => props.theme.chapterNavBG};
   overflow: hidden;
@@ -1033,7 +1033,7 @@ function Category({ gmId, categoryList, selectedColumn, setSelectedColumn, selec
 
         if (res.data.findColumn) {
           const adminColumn = res.data.findColumn;
-          // console.log(adminColumn);
+          console.log(adminColumn);
 
           if (adminColumn.darkMode) {
             setIsDarkMode(adminColumn.darkMode);
@@ -1138,15 +1138,15 @@ function Category({ gmId, categoryList, selectedColumn, setSelectedColumn, selec
       const scrollableElement = scrollWrapRef.current;
     const listRef = scrollListRef.current;
 
-      if (scrollableElement && listRef) {
+      if (scrollableElement) {
         console.log("최초실행");
-        // console.log(scrollableElement.scrollLeft);
+        console.log(scrollableElement.scrollLeft);
         console.log(scrollableElement.clientWidth);
-        // console.log(scrollableElement.scrollWidth);
-        // console.log(window.innerWidth);
+        console.log(scrollableElement.scrollWidth);
+        console.log(window.innerWidth);
         setClientWidth(scrollableElement.clientWidth!);
         setScrollWidth(scrollableElement.scrollWidth!);
-        setIsChapterNavScroll(scrollableElement.scrollWidth > scrollableElement.clientWidth);
+        setIsChapterNavScroll(scrollableElement.scrollWidth !== scrollableElement.clientWidth);
         // console.log(scrollWidth);
       }
     };
@@ -1159,16 +1159,17 @@ function Category({ gmId, categoryList, selectedColumn, setSelectedColumn, selec
     };
   }, []);
 
-  useEffect(() => {
-    const scrollableElement = scrollWrapRef.current;
-    const listRef = scrollListRef.current;
-    if (scrollableElement && listRef) {
-      // console.log(scrollLeft);
-      // console.log(scrollableElement.scrollWidth);
-      console.log(scrollableElement.clientWidth);
-      // setIsChapterNavScroll(scrollableElement.scrollWidth > scrollableElement.clientWidth);
-    }
-  }, [selectedColumn?.taskIds]);
+  // useEffect(() => {
+  //   const scrollableElement = scrollWrapRef.current;
+  //   const listRef = scrollListRef.current;
+
+  //   if (scrollableElement && listRef) {
+  //     console.log(scrollLeft);
+  //     console.log(scrollableElement.scrollWidth);
+  //     console.log(scrollableElement.clientWidth);
+  //     // setIsChapterNavScroll(scrollableElement.scrollWidth > scrollableElement.clientWidth);
+  //   }
+  // }, [selectedColumn?.taskIds]);
 
   return (
     <>

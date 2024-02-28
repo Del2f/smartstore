@@ -76,7 +76,7 @@ export const lightTheme: DefaultTheme = {
 export const darkTheme: DefaultTheme = {
   navMain: "rgba(255,255,255,.8)",
   navMainHover: "#ffffff",
-  navBG: "black",
+  navBG: "rgba(22, 22, 23, .8);",
   navMobileBG: "#161617",
 
   navSubBG: "#161617",

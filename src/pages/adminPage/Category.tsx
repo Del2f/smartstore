@@ -14,6 +14,7 @@ import type1 from "@img/home/category/type1.png";
 import type2 from "@img/home/category/type2.png";
 import type3 from "@img/home/category/type3.png";
 import "./Category.scss";
+import SaveModal from "../../components/admin/CategorySave";
 
 type Props = {
   setNoticeIcon?: React.Dispatch<SetStateAction<any>>;
@@ -590,6 +591,9 @@ function Category(props: Props) {
 
   // 광고 등록 모달창
   const [isAdvertiseModal, setIsAdvertiseModal] = useState<boolean>(false);
+
+  // 저장 모달창
+  const [isSaveModal, setIsSaveModal] = useState<boolean>(false);
   // console.log(isAdvertiseModal);
 
   // 광고 관련 함수 모음.
@@ -1324,6 +1328,8 @@ function Category(props: Props) {
 
       try {
         await axios.post("/smartstore/home/category/edit", { updatedDnd, selectedList, selectedName }, { withCredentials: true });
+        setIsSaveModal(true);
+
       } catch (err: unknown) {
         console.log(err);
         if ((err as AxiosError).response && (err as AxiosError).response?.status === 401) {
@@ -1387,6 +1393,8 @@ function Category(props: Props) {
 
       try {
         await axios.post("/smartstore/home/category/edit", { updatedDnd, selectedList, selectedName }, { withCredentials: true });
+        setIsSaveModal(true);
+
       } catch (err: unknown) {
         console.log(err);
         if ((err as AxiosError).response && (err as AxiosError).response?.status === 401) {
@@ -1466,6 +1474,7 @@ function Category(props: Props) {
 
       try {
         await axios.post("/smartstore/home/category/edit", { updatedDnd }, { withCredentials: true });
+        setIsSaveModal(true);
       } catch (err: unknown) {
         console.log(err);
         if ((err as AxiosError).response && (err as AxiosError).response?.status === 401) {
@@ -1756,7 +1765,7 @@ function Category(props: Props) {
                 </h3>
               </div>
             </div>
-            <div className="panel-body flex" style={{paddingBottom: "30px"}}>
+            <div className="panel-body flex" style={{ paddingBottom: "30px" }}>
               <div className="box-wrap flex">
                 {!isAdvertise && (
                   <div className="box first flex flex-ju-bt flex-di-row">
@@ -1847,7 +1856,6 @@ function Category(props: Props) {
                             <div id="input-inner">
                               <input type="text" value={selectedName} placeholder="이름을 입력하세요" className="input" onChange={onChange} />
                               <Error className={isName ? "error-active" : "error"}>{NameMessage}</Error>
-
                             </div>
                           </InputWrap>
                           <InputWrap className="cateInfo-input">
@@ -1856,24 +1864,24 @@ function Category(props: Props) {
                               <input type="text" value={selectedURL} placeholder="URL 주소" className="input" onChange={onChangeURL} />
                             </div>
                           </InputWrap>
-                            <InputWrap className="cateInfo-input">
-                              <h5 className="cateInfo-name">광고 목록</h5>
-                              <span className="input-text">{selectedAdvertise[0]?.name}</span>
-                              <div>
-                                <AdvertiseBtn onClick={Advertise.advertiseListShow}>
-                                  <span>광고 목록</span>
+                          <InputWrap className="cateInfo-input">
+                            <h5 className="cateInfo-name">광고 목록</h5>
+                            <span className="input-text">{selectedAdvertise[0]?.name}</span>
+                            <div>
+                              <AdvertiseBtn onClick={Advertise.advertiseListShow}>
+                                <span>광고 목록</span>
+                              </AdvertiseBtn>
+                              {selectedAdvertise.length === 1 ? (
+                                <AdvertiseBtn onClick={Advertise.Link}>
+                                  <span>광고 수정</span>
                                 </AdvertiseBtn>
-                                {selectedAdvertise.length === 1 ? (
-                                  <AdvertiseBtn onClick={Advertise.Link}>
-                                    <span>광고 수정</span>
-                                  </AdvertiseBtn>
-                                ) : (
-                                  <AdvertiseBtn onClick={Advertise.Link}>
-                                    <span>광고 등록</span>
-                                  </AdvertiseBtn>
-                                )}
-                              </div>
-                            </InputWrap>
+                              ) : (
+                                <AdvertiseBtn onClick={Advertise.Link}>
+                                  <span>광고 등록</span>
+                                </AdvertiseBtn>
+                              )}
+                            </div>
+                          </InputWrap>
                           <div style={{ marginTop: "10px", color: "#ff3627" }}>
                             <span>{addedErrMessage}</span>
                           </div>
@@ -1941,6 +1949,7 @@ function Category(props: Props) {
             <div className="panel-footer"></div>
           </div>
         </div>
+        <SaveModal isBoolean={isSaveModal} setIsBoolean={setIsSaveModal}></SaveModal>
         <AdverBlurWrap isAdverListShow={isAdverListShow} ref={AdverBlurWrapRef} className="modal">
           <AdverListWrap isAdverListShow={isAdverListShow} ref={AdverBlurRef}>
             <AdverList>

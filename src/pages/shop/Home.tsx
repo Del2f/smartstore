@@ -6,6 +6,14 @@ import "./Home.scss";
 import mainImg from "@img/shop/hero_wwdc23_apple__f6s4xvm9mk2u_largetall.jpg";
 import mainText from "@img/shop/hero_logo_wwdc23__bgfcj40dxkpe_largetall.png";
 
+const HomeWrap = styled.div`
+  padding-top: 44px;
+  
+  @media only screen and (max-width: 833px) {
+    padding-top: 48px;
+  }
+`;
+
 const LineMiddle = styled.div`
   display: flex;
   justify-content: center;
@@ -15,7 +23,7 @@ const LineMiddle = styled.div`
   font-size: 13.5px;
   padding: 12px 0;
   background-color: white;
-  color: ${(props) => props.theme.chapterNavText};
+  color: #1d1d1f;
   
    & > span {
     font-weight: 400;
@@ -109,6 +117,7 @@ const TextWrap = styled.div`
   justify-content: flex-end;
   align-items: center;
   padding: 55px 0;
+  position: relative;
 `;
 const MainText = styled.h2`
   display: block;
@@ -132,6 +141,7 @@ const MiddleText = styled.p`
 
 const LinkWrap = styled.div`
   margin-top: 10px;
+
   & > a {
     color: #2997ff;
     font-size: 20px;
@@ -142,26 +152,27 @@ const LinkWrap = styled.div`
 function Home() {
   return (
     <>
-      <LineMiddle>
-        <span>
-          교육 할인가로 Mac 또는 iPad를 더욱 부담 없이. 여기에 Mac 구입 시 AirPods을, iPad 구입 시<br></br> Apple Pencil을 받을 수 있습니다.**&nbsp;
-
-        <Link to={""} className="link">
-          지금 쇼핑하기
-        </Link>
-        </span>
-      </LineMiddle>
-      <HomeImgWrap>
-        <TextWrap className="TextWrap">
-          <MainText></MainText>
-          <MiddleText>한국 시간 6월 6일 새벽 2시, 온라인 생중계.</MiddleText>
-          <MiddleText>촬영: 앤드류 주커만</MiddleText>
-          <LinkWrap>
-            <Link to={""}>더 알아보기</Link>
-          </LinkWrap>
-        </TextWrap>
-        <img />
-      </HomeImgWrap>
+      <HomeWrap className="HomeWrap">
+        <LineMiddle className="LineMiddle">
+          <span>
+            교육 할인가로 Mac 또는 iPad를 더욱 부담 없이. 여기에 Mac 구입 시 AirPods을, iPad 구입 시<br></br> Apple Pencil을 받을 수 있습니다.**&nbsp;
+            <Link to={""} className="link">
+              지금 쇼핑하기
+            </Link>
+          </span>
+        </LineMiddle>
+        <HomeImgWrap className="HomeImgWrap">
+          <TextWrap className="TextWrap">
+            <MainText></MainText>
+            <MiddleText>한국 시간 6월 6일 새벽 2시, 온라인 생중계.</MiddleText>
+            <MiddleText>촬영: 앤드류 주커만</MiddleText>
+            <LinkWrap>
+              <Link to={""}>더 알아보기</Link>
+            </LinkWrap>
+          </TextWrap>
+          <img />
+        </HomeImgWrap>
+      </HomeWrap>
     </>
   );
 }
