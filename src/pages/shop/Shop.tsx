@@ -232,6 +232,7 @@ export const MainWrap = styled.div<mainwrap>`
 
   @media only screen and (max-width: 833px) {
     & {
+      /* position: relative; */
       min-height: 0px;
       max-height: none;
       /* overflow: hidden; */
@@ -241,7 +242,6 @@ export const MainWrap = styled.div<mainwrap>`
         props.isMobile && props.isSubCateShow
           && css`
           .NavWrap-home {
-            position: absolute;
           }
       `}
     }
@@ -259,7 +259,7 @@ export const NavWrap = styled.div<NavWrapType>`
 
 interface NavInner {
   isSubCateShow: boolean;
-  scrollbarWidth: string;
+  isHome: RegExpMatchArray | null;
 }
 
 export const NavInner = styled.div<NavInner>`
@@ -279,20 +279,18 @@ export const NavInner = styled.div<NavInner>`
     & {
       display: flex;
       padding: 0;
+
+      ${(props) =>
+        props.isSubCateShow && props.isHome &&
+        css`
+          padding-right: 17px;
+        `}
     }
 
     &.NavTabMobileMenu {
       display: flex;
       z-index: 6;
     }
-
-    ${(props) =>
-      props.isSubCateShow &&
-      css`
-        & {
-          padding-right: 17px;
-        }
-      `}
   }
 `;
 
@@ -1805,8 +1803,6 @@ function Shop() {
   const [selectedCateName, setSelectedCateName] = useState<string>(""); // 선택된 카테고리
   const [height, setHeight] = useState<string>("44px"); // 하단 메뉴 높이 PC전용
 
-  const [scrollbarWidth, setScrollbarWidth] = useState<string>(''); // 하단 메뉴 높이 PC전용
-
   const [isMobile, setIsMobile] = useState<boolean>(false); // 모바일
   const [isNavFirstMenuShow, setIsNavFirstMenuShow] = useState<boolean>(false); // 모바일 메뉴 1번째 탭
   const [isNavSecondMenuShow, setIsNavSecondMenuShow] = useState<boolean>(false); // 모바일 메뉴 2번째 탭
@@ -1840,30 +1836,32 @@ function Shop() {
   useEffect(() => {
     if (isMobile && isSubCateShow) {
       const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-      setScrollbarWidth(`${scrollbarWidth}px`);
-
       const pageY = window.pageYOffset;
 
       document.body.setAttribute("scrollY", pageY.toString());
+      document.documentElement.style.paddingInlineEnd = `${scrollbarWidth}px`;
+      document.documentElement.style.overflow = "hidden";
+      document.documentElement.style.height = "100%";
 
-      document.body.style.paddingRight = `${scrollbarWidth}px`;
       document.body.style.overflow = "hidden";
-      document.body.style.position = "fixed";
+      if(isHome) document.body.style.position = "relative";
       // document.body.style.top = `-${pageY}px`;
       document.body.style.top = "0px";
       document.body.style.left = "0px";
       document.body.style.right = "0px";
       // document.body.style.bottom = "0px";
-      document.documentElement.style.overflow = "hidden";
     } else {
-      document.body.style.paddingRight = "0";
+      // document.documentElement.style.paddingRight = "0";
+      document.documentElement.style.paddingInlineEnd = "0";
+
+      document.documentElement.style.overflow = "auto";
+
       document.body.style.overflow = "auto";
       document.body.style.removeProperty("position");
       document.body.style.removeProperty("top");
       document.body.style.removeProperty("left");
       document.body.style.removeProperty("right");
       document.body.style.removeProperty("bottom");
-      document.documentElement.style.overflow = "auto";
     }
 
     return () => {
@@ -2762,7 +2760,7 @@ function Shop() {
                   </span>
                 </button>
               </NavMenuBack>
-              <NavInner className="NavInner" isSubCateShow={isSubCateShow} scrollbarWidth={scrollbarWidth}>
+              <NavInner className="NavInner" isSubCateShow={isSubCateShow} isHome={isHome}>
                 <NavFlex className="NavFlex" isSubCateShow={isSubCateShow}>
                   {/* 로고 */}
                   <NavTab className="NavTab NavTab-Logo" name={"apple"} selectedCateName={selectedCateName} isMobile={isMobile}>
