@@ -7,11 +7,7 @@ import mainImg from "@img/shop/hero_wwdc23_apple__f6s4xvm9mk2u_largetall.jpg";
 import mainText from "@img/shop/hero_logo_wwdc23__bgfcj40dxkpe_largetall.png";
 
 const HomeWrap = styled.div`
-  padding-top: 44px;
   
-  @media only screen and (max-width: 833px) {
-    padding-top: 48px;
-  }
 `;
 
 const LineMiddle = styled.div`
