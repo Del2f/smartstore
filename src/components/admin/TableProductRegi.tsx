@@ -1,11 +1,16 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { AgGridReact } from "ag-grid-react";
 import styled from "styled-components";
-import "ag-grid-community/dist/styles/ag-grid.css";
-import "ag-grid-community/dist/styles/ag-theme-alpine.css";
-import "./TableProductRegi.scss";
-import $ from "jquery";
+
 import Checkbox from "../CheckBox";
+import { AG_GRID_LOCALE_KO } from "../../api/locale.ko";
+
+import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the grid
+import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional Theme applied to the grid
+import "./TableProductRegi.scss";
+
+import { GridReadyEvent, GridApi, ColumnApi, ColDef } from "ag-grid-community";
+import { options } from "../../pages/adminPage/ProductRegister";
 
 type Props = {
   optionResult?: any;
@@ -15,14 +20,7 @@ type Props = {
   setOptionValue?: any;
   setOptionPrice?: any;
   gridOptions?: any;
-  OptionType: number;
-  OptionList: any;
-  OptionName1: string;
-  OptionName2: string;
-  OptionName3: string;
-  OptionName4: string;
-  OptionName5: string;
-  OptionName6: string;
+  options: options[];
   isEdit: boolean;
 };
 
@@ -75,8 +73,8 @@ const List = styled.li`
 `;
 
 function TableProductRegi(props: Props) {
-  const rowData = [...props.optionResult];
-  const [gridApi, setGridApi] = useState<any>(null);
+
+  const [rowData, setRowData] = useState<any>();
   const [selectedRows, setSelectedRows] = useState<any>([]);
   const [selectedID, setSelectedID] = useState<string[]>([]);
   const [priceTypeSelect, setPriceTypeSelect] = useState<string>("+");
@@ -114,9 +112,13 @@ function TableProductRegi(props: Props) {
     },
   ]);
 
+  // console.log(props.optionResult);
+  // console.log(props.options.length);
+
   // 옵션 슬롯을 추가할때마다 Table에 optionValue 슬롯을 추가합니다.
   // [옵션 목록으로 적용]을 눌러 props.optionResult가 최신화 될 경우에만 슬롯이 늘어납니다.
   useEffect(() => {
+    setRowData(props.optionResult);
     setColumnDefs((prevDefs) => {
       const filteredDefs = prevDefs.filter(
         (def) =>
@@ -128,61 +130,70 @@ function TableProductRegi(props: Props) {
           def.field !== "optionValue6"
       );
 
+      // if (props.options.length === 0) {
+      //   return [
+      //     filteredDefs[0], // 첫 번째 요소 유지
+      //     { field: "옵션명", headerName: props.optionResult[0]?.optionName1, width: 100, editable: true, resizable: true, filter: true },
+      //     ...filteredDefs.slice(1), // 첫 번째 요소 이후의 요소들을 그대로 유지
+      //   ];
+      // }
+
       // OptionType 값에 따라 필드를 추가합니다.
-      if (props.OptionType === 0) {
+      if (props.options.length === 1) {
         return [
           filteredDefs[0], // 첫 번째 요소 유지
-          { field: "optionValue1", headerName: props.OptionName1, width: 100, editable: true, resizable: true, filter: true },
+          { field: "optionValue1", headerName: props.optionResult[0]?.optionName1 ? props.optionResult[0]?.optionName1 : "옵션명", width: 100, editable: true, resizable: true, filter: true },
           ...filteredDefs.slice(1), // 첫 번째 요소 이후의 요소들을 그대로 유지
         ];
-      } else if (props.OptionType === 1) {
+      } else if (props.options.length === 2) {
         return [
           filteredDefs[0], // 첫 번째 요소 유지
-          { field: "optionValue1", headerName: props.OptionName1, width: 100, editable: true, resizable: true, filter: true },
-          { field: "optionValue2", headerName: props.OptionName2, width: 250, editable: true, resizable: true, filter: true },
+          { field: "optionValue1", headerName: props.optionResult[0]?.optionName1, width: 100, editable: true, resizable: true, filter: true },
+          { field: "optionValue2", headerName: props.optionResult[0]?.optionName2, width: 250, editable: true, resizable: true, filter: true },
           ...filteredDefs.slice(1), // 첫 번째 요소 이후의 요소들을 그대로 유지
         ];
-      } else if (props.OptionType === 2) {
+      } else if (props.options.length === 3) {
         return [
           filteredDefs[0], // 첫 번째 요소 유지
-          { field: "optionValue1", headerName: props.OptionName1, width: 100, editable: true, resizable: true, filter: true },
-          { field: "optionValue2", headerName: props.OptionName2, width: 250, editable: true, resizable: true, filter: true },
-          { field: "optionValue3", headerName: props.OptionName3, width: 250, editable: true, resizable: true, filter: true },
+          { field: "optionValue1", headerName: props.optionResult[0]?.optionName1, width: 100, editable: true, resizable: true, filter: true },
+          { field: "optionValue2", headerName: props.optionResult[0]?.optionName2, width: 250, editable: true, resizable: true, filter: true },
+          { field: "optionValue3", headerName: props.optionResult[0]?.optionName3, width: 250, editable: true, resizable: true, filter: true },
           ...filteredDefs.slice(1), // 첫 번째 요소 이후의 요소들을 그대로 유지
         ];
-      } else if (props.OptionType === 3) {
+      } else if (props.options.length === 4) {
         return [
           filteredDefs[0], // 첫 번째 요소 유지
-          { field: "optionValue1", headerName: props.OptionName1, width: 100, editable: true, resizable: true, filter: true },
-          { field: "optionValue2", headerName: props.OptionName2, width: 250, editable: true, resizable: true, filter: true },
-          { field: "optionValue3", headerName: props.OptionName3, width: 250, editable: true, resizable: true, filter: true },
-          { field: "optionValue4", headerName: props.OptionName4, width: 250, editable: true, resizable: true, filter: true },
+          { field: "optionValue1", headerName: props.optionResult[0]?.optionName1, width: 100, editable: true, resizable: true, filter: true },
+          { field: "optionValue2", headerName: props.optionResult[0]?.optionName2, width: 250, editable: true, resizable: true, filter: true },
+          { field: "optionValue3", headerName: props.optionResult[0]?.optionName3, width: 250, editable: true, resizable: true, filter: true },
+          { field: "optionValue4", headerName: props.optionResult[0]?.optionName4, width: 250, editable: true, resizable: true, filter: true },
           ...filteredDefs.slice(1), // 첫 번째 요소 이후의 요소들을 그대로 유지
         ];
-      } else if (props.OptionType === 4) {
+      } else if (props.options.length === 5) {
         return [
           filteredDefs[0], // 첫 번째 요소 유지
-          { field: "optionValue1", headerName: props.OptionName1, width: 100, editable: true, resizable: true, filter: true },
-          { field: "optionValue2", headerName: props.OptionName2, width: 250, editable: true, resizable: true, filter: true },
-          { field: "optionValue3", headerName: props.OptionName3, width: 250, editable: true, resizable: true, filter: true },
-          { field: "optionValue4", headerName: props.OptionName4, width: 250, editable: true, resizable: true, filter: true },
-          { field: "optionValue5", headerName: props.OptionName5, width: 250, editable: true, resizable: true, filter: true },
+          { field: "optionValue1", headerName: props.optionResult[0]?.optionName1, width: 100, editable: true, resizable: true, filter: true },
+          { field: "optionValue2", headerName: props.optionResult[0]?.optionName2, width: 250, editable: true, resizable: true, filter: true },
+          { field: "optionValue3", headerName: props.optionResult[0]?.optionName3, width: 250, editable: true, resizable: true, filter: true },
+          { field: "optionValue4", headerName: props.optionResult[0]?.optionName4, width: 250, editable: true, resizable: true, filter: true },
+          { field: "optionValue5", headerName: props.optionResult[0]?.optionName5, width: 250, editable: true, resizable: true, filter: true },
           ...filteredDefs.slice(1), // 첫 번째 요소 이후의 요소들을 그대로 유지
         ];
-      } else if (props.OptionType === 5) {
+      } else if (props.options.length === 6) {
         return [
           filteredDefs[0], // 첫 번째 요소 유지
-          { field: "optionValue1", headerName: props.OptionName1, width: 100, editable: true, resizable: true, filter: true },
-          { field: "optionValue2", headerName: props.OptionName2, width: 250, editable: true, resizable: true, filter: true },
-          { field: "optionValue3", headerName: props.OptionName3, width: 250, editable: true, resizable: true, filter: true },
-          { field: "optionValue4", headerName: props.OptionName4, width: 250, editable: true, resizable: true, filter: true },
-          { field: "optionValue5", headerName: props.OptionName5, width: 250, editable: true, resizable: true, filter: true },
-          { field: "optionValue6", headerName: props.OptionName6, width: 250, editable: true, resizable: true, filter: true },
+          { field: "optionValue1", headerName: props.optionResult[0]?.optionName1, width: 100, editable: true, resizable: true, filter: true },
+          { field: "optionValue2", headerName: props.optionResult[0]?.optionName2, width: 250, editable: true, resizable: true, filter: true },
+          { field: "optionValue3", headerName: props.optionResult[0]?.optionName3, width: 250, editable: true, resizable: true, filter: true },
+          { field: "optionValue4", headerName: props.optionResult[0]?.optionName4, width: 250, editable: true, resizable: true, filter: true },
+          { field: "optionValue5", headerName: props.optionResult[0]?.optionName5, width: 250, editable: true, resizable: true, filter: true },
+          { field: "optionValue6", headerName: props.optionResult[0]?.optionName6, width: 250, editable: true, resizable: true, filter: true },
           ...filteredDefs.slice(1), // 첫 번째 요소 이후의 요소들을 그대로 유지
         ];
       } else {
         return;
       }
+
     });
   }, [props.optionResult]);
 
@@ -191,34 +202,64 @@ function TableProductRegi(props: Props) {
   const [optionUseValue, setOptionUseValue] = useState<Boolean>(true);
 
   const [showdropmenu, setShowdropmenu] = useState<Boolean>(false);
+
+  const gridRef = useRef<any>();
   const dropmenu = useRef<HTMLDivElement>(null);
   const pricedropmenu = useRef<HTMLDivElement>(null);
+
+  // ag-grid 한글화
+  const localeText = useMemo(() => {
+    return AG_GRID_LOCALE_KO;
+  }, []);
+
+  // ag-grid bottom 디자인 변경
+  const slash = document.getElementById("ag-79-of-page");
+  if (slash) {
+    slash.textContent = "/"; // 페이지 1 의 10 => 페이지 1 / 10
+  }
+
+  const slash2 = document.getElementById("ag-79-of");
+  if (slash2) {
+    slash2.textContent = "/"; // 1 의 10 => 페이지 10 / 100
+  }
+
+  const to = document.getElementById("ag-79-to");
+  if (to) {
+    to.textContent = "-"; // 1 의 10 => 페이지 10 / 100
+  }
+
+  const onPageSizeChanged = useCallback(() => {
+    var value = (document.getElementById("page-size") as HTMLInputElement).value;
+    gridRef.current.api.paginationSetPageSize(Number(value));
+  }, []);
 
   const onCellEditingStopped = (params: any) => {
     // 셀 수정 즉시 새 데이터를 반환합니다.
     const cellEditData: string[] = [];
-    gridApi.forEachNode((node: any) => {
+    gridRef.current.api.forEachNode((node: any) => {
       cellEditData.push(node.data);
     });
 
-    // const copy = [...rowData]
     const test = cellEditData.map((list: any) => (list.optionStock > 0 ? { ...list, optionStatus: "판매" } : { ...list, optionStatus: "품절" }));
-
     props.setOptionResult(test);
   };
 
   const onSelectionChanged = () => {
-    setSelectedRows(gridApi.getSelectedRows());
+    // setSelectedRows(gridRef.current.api.getSelectedRows());
+    const selectedRows = gridRef.current.api.getSelectedRows();
+    const currentPageRows = gridRef.current.api.getRenderedNodes().map(node => node.data);
+    const selectedRowsInCurrentPage = selectedRows.filter(row => currentPageRows.includes(row));
+    setSelectedRows(selectedRowsInCurrentPage);
   };
 
   // 선택삭제
   const onDeleteBtn = (params: any) => {
-    const selectedData = gridApi.getSelectedRows();
-    const data = gridApi.updateRowData({ remove: selectedData });
-    const remove = rowData.filter((list: any, index: any) => !selectedData.includes(list));
+    const selectedData = gridRef.current.api.getSelectedRows();
+    const remove = rowData.filter((list: any) => !selectedData.includes(list));
     props.setOptionResult(remove);
     const newInput = remove.map((list: any) => list.optionValue);
     props.setOptionValue(newInput);
+    gridRef.current.api.setRowData(remove);
   };
 
   const priceTypeOnChange = (e: any) => {
@@ -324,16 +365,16 @@ function TableProductRegi(props: Props) {
   };
 
   // 메뉴 파트1 옵션 마우스 올렸을때
-  useEffect(() => {
-    showdropmenu == false
-      ? $(".selectize-dropdown-content").children(".option").removeClass("active")
-      : $(".selectize-dropdown-content").children(".selected").addClass("active");
+  // useEffect(() => {
+  //   showdropmenu == false
+  //     ? $(".selectize-dropdown-content").children(".option").removeClass("active")
+  //     : $(".selectize-dropdown-content").children(".selected").addClass("active");
 
-    $(".selectize-dropdown-content").on("mouseover", function (e) {
-      $(".option").removeClass("active");
-      $(e.target).addClass("active");
-    });
-  });
+  //   $(".selectize-dropdown-content").on("mouseover", function (e) {
+  //     $(".option").removeClass("active");
+  //     $(e.target).addClass("active");
+  //   });
+  // });
 
   // 모달이 열려 있고 모달의 바깥쪽을 눌렀을 때 창 닫기
   useEffect(() => {
@@ -357,6 +398,16 @@ function TableProductRegi(props: Props) {
     };
   }, [showdropmenu, priceTypeShow]);
 
+  const onGridReady = (params: GridReadyEvent) => {
+    gridRef.current.grid = params.api;
+    gridRef.current.column = params.columnApi;
+  };
+
+
+  // 페이지 크기 커스텀
+  const paginationPageSizeSelector = useMemo(() => {
+    return [20, 50, 100, 500, 1000];
+  }, []);
   return (
     <>
       <div className="top flex flex-ju-bt flex-align-center">
@@ -413,29 +464,33 @@ function TableProductRegi(props: Props) {
           </button>
         </div>
       </div>
-      <div className="ag-theme-alpine" style={{ height: "400px", width: "100%" }}>
+      <div style={{ height: "600px", marginTop: "10px", borderRadius: "20px" }} className="ag-theme-alpine">
         <AgGridReact
-          onGridReady={(params) => {
-            setGridApi(params.api);
-          }}
+          ref={gridRef}
+          localeText={localeText}
+          // suppressHorizontalScroll={true}
           rowData={rowData}
           columnDefs={columnDefs}
           rowSelection={"multiple"}
-          rowMultiSelectWithClick={true}
+          // rowMultiSelectWithClick={true}
           onCellEditingStopped={onCellEditingStopped}
           onSelectionChanged={onSelectionChanged}
-          onCellClicked={(params: any) => {
-            if (params.column.colId === "deleteBtn") {
-              let action = params.event.target.dataset.action;
-              if (action === "delete") {
-                const selectedData = [params.node.data];
-                const remove = rowData.filter((list: any, index: any) => !selectedData.includes(list));
-                props.setOptionResult(remove);
-                const newInput = remove.map((list: any) => list.optionValue);
-                props.setOptionValue(newInput);
-              }
-            }
-          }}
+          pagination={true}
+          paginationPageSize={20}
+          paginationPageSizeSelector={paginationPageSizeSelector}
+          // onCellClicked={(params: any) => { 
+          //   if (params.column.colId === "deleteBtn") {
+          //     let action = params.event.target.dataset.action;
+          //     if (action === "delete") {
+          //       const selectedData = [params.node.data];
+          //       const remove = rowData.filter((list: any, index: any) => !selectedData.includes(list));
+          //       props.setOptionResult(remove);
+          //       const newInput = remove.map((list: any) => list.optionValue);
+          //       props.setOptionValue(newInput);
+          //     }
+          //   }
+          // }}
+          // onGridReady={onGridReady}
         ></AgGridReact>
       </div>
     </>

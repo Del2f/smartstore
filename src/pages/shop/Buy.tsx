@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { productList } from "./Category";
 import "./Buy.scss";
-import ProductCarousel from "@components/shop/buy/Swiper_Buy";
+import ProductCarousel from "@components/shop/buy/ProductCarousel";
+import OptionSelect from "@components/shop/buy/OptionSelect";
 
 const Container = styled.div`
   width: 87.5%;
@@ -60,6 +61,7 @@ function Buy() {
         </div>
         <div className="pb">
           <ProductCarousel mainimage={product?.mainImage} subimage={product?.subImage}></ProductCarousel>
+          <OptionSelect product={product}></OptionSelect>
         </div>
       </Container>
     </>

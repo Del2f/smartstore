@@ -1,7 +1,7 @@
 import axios from "../../api/axios";
 import styled from "styled-components";
 import { useState, useEffect, SetStateAction } from "react";
-import { OptionList } from "../../pages/adminPage/ProductRegister";
+import { options } from "../../pages/adminPage/ProductRegister";
 
 const IconWrap = styled.div`
   display: flex;
@@ -11,7 +11,7 @@ const IconWrap = styled.div`
 
 interface isImage {
   // isAdImage: boolean;
-  optionImage: any;
+  image: any;
 }
 
 const IconI = styled.div`
@@ -65,13 +65,13 @@ const Error = styled.span`
 
 const DeleteBtn = styled.button<isImage>`
   position: absolute;
-  right: -30px;
+  right: -25px;
   z-index: 1;
   margin: 0;
-  top: -30px;
+  top: -25px;
 
   ${(props) =>
-    props.optionImage !== undefined && props.optionImage !== null
+    props.image !== undefined && props.image !== ""
       ? `
       display: block;
       `
@@ -80,8 +80,8 @@ const DeleteBtn = styled.button<isImage>`
   `}
 
   span {
-    width: 15px;
-    height: 15px;
+    width: 12px;
+    height: 12px;
 
     svg {
       width: 10px;
@@ -90,29 +90,28 @@ const DeleteBtn = styled.button<isImage>`
   }
 `;
 
-function ImagePreview({ imageURL }: any) {
-  console.log(imageURL);
-
+function ImagePreview({ url }: any) {
   return (
     <>
-      {(imageURL !== undefined && imageURL !== null) && (
+      {url !== "" && 
         <div className="ImagePreview" draggable>
-          <img src={imageURL} alt="preview" />
+          <img src={url} alt="preview" />
         </div>
-      )}
+      }
     </>
   );
 }
 
 interface OptionImage {
   index: number;
-  OptionListIndex1: number | null;
-  OptionListIndex2: number | null;
-  OptionList: any;
-  setOptionList: React.Dispatch<SetStateAction<OptionList>>;
+  index2: number;
+  image: string;
+  imageIdx: number;
   isClicked: boolean;
   setIsClicked: React.Dispatch<SetStateAction<boolean>>;
   optionImage: any;
+  options: options[];
+  setOptions: React.Dispatch<React.SetStateAction<options[]>>;
 }
 
 function OptionImage(props: OptionImage) {
@@ -162,20 +161,18 @@ function OptionImage(props: OptionImage) {
 
             const URL = await axios.post("/smartstore/home/product/optionimage", formData);
 
-            if (props.OptionListIndex1 !== null && props.OptionListIndex2 !== null) {
-              // OptionList를 복사하여 업데이트할 새로운 리스트 생성
-              const updatedOptionList = [...props.OptionList];
-              const targetOption = updatedOptionList[props.OptionListIndex1][props.OptionListIndex2]; // 수정하려는 optionImage 배열을 가져옵니다.
+            const updatedOptions = [...props.options];
+            const targetOption = updatedOptions[props.index];
 
-              if (!targetOption.optionImage) {
-                targetOption.optionImage = [];
-              }
-
-              targetOption.optionImage[props.index] = { url: URL.data.location };
-
-              console.log(targetOption);
-              props.setOptionList(updatedOptionList);
+            targetOption.image && (targetOption.image[props.index2] = targetOption.image[props.index2].slice());
+            if (targetOption.image && targetOption.image[props.index2]) {
+              const images = targetOption.image[props.index2];
+              const lastIdx = images.length - 1;
+              images[lastIdx] = URL.data.location;
+              images.push("");
             }
+
+              props.setOptions(updatedOptions);
           } else {
             setErrorMessage("이미지의 가로는 2500px 이하, 세로는 1200px 이하이어야 합니다.");
           }
@@ -187,81 +184,69 @@ function OptionImage(props: OptionImage) {
   };
 
   // 이미지 교체
-  const changeHandler = (event: any) => {
-    const files = event.target.files;
+  const changeHandler = (e: any) => {
+    const files = e.target.files;
 
     handleFiles(files);
-    event.target.value = ""; // 같은 파일 업로드를 위한 초기화
+    e.target.value = ""; // 같은 파일 업로드를 위한 초기화
   };
 
   // 끌어서 업로드
-  const dropHandler = (event: any) => {
-    event.preventDefault();
-    event.stopPropagation();
+  const dropHandler = (e: any) => {
+    e.preventDefault();
+    e.stopPropagation();
 
     // if (!props.isSelectedTask && !props.isSelectedSubTask) {
     //   console.log("서브 카테고리를 선택해주세요");
     //   return;
     // }
 
-    const files = event.dataTransfer.files;
+    const files = e.dataTransfer.files;
     handleFiles(files);
   };
 
-  const dragOverHandler = (event: any) => {
-    event.preventDefault();
-    event.stopPropagation();
+  const dragOverHandler = (e: any) => {
+    e.preventDefault();
+    e.stopPropagation();
   };
 
   // 이미지 삭제
-  const ImageDelete = (event: any) => {
+  const ImageDelete = (e: any) => {
     console.log("옵션 이미지 삭제");
 
-    event.preventDefault();
-    event.stopPropagation();
-
-    if (props.OptionListIndex1 !== null) {
-      const updatedOptionList = [...props.OptionList];
-      updatedOptionList[props.OptionListIndex1][props.OptionListIndex1].optionImage[props.index] = null;
-
-      props.setOptionList(updatedOptionList);
-      setPreviewImages([]);
-    }
+    e.preventDefault();
+    e.stopPropagation();
+  
+    const updatedOptions = [...props.options];
+    const targetOption = updatedOptions[props.index];
+  
+    console.log(e.currentTarget.value)
+      const indexToRemove = parseInt(e.currentTarget.value);
+      const targetImage = targetOption.image && targetOption.image[props.index2];
+      const filteredImage = targetImage?.filter((list, index) => index !== indexToRemove);
+  
+      if (filteredImage) {
+        if (targetOption.image) {
+          targetOption.image[props.index2] = filteredImage;
+        }
+        props.setOptions(updatedOptions);
+      } else {
+        setPreviewImages([]);
+      }
   };
 
-  // 상품 최초 등록시 미리보기
-  // useEffect(() => {
-  //   // if (props.isAdvertiseEdit) {
-  //   //   return;
-  //   // }
-  //   console.log('최초 등록');
-
-  //   const imageJSXs = uploadedImages.map((imageURL: any, index: any) => {
-  //     return (
-  //       <ImagePreview
-  //         imageURL={imageURL}
-  //         key={index}
-  //       />
-  //     );
-  //   });
-
-  //   setPreviewImages(imageJSXs);
-  // }, [uploadedImages]);
-
   useEffect(() => {
-    console.log("이미지 추가 및 수정시 실행");
-    const imageURL = props.optionImage;
+    const options = [...props.options];
+    const target = options[props.index];
     
-    if (Array.isArray(imageURL) && imageURL.length > 0) {
-      console.log(props.optionImage[props.index]);
-      const imageJSX = <ImagePreview imageURL={imageURL[props.index]?.url} key={props.index} />;
+    if (target.image && target.image.length > 1) {
+      const imageJSX = <ImagePreview url={props.image} key={props.index} />;
       setPreviewImages(imageJSX);
     }
-  }, [props.OptionList]);
+  }, [props.options]);
 
   return (
-    <>
-      <IconWrap className="IconWrap">
+      <IconWrap className="IconWrap" key={props.imageIdx}>
         <IconLabel className="IconLabel dragorclick" onDragOver={dragOverHandler} onDrop={dropHandler}>
           <IconI className="IconI">
             <span>+</span>
@@ -269,8 +254,7 @@ function OptionImage(props: OptionImage) {
           {previewImages}
           <IconInput type="file" multiple accept="image/*" onChange={changeHandler} />
           {Array.isArray(props.optionImage) && props.optionImage.length > 0 && (
-
-          <DeleteBtn className="modal-close-button" optionImage={props.optionImage[props.index]?.url} onClick={ImageDelete}>
+          <DeleteBtn className="modal-close-button" image={props.image} value={props.imageIdx} onClick={(e) => ImageDelete(e)}>
             <span className="modal-close-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                 <path d="M12.12,10l4.07-4.06a1.5,1.5,0,1,0-2.11-2.12L10,7.88,5.94,3.81A1.5,1.5,0,1,0,3.82,5.93L7.88,10,3.81,14.06a1.5,1.5,0,0,0,0,2.12,1.51,1.51,0,0,0,2.13,0L10,12.12l4.06,4.07a1.45,1.45,0,0,0,1.06.44,1.5,1.5,0,0,0,1.06-2.56Z"></path>
@@ -281,7 +265,6 @@ function OptionImage(props: OptionImage) {
         </IconLabel>
         <Error>{errorMessage}</Error>
       </IconWrap>
-    </>
   );
 }
 

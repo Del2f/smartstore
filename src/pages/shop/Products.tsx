@@ -487,7 +487,7 @@ function Products({ gmId, categoryList, setNavCart, isMobile }: Props) {
                   <MenuWrap className="MenuWrap">
                     <MenuItems className="MenuItems">
                       {sidemenu.map((list, index) => (
-                        <MenuItem className="MenuItem" number={index + 1} total={sidemenu.length + 1} isSideMenu={isSideMenu}>
+                        <MenuItem className="MenuItem" number={index + 1} total={sidemenu.length + 1} isSideMenu={isSideMenu} key={list.title}>
                           <span>{list.title}</span>
                         </MenuItem>
                       ))}

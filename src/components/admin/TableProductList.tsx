@@ -23,6 +23,7 @@ type Props = {
 function TableProductList(props: Props) {
   const token = useSelector(selectToken);
   const [rowData, setRowData] = useState<any>();
+  console.log(rowData);
 
   const [selectedRows, setSelectedRows] = useState<any>([]);
   const [inputClick, setInputClick] = useState(false);
@@ -136,7 +137,6 @@ function TableProductList(props: Props) {
 
   const onSelectionChanged = () => {
     setSelectedRows(gridRef.current.api.getSelectedRows());
-
     props.setSelectedProductList && props.setSelectedProductList(gridRef.current.api.getSelectedRows());
   };
 
@@ -308,7 +308,7 @@ function TableProductList(props: Props) {
               </button>
             </div>
           </div>
-          {/* {pagination} */}
+          {pagination}
         </div>
       )}
       <div style={{ height: "500px", marginTop: "10px", borderRadius: "20px" }} className="ag-theme-alpine">
@@ -324,7 +324,7 @@ function TableProductList(props: Props) {
           paginationPageSizeSelector={paginationPageSizeSelector}
           // paginationNumberFormatter={paginationNumberFormatter}
           onGridReady={onGridReady}
-          onCellClicked={(params: any) => {}}
+          // onCellClicked={(params: any) => {}}
         ></AgGridReact>
       </div>
     </>

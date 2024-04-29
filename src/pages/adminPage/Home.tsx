@@ -38,12 +38,15 @@ function Home(props: Props) {
 
   return (
     <>
+
       <div className="SellerSubframe">
+
         <div className="Sellerdashboard">
           <div className="SellerSubcontents">
             <div className="flex flex-wrap flex-panel-wrap">
 
               {/* 03 주문/배송 박스 */}
+
               <div className="salesinfo panel-wrap flex-col-6 flex-col-xs-12 flex-order-md-3 flex-order-xs-1">
                 <div className="panel panel-dashboard">
                   <div className="panel-heading">
@@ -66,6 +69,7 @@ function Home(props: Props) {
                             <li className="number-area">
                               <a className="number">0</a>
                               <span>건</span>
+
                             </li>
                           </li>
                           <li className="text-box">
@@ -685,6 +689,7 @@ function Home(props: Props) {
                   </div>
                 </div>
               </div>
+
             </div>
           </div>
         </div>

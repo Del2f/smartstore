@@ -1,6 +1,6 @@
 import axios from "../../api/axios";
-import styled, { css } from "styled-components";
-import { Link, useNavigate } from "react-router-dom";
+import styled, { css, keyframes } from "styled-components";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { ObjectId } from "mongodb";
@@ -53,6 +53,8 @@ interface AdverInner {
 interface Type {
   type: number;
 }
+
+interface ChapterNavItems {}
 
 // 카테고리 클릭후 나오는 상품 메인사진
 
@@ -432,6 +434,26 @@ export interface productList {
       optionStock: String;
       optionUse: String;
       deleteBtn: String;
+      optionName1: String;
+      optionValue1: String;
+      optionName2: String;
+      optionValue2: String;
+      optionName3: String;
+      optionValue3: String;
+      optionName4: String;
+      optionValue4: String;
+      optionName5: String;
+      optionValue5: String;
+      optionName6: String;
+      optionValue6: String;
+    }
+  ];
+  optionList: [
+    {
+      name: string;
+      values: string[];
+      image: [string[]];
+      price: number[];
     }
   ];
   mainImage: string[];
@@ -448,9 +470,18 @@ export interface productList {
   __v: number;
 }
 
-// interface ChapterNav {
-//   columnname: string | undefined;
-// }
+const chapterNavAni = keyframes`
+  0% {
+    opacity: 0;
+  }
+  1% {
+    transform: translateX(160px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+`;
 
 // 아이콘 네비게이션
 const ChapterNav = styled.div`
@@ -462,7 +493,7 @@ const ChapterNav = styled.div`
   background-color: ${(props) => props.theme.chapterNavBG};
   overflow: hidden;
   white-space: nowrap;
-  transition: transform 0.3s ease;
+  /* transition: transform 0.3s ease; */
 
   @media only screen and (max-width: 833px) {
   }
@@ -471,20 +502,15 @@ const ChapterNav = styled.div`
 const ChapterNavWrap = styled.div`
   height: 100%;
   position: relative;
-  /* display: flex; */
-  /* align-items: center; */
-  /* justify-content: center; */
-  /* overflow: hidden; */
-  transition: transform 0.3s ease;
 `;
 
-const ChapterNavItems = styled.ul`
+const ChapterNavItems = styled.ul<ChapterNavItems>`
   overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;
   padding-bottom: 50px;
   margin: 0 34px;
-  /* transition: transform 0.3s ease; */
+  scroll-behavior: smooth;
 `;
 
 const Buttons = styled.button`
@@ -506,7 +532,8 @@ interface ChapterNavButtonsType {
 }
 
 const ChapterNavButtons = styled.div<ChapterNavButtonsType>`
-  display: ${(props) => (props.isChapterNavScroll ? "block" : "none")};
+  opacity: ${(props) => (props.isChapterNavScroll ? "1" : "0")};
+  transition: opacity ${(props) => props.theme.navMobileColorRate} ease-out;
 `;
 
 interface ButtonsType {
@@ -519,11 +546,12 @@ const LeftButton = styled(Buttons)<ButtonsType>`
   left: 0;
   border-right-width: 1px;
   opacity: ${({ scrollLeft }) => (scrollLeft === 0 ? 0 : 1)};
+  color: ${(props) => props.theme.chapterNavArrowColor};
 
-  &::after {
+  /* &::after {
     content: "";
     font-family: SF Pro Icons;
-  }
+  } */
 
   &:hover {
     ${(props) =>
@@ -538,14 +566,18 @@ const LeftButton = styled(Buttons)<ButtonsType>`
 const RightButton = styled(Buttons)<ButtonsType>`
   right: 0;
   border-left-width: 1px;
+  color: ${(props) => props.theme.chapterNavArrowColor};
 
   opacity: ${({ scrollLeft, clientWidth, scrollWidth }) =>
-    scrollLeft && clientWidth && scrollWidth && scrollLeft + clientWidth === scrollWidth ? 0 : 1};
+    (scrollLeft && clientWidth && scrollWidth && scrollLeft + clientWidth >= scrollWidth) ||
+    (scrollLeft && clientWidth && scrollWidth && scrollLeft + clientWidth === scrollWidth)
+      ? 0
+      : 1};
 
-  &::after {
+  /* &::after {
     content: "";
     font-family: SF Pro Icons;
-  }
+  } */
 
   &:hover {
     ${(props) =>
@@ -558,16 +590,13 @@ const RightButton = styled(Buttons)<ButtonsType>`
 `;
 
 interface ChapterNavItem {
-  columnName: string | undefined;
+  columnName?: string | undefined;
   taskName: string;
-  chapterNavRender: boolean;
+  isChapterNavRender: boolean;
 }
 
 const ChapterNavItem = styled.li<ChapterNavItem>`
   display: inline-block;
-  opacity: ${(props) => (props.chapterNavRender ? "0" : "1")};
-  transform: ${(props) => (props.chapterNavRender ? "translateX(160px);" : "translateX(0);")};
-  transition: transform 0.28s cubic-bezier(0.4, 0, 0.6, 1);
   vertical-align: top;
   margin: 0 -0.1176470588em;
   padding: 0 20px;
@@ -581,6 +610,12 @@ const ChapterNavItem = styled.li<ChapterNavItem>`
     margin-right: 0;
     padding-right: 4px;
   }
+
+  ${(props) =>
+    props.isChapterNavRender &&
+    css`
+      animation: ${chapterNavAni} 0.35s backwards;
+    `}
 
   // Watch
   ${(props) => {
@@ -620,29 +655,27 @@ const ChapterNavItem = styled.li<ChapterNavItem>`
 
   // 엔터테인먼트
   ${(props) =>
-    props.columnName === "엔터테인먼트"
-      ? css`
-          padding: 0 15px;
-        `
-      : ""};
+    props.columnName === "엔터테인먼트" &&
+    css`
+      padding: 0 15px;
+    `};
 
   // 고객지원
   ${(props) =>
-    props.columnName === "고객지원"
-      ? css`
-          width: 130px;
-          padding: 0 10px;
-          opacity: 1;
-          transform: translateX(0);
+    props.columnName === "고객지원" &&
+    css`
+      width: 130px;
+      padding: 0 10px;
+      opacity: 1;
+      transform: translateX(0);
 
-          &:first-child {
-            padding: 0 10px;
-          }
-          &:last-child {
-            padding: 0 10px;
-          }
-        `
-      : ""};
+      &:first-child {
+        padding: 0 10px;
+      }
+      &:last-child {
+        padding: 0 10px;
+      }
+    `};
 `;
 
 interface ChapterNavLink {
@@ -951,7 +984,7 @@ const ChapterNavIcon = styled.svg<ChapterNavIcon>`
 `;
 
 interface ChapterNavName {
-  columnName: string | undefined;
+  columnName?: string | undefined;
 }
 
 const ChapterNavName = styled.span<ChapterNavName>`
@@ -1001,26 +1034,26 @@ interface Props {
 
 function Category({ gmId, categoryList, selectedColumn, setSelectedColumn, selectedTask, setSelectedTask, setIsDarkMode }: Props) {
   const { id } = useParams();
+  const location = useLocation();
+
   const navigate = useNavigate();
   const [scrollLeft, setScrollLeft] = useState<number>(0);
   const [clientWidth, setClientWidth] = useState<number>(0);
   const [scrollWidth, setScrollWidth] = useState<number>(0);
 
-  const [chapterNavRender, setRerender] = useState<boolean>(false);
   const [isIdNotFound, setIsIdNotFound] = useState<boolean>(false);
   const [advertise, setAdvertise] = useState<Advertise[]>([]);
 
+  const [isChapterNavRender, setIsChapterNavRender] = useState<boolean>(false);
   const [isChapterNavScroll, setIsChapterNavScroll] = useState<boolean>(false);
-  // console.log(isChapterNavScroll);
+  console.log(isChapterNavRender);
 
   const scrollWrapRef = useRef<HTMLUListElement | null>(null);
-  const scrollListRef = useRef<HTMLLIElement | null>(null);
-
+  const scrollListRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    // setRerender(true);
-    // setTimeout(() => setRerender(false), 200);
-  }, [selectedColumn && selectedColumn.taskIds && selectedColumn.taskIds.length]);
+    setIsChapterNavRender(true);
+  }, []);
 
   useEffect(() => {
     const categoryData = async () => {
@@ -1068,6 +1101,10 @@ function Category({ gmId, categoryList, selectedColumn, setSelectedColumn, selec
 
   const [iconSize, setIconSize] = useState<IconSize[]>([]);
 
+  console.log("scrollLeft " + scrollLeft);
+  console.log("clientWidth " + clientWidth);
+  console.log("scrollWidth " + scrollWidth);
+
   // 선택된 메인 카테고리 (selectedColumn)의 list.icon의 여부를 체크후 width와 height값을 계산하여
   // iconSize 배열에 새롭게 등록합니다.
   // iconSize는 CSS에 width와 height에 사용합니다.
@@ -1112,19 +1149,16 @@ function Category({ gmId, categoryList, selectedColumn, setSelectedColumn, selec
   }, [selectedColumn, selectedTask]);
 
   const handleScroll = (direction) => {
-    const scrollAmount = scrollWidth / 2; // Adjust this value as needed
+    const scrollAmount = scrollWidth / 5; // Adjust this value as needed
     const scrollableElement = scrollWrapRef.current;
 
     if (scrollableElement) {
       if (direction === "left") {
-        // console.log("왼쪽");
         scrollableElement.scrollLeft -= scrollAmount;
-        setScrollLeft(scrollableElement.scrollLeft);
       } else {
-        // console.log("오른쪽");
         scrollableElement.scrollLeft += scrollAmount;
-        setScrollLeft(scrollableElement.scrollLeft);
       }
+      setScrollLeft(scrollableElement.scrollLeft);
     }
   };
 
@@ -1136,18 +1170,23 @@ function Category({ gmId, categoryList, selectedColumn, setSelectedColumn, selec
   useEffect(() => {
     const handleResize = () => {
       const scrollableElement = scrollWrapRef.current;
-    const listRef = scrollListRef.current;
+      const listRef = scrollListRef.current;
 
       if (scrollableElement) {
         console.log("최초실행");
-        console.log(scrollableElement.scrollLeft);
-        console.log(scrollableElement.clientWidth);
-        console.log(scrollableElement.scrollWidth);
-        console.log(window.innerWidth);
-        setClientWidth(scrollableElement.clientWidth!);
-        setScrollWidth(scrollableElement.scrollWidth!);
-        setIsChapterNavScroll(scrollableElement.scrollWidth !== scrollableElement.clientWidth);
-        // console.log(scrollWidth);
+        scrollableElement.scrollLeft = 0;
+
+        const { scrollLeft, clientWidth, scrollWidth } = scrollableElement;
+
+        const timer = setTimeout(() => {
+          if (scrollableElement) {
+            setClientWidth(scrollableElement.clientWidth);
+            setScrollWidth(scrollableElement.scrollWidth);
+            setIsChapterNavScroll(scrollableElement.scrollWidth !== scrollableElement.clientWidth);
+          }
+        }, 1000);
+
+        return () => clearTimeout(timer);
       }
     };
 
@@ -1157,105 +1196,114 @@ function Category({ gmId, categoryList, selectedColumn, setSelectedColumn, selec
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, [location]);
 
-  // useEffect(() => {
-  //   const scrollableElement = scrollWrapRef.current;
-  //   const listRef = scrollListRef.current;
-
-  //   if (scrollableElement && listRef) {
-  //     console.log(scrollLeft);
-  //     console.log(scrollableElement.scrollWidth);
-  //     console.log(scrollableElement.clientWidth);
-  //     // setIsChapterNavScroll(scrollableElement.scrollWidth > scrollableElement.clientWidth);
-  //   }
-  // }, [selectedColumn?.taskIds]);
+  const renderAdvertise = (advertise: any) => {
+    return (
+      <AdverWrap key={advertise._id} className="AdverWrap">
+        <AdverWrap2 className="AdverWrap2" backcolor={advertise.backcolor}>
+          <AdverWidth>
+            <AdverInner className="AdverInner" type={advertise.type}>
+              <AdverTextWrap type={advertise.type}>
+                <AdverSubTitle type={advertise.type}>{advertise.subtitle}</AdverSubTitle>
+                <AdverMainTitle type={advertise.type}>{advertise.maintitle}</AdverMainTitle>
+                <AdverDetail type={advertise.type}>{advertise.detail}</AdverDetail>
+                <AdverSubDetail type={advertise.type}>{advertise.subdetail}</AdverSubDetail>
+                <Links type={advertise.type}>
+                  <BuyLink to={`/shop/products/${advertise.url}`}>구입하기</BuyLink>
+                  <DetailLink to={`/shop/products/${advertise.url}`}>더 알아보기</DetailLink>
+                </Links>
+              </AdverTextWrap>
+              {advertise.type !== 2 && <ShippingWrap></ShippingWrap>}
+              <AdverImageWrap type={advertise.type}>
+                <AdverImage type={advertise.type} src={advertise.image} />
+              </AdverImageWrap>
+            </AdverInner>
+          </AdverWidth>
+        </AdverWrap2>
+      </AdverWrap>
+    );
+  };
 
   return (
     <>
       {!isIdNotFound ? (
         <>
-          <ChapterNav className="ChapterNav">
+          <ChapterNav className="ChapterNav" ref={scrollListRef}>
             <ChapterNavWrap className="ChapterNavWrap">
-              <ChapterNavItems className="ChapterNavItems" ref={scrollWrapRef} onScroll={touchScroll}>
+              <ChapterNavItems className="ChapterNavItems" id="test" ref={scrollWrapRef} onScroll={touchScroll}>
                 {selectedColumn?.taskIds?.map((taskId: any, index: number) => {
                   if (taskId.chapterNavHide) return null;
                   const iconItem = iconSize.find((item) => item.name === taskId.name);
                   // taskId.subTaskIds 배열이 비어있지 않으면
-                    return (
-                      <>
-                        <ChapterNavItem
-                          key={index}
-                          className="ChapterNavItem"
-                          columnName={selectedColumn.name}
-                          taskName={taskId.name}
-                          chapterNavRender={chapterNavRender}
-                          ref={scrollListRef}
-                        >
-                          <ChapterNavLink
-                            className="ChapterNavLink"
-                            to={`${taskId.subTaskIds && taskId.subTaskIds.length > 0 ? '../' : '/shop/products/'}${taskId.url}`}
-                            columnName={selectedColumn.name}
-                            taskName={taskId.name}
-                            type={taskId.type}
-                          >
-                            {iconItem?.icon !== "" && (
-                              <ChapterNavIcon
-                                className="ChapterNavIcon"
-                                columnName={selectedColumn.name}
-                                taskName={taskId.name}
-                                parentID={taskId.parentID}
-                                icon={iconItem?.icon}
-                                width={iconItem?.width}
-                                height={iconItem?.height}
-                                darkMode={selectedColumn.darkMode}
-                              />
-                            )}
-                            <ChapterNavName className="ChapterNavName" columnName={selectedColumn.name}>
-                              {taskId.name}
-                            </ChapterNavName>
-                            {/* <span className="chapternav-new">New</span> */}
-                          </ChapterNavLink>
-                        </ChapterNavItem>
-                      </>
-                    );
-                })}
-
-                {selectedTask?.subTaskIds?.map((taskId: any) => {
-                  if (taskId.chapterNavHide) return null;
-                  const iconItem = iconSize.find((item) => item.name === taskId.name);
                   return (
-                    <>
-                      <ChapterNavItem
-                        className="ChapterNavItem"
-                        columnName={selectedTask.name}
+                    <ChapterNavItem
+                      key={taskId._id}
+                      className="ChapterNavItem"
+                      columnName={selectedColumn?.name}
+                      taskName={taskId.name}
+                      isChapterNavRender={isChapterNavRender}
+                    >
+                      <ChapterNavLink
+                        className="ChapterNavLink"
+                        to={`${taskId.subTaskIds && taskId.subTaskIds.length > 0 ? "../" : "/shop/products/"}${taskId.url}`}
+                        columnName={selectedColumn?.name}
                         taskName={taskId.name}
-                        chapterNavRender={chapterNavRender}
-                        ref={scrollListRef}
+                        type={taskId.type}
                       >
-                        <ChapterNavLink
-                          className="ChapterNavLink"
-                          to={`/shop/products/${taskId.url}`}
-                          columnName={selectedTask.name}
-                          taskName={taskId.name}
-                        >
+                        {iconItem?.icon !== "" && (
                           <ChapterNavIcon
                             className="ChapterNavIcon"
-                            columnName={selectedTask.name}
+                            columnName={selectedColumn?.name}
                             taskName={taskId.name}
                             parentID={taskId.parentID}
                             icon={iconItem?.icon}
                             width={iconItem?.width}
                             height={iconItem?.height}
-                            darkMode={taskId.darkMode}
+                            darkMode={selectedColumn.darkMode}
                           />
-                          <ChapterNavName className="ChapterNavName" columnName={selectedTask.name}>
-                            {taskId.name}
-                          </ChapterNavName>
-                          {/* <span className="chapternav-new">New</span> */}
-                        </ChapterNavLink>
-                      </ChapterNavItem>
-                    </>
+                        )}
+                        <ChapterNavName className="ChapterNavName" columnName={selectedColumn?.name}>
+                          {taskId.name}
+                        </ChapterNavName>
+                        {/* <span className="chapternav-new">New</span> */}
+                      </ChapterNavLink>
+                    </ChapterNavItem>
+                  );
+                })}
+                {selectedTask?.subTaskIds?.map((taskId: any, index: number) => {
+                  if (taskId.chapterNavHide) return null;
+                  const iconItem = iconSize.find((item) => item.name === taskId.name);
+                  return (
+                    <ChapterNavItem
+                      key={index}
+                      className="ChapterNavItem"
+                      columnName={selectedTask.name}
+                      taskName={taskId.name}
+                      isChapterNavRender={isChapterNavRender}
+                    >
+                      <ChapterNavLink
+                        className="ChapterNavLink"
+                        to={`/shop/products/${taskId.url}`}
+                        columnName={selectedTask.name}
+                        taskName={taskId.name}
+                      >
+                        <ChapterNavIcon
+                          className="ChapterNavIcon"
+                          columnName={selectedTask.name}
+                          taskName={taskId.name}
+                          parentID={taskId.parentID}
+                          icon={iconItem?.icon}
+                          width={iconItem?.width}
+                          height={iconItem?.height}
+                          darkMode={taskId.darkMode}
+                        />
+                        <ChapterNavName className="ChapterNavName" columnName={selectedTask.name}>
+                          {taskId.name}
+                        </ChapterNavName>
+                        {/* <span className="chapternav-new">New</span> */}
+                      </ChapterNavLink>
+                    </ChapterNavItem>
                   );
                 })}
               </ChapterNavItems>
@@ -1264,102 +1312,45 @@ function Category({ gmId, categoryList, selectedColumn, setSelectedColumn, selec
                   className="ChapterNavButton ChapterNavButton-Left"
                   onClick={() => handleScroll("left")}
                   scrollLeft={scrollLeft}
-                  // scrollWidth={scrollWidth}
-                ></LeftButton>
+                  scrollWidth={scrollWidth}
+                >
+                  <svg width="7" height="13" viewBox="0 0 7 13" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      fill="currentcolor"
+                      d="m2.252 6.5001s0-.0001 0-.0001l4.4336-4.877c.3438-.3789.3164-.9648-.0625-1.3086s-.9648-.3174-1.3086.0625l-5 5.5c-.3212.3535-.3212.8927 0 1.2462l5 5.5c.3438.3799.9297.4062 1.3086.0625s.4062-.9297.0625-1.3086z"
+                    ></path>
+                  </svg>
+                </LeftButton>
                 <RightButton
                   className="ChapterNavButton ChapterNavButton-Right"
                   onClick={() => handleScroll("right")}
                   scrollLeft={scrollLeft}
                   clientWidth={clientWidth}
                   scrollWidth={scrollWidth}
-                ></RightButton>
+                >
+                  <svg width="7" height="13" viewBox="0 0 7 13" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      fill="currentcolor"
+                      d="m4.748 6.5001s0-.0001 0-.0001l-4.4336-4.877c-.3438-.3789-.3164-.9649.0625-1.3086s.9648-.3174 1.3086.0625l5 5.5c.3213.3535.3213.8927 0 1.2462l-5 5.5c-.3438.3799-.9297.4062-1.3086.0625s-.4062-.9297-.0625-1.3086l4.4336-4.877z"
+                    ></path>
+                  </svg>
+                </RightButton>
               </ChapterNavButtons>
             </ChapterNavWrap>
           </ChapterNav>
           <Adver className="ProductsWrap">
-            {advertise?.map((advertise: any, index: any) => {
-              return (
-                <AdverWrap key={index} className="AdverWrap">
-                  {advertise.type === 0 && (
-                    <AdverWrap2 className="AdverWrap2" backcolor={advertise.backcolor}>
-                      <AdverWidth>
-                        <AdverInner className="AdverInner" type={0}>
-                          <AdverTextWrap type={0}>
-                            <AdverSubTitle type={0}>{advertise.subtitle}</AdverSubTitle>
-                            <AdverMainTitle type={0}>{advertise.maintitle}</AdverMainTitle>
-                            <AdverDetail type={0}>{advertise.detail}</AdverDetail>
-                            <AdverSubDetail type={0}>{advertise.subdetail}</AdverSubDetail>
-                            <Links type={0}>
-                              <BuyLink to={`/shop/products/${advertise.url}`}>구입하기</BuyLink>
-                              <DetailLink to={`/shop/products/${advertise.url}`}>더 알아보기</DetailLink>
-                            </Links>
-                          </AdverTextWrap>
-                          <ShippingWrap></ShippingWrap>
-                          <AdverImageWrap type={0}>
-                            <AdverImage type={0} src={advertise.image} />
-                          </AdverImageWrap>
-                        </AdverInner>
-                      </AdverWidth>
-                    </AdverWrap2>
-                  )}
-                  {advertise.type === 1 && (
-                    <AdverWrap2 className="AdverWrap2" backcolor={advertise.backcolor}>
-                      <AdverWidth>
-                        <AdverInner className="AdverInner" type={1}>
-                          <AdverTextWrap type={1}>
-                            <AdverSubTitle type={1}>{advertise.subtitle}</AdverSubTitle>
-                            <AdverMainTitle type={1}>{advertise.maintitle}</AdverMainTitle>
-                            <AdverDetail type={1}>{advertise.detail}</AdverDetail>
-                            <AdverSubDetail type={1}>{advertise.subdetail}</AdverSubDetail>
-                            <Links type={1}>
-                              <BuyLink to={`/shop/products/${advertise.url}`}>구입하기</BuyLink>
-                              <DetailLink to={`/shop/products/${advertise.url}`}>더 알아보기</DetailLink>
-                            </Links>
-                          </AdverTextWrap>
-
-                          <ShippingWrap></ShippingWrap>
-                          <AdverImageWrap type={1}>
-                            <AdverImage type={1} src={advertise.image} />
-                          </AdverImageWrap>
-                        </AdverInner>
-                      </AdverWidth>
-                    </AdverWrap2>
-                  )}
-                  {advertise.type === 2 && (
-                    <AdverWrap2 className="AdverWrap2" backcolor={advertise.backcolor}>
-                      <AdverWidth>
-                        <AdverInner className="AdverInner" type={2}>
-                          <AdverTextWrap type={2}>
-                            <AdverSubTitle type={2}>{advertise.subtitle}</AdverSubTitle>
-                            <AdverMainTitle type={2}>{advertise.maintitle}</AdverMainTitle>
-                            <AdverDetail type={2}>{advertise.detail}</AdverDetail>
-                            <AdverSubDetail type={2}>{advertise.subdetail}</AdverSubDetail>
-                            <Links type={2}>
-                              <BuyLink to={`/shop/products/${advertise.url}`}>구입하기</BuyLink>
-                              <DetailLink to={`/shop/products/${advertise.url}`}>더 알아보기</DetailLink>
-                            </Links>
-                          </AdverTextWrap>
-                          <AdverImageWrap type={2}>
-                            <AdverImage type={2} src={advertise.image} />
-                          </AdverImageWrap>
-                        </AdverInner>
-                      </AdverWidth>
-                    </AdverWrap2>
-                  )}
-                </AdverWrap>
-              );
+            {advertise?.map((advertise: any, index: number) => {
+              return renderAdvertise(advertise);
             })}
           </Adver>
         </>
       ) : (
-        <>
-          <div style={{ margin: "150px auto" }}>
-            <div style={{ fontSize: "48px", fontWeight: "700", textAlign: "center" }}>
-              <p>찾으시는 페이지가</p>
-              <p>없는 듯 하네요.</p>
-            </div>
+        <div style={{ margin: "150px auto" }}>
+          <div style={{ fontSize: "48px", fontWeight: "700", textAlign: "center" }}>
+            <p>찾으시는 페이지가</p>
+            <p>없는 듯 하네요.</p>
           </div>
-        </>
+        </div>
       )}
     </>
   );

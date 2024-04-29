@@ -373,7 +373,15 @@
                                 z-index: 1;
                                 border: 1px solid rgba(0, 0, 0, 0.15);
                                 border-radius: 20px;
-                                width: 500px;
+                                width: 700px;
+                            }
+
+                            #display-flex {
+                                display: flex;
+                            }
+
+                            #display-none {
+                                display: none;
                             }
                         }
 

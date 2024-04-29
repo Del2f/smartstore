@@ -34,7 +34,6 @@ function ImageUploadBox( props: any ) {
     try {
 
       for (const file of files) {
-        console.log(file)
         if (!file.type.startsWith("image/")) continue;
         const reader = new FileReader();
         reader.onloadend = (e: any) => {
@@ -73,6 +72,7 @@ function ImageUploadBox( props: any ) {
 
   const changeHandler = (event: any) => {
     const files = event.target.files;
+    console.log(files[0])
     handleFiles(files);
     event.target.value = ''; // 같은 파일 업로드를 위한 초기화
   };

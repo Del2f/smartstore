@@ -37,7 +37,7 @@ export const lightTheme: DefaultTheme = {
   chapterNavBG: "rgba(245,245,247,.6)",
   chapterNavText: "#1d1d1f",
   chapterNavTextHover: "#06c",
-  chapterNavArrowColor: "rgb(210,210,215)",
+  chapterNavArrowColor: "rgb(29,29,31)",
   chapterNavArrowBorderColor: "#d2d2d7",
 
   footerBG: "rgb(245,245,247)",
