@@ -340,7 +340,7 @@ function Cart({ navCart, setNavCart }: Props) {
   const [isAnimating, setIsAnimating] = useState({});
   const [cartList, setCartList] = useState<cartListType[]>();
   const [payment, setPayment] = useState<number>(0);
-  console.log(backupCartList);
+  console.log(cartList);
 
   const refs = useRef<HTMLDivElement[]>([]);
 
@@ -476,7 +476,7 @@ function Cart({ navCart, setNavCart }: Props) {
   };
 
   const fulfillment = () => {
-    if (cartList && cartList.length > 1) {
+    if (cartList && cartList.length > 0) {
       navigate("../fulfillment");
     }
   };
