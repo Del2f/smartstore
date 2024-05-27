@@ -891,7 +891,7 @@ function Advertise(props: Props) {
                             </TypeBox>
                           </TypeBoxWrap>
                           <h3 className="cateInfo-title">광고 미리보기</h3>
-                          <div ref={imgRef}>
+                          <div className="cateInfo-wrap" ref={imgRef}>
                             {adType === 0 && (
                               <AdverPreview adBackColor={adBackColor}>
                                 <div id="input-inner" style={{ marginTop: "50px" }}>
@@ -1046,7 +1046,7 @@ function Advertise(props: Props) {
                             )}
                             {adType === 2 && (
                               <AdverPreviewColumn adBackColor={adBackColor}>
-                                <div style={{}}>
+                                <div style={{ paddingLeft: '100px'}}>
                                   <div className="adver-input-type3-wrap" style={{ marginTop: "40px" }}>
                                     <input
                                       type="text"

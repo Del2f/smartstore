@@ -1819,7 +1819,6 @@ function Category(props: Props) {
                     </div>
                   </div>
                 )}
-
                 <div className="box second flex flex-ju-bt flex-di-row">
                   <div ref={inputRef} style={{ padding: "0 20px" }}>
                     <div>

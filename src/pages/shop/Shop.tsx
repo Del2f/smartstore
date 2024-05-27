@@ -999,11 +999,24 @@ export const SubMenuList = styled.div<SubMenuListType>`
   & > div.right {
     width: 50.5%;
     text-align: right;
-    margin-top: -4px;
   }
 
   @media only screen and (max-width: 833px) {
     width: 100%;
+
+    &.cart {
+    display: flex;
+    flex-direction: column;
+  }
+
+  & > div.left {
+    width: 50%;
+  }
+
+  & > div.right {
+    margin-top: 20px;
+    width: 385px;
+  }
 
     &:first-child {
       flex: 100%;
@@ -1075,8 +1088,12 @@ export const SubMenuText = styled.h2<SubMenuTextType>`
   }
 `;
 
+const SubMenuHeader = styled.h2`
+
+`
+
 // 메뉴 리스트 낱개
-export const SubMenuLi = styled.li<SubMenuLiType>`
+export const SubMenuLi = styled.div<SubMenuLiType>`
   --nav-item-number: ${(props) => props.number};
   --nav-item-total: ${(props) => props.total};
 
@@ -1126,7 +1143,7 @@ export const SubMenuLi = styled.li<SubMenuLiType>`
 
   &.cart {
     padding: 0;
-    width: 480px;
+    /* width: 480px; */
     padding-bottom: 24px;
   }
 
@@ -1138,6 +1155,14 @@ export const SubMenuLi = styled.li<SubMenuLiType>`
     display: flex;
     padding: 3px 0px 4px;
     height: 100%;
+
+  &.cart {
+    width: 100%;
+  }
+
+  svg {
+    fill: ${(props) => props.theme.navMain};
+  }
 
     /* ${(props) =>
       props.isNavSecondMenuShow
@@ -3156,9 +3181,9 @@ function Shop() {
                                     isSubCateShow={isSubCateShow}
                                     total={7}
                                   >
-                                    <NavCart.Link to={"./cart"} className="cartcheck">
+                                    <NavCart.Button to={"./cart"} className="cartcheck">
                                       장바구니 확인
-                                    </NavCart.Link>
+                                    </NavCart.Button>
                                   </SubMenuLi>
                                 </div>
                               </SubMenuList>
