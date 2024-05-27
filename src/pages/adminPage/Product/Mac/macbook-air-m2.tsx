@@ -206,7 +206,7 @@ function MacBookAirM2() {
 
     return () => {
       // Clean up when component unmounts
-      document.documentElement.style.overflow = "auto";
+      document.documentElement.style.overflow = "visible";
     };
   }, [showModal]);
 

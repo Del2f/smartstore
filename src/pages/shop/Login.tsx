@@ -1,7 +1,7 @@
 import axios from "../../api/axios";
 import styled, { css } from "styled-components";
 import { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { UserLogin } from "../../store/userSlice";
 import { useCookies } from "react-cookie";
@@ -331,6 +331,7 @@ function Login({ setNavCart }: Props) {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [Id, setId] = useState<string>("");
   const [Password, setPassword] = useState<string>("");
@@ -366,7 +367,7 @@ function Login({ setNavCart }: Props) {
             }
             navigate(-2);
           };
-        }
+        } 
       } catch (errors) {
         console.log(errors);
       }
@@ -443,8 +444,17 @@ function Login({ setNavCart }: Props) {
         return;
       }
 
+      let redirectUrl = new URLSearchParams(location.search).get('redirect') || '/';
+      redirectUrl = redirectUrl.replace('/smartstore/', '/');
       dispatch(UserLogin(res.data.user));
-      navigate("/shop");
+      const from = location.state?.from || '/';
+      console.log(from)
+
+      if (location.search === '') {
+        navigate(from, { replace: true });
+      } else {
+        navigate(redirectUrl);
+      }
 
       window.location.reload();
     } catch (err) {

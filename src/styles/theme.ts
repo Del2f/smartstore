@@ -34,6 +34,10 @@ export const lightTheme: DefaultTheme = {
   navCartBadgeBG: "rgb(0, 0, 0)",
   navCartBadge: "rgb(255, 255, 255)",
 
+  cartText: "#1d1d1f",
+  cartCountText: "#6e6e73",
+
+
   chapterNavBG: "rgba(245,245,247,.6)",
   chapterNavText: "#1d1d1f",
   chapterNavTextHover: "#06c",
@@ -52,6 +56,8 @@ export const lightTheme: DefaultTheme = {
   background1: "#fefefe",
   background2: "#fefefe", // 다이얼로그
   text: "#202124",
+  text2: "#1d1d1f",
+
   textHover: "rgba(255,255,255,.8)",
   keyBg1: "#e3e1e3",
   keyBg2: "#cfcbcf",
@@ -86,8 +92,12 @@ export const darkTheme: DefaultTheme = {
   navCartBtnBG: "rgb(0, 113, 227)",
   navCartBtnBGHover: "#0077ED",
   navCartBtn: "rgb(255, 255, 255)",
-  navCartBadgeBG: "rgb(0, 0, 0)",
-  navCartBadge: "rgb(255, 255, 255)",
+  navCartBadgeBG: "rgb(255, 255, 255)",
+  navCartBadge: "rgb(0, 0, 0)",
+
+  cartText: "#e8e8ed",
+  cartCountText: "#6e6e73",
+
 
   chapterNavBG: "black",
   chapterNavText: "#f5f5f7",
@@ -107,6 +117,7 @@ export const darkTheme: DefaultTheme = {
   background1: "#202124",
   background2: "#38393e", // 다이얼로그
   text: "rgba(255,255,255,.8)",
+  text2: "rgba(255,255,255,.8)",
   textHover: "rgba(255,255,255,.8)",
   keyBg1: "#403c40",
   keyBg2: "#766c76",

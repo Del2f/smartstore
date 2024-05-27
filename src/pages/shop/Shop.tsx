@@ -1,7 +1,7 @@
 import axios from "../../api/axios";
 import styled, { ThemeProvider, css, keyframes } from "styled-components";
 import { motion } from "framer-motion";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useLayoutEffect } from "react";
 import { Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useCookies } from "react-cookie";
@@ -19,6 +19,8 @@ import { cartListType } from "./Cart";
 import { darkTheme, lightTheme } from "@styles/theme";
 import { selectCurrentUser } from "../../store/userSlice";
 import "./Shop.scss";
+import Fulfillment from "src/pages/shop/fulfillment";
+import Shipping from "src/pages/shop/Shipping";
 
 let currentPath = "";
 
@@ -361,8 +363,8 @@ const NavTabMenuWrap = styled.div<NavTabType>`
               visibility: visible;
               transition: visibility var(--nav-mobile-height-rate) step-start;
             `
-    : css`
-          overflow: visible;
+          : css`
+              overflow: visible;
               visibility: hidden;
               transition: visibility var(--nav-mobile-height-rate) step-end;
             `}
@@ -609,6 +611,7 @@ export const NavTabText = styled.span<NavTabTextType>`
   color: ${(props) => props.theme.navMain};
   transition: color 0.32s cubic-bezier(0.4, 0, 0.6, 1);
   white-space: nowrap;
+  position: relative;
 
   &.cart {
     position: relative;
@@ -752,7 +755,7 @@ const Badge = styled.span`
   display: inline-block;
   position: absolute;
   top: 20px;
-  left: 13px;
+  left: 4px;
   z-index: 1;
   width: 1.3em;
   height: 1.3em;
@@ -780,6 +783,7 @@ const Badge = styled.span`
 const BadgeNumber = styled.span`
   display: block;
   position: relative;
+  left: -1px;
   z-index: 2;
   user-select: none;
 `;
@@ -1004,8 +1008,6 @@ export const SubMenuList = styled.div<SubMenuListType>`
     &:first-child {
       flex: 100%;
     }
-
-
   }
 `;
 
@@ -1019,8 +1021,6 @@ export const SubMenuListItem = styled.ul<SubMenuListItemType>`
   @media only screen and (max-width: 833px) {
     display: block;
     padding-bottom: 52px;
-
-
   }
 `;
 
@@ -1064,7 +1064,7 @@ export const SubMenuText = styled.h2<SubMenuTextType>`
     font-size: 11px;
     padding-bottom: 6px;
     margin-top: 36px;
-    color: #6e6e73;
+    color: ${(props) => props.theme.cartText};
   }
 
   @media only screen and (max-width: 833px) {
@@ -1266,10 +1266,27 @@ const NavCart = {
     font-weight: 600;
     letter-spacing: 0.009em;
     margin-bottom: 24px;
-    color: #333336;
+    color: ${(props) => props.theme.cartText};
   `,
+  NameWrap: styled.div`
+    display: flex;
+  `,
+  ImageWrap: styled.div`
+    display: flex;
+    align-items: center;
 
+    width: 64px;
+    height: 64px;
+
+    img {
+      width: 100%;
+    }
+  `,
   ItemWrap: styled.div``,
+  Count: styled.div`
+    margin-left: 3px;
+    color: ${(props) => props.theme.cartCountText};
+  `,
   Item: styled.div``,
   Link: styled(Link)`
     --cart-button-background: ${(props) => props.theme.navCartBtnBG};
@@ -1280,29 +1297,28 @@ const NavCart = {
     align-items: center;
     text-decoration: none;
     padding: 1px 8px 1px 2px;
-
-    &.cartcheck {
-      background: ${(props) => props.theme.navCartBtnBG};
-      color: ${(props) => props.theme.navCartBtn};
-      padding: 8px 16px;
-      border-radius: 980px;
-      font-size: 16px;
-      font-weight: 400;
-      line-height: 1.1764805882;
-      height: 36px;
-
-      &:hover {
-        background: ${(props) => props.theme.navCartBtnBGHover};
-      }
-    }
   `,
   Name: styled.span`
     --nav-item-number: 1;
     font-size: 12px;
     font-weight: 600;
     padding-left: 24px;
-    color: #333336;
+    color: ${(props) => props.theme.cartText};
     max-width: 392px;
+  `,
+  Button: styled(Link)`
+    background: ${(props) => props.theme.navCartBtnBG};
+    color: ${(props) => props.theme.navCartBtn};
+    padding: 8px 16px;
+    border-radius: 980px;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.1764805882;
+    height: 36px;
+
+    &:hover {
+      background: ${(props) => props.theme.navCartBtnBGHover};
+    }
   `,
 
   // 프로필
@@ -1730,7 +1746,7 @@ function Shop() {
 
   // 암호화된 id를 입력.
   const [gmId] = useState<GmIdType>({ id: "thanks6" });
-  const [cookies, removeCookie] = useCookies(["userjwt"]);
+  const [cookies, setCookie, removeCookie] = useCookies(["userjwt"]);
 
   // 카테고리 클릭시 퀵메뉴
   const [selectedColumn, setSelectedColumn] = useState<ColumnType | null>(null);
@@ -1740,7 +1756,7 @@ function Shop() {
     const savedCategoryList = sessionStorage.getItem("categoryList");
     return savedCategoryList ? JSON.parse(savedCategoryList) : [];
   });
-  console.log(categoryList);
+  // console.log(categoryList);
 
   const [modifyTime, setModifyTime] = useState(() => {
     const savedModifyTime = sessionStorage.getItem("modifyTime");
@@ -1756,12 +1772,6 @@ function Shop() {
   const [isMobile, setIsMobile] = useState<boolean>(false); // 모바일
   const [isNavFirstMenuShow, setIsNavFirstMenuShow] = useState<boolean>(false); // 모바일 메뉴 1번째 탭
   const [isNavSecondMenuShow, setIsNavSecondMenuShow] = useState<boolean>(false); // 모바일 메뉴 2번째 탭
-
-  // console.log("isMobile " + isMobile);
-  // console.log("selectedCateName " + selectedCateName);
-  console.log("isSubCateShow " + isSubCateShow);
-  console.log("isNavFirstMenuShow " + isNavFirstMenuShow);
-  console.log("isNavSecondMenuShow " + isNavSecondMenuShow);
 
   // footer columns
   const [selectedFooterName, setSelectedFooterName] = useState<string>(""); // footer 선택된 이름
@@ -1804,9 +1814,9 @@ function Shop() {
       // document.documentElement.style.paddingRight = "0";
       document.documentElement.style.paddingInlineEnd = "0";
 
-      document.documentElement.style.overflow = "auto";
+      document.documentElement.style.overflow = "visible";
 
-      document.body.style.overflow = "auto";
+      document.body.style.overflow = "visible";
       document.body.style.removeProperty("position");
       document.body.style.removeProperty("top");
       document.body.style.removeProperty("left");
@@ -1815,8 +1825,8 @@ function Shop() {
     }
 
     return () => {
-      document.body.style.overflow = "auto";
-      document.documentElement.style.overflow = "auto";
+      document.body.style.overflow = "visible";
+      document.documentElement.style.overflow = "visible";
     };
   }, [isMobile, isSubCateShow]);
 
@@ -1849,34 +1859,37 @@ function Shop() {
     setSelectedCateName("");
   }, [location]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const userData = async () => {
       try {
         const res = await axios.post("/smartstore/shop", gmId, {
           withCredentials: true,
         });
         const newModifyTime = res.data.modifytime;
-        console.log(res.data);
+        // console.log(res.data);
 
-        const shop = res.data.category.find((list) => list.name === "전체상품");
-        if (shop && isHome) {
-          console.log('홈 다크모드 적용')
-          setIsDarkMode(shop.darkMode);
-        }
+        if (res.data) {
+          const shop = res.data.category.find((list) => list.name === "전체상품");
+          if (shop && isHome) {
+            console.log("홈 다크모드 적용");
+            setIsDarkMode(shop.darkMode);
+          }
 
-        if (newModifyTime !== modifyTime) {
+          if (newModifyTime !== modifyTime) {
+            updateCategoryList(res.data.category);
+            setModifyTime(newModifyTime);
+            sessionStorage.setItem("modifyTime", JSON.stringify(newModifyTime));
+          }
+
+          setNavCart(res.data.cart);
           updateCategoryList(res.data.category);
-          setModifyTime(newModifyTime);
-          sessionStorage.setItem("modifyTime", JSON.stringify(newModifyTime));
         }
-
-        updateCategoryList(res.data.category);
       } catch (err) {
         console.log(err);
       }
     };
     userData();
-  }, [gmId]);
+  }, []);
 
   // 임시로 nav 높이 설정. Ref로 높이계산은 실패. length에 곱한 높이를 계산 해야겠음.
   useEffect(() => {
@@ -1925,18 +1938,20 @@ function Shop() {
   // 로그인, 로그아웃
   const account = {
     // 로그인
-    login: () => {
-      navigate("./login");
+    login: (e) => {
+      e.preventDefault();
+      // navigate("./login");
+      navigate("./login", { state: { from: location.pathname } });
       setHeight("44px");
       setIsSubCateShow(false);
     },
 
     // 로그아웃
     logOut: () => {
-      navigate("/shop");
-      removeCookie("userjwt", {
-        path: "/",
-      });
+      // navigate("/shop");
+      // console.log('로그아웃')
+      removeCookie("userjwt", { path: "/" });
+      window.location.reload();
     },
   };
 
@@ -1988,7 +2003,6 @@ function Shop() {
     if (isMobile) {
       subMenuOpen(e, name);
     } else {
-
       timer = setTimeout(() => {
         subMenuOpen(e, name);
       }, 100);
@@ -2053,7 +2067,7 @@ function Shop() {
   // 모바일 하단 메뉴 켜기/닫기
   const NavMobileMenuClick = () => {
     console.log("NavMobileMenuClick");
-    
+
     if (selectedCateName === "search" || selectedCateName === "cart") {
       // 검색 혹은 장바구니를 선택된 상태로 메뉴 클릭시 초기화
       setIsSubCateShow(!isSubCateShow);
@@ -2413,12 +2427,7 @@ function Shop() {
   const renderSubMenu = (list, sections) => {
     return sections.map((section, sectionidx) => (
       <SubMenuList className="SubMenuList main" number={sectionidx + 1} grouptotal={3} key={section.header}>
-        <SubMenuText
-          className="main"
-          isSubCateShow={isSubCateShow}
-          number={1}
-          total={list.taskIds.length + 1}
-        >
+        <SubMenuText className="main" isSubCateShow={isSubCateShow} number={1} total={list.taskIds.length + 1}>
           {section.header}
         </SubMenuText>
         <SubMenuListItem className="SubMenuListItem">
@@ -2438,7 +2447,7 @@ function Shop() {
         </SubMenuListItem>
       </SubMenuList>
     ));
-  }
+  };
 
   return (
     <>
@@ -2628,12 +2637,10 @@ function Shop() {
                             <path d="m13.4575 16.9268h-1.1353a3.8394 3.8394 0 0 0 -7.6444 0h-1.1353a2.6032 2.6032 0 0 0 -2.6 2.6v8.9232a2.6032 2.6032 0 0 0 2.6 2.6h9.915a2.6032 2.6032 0 0 0 2.6-2.6v-8.9231a2.6032 2.6032 0 0 0 -2.6-2.6001zm-4.9575-2.2768a2.658 2.658 0 0 1 2.6221 2.2764h-5.2442a2.658 2.658 0 0 1 2.6221-2.2764zm6.3574 13.8a1.4014 1.4014 0 0 1 -1.4 1.4h-9.9149a1.4014 1.4014 0 0 1 -1.4-1.4v-8.9231a1.4014 1.4014 0 0 1 1.4-1.4h9.915a1.4014 1.4014 0 0 1 1.4 1.4z"></path>
                           </svg>
                         </span>
-                        {navCart && navCart.length > 1 && (
-                          <>
-                            <Badge>
-                              <BadgeNumber>{navCart && navCart.length}</BadgeNumber>
-                            </Badge>
-                          </>
+                        {navCart && navCart.length >= 1 && (
+                          <Badge className="Badge">
+                            <BadgeNumber className="BadgeNumber">{navCart && navCart.length}</BadgeNumber>
+                          </Badge>
                         )}
                       </NavTabText>
                       <SubMenu className="SubMenu" isSubCateShow={isSubCateShow} name={"cart"} selectedCateName={selectedCateName} height={height}>
@@ -2654,21 +2661,26 @@ function Shop() {
                                       <NavCart.H2 className="cart-main-h2">장바구니</NavCart.H2>
                                     </SubMenuLi>
                                     {navCart &&
-                                      navCart.map((list: any, index: any) => {
+                                      navCart.map((cart: any, index: any) => {
                                         if (index < 3) {
                                           return (
                                             <SubMenuLi
+                                              key={index}
                                               name={"cart"}
                                               selectedCateName={selectedCateName}
                                               className="SubMenuLi cart"
                                               number={index + 1}
                                               isSubCateShow={isSubCateShow}
                                               total={7}
-                                              key={list._id}
                                             >
                                               <NavCart.Link to={""} className="NavCart.Link">
-                                                <img src={list.product.mainImage} width="64" height="64" alt="" />
-                                                <NavCart.Name className="NavCart.Name">{list.product.name}</NavCart.Name>
+                                                <NavCart.ImageWrap className="">
+                                                  <img src={cart.mainImage} alt="" />
+                                                </NavCart.ImageWrap>
+                                                <NavCart.NameWrap>
+                                                  <NavCart.Name className="NavCart.Name">{cart.name} </NavCart.Name>
+                                                  <NavCart.Count className="NavCart-Count"> {cart.count}</NavCart.Count>
+                                                </NavCart.NameWrap>
                                               </NavCart.Link>
                                             </SubMenuLi>
                                           );
@@ -2700,9 +2712,9 @@ function Shop() {
                                       isSubCateShow={isSubCateShow}
                                       total={7}
                                     >
-                                      <NavCart.Link to={"./cart"} className="cartcheck">
+                                      <NavCart.Button to={"./cart"} className="cartcheck">
                                         장바구니 확인
-                                      </NavCart.Link>
+                                      </NavCart.Button>
                                     </SubMenuLi>
                                   </div>
                                 </SubMenuList>
@@ -2851,47 +2863,43 @@ function Shop() {
                                   total={7}
                                 >
                                   {!cookies.userjwt ? (
-                                    <>
-                                      <NavCart.ProfileLink to="./login" className="profile">
-                                        <svg
-                                          id="Outlined"
-                                          xmlns="http://www.w3.org/2000/svg"
-                                          className="ac-gn-bagview-nav-svgicon"
-                                          width="11"
-                                          height="16"
-                                          viewBox="0 0 16 25"
-                                        >
-                                          <path
-                                            id="art_"
-                                            d="M15.09,12.5a7.1,7.1,0,1,1-7.1-7.1A7.1077,7.1077,0,0,1,15.09,12.5ZM7.99,6.6a5.89,5.89,0,0,0-4.4609,9.7471c.6069-.9658,2.48-1.6787,4.4609-1.6787s3.8545.7129,4.4615,1.6787A5.89,5.89,0,0,0,7.99,6.6ZM7.99,8.4A2.5425,2.5425,0,0,0,5.5151,11,2.5425,2.5425,0,0,0,7.99,13.6,2.5424,2.5424,0,0,0,10.4653,11,2.5424,2.5424,0,0,0,7.99,8.4Z"
-                                            fill="6E6E73"
-                                          ></path>
-                                        </svg>
-                                        <SubMenuName className="cartprofile" onClick={account.login}>
-                                          로그인
-                                        </SubMenuName>
-                                      </NavCart.ProfileLink>
-                                    </>
+                                    <NavCart.ProfileLink to="./login" className="profile">
+                                      <svg
+                                        id="Outlined"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        className="ac-gn-bagview-nav-svgicon"
+                                        width="11"
+                                        height="16"
+                                        viewBox="0 0 16 25"
+                                      >
+                                        <path
+                                          id="art_"
+                                          d="M15.09,12.5a7.1,7.1,0,1,1-7.1-7.1A7.1077,7.1077,0,0,1,15.09,12.5ZM7.99,6.6a5.89,5.89,0,0,0-4.4609,9.7471c.6069-.9658,2.48-1.6787,4.4609-1.6787s3.8545.7129,4.4615,1.6787A5.89,5.89,0,0,0,7.99,6.6ZM7.99,8.4A2.5425,2.5425,0,0,0,5.5151,11,2.5425,2.5425,0,0,0,7.99,13.6,2.5424,2.5424,0,0,0,10.4653,11,2.5424,2.5424,0,0,0,7.99,8.4Z"
+                                          fill="6E6E73"
+                                        ></path>
+                                      </svg>
+                                      <SubMenuName className="cartprofile" onClick={account.login}>
+                                        로그인
+                                      </SubMenuName>
+                                    </NavCart.ProfileLink>
                                   ) : (
-                                    <>
-                                      <NavCart.ProfileLink to={""} onClick={account.logOut}>
-                                        <svg
-                                          id="Outlined"
-                                          xmlns="http://www.w3.org/2000/svg"
-                                          className="ac-gn-bagview-nav-svgicon"
-                                          width="11"
-                                          height="16"
-                                          viewBox="0 0 16 25"
-                                        >
-                                          <path
-                                            id="art_"
-                                            d="M15.09,12.5a7.1,7.1,0,1,1-7.1-7.1A7.1077,7.1077,0,0,1,15.09,12.5ZM7.99,6.6a5.89,5.89,0,0,0-4.4609,9.7471c.6069-.9658,2.48-1.6787,4.4609-1.6787s3.8545.7129,4.4615,1.6787A5.89,5.89,0,0,0,7.99,6.6ZM7.99,8.4A2.5425,2.5425,0,0,0,5.5151,11,2.5425,2.5425,0,0,0,7.99,13.6,2.5424,2.5424,0,0,0,10.4653,11,2.5424,2.5424,0,0,0,7.99,8.4Z"
-                                            fill="6E6E73"
-                                          ></path>
-                                        </svg>
-                                        <SubMenuName className="cartprofile">{user.name}&nbsp;로그아웃</SubMenuName>
-                                      </NavCart.ProfileLink>
-                                    </>
+                                    <NavCart.ProfileLink to={""} onClick={account.logOut}>
+                                      <svg
+                                        id="Outlined"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        className="ac-gn-bagview-nav-svgicon"
+                                        width="11"
+                                        height="16"
+                                        viewBox="0 0 16 25"
+                                      >
+                                        <path
+                                          id="art_"
+                                          d="M15.09,12.5a7.1,7.1,0,1,1-7.1-7.1A7.1077,7.1077,0,0,1,15.09,12.5ZM7.99,6.6a5.89,5.89,0,0,0-4.4609,9.7471c.6069-.9658,2.48-1.6787,4.4609-1.6787s3.8545.7129,4.4615,1.6787A5.89,5.89,0,0,0,7.99,6.6ZM7.99,8.4A2.5425,2.5425,0,0,0,5.5151,11,2.5425,2.5425,0,0,0,7.99,13.6,2.5424,2.5424,0,0,0,10.4653,11,2.5424,2.5424,0,0,0,7.99,8.4Z"
+                                          fill="6E6E73"
+                                        ></path>
+                                      </svg>
+                                      <SubMenuName className="cartprofile">{user.name}&nbsp;로그아웃</SubMenuName>
+                                    </NavCart.ProfileLink>
                                   )}
                                 </SubMenuLi>
                                 <SubMenuLi
@@ -3039,10 +3047,10 @@ function Shop() {
                                       </SubMenuListItem>
                                     </SubMenuList>
                                     {NavSubMenuList.map((sublist) => {
-                                        if (list.name === sublist.title) {
-                                          return renderSubMenu(list, sublist.sections);
-                                        }
-                                      })}
+                                      if (list.name === sublist.title) {
+                                        return renderSubMenu(list, sublist.sections);
+                                      }
+                                    })}
                                   </SubMenuInner>
                                 </SubMenuHeight>
                               </SubMenu>
@@ -3106,7 +3114,7 @@ function Shop() {
                                       if (index < 3) {
                                         return (
                                           <SubMenuLi
-                                          key={list._id}
+                                            key={index}
                                             name={"cart"}
                                             selectedCateName={selectedCateName}
                                             className="SubMenuLi cart"
@@ -3115,8 +3123,8 @@ function Shop() {
                                             total={7}
                                           >
                                             <NavCart.Link to={""} className="NavCart.Link">
-                                              <img src={list.product.mainImage} width="64" height="64" alt="" />
-                                              <NavCart.Name className="NavCart.Name">{list.product.name}</NavCart.Name>
+                                              <img src={list.mainImage} width="64" height="64" alt="" />
+                                              <NavCart.Name className="NavCart.Name">{list.name}</NavCart.Name>
                                             </NavCart.Link>
                                           </SubMenuLi>
                                         );
@@ -3299,47 +3307,41 @@ function Shop() {
                                 total={7}
                               >
                                 {!cookies.userjwt ? (
-                                  <>
-                                    <NavCart.ProfileLink to="./login" className="profile">
-                                      <svg
-                                        id="Outlined"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        className="ac-gn-bagview-nav-svgicon"
-                                        width="11"
-                                        height="16"
-                                        viewBox="0 0 16 25"
-                                      >
-                                        <path
-                                          id="art_"
-                                          d="M15.09,12.5a7.1,7.1,0,1,1-7.1-7.1A7.1077,7.1077,0,0,1,15.09,12.5ZM7.99,6.6a5.89,5.89,0,0,0-4.4609,9.7471c.6069-.9658,2.48-1.6787,4.4609-1.6787s3.8545.7129,4.4615,1.6787A5.89,5.89,0,0,0,7.99,6.6ZM7.99,8.4A2.5425,2.5425,0,0,0,5.5151,11,2.5425,2.5425,0,0,0,7.99,13.6,2.5424,2.5424,0,0,0,10.4653,11,2.5424,2.5424,0,0,0,7.99,8.4Z"
-                                          fill="6E6E73"
-                                        ></path>
-                                      </svg>
-                                      <SubMenuName className="cartprofile" onClick={account.login}>
-                                        로그인
-                                      </SubMenuName>
-                                    </NavCart.ProfileLink>
-                                  </>
+                                  <NavCart.ProfileLink to={""} className="profile" onClick={(e) => account.login(e)}>
+                                    <svg
+                                      id="Outlined"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      className="ac-gn-bagview-nav-svgicon"
+                                      width="11"
+                                      height="16"
+                                      viewBox="0 0 16 25"
+                                    >
+                                      <path
+                                        id="art_"
+                                        d="M15.09,12.5a7.1,7.1,0,1,1-7.1-7.1A7.1077,7.1077,0,0,1,15.09,12.5ZM7.99,6.6a5.89,5.89,0,0,0-4.4609,9.7471c.6069-.9658,2.48-1.6787,4.4609-1.6787s3.8545.7129,4.4615,1.6787A5.89,5.89,0,0,0,7.99,6.6ZM7.99,8.4A2.5425,2.5425,0,0,0,5.5151,11,2.5425,2.5425,0,0,0,7.99,13.6,2.5424,2.5424,0,0,0,10.4653,11,2.5424,2.5424,0,0,0,7.99,8.4Z"
+                                        fill="6E6E73"
+                                      ></path>
+                                    </svg>
+                                    <SubMenuName className="cartprofile">로그인</SubMenuName>
+                                  </NavCart.ProfileLink>
                                 ) : (
-                                  <>
-                                    <NavCart.ProfileLink to={""} onClick={account.logOut}>
-                                      <svg
-                                        id="Outlined"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        className="ac-gn-bagview-nav-svgicon"
-                                        width="11"
-                                        height="16"
-                                        viewBox="0 0 16 25"
-                                      >
-                                        <path
-                                          id="art_"
-                                          d="M15.09,12.5a7.1,7.1,0,1,1-7.1-7.1A7.1077,7.1077,0,0,1,15.09,12.5ZM7.99,6.6a5.89,5.89,0,0,0-4.4609,9.7471c.6069-.9658,2.48-1.6787,4.4609-1.6787s3.8545.7129,4.4615,1.6787A5.89,5.89,0,0,0,7.99,6.6ZM7.99,8.4A2.5425,2.5425,0,0,0,5.5151,11,2.5425,2.5425,0,0,0,7.99,13.6,2.5424,2.5424,0,0,0,10.4653,11,2.5424,2.5424,0,0,0,7.99,8.4Z"
-                                          fill="6E6E73"
-                                        ></path>
-                                      </svg>
-                                      <SubMenuName className="cartprofile">{user.name}&nbsp;로그아웃</SubMenuName>
-                                    </NavCart.ProfileLink>
-                                  </>
+                                  <NavCart.ProfileLink to={""} onClick={account.logOut}>
+                                    <svg
+                                      id="Outlined"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      className="ac-gn-bagview-nav-svgicon"
+                                      width="11"
+                                      height="16"
+                                      viewBox="0 0 16 25"
+                                    >
+                                      <path
+                                        id="art_"
+                                        d="M15.09,12.5a7.1,7.1,0,1,1-7.1-7.1A7.1077,7.1077,0,0,1,15.09,12.5ZM7.99,6.6a5.89,5.89,0,0,0-4.4609,9.7471c.6069-.9658,2.48-1.6787,4.4609-1.6787s3.8545.7129,4.4615,1.6787A5.89,5.89,0,0,0,7.99,6.6ZM7.99,8.4A2.5425,2.5425,0,0,0,5.5151,11,2.5425,2.5425,0,0,0,7.99,13.6,2.5424,2.5424,0,0,0,10.4653,11,2.5424,2.5424,0,0,0,7.99,8.4Z"
+                                        fill="6E6E73"
+                                      ></path>
+                                    </svg>
+                                    <SubMenuName className="cartprofile">{user.name}&nbsp;로그아웃</SubMenuName>
+                                  </NavCart.ProfileLink>
                                 )}
                               </SubMenuLi>
                               <SubMenuLi
@@ -3401,7 +3403,9 @@ function Shop() {
             {/* <Route path="/mac" element={<Mac />} /> */}
             <Route path="/qna" element={<Qna />} />
             <Route path="/login" element={<Login setNavCart={setNavCart} />} />
-            <Route path="/cart" element={<Cart setNavCart={setNavCart} />} />
+            <Route path="/cart" element={<Cart navCart={navCart} setNavCart={setNavCart} />} />
+            <Route path="/fulfillment" element={<Fulfillment />} />
+            <Route path="/shipping" element={<Shipping />} />
             <Route path="usersign" element={<Usersign />} />
           </Routes>
           <FooterWrap className="FooterWrap">

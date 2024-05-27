@@ -17,6 +17,10 @@ declare module 'styled-components' {
     navCartBtn: string;
     navCartBadgeBG: string;
     navCartBadge: string;
+    cartText: string;
+    cartCountText: string,
+
+
     chapterNavBG: string;
     chapterNavText: string;
     chapterNavTextHover: string;
@@ -35,6 +39,8 @@ declare module 'styled-components' {
     background1: string;
     background2: string;
     text: string;
+    text2: string;
+
     textHover: string;
     keyBg1: string;
     keyBg2: string;

@@ -22,6 +22,11 @@ const GlobalStyles = createGlobalStyle`
         --blue-color: #0071e3; // 자주 사용하는 블루 컬러.
         --gray-color: #f5f5f7; // 자주 사용하는 그레이 컬러
 
+        // shop/buy
+        --btn-background-color: #0071e3;
+        --btn-disabled-opacity: 0.42;
+        --btn-border-radius: 8px;
+
         // shop
         box-sizing: border-box; 
     }

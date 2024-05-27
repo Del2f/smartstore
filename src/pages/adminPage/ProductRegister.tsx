@@ -166,7 +166,7 @@ function ProductRegister(props: Props) {
   const [DetailImage, setDetailImage] = useState<any>([]);
   const [mainSpec, setMainSpec] = useState<any>([]);
   const [spec, setSpec] = useState<any>([]);
-  const [Delivery, setDelivery] = useState<Number | null>(null);
+  const [Delivery, setDelivery] = useState<Number | null>(0);
 
   // 오류메시지 상태저장
   const [NameMessage, setNameMessage] = useState<string>("");
@@ -478,11 +478,11 @@ function ProductRegister(props: Props) {
       return;
     }
 
-    if (e.target.value.length === 1) {
-      setDeliveryMessage("최소 10원 이상 입력해주세요.");
-      setIsDelivery(false);
-      return;
-    }
+    // if (e.target.value.length === 1) {
+    //   setDeliveryMessage("최소 10원 이상 입력해주세요.");
+    //   setIsDelivery(false);
+    //   return;
+    // }
 
     if (e.target.value.length === 10) {
       setDeliveryMessage("최대 999,999,990원 이하로 입력해주세요.");

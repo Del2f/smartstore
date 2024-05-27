@@ -20,7 +20,7 @@ export const userSlice = createSlice({
 });
 
 // actions
-//dispatch로 액션을 전달해 상태를 어떻게 변화시킬지를 결정함
+// dispatch로 액션을 전달해 상태를 어떻게 변화시킬지를 결정함
 export const { UserLogin } = userSlice.actions;
 
 //reducer

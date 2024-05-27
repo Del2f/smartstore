@@ -10,10 +10,22 @@ interface Carousel {
   height: string;
 }
 
+const CarouselWrap = styled.div``;
+
 const Carousel = styled.div<Carousel>`
-  overflow: hidden;
-  width: ${(props) => props.width};
-  height: ${(props) => props.height};
+  flex-basis: calc(100% - 22.82353rem);
+  height: calc(100vh - 109px);
+  max-width: calc(100% - 22.82353rem);
+  min-height: 540px;
+  padding-inline-end: 3.5294117647rem;
+  padding-top: 40px;
+
+  position: sticky;
+  top: 100px;
+
+  /* overflow: hidden; */
+  /* width: ${(props) => props.width}; */
+  /* height: ${(props) => props.height}; */
 
   .slick-dots {
     bottom: 40px;
@@ -65,43 +77,42 @@ interface ImgContentType {
 }
 
 const ImgItemWrap = styled.div<Carousel>`
-    align-items: center;
-    border-radius: 18px;
-    display: flex;
-    flex-direction: column;
-    height: calc(100vh - 189px);
-    justify-content: center;
-    min-height: 460px;
-    min-width: 592px;
+  align-items: center;
+  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 189px);
+  justify-content: center;
+  min-height: 460px;
+  min-width: 592px;
 `;
 
 const ImgItem = styled.div<Carousel>`
-    align-items: center;
-    display: flex;
-    justify-content: center;
-    position: relative;
-    /* width: ${(props) => props.width};
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  /* width: ${(props) => props.width};
   height: ${(props) => props.height}; */
-    width: 100%;
+  width: 100%;
   height: 100%;
 `;
 
 const ImgContent = styled.div`
-
-align-items: center;
-    border-radius: 18px;
-    display: flex;
-    height: 100%;
-    justify-content: center;
-    max-height: 1200px;
-    overflow: hidden;
-    position: relative;
-    width: 100%;
+  align-items: center;
+  border-radius: 18px;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  max-height: 1200px;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
 `;
 
 const ImgWrap = styled.div`
-    height: 100%;
-    width: auto;
+  height: 100%;
+  width: auto;
 
   img {
     width: auto;
@@ -192,18 +203,19 @@ function Swiper_Buy({ mainimage, subimage }: Props) {
   const [width, setWidth] = useState<string>("1285px");
   const [height, setHeight] = useState<string>("722px");
   const widthRef = useRef<HTMLDivElement>(null);
-  console.log(width);
 
   useEffect(() => {
     const handleResize = () => {
       const windowWidth = window.innerWidth;
       const windowHeight = window.innerHeight;
 
-        if (widthRef.current) {
-          const newWidth = widthRef.current.clientWidth.toString(); // number를 string으로 변환
-          setWidth(newWidth);
-        }
-  
+      // if (widthRef.current) {
+      //   const newWidth = widthRef.current.clientWidth.toString(); // number를 string으로 변환
+      //   const newWidthPx = newWidth + "px";
+      //   console.log(newWidth  + "px");
+      //   setWidth(newWidthPx);
+      // }
+
       // if (windowWidth > 1285) {
       //   setWidth(`${windowWidth}px`);
       //   setHeight(`${Math.max(722, windowHeight)}px`);
@@ -213,10 +225,10 @@ function Swiper_Buy({ mainimage, subimage }: Props) {
       // }
     };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
@@ -246,7 +258,7 @@ function Swiper_Buy({ mainimage, subimage }: Props) {
       <Slider className={"Slider"} {...settings}>
         {subimage?.map((list: any) => {
           return (
-            <ImgItemWrap className="ImgItemWrap" width={width} height={height} >
+            <ImgItemWrap className="ImgItemWrap" width={width} height={height}>
               <ImgItem className="ImgItem" width={width} height={height}>
                 <ImgContent className="ImgContent">
                   <ImgWrap className="ImgWrap">
