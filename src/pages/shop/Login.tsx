@@ -11,6 +11,12 @@ const LayoutInner = styled.div`
   margin-left: auto;
   margin-right: auto;
   width: 980px;
+
+  @media only screen and (max-width: 833px) {
+width: 100%;
+
+
+  }
 `;
 
 const LoginArea = styled.div`
@@ -27,6 +33,12 @@ const LoginH2 = styled.h2`
   padding-top: 34px;
   font-size: 40px;
   font-weight: 700;
+
+  @media only screen and (max-width: 833px) {
+    font-size: 30px;
+    padding-left: 10px;
+
+  }
 `;
 
 const LoginH3 = styled.h3`
