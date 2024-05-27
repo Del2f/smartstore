@@ -35,7 +35,7 @@ const LoginH2 = styled.h2`
   font-weight: 700;
 
   @media only screen and (max-width: 833px) {
-    font-size: 30px;
+    font-size: 24px;
     padding-left: 10px;
 
   }
