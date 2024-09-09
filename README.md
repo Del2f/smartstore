@@ -219,7 +219,7 @@ react-router-dom의 Link를 사용해 상품의 _id를 기반으로 다시 상�
 
 5) 스토어 카테고리 관리
 
-![image](https://github.com/user-attachments/assets/7a843246-d733-47ca-a519-c0c5058cec64)
+![apple-menu16](https://github.com/user-attachments/assets/c2a8e77a-d76a-4f39-b3a8-8fdfe5087802)
 
 사용한 라이브러리
 - react-beautiful-dnd
@@ -417,11 +417,11 @@ react-color 라이브러리를 추가하여 광고 텍스트 및 배경의 색�
 
 ### 애플 스토어
 
-![apple-menu](https://github.com/Del2f/smartstore/assets/92422357/b7a3d0b3-99ba-471e-a3ec-012538f52132)
 - PC
+![apple-menu](https://github.com/Del2f/smartstore/assets/92422357/b7a3d0b3-99ba-471e-a3ec-012538f52132)
 
-![apple-menu](https://github.com/Del2f/smartstore/assets/92422357/ba50c9f6-bbe6-432c-905d-51afec09ebc5)
 - 모바일
+![apple-menu](https://github.com/Del2f/smartstore/assets/92422357/ba50c9f6-bbe6-432c-905d-51afec09ebc5)
 
 - http://57.181.111.217/smartstore/shop
 
