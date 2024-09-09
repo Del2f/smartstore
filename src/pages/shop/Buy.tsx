@@ -203,7 +203,8 @@ const Cart = styled.div<Cart>`
     }
 
     .cart-title-main {
-      color: ${(props) => props.theme.text2};
+      /* color: ${(props) => props.theme.text2}; */
+      color: #1d1d1f;
     }
 
     .cart-title-sub {
@@ -612,8 +613,10 @@ function Buy() {
       console.log(res.data);
 
       if (res.status === 200) {
+        const pathname = getPathname(); // 현재 경로를 가져옴
+        sessionStorage.removeItem(pathname); // 세션 스토리지 항목 제거
         navigate('/shop/cart');
-        window.location.reload();
+        // window.location.reload();
       }
 
     } catch (err) {
@@ -649,7 +652,7 @@ function Buy() {
                       <span className="stickybar-text">무료배송</span>
                     </div>
                     <div className="stickybar-fulfillment-pickup-icon">
-                      <svg enable-background="new 0 0 25 25" viewBox="0 0 25 25">
+                      <svg enableBackground="new 0 0 25 25" viewBox="0 0 25 25">
                         <path d="m0 0h25v25h-25z" fill="none"></path>
                         <path
                           d="m18.5 5.0005h-1.7755c-.1332-2.2255-1.967-4.0005-4.2245-4.0005s-4.0913 1.775-4.2245 4.0005h-1.7755c-1.3789 0-2.5 1.1216-2.5 2.5v11c0 1.3784 1.1211 2.4995 2.5 2.4995h12c1.3789 0 2.5-1.1211 2.5-2.4995v-11c0-1.3784-1.1211-2.5-2.5-2.5zm-6-3.0005c1.7058 0 3.0935 1.3264 3.2245 3.0005h-6.449c.131-1.6741 1.5187-3.0005 3.2245-3.0005zm7.5 16.5005c0 .8271-.6729 1.5-1.5 1.5h-12c-.8271 0-1.5-.6729-1.5-1.5v-11c0-.8271.6729-1.5005 1.5-1.5005h12c.8271 0 1.5.6734 1.5 1.5005zm-4.8633-7.5066c-.0377.0378-.7383.4304-.7383 1.3289 0 1.0344.8965 1.3968.9266 1.4044 0 .0227-.1356.5059-.4746.9891-.2938.4228-.6177.8532-1.0848.8532-.4746 0-.5876-.2794-1.1375-.2794-.5273 0-.7157.2869-1.1451.2869-.4369 0-.7383-.3926-1.0848-.8834-.3917-.5663-.7232-1.4572-.7232-2.3028 0-1.3515.8814-2.0688 1.7402-2.0688.4671 0 .8437.302 1.13.302.2787 0 .7006-.3171 1.2204-.3171.2034-.0001.9115.015 1.3711.687zm-2.5538-.7626c-.0377 0-.0678-.0076-.0979-.0076 0-.0227-.0075-.0755-.0075-.1284 0-.3624.1883-.7097.3842-.9438.2486-.2945.6629-.521 1.017-.5285.0075.0378.0075.0831.0075.1359 0 .3624-.1507.7097-.3616.974-.2336.287-.6253.4984-.9417.4984z"
@@ -719,8 +722,8 @@ function Buy() {
           <div className="cart-center">
             <div className="cart-center-top">
               <div className="cart-center-title">{product?.name}</div>
-              {selectOptions.map((option) => (
-                <div className="cart-center-title">{option.value}</div>
+              {selectOptions.map((option, index) => (
+                <div className="cart-center-title" key={index}>{option.value}</div>
               ))}
               <div className="cart-center-price">￦{price.toLocaleString()}</div>
               <div className="cart-center-cardwrap">

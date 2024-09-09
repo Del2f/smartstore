@@ -33,8 +33,8 @@ const GlobalStyles = createGlobalStyle`
     
     body {
         font-size: 17px;
-        font-weight: 400;
-        font-family: 'Pretendard';
+        font-weight: 200;
+      font-family: SF Pro KR, SF Pro Text, SF Pro Icons, SF Pro Display;
     }
 
     a {

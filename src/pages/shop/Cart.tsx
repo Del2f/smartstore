@@ -56,10 +56,47 @@ const CartWrapWrap = styled.div`
 `;
 
 const CartWrap = styled.div`
-  margin: 0 auto;
-  margin-bottom: 100px;
-  padding-top: 50px;
+  margin: auto;
+  padding: 50px 0;
   max-width: 980px;
+
+  h1 {
+    font-size: 40px;
+    font-weight: 600;
+  }
+
+  h2 {
+    font-size: 17px;
+    font-weight: 400;
+    margin-top: 25px;
+  }
+
+  .margin {
+    margin-top: 32px;
+    max-width: 50%;
+  }
+
+  .submit-btn {
+    padding: 17px 30px;
+
+    background-color: white;
+    border: 1px solid #06c;
+
+    .text {
+      color: #06c;
+      font-weight: 500;
+    }
+  }
+
+  .submit-btn:hover {
+    background-color: #06c;
+    border: 1px solid #06c;
+
+    .text {
+      color: white;
+      font-weight: 500;
+    }
+  }
 `;
 
 const PaymentHeader = styled.div`
@@ -79,7 +116,7 @@ const PaymentHeader = styled.div`
     padding-bottom: 2px;
   }
 
-  .cart-messeage {
+  .cart-message {
     padding-top: 20px;
     font-size: 15px;
   }
@@ -250,14 +287,15 @@ const PaymentFooter = styled.div`
     margin-inline-start: 25%;
 
     .price-wrap,
-    .total-wrap, .delivery-wrap {
+    .total-wrap,
+    .delivery-wrap {
       display: flex;
       justify-content: space-between;
       line-height: 1.6;
-
     }
 
-    .price-wrap, .delivery-wrap {
+    .price-wrap,
+    .delivery-wrap {
       font-size: 16px;
       font-weight: 400;
     }
@@ -268,33 +306,34 @@ const PaymentFooter = styled.div`
     }
 
     .top {
-
     }
 
     .middle {
       border-top: 1px solid #d2d2d7;
-    margin-top: 16px;
-    padding-top: 19px;
+      margin-top: 16px;
+      padding-top: 19px;
     }
 
     .footer {
-        button {
-          float: inline-end;
-          margin-top: 35px;
-          width: 360px;
+      display: flex;
+      justify-content: flex-end;
 
-          border: 0;
-          border-radius: var(--btn-border-radius);
-          background-color: var(--btn-background-color);
-          padding: 18px 15px;
-          border-radius: 12px;
+      button {
+        margin-top: 35px;
+        width: 360px;
 
-          span {
-            color: var(--white-color);
-            font-size: 16px;
-          }
+        border: 0;
+        border-radius: var(--btn-border-radius);
+        background-color: var(--btn-background-color);
+        padding: 18px 15px;
+        border-radius: 12px;
+
+        span {
+          color: var(--white-color);
+          font-size: 16px;
         }
       }
+    }
   }
 `;
 
@@ -334,36 +373,37 @@ function Cart({ navCart, setNavCart }: Props) {
   const location = useLocation();
   const randomId = uuidv4().replace(/-/g, "");
 
-  const [cookies, setCookie, removeCookie] = useCookies(["userjwt"]);
+  const [cookies] = useCookies(["userjwt"]);
 
   const [backupCartList, setBackupCartList] = useState<any>([]);
   const [isAnimating, setIsAnimating] = useState({});
   const [cartList, setCartList] = useState<cartListType[]>();
   const [payment, setPayment] = useState<number>(0);
-  console.log(cartList);
 
+  // count창 출력 여부
+  const [showCountIndex, setShowCountIndex] = useState<number | null>(null);
   const refs = useRef<HTMLDivElement[]>([]);
 
   const setCountRef = useCallback((element, index) => {
     refs.current[index] = element;
   }, []);
-  const [cartCheck, setCartCheck] = useState<any>([]);
 
-  // count창 출력 여부
-  const [showCountIndex, setShowCountIndex] = useState<number | null>(null);
+  console.log(navCart);
 
   // 유저의 로그인 상태를 확인 하면서, 장바구니를 최신화 합니다.
-  useLayoutEffect(() => {
+  useEffect(() => {
     setBackupCartList([]);
 
     const verifyUser = async () => {
       if (!cookies.userjwt) {
         navigate("/shop");
+        return;
       }
 
       try {
         const res = await axios.post("/smartstore/cart/cartList", {}, { withCredentials: true });
         console.log(res.data);
+        // window.scrollTo(0, 0);
 
         setCartList(res.data);
       } catch (err) {
@@ -385,18 +425,25 @@ function Cart({ navCart, setNavCart }: Props) {
   // 컴포넌트 나가거나 새로고침 시 서버로 삭제 요청 전송
   useEffect(() => {
     const handleBeforeUnload = async () => {
-      if (backupCartList.length > 0) {
-        const deleteIndices = backupCartList.map((item) => item.index);
-        try {
-          await axios.post("/smartstore/cart/delete", { indices: deleteIndices }, { withCredentials: true });
-        } catch (err) {
-          console.log(err);
-        }
+      const deleteIndices = backupCartList.map((item) => item.index);
+      try {
+        const res = await axios.post("/smartstore/cart/delete", { indices: deleteIndices }, { withCredentials: true });
+        console.log(res.data);
+        const newArray = res.data.map(data => ({
+          name: data.name,
+          mainImage: data.mainImage,
+          count: data.count
+        }));
+
+        setNavCart(newArray);
+      } catch (err) {
+        console.log(err);
       }
     };
 
     window.addEventListener("beforeunload", handleBeforeUnload);
     return () => {
+      handleBeforeUnload();
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, [backupCartList]);
@@ -484,79 +531,97 @@ function Cart({ navCart, setNavCart }: Props) {
   return (
     <CartWrapWrap className="CartWrapWrap">
       <CartWrap className="CartWrap">
-        <PaymentHeader>
-          <h1>장바구니 총액: ₩{payment && payment.toLocaleString()}</h1>
-          <span className="cart-messeage">모든 주문에 무료 배송 서비스가 제공됩니다.</span>
-          <button onClick={fulfillment}>
-            <span>결제</span>
-          </button>
-        </PaymentHeader>
-        <CartList className="cart-ul" showCountIndex={showCountIndex} isDeleting={!!backupCartList}>
-          {cartList &&
-            cartList?.map((cart: any, index: number) => (
-              <li key={index} className={`list ${isAnimating[index]}`}>
-                <div className="list-inner">
-                  <div className="image-wrap">
-                    <img src={cart?.mainImage[0]} alt="" />
-                  </div>
-                  <div className="cart-info">
-                    <div className="cart-info-top">
-                      <div className="name">
-                        <span>{cart.name}</span>
-                        <span className="option">{cart.option.values.map((value) => value)}</span>
+        {cartList && cartList.length === 0 && backupCartList.length === 0 ? (
+          <>
+            <div className="large-9">
+              <h1>장바구니가 비어 있습니다.</h1>
+              <h2>모든 주문에 무료 배송 서비스가 제공됩니다.</h2>
+              <div className="margin">
+                <div className="submit-btn-wrap">
+                  <button className="submit-btn" onClick={() => navigate("/shop")}>
+                    <span className="text">쇼핑 계속하기</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
+            <PaymentHeader>
+              <h1>장바구니 총액: ₩{payment && payment.toLocaleString()}</h1>
+              <span className="cart-message">모든 주문에 무료 배송 서비스가 제공됩니다.</span>
+              <button onClick={fulfillment}>
+                <span>결제</span>
+              </button>
+            </PaymentHeader>
+            <CartList className="cart-ul" showCountIndex={showCountIndex} isDeleting={!!backupCartList}>
+              {cartList &&
+                cartList?.map((cart: any, index: number) => (
+                  <li key={index} className={`list ${isAnimating[index]}`}>
+                    <div className="list-inner">
+                      <div className="image-wrap">
+                        <img src={cart?.mainImage[0]} alt="" />
                       </div>
-                      <div className="count">
-                        <div onClick={() => showCount(index)}>
-                          <span>{cart.count}</span>
-                          <span className="count-icon"></span>
-                        </div>
-                        <div className={`count-select count-select-${index}`} ref={(element) => setCountRef(element, index)}>
-                          {[...Array(9).keys()].map((i) => (
-                            <div key={i} className="number" onClick={(e) => CountHandler(index, e)}>
-                              {i + 1}
+                      <div className="cart-info">
+                        <div className="cart-info-top">
+                          <div className="name">
+                            <span>{cart.name}</span>
+                            <span className="option">{cart.option.values.map((value) => value)}</span>
+                          </div>
+                          <div className="count">
+                            <div onClick={() => showCount(index)}>
+                              <span>{cart.count}</span>
+                              <span className="count-icon"></span>
                             </div>
-                          ))}
-                        </div>
-                      </div>
-                      <div className="price">
-                        <span>₩{((cart.price + cart.option.optionPrice) * cart.count).toLocaleString()}</span>
-                        <div>
-                          <button className="price-delete-btn" onClick={() => DeleteHandler(index)}>
-                            <span>삭제</span>
-                          </button>
+                            <div className={`count-select count-select-${index}`} ref={(element) => setCountRef(element, index)}>
+                              {[...Array(9).keys()].map((i) => (
+                                <div key={i} className="number" onClick={(e) => CountHandler(index, e)}>
+                                  {i + 1}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                          <div className="price">
+                            <span>₩{((cart.price + cart.option.optionPrice) * cart.count).toLocaleString()}</span>
+                            <div>
+                              <button className="price-delete-btn" onClick={() => DeleteHandler(index)}>
+                                <span>삭제</span>
+                              </button>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
+                  </li>
+                ))}
+            </CartList>
+            <PaymentFooter>
+              <div className="payment-footer-inner">
+                <div className="top">
+                  <div className="price-wrap">
+                    <div>소계</div>
+                    <div>₩{payment && payment.toLocaleString()}</div>
+                  </div>
+                  <div className="delivery-wrap">
+                    <div>배송</div>
+                    <div>무료</div>
                   </div>
                 </div>
-              </li>
-            ))}
-        </CartList>
-        <PaymentFooter>
-          <div className="payment-footer-inner">
-            <div className="top">
-              <div className="price-wrap">
-                <div>소계</div>
-                <div>₩{payment && payment.toLocaleString()}</div>
+                <div className="middle">
+                  <div className="total-wrap">
+                    <div>총계</div>
+                    <div>₩{payment && payment.toLocaleString()}</div>
+                  </div>
+                </div>
+                <div className="footer">
+                  <button onClick={fulfillment}>
+                    <span>결제</span>
+                  </button>
+                </div>
               </div>
-              <div className="delivery-wrap">
-                <div>배송</div>
-                <div>무료</div>
-              </div>
-            </div>
-            <div className="middle">
-              <div className="total-wrap">
-                <div>총계</div>
-                <div>₩{payment && payment.toLocaleString()}</div>
-              </div>
-            </div>
-            <div className="footer">
-              <button onClick={fulfillment}>
-              <span>결제</span>
-            </button>
-            </div>
-          </div>
-        </PaymentFooter>
+            </PaymentFooter>
+          </>
+        )}
       </CartWrap>
       {/* 삭제된 항목 복원 UI */}
       {backupCartList.length > 0 && (

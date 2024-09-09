@@ -67,8 +67,22 @@ function TableProductList(props: Props) {
     { field: "_id", headerName: "상품코드", width: 100, resizable: true },
     { field: "name", headerName: "상품명", width: 150, resizable: true },
     { field: "subtitle", headerName: "부제목", width: 150, resizable: true },
-    { field: "price", headerName: "가격", width: 100, resizable: true },
-    { field: "delivery", headerName: "배송비", width: 100, resizable: true },
+    {
+      field: "price", headerName: "가격", width: 100, resizable: true,
+      cellRenderer: (params: any) => {
+      return (
+        <span>₩{params.value.toLocaleString()}</span>
+      );
+      },
+    },
+    {
+      field: "delivery", headerName: "배송비", width: 100, resizable: true,
+      cellRenderer: (params: any) => {
+        return (
+          <span>₩{params.value.toLocaleString()}</span>
+        );
+        },
+     },
     { field: "url", headerName: "URL", width: 150, resizable: true },
   ]);
 
@@ -88,8 +102,22 @@ function TableProductList(props: Props) {
     },
     { field: "name", headerName: "상품명", width: 150, resizable: true },
     { field: "_id", headerName: "상품코드", width: 100, resizable: true },
-    { field: "price", headerName: "가격", width: 100, resizable: true },
-    { field: "delivery", headerName: "배송비", width: 70, resizable: true },
+    {
+      field: "price", headerName: "가격", width: 100, resizable: true,
+      cellRenderer: (params: any) => {
+        return (
+          <span>₩{params.value.toLocaleString()}</span>
+        );
+        },
+     },
+    {
+      field: "delivery", headerName: "배송비", width: 70, resizable: true,
+      cellRenderer: (params: any) => {
+        return (
+          <span>₩{params.value.toLocaleString()}</span>
+        );
+        },
+     },
     { field: "url", headerName: "URL", width: 70, resizable: true },
   ]);
 
@@ -109,8 +137,22 @@ function TableProductList(props: Props) {
     },
     { field: "name", headerName: "상품명", width: 150, resizable: true },
     { field: "_id", headerName: "상품코드", width: 100, resizable: true },
-    { field: "price", headerName: "가격", width: 100, resizable: true },
-    { field: "delivery", headerName: "배송비", width: 70, resizable: true },
+    {
+      field: "price", headerName: "가격", width: 100, resizable: true,
+      cellRenderer: (params: any) => {
+        return (
+          <span>₩{params.value.toLocaleString()}</span>
+        );
+        },
+     },
+    {
+      field: "delivery", headerName: "배송비", width: 70, resizable: true,
+      cellRenderer: (params: any) => {
+        return (
+          <span>₩{params.value.toLocaleString()}</span>
+        );
+        },
+     },
     { field: "url", headerName: "URL", width: 70, resizable: true },
   ]);
 

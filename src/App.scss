@@ -16,8 +16,6 @@
 
 .App {
   position: relative;
-  box-sizing: border-box;
-  min-width: 1200px;
 }
 
 html, body { 
@@ -72,12 +70,21 @@ body {
 /* 네비게이션 */
 .App {
 
+  .navi-wrap {
+    width: 100%;
+  }
+  
   .navi {
+    width: 100%;
     color: $naviTextColor;
     justify-content: space-between;
     align-items: center;
     background-color: $naviBGColor;
     height: 44px;
+    max-width: 1200px;
+
+    @media only screen and (max-width: 833px) {
+    }
   }
 
   .nav-left {

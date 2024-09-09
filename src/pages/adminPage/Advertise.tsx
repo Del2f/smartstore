@@ -1,5 +1,5 @@
 import axios from "../../api/axios";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import React, { useState, useRef, useEffect, SetStateAction, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -9,6 +9,7 @@ import AdvertiseImage from "../../components/admin/AdvertiseImage";
 import type1 from "@img/home/category/type1.png";
 import type2 from "@img/home/category/type2.png";
 import type3 from "@img/home/category/type3.png";
+import { ChromePicker } from "react-color";
 
 type Props = {
   setNoticeIcon?: React.Dispatch<SetStateAction<any>>;
@@ -16,17 +17,51 @@ type Props = {
   setNoticeDate?: React.Dispatch<SetStateAction<string>>;
 };
 
-const Container = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  margin: 0 auto;
-`;
+const AdvertiseWrap = styled.div`
+  /* .chrome-picker {
+    display: flex;
+    width: 100% !important;
+  } */
+  .adverback:focus {
+    outline: 2px solid black; /* 클릭 시 border 추가 */
+  }
+  .category-name {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
 
-const CategoryInfoUl = styled.ul`
-  display: flex;
-`;
+  textarea {
+    border: none;
+    margin-top: 10px;
+  }
 
-const CategoryInfoLi = styled.li``;
+  input {
+    border: none;
+  }
+
+  .input-text-error {
+    margin-top: 15px;
+  }
+
+  .advertise-input {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #86868b;
+    border-radius: 12px;
+    height: 56px;
+
+    &.none {
+      border: 1px solid rgb(0, 113, 227);
+    }
+  }
+
+  .color-box {
+    position: absolute;
+    right: 0px;
+  }
+`;
 
 // 이름 체크박스
 
@@ -153,14 +188,14 @@ const ProductListWrap = styled.div<showProductList>`
 
   ${(props) =>
     props.isProductListShow
-      ? `
-opacity: 1;
-visibility: visible;
-`
-      : `
-opacity: 0;
-visibility: hidden;
-   `}
+      ? css`
+          opacity: 1;
+          visibility: visible;
+        `
+      : css`
+          opacity: 0;
+          visibility: hidden;
+        `}
   transition: opacity 0.32s cubic-bezier(0.4, 0, 0.6, 1) 80ms, visibility 0.32s 80ms;
 `;
 const ProductList = styled.div`
@@ -169,28 +204,6 @@ const ProductList = styled.div`
   background-color: white;
   padding: 20px 40px;
   border-radius: 20px;
-`;
-
-const Blur = styled.div<showProductList>`
-  backdrop-filter: blur(20px);
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 1;
-
-  ${(props) =>
-    props.isProductListShow
-      ? `
-      opacity: 1;
-      visibility: visible;
-      `
-      : `
-      opacity: 0;
-      visibility: hidden;
-  `}
-  transition: opacity 0.32s cubic-bezier(0.4, 0, 0.6, 1) 80ms, visibility 0.32s 80ms;
 `;
 
 const BlurWrap = styled.div<showProductList>`
@@ -422,8 +435,16 @@ function Advertise(props: Props) {
         setAdDetail(data.advertise[0].detail);
         setAdSubDetail(data.advertise[0].subdetail);
         setAdImage(data.advertise[0].image);
-        setAdBackColor(data.advertise[0].backcolor);
         setAdURL(data.advertise[0].url);
+
+        // 배경 색상
+        setAdBackColor(data.advertise[0].backcolor);
+
+        // 텍스트 색상
+        setSubTitleColor(data.advertise[0].subtitleColor);
+        setMainTitleColor(data.advertise[0].mainTitleColor);
+        setDetailColor(data.advertise[0].detailColor);
+        setSubDetailColor(data.advertise[0].subDetailColor);
 
         setIsAdName(true);
         setIsAdSubTitle(true);
@@ -431,7 +452,6 @@ function Advertise(props: Props) {
         setIsAdDetail(true);
         setIsAdSubDetail(true);
         setIsAdImage(true);
-        setIsBackColor(true);
         setIsAdURL(true);
       }
 
@@ -454,21 +474,22 @@ function Advertise(props: Props) {
   const [adImage, setAdImage] = useState<string>("");
 
   // 텍스트 클릭 여부
+  const [isBackClick, setIsBackClick] = useState<boolean>(false);
   const [isSubTitleClick, setIsSubTitleClick] = useState<boolean>(false);
   const [isMainTitleClick, setIsMainTitleClick] = useState<boolean>(false);
   const [isDetailClick, setIsDetailClick] = useState<boolean>(false);
   const [isSubDetailClick, setIsSubDetailClick] = useState<boolean>(false);
 
   // 텍스트 컬러
-  const [SubTitleColor, setSubTitleColor] = useState<string>("");
-  const [MainTitleColor, setMainTitleColor] = useState<string>("");
-  const [DetailColor, setDetailColor] = useState<string>("");
-  const [SubDetailColor, setSubDetailColor] = useState<string>("");
+  const [subTitleColor, setSubTitleColor] = useState<string>("");
+  const [mainTitleColor, setMainTitleColor] = useState<string>("");
+  const [detailColor, setDetailColor] = useState<string>("");
+  const [subDetailColor, setSubDetailColor] = useState<string>("");
 
-  console.log(isSubTitleClick);
-  console.log(isMainTitleClick);
-  console.log(isDetailClick);
-  console.log(isSubDetailClick);
+  // console.log(isSubTitleClick);
+  // console.log(isMainTitleClick);
+  // console.log(isDetailClick);
+  // console.log(isSubDetailClick);
 
   // 유효성 검사
   const [isSelected, setIsSelected] = useState<boolean>(false);
@@ -506,7 +527,6 @@ function Advertise(props: Props) {
   const [isAdSubDetail, setIsAdSubDetail] = useState<boolean>(false);
   const [isAdURL, setIsAdURL] = useState<boolean>(false);
   const [isAdImage, setIsAdImage] = useState<boolean>(false);
-  const [isBackColor, setIsBackColor] = useState<boolean>(false);
   const [advertise, setAdvertise] = useState<Advertise[]>([]);
 
   const [isAdFinish, setIsAdFinish] = useState<boolean>(false);
@@ -527,14 +547,75 @@ function Advertise(props: Props) {
   // 배경 색상
   const [colorSelector, setColorSelector] = useState<boolean>(false);
 
+  // 색상 파레트 열기
+  const [showColorPicker, setShowColorPicker] = useState<boolean>(false);
+
+  // 현재 선택된 색상 가져오기
+  const getCurrentColor = () => {
+    if (isSubTitleClick) return subTitleColor;
+    if (isMainTitleClick) return mainTitleColor;
+    if (isDetailClick) return detailColor;
+    if (isSubDetailClick) return subDetailColor;
+    if (isBackClick) return adBackColor;
+    return "#fff"; // 기본값 (선택되지 않은 경우)
+  };
+
+  // 색상 변경 핸들러
+  const handleColorChange = (color) => {
+    if (isSubTitleClick) setSubTitleColor(color.hex);
+    else if (isMainTitleClick) setMainTitleColor(color.hex);
+    else if (isDetailClick) setDetailColor(color.hex);
+    else if (isSubDetailClick) setSubDetailColor(color.hex);
+    else if (isBackClick) setAdBackColor(color.hex);
+  };
+
+  // 색상 선택기 토글
+  const handleColorPickerToggle = () => {
+    setShowColorPicker(!showColorPicker);
+  };
+
+  const test = {
+    isSubTitleClick: isSubTitleClick,
+    isMainTitleClick: isMainTitleClick,
+    isDetailClick: isDetailClick,
+    isSubDetailClick: isSubDetailClick,
+    isBackClick: isBackClick,
+  };
+
+  console.log(test);
+
+  // 클릭 이벤트 핸들러
+  const handleInputClick = (e, type) => {
+    e.stopPropagation();
+
+    // 모든 클릭 상태를 false로 초기화
+    setIsBackClick(false);
+    setIsSubTitleClick(false);
+    setIsMainTitleClick(false);
+    setIsDetailClick(false);
+    setIsSubDetailClick(false);
+
+    // 해당 타입의 클릭 상태를 true로 설정
+    if (type === "background") setIsBackClick(true);
+    if (type === "subTitle") setIsSubTitleClick(true);
+    if (type === "mainTitle") setIsMainTitleClick(true);
+    if (type === "detail") setIsDetailClick(true);
+    if (type === "subDetail") setIsSubDetailClick(true);
+  };
+
   // 광고 관련 함수 모음.
   const Advertise = {
     adName: (e: any) => {
       setAdname(e.target.value);
+      setErrAdName("");
+
+      if (e.target.value === "") {
+        setErrAdName("");
+      }
 
       if (e.target.value.length === 0) {
         setIsAdName(false);
-        setErrAdName("광고 이름을 입력해주세요.");
+        // setErrAdName("광고 이름을 입력해주세요.");
         return;
       }
 
@@ -635,7 +716,6 @@ function Advertise(props: Props) {
     },
     adSubmit: async (e: any) => {
       e.preventDefault();
-
       console.log("adSubmit");
 
       if (isSelectedSubTask) {
@@ -649,7 +729,7 @@ function Advertise(props: Props) {
         setIsAdFinish(true);
         setErrAdFinish("");
 
-        if (isAdName && isAdSubTitle && isAdMainTitle && isAdDetail && isAdSubDetail && isAdURL && isBackColor) {
+        if (isAdName && isAdSubTitle && isAdMainTitle && isAdDetail && isAdSubDetail && isAdURL) {
           setIsAdFinish(true);
           setErrAdFinish("");
 
@@ -663,6 +743,10 @@ function Advertise(props: Props) {
               maintitle: adMainTitle,
               detail: adDetail,
               subdetail: adSubDetail,
+              subtitleColor: subTitleColor,
+              maintitleColor: mainTitleColor,
+              detailColor: detailColor,
+              subdetailColor: subDetailColor,
               image: adImage,
               url: adURL,
               backcolor: adBackColor,
@@ -676,6 +760,10 @@ function Advertise(props: Props) {
               maintitle: adMainTitle,
               detail: adDetail,
               subdetail: adSubDetail,
+              subtitleColor: subTitleColor,
+              maintitleColor: mainTitleColor,
+              detailColor: detailColor,
+              subdetailColor: subDetailColor,
               image: adImage,
               url: adURL,
               backcolor: adBackColor,
@@ -752,7 +840,7 @@ function Advertise(props: Props) {
       //   setIsAdFinish(true);
       //   setErrAdFinish("");
 
-      //   if (isAdName && isAdSubTitle && isAdMainTitle && isAdDetail && isAdSubDetail && isAdURL && isBackColor) {
+      //   if (isAdName && isAdSubTitle && isAdMainTitle && isAdDetail && isAdSubDetail && isAdURL) {
       //     setIsAdFinish(true);
       //     setErrAdFinish("");
 
@@ -809,7 +897,6 @@ function Advertise(props: Props) {
       setIsAdSubDetail(false);
       setIsAdURL(false);
       setIsAdImage(false);
-      setIsBackColor(false);
       setIsAdFinish(false);
     },
   };
@@ -831,7 +918,7 @@ function Advertise(props: Props) {
 
   return (
     <>
-      <div className="SellerSubframe home-category">
+      <AdvertiseWrap className="SellerSubframe home-category">
         <div className="product-list">
           <div className="panel panel-seller">
             {isError && (
@@ -852,28 +939,24 @@ function Advertise(props: Props) {
             </div>
             <div className="panel-body flex">
               <div className="box-wrap">
-                <div className="box second flex flex-ju-bt flex-di-row">
+                <div className="box flex flex-ju-bt flex-di-row">
                   <div ref={inputRef} style={{ padding: "0 20px" }}>
                     <div>
                       <div className="second-product-list">
                         <div className="wrap">
-                          <div>{selectedList.name}</div>
+                          <div className="category-name">{selectedList.name}</div>
                           <h3 className="cateInfo-title">카테고리 광고</h3>
                           <div className="cateInfo-input-wrap">
-                            <div className="cateInfo-input">
-                              <h5 className="cateInfo-name">광고 이름</h5>
-                              <div id="input-inner">
-                                <input
-                                  type="text"
-                                  value={adName}
-                                  maxLength={20}
-                                  placeholder="시작하는 광고의 이름을 적어주세요."
-                                  className="input"
-                                  onChange={Advertise.adName}
-                                />
-                              </div>
+                            <div className="input-wrap">
+                              <input
+                                type="text"
+                                value={adName}
+                                className={`input-id input ${adName ? "not-empty" : ""}`}
+                                onChange={Advertise.adName}
+                              />
+                              <span className="input-text">이름</span>
                             </div>
-                            <div className={isAdName ? "error" : "error-active"}>{ErrAdName}</div>
+                            <div className={!isAdName ? "input-text-error" : ""}>{ErrAdName}</div>
                           </div>
                           <h3 className="cateInfo-title">광고 타입을 지정</h3>
                           <TypeBoxWrap>
@@ -891,9 +974,17 @@ function Advertise(props: Props) {
                             </TypeBox>
                           </TypeBoxWrap>
                           <h3 className="cateInfo-title">광고 미리보기</h3>
+                          {/* <button onClick={handleColorPickerToggle}>{showColorPicker ? "Close Color Picker" : "Pick a Color"}</button> */}
+                          {/* {showColorPicker && <ChromePicker color={getCurrentColor()} onChangeComplete={handleColorChange} />} */}
                           <div className="cateInfo-wrap" ref={imgRef}>
+                            <ChromePicker color={getCurrentColor()} onChangeComplete={handleColorChange} />
                             {adType === 0 && (
-                              <AdverPreview adBackColor={adBackColor}>
+                              <AdverPreview
+                                className="adverback"
+                                adBackColor={adBackColor}
+                                onClick={(e) => handleInputClick(e, "background")}
+                                tabIndex={0}
+                              >
                                 <div id="input-inner" style={{ marginTop: "50px" }}>
                                   <input
                                     type="text"
@@ -902,8 +993,8 @@ function Advertise(props: Props) {
                                     placeholder="가장 위에 들어갑니다."
                                     className="input adsubtitle adver-input-type1"
                                     onChange={Advertise.adSubTitle}
-                                    onFocus={() => setIsSubTitleClick(true)}
-                                    onBlur={() => setIsSubTitleClick(false)}
+                                    onClick={(e) => handleInputClick(e, "subTitle")}
+                                    style={{ color: subTitleColor }}
                                   />
                                   <div className={isAdSubTitle ? "error" : "error-active"}>{ErrAdSubTitle}</div>
                                 </div>
@@ -915,8 +1006,8 @@ function Advertise(props: Props) {
                                     placeholder="가장 큰 제목 입니다."
                                     className="input admaintitle adver-input-type1"
                                     onChange={Advertise.adMainTitle}
-                                    onFocus={() => setIsMainTitleClick(true)}
-                                    onBlur={() => setIsMainTitleClick(false)}
+                                    style={{ color: mainTitleColor }}
+                                    onClick={(e) => handleInputClick(e, "mainTitle")}
                                   />
                                   <div className={isAdMainTitle ? "error" : "error-active"}>{ErrAdMainTitle}</div>
                                 </div>
@@ -927,9 +1018,8 @@ function Advertise(props: Props) {
                                     placeholder="상품에 대한 내용"
                                     className="input addetail adver-input-type1"
                                     onChange={Advertise.adDetail}
-                                    style={{ backgroundColor: "transparent" }}
-                                    onFocus={() => setIsDetailClick(true)}
-                                    onBlur={() => setIsDetailClick(false)}
+                                    style={{ backgroundColor: "transparent", color: detailColor }}
+                                    onClick={(e) => handleInputClick(e, "detail")}
                                   />
                                   <div className={isAdDetail ? "error" : "error-active"}>{ErrAdDetail}</div>
                                 </div>
@@ -940,9 +1030,8 @@ function Advertise(props: Props) {
                                     placeholder="특징 및 가격"
                                     className="input adsubdetail adver-input-type1"
                                     onChange={Advertise.adSubDetail}
-                                    style={{ backgroundColor: "transparent" }}
-                                    onFocus={() => setIsSubDetailClick(true)}
-                                    onBlur={() => setIsSubDetailClick(false)}
+                                    style={{ backgroundColor: "transparent", color: subDetailColor }}
+                                    onClick={(e) => handleInputClick(e, "subDetail")}
                                   />
                                   <div className={isAdSubDetail ? "error" : "error-active"}>{ErrAdSubDetail}</div>
                                 </div>
@@ -961,7 +1050,6 @@ function Advertise(props: Props) {
                                   isAdImage={isAdImage}
                                   setIsAdImage={setIsAdImage}
                                   setAdBackColor={setAdBackColor}
-                                  setIsBackColor={setIsBackColor}
                                   colorSelector={colorSelector}
                                   setColorSelector={setColorSelector}
                                   isAdvertiseEdit={isAdvertiseEdit}
@@ -969,7 +1057,7 @@ function Advertise(props: Props) {
                               </AdverPreview>
                             )}
                             {adType === 1 && (
-                              <AdverPreview adBackColor={adBackColor}>
+                              <AdverPreview adBackColor={adBackColor} onClick={(e) => handleInputClick(e, "background")}>
                                 <div id="input-inner" style={{ marginTop: "50px" }}>
                                   <input
                                     type="text"
@@ -978,8 +1066,8 @@ function Advertise(props: Props) {
                                     placeholder="가장 위에 들어갑니다."
                                     className="input adsubtitle adver-input-type1"
                                     onChange={Advertise.adSubTitle}
-                                    onFocus={() => setIsSubTitleClick(true)}
-                                    onBlur={() => setIsSubTitleClick(false)}
+                                    style={{ color: subTitleColor }}
+                                    onClick={(e) => handleInputClick(e, "subTitle")}
                                   />
                                   <div className={isAdSubTitle ? "error" : "error-active"}>{ErrAdSubTitle}</div>
                                 </div>
@@ -991,8 +1079,8 @@ function Advertise(props: Props) {
                                     placeholder="가장 큰 제목 입니다."
                                     className="input admaintitle adver-input-type1"
                                     onChange={Advertise.adMainTitle}
-                                    onFocus={() => setIsMainTitleClick(true)}
-                                    onBlur={() => setIsMainTitleClick(false)}
+                                    style={{ color: mainTitleColor }}
+                                    onClick={(e) => handleInputClick(e, "mainTitle")}
                                   />
                                   <div className={isAdMainTitle ? "error" : "error-active"}>{ErrAdMainTitle}</div>
                                 </div>
@@ -1003,9 +1091,8 @@ function Advertise(props: Props) {
                                     placeholder="상품에 대한 내용"
                                     className="input addetail adver-input-type1"
                                     onChange={Advertise.adDetail}
-                                    style={{ backgroundColor: "transparent" }}
-                                    onFocus={() => setIsDetailClick(true)}
-                                    onBlur={() => setIsDetailClick(false)}
+                                    style={{ backgroundColor: "transparent", color: detailColor }}
+                                    onClick={(e) => handleInputClick(e, "detail")}
                                   />
                                   <div className={isAdDetail ? "error" : "error-active"}>{ErrAdDetail}</div>
                                 </div>
@@ -1016,7 +1103,6 @@ function Advertise(props: Props) {
                                   isAdImage={isAdImage}
                                   setIsAdImage={setIsAdImage}
                                   setAdBackColor={setAdBackColor}
-                                  setIsBackColor={setIsBackColor}
                                   colorSelector={colorSelector}
                                   setColorSelector={setColorSelector}
                                   isAdvertiseEdit={isAdvertiseEdit}
@@ -1028,9 +1114,8 @@ function Advertise(props: Props) {
                                     placeholder="특징 및 가격"
                                     className="input adsubdetail adver-input-type1"
                                     onChange={Advertise.adSubDetail}
-                                    style={{ backgroundColor: "transparent" }}
-                                    onFocus={() => setIsSubDetailClick(true)}
-                                    onBlur={() => setIsSubDetailClick(false)}
+                                    style={{ backgroundColor: "transparent", color: subDetailColor }}
+                                    onClick={(e) => handleInputClick(e, "subDetail")}
                                   />
                                   <div className={isAdSubDetail ? "error" : "error-active"}>{ErrAdSubDetail}</div>
                                 </div>
@@ -1045,8 +1130,8 @@ function Advertise(props: Props) {
                               </AdverPreview>
                             )}
                             {adType === 2 && (
-                              <AdverPreviewColumn adBackColor={adBackColor}>
-                                <div style={{ paddingLeft: '100px'}}>
+                              <AdverPreviewColumn adBackColor={adBackColor} onClick={(e) => handleInputClick(e, "background")}>
+                                <div style={{ paddingLeft: "100px" }}>
                                   <div className="adver-input-type3-wrap" style={{ marginTop: "40px" }}>
                                     <input
                                       type="text"
@@ -1055,8 +1140,8 @@ function Advertise(props: Props) {
                                       placeholder="가장 위에 들어갑니다."
                                       className="input adsubtitle adver-input-type3"
                                       onChange={Advertise.adSubTitle}
-                                      onFocus={() => setIsSubTitleClick(true)}
-                                      onBlur={() => setIsSubTitleClick(false)}
+                                      onClick={(e) => handleInputClick(e, "subTitle")}
+                                      style={{ color: subTitleColor }}
                                     />
                                     <div className={isAdSubTitle ? "error" : "error-active"}>{ErrAdSubTitle}</div>
                                   </div>
@@ -1068,8 +1153,8 @@ function Advertise(props: Props) {
                                       placeholder="가장 큰 제목 입니다."
                                       className="input admaintitle adver-input-type3"
                                       onChange={Advertise.adMainTitle}
-                                      onFocus={() => setIsMainTitleClick(true)}
-                                      onBlur={() => setIsMainTitleClick(false)}
+                                      onClick={(e) => handleInputClick(e, "mainTitle")}
+                                      style={{ color: mainTitleColor }}
                                     />
                                     <div className={isAdMainTitle ? "error" : "error-active"}>{ErrAdMainTitle}</div>
                                   </div>
@@ -1080,9 +1165,8 @@ function Advertise(props: Props) {
                                       placeholder="상품에 대한 내용"
                                       className="input addetail adver-input-type3"
                                       onChange={Advertise.adDetail}
-                                      style={{ backgroundColor: "transparent" }}
-                                      onFocus={() => setIsDetailClick(true)}
-                                      onBlur={() => setIsDetailClick(false)}
+                                      style={{ backgroundColor: "transparent", color: detailColor }}
+                                      onClick={(e) => handleInputClick(e, "detail")}
                                     />
                                     <div className={isAdDetail ? "error" : "error-active"}>{ErrAdDetail}</div>
                                   </div>
@@ -1093,9 +1177,8 @@ function Advertise(props: Props) {
                                       placeholder="특징 및 가격"
                                       className="input adsubdetail adver-input-type3"
                                       onChange={Advertise.adSubDetail}
-                                      style={{ backgroundColor: "transparent" }}
-                                      onFocus={() => setIsSubDetailClick(true)}
-                                      onBlur={() => setIsSubDetailClick(false)}
+                                      style={{ backgroundColor: "transparent", color: subDetailColor }}
+                                      onClick={(e) => handleInputClick(e, "subDetail")}
                                     />
                                     <div className={isAdSubDetail ? "error" : "error-active"}>{ErrAdSubDetail}</div>
                                   </div>
@@ -1115,7 +1198,6 @@ function Advertise(props: Props) {
                                   isAdImage={isAdImage}
                                   setIsAdImage={setIsAdImage}
                                   setAdBackColor={setAdBackColor}
-                                  setIsBackColor={setIsBackColor}
                                   colorSelector={colorSelector}
                                   setColorSelector={setColorSelector}
                                   isAdvertiseEdit={isAdvertiseEdit}
@@ -1126,7 +1208,7 @@ function Advertise(props: Props) {
                           {adImage && (
                             <div className="cateInfo-input-wrap" style={{ width: "100%" }} ref={colorRef}>
                               <div
-                                className="cateInfo-input"
+                                className={colorSelector ? "advertise-input none" : "advertise-input"}
                                 onClick={Advertise.adColorSelect}
                                 style={{ outline: colorSelector ? "2px solid #0071e3" : "none" }}
                               >
@@ -1145,53 +1227,31 @@ function Advertise(props: Props) {
                             </div>
                           )}
                           <div className="cateInfo-input-wrap">
-                            <div className="cateInfo-input">
+                            <div className="advertise-input">
                               <h5 className="cateInfo-name">상품 연결</h5>
-                              <div style={{ display: "flex" }}>
-                                {adProduct &&
-                                  adProduct.map((list: any, index: any) => {
-                                    return (
-                                      <li
-                                        key={index}
-                                        value={list.name}
-                                        className="adproduct-list"
-                                        // style={{
-                                        //   backgroundColor: isProductClick ? "#f5f5f7" : "#fff",
-                                        // }}
-                                        // onClick={() => setIsProductClick((boolean) => !boolean)}
-                                      >
-                                        <div className="edit flex flex-ju-center flex-align-center" style={{ padding: "0 15px" }}>
-                                          <img src={list.mainImage[0]} style={{ width: "40px", marginRight: "5px", padding: "5px" }}></img>
-                                          <span>{list.name}</span>
-                                        </div>
-                                        {/* <DeleteBtn
-                                          className="modal-close-button"
-                                          style={{ position: "absolute", right: "0px", zIndex: "10" }}
-                                          isAdImage={props.isAdImage}
-                                          onClick={Advertise.ProductDelete}
-                                        >
-                                          <span className="modal-close-icon">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                              <path d="M12.12,10l4.07-4.06a1.5,1.5,0,1,0-2.11-2.12L10,7.88,5.94,3.81A1.5,1.5,0,1,0,3.82,5.93L7.88,10,3.81,14.06a1.5,1.5,0,0,0,0,2.12,1.51,1.51,0,0,0,2.13,0L10,12.12l4.06,4.07a1.45,1.45,0,0,0,1.06.44,1.5,1.5,0,0,0,1.06-2.56Z"></path>
-                                            </svg>
-                                          </span>
-                                        </DeleteBtn> */}
-                                      </li>
-                                    );
-                                  })}
-                                <div className="text-btn-wrap" style={{ marginRight: "10px" }}>
-                                  <button className="text-btn" onClick={Advertise.ProductListShow}>
-                                    <span className="text">추가</span>
-                                  </button>
-                                  <button className="text-btn" onClick={Advertise.ProductDelete}>
-                                    <span className="text">삭제</span>
-                                  </button>
-                                </div>
+                              {adProduct &&
+                                adProduct.map((list: any, index: any) => {
+                                  return (
+                                    <li key={index} value={list.name} className="adproduct-list">
+                                      <div className="edit flex flex-ju-center flex-align-center" style={{ padding: "0 15px" }}>
+                                        <img src={list.mainImage[0]} style={{ width: "40px", marginRight: "5px", padding: "5px" }}></img>
+                                        <span>{list.name}</span>
+                                      </div>
+                                    </li>
+                                  );
+                                })}
+                              <div className="text-btn-wrap" style={{ marginRight: "10px" }}>
+                                <button className="text-btn" onClick={Advertise.ProductListShow}>
+                                  <span className="text">추가</span>
+                                </button>
+                                <button className="text-btn" onClick={Advertise.ProductDelete}>
+                                  <span className="text">삭제</span>
+                                </button>
                               </div>
                             </div>
                           </div>
                           <AdSubmitBtn onClick={Advertise.adSubmit}>{isAdvertiseEdit ? <span>수정</span> : <span>등록</span>}</AdSubmitBtn>
-                          <div className={isAdFinish ? "error" : "error-active"} style={{ textAlign: "right" }}>
+                          <div className={!isAdFinish ? "input-text-error" : ""} style={{ textAlign: "right" }}>
                             {ErrAdFinish}
                           </div>
                         </div>
@@ -1238,9 +1298,8 @@ function Advertise(props: Props) {
               </div>
             </ProductList>
           </ProductListWrap>
-          <Blur className="blur" isProductListShow={isProductListShow}></Blur>
         </BlurWrap>
-      </div>
+      </AdvertiseWrap>
     </>
   );
 }

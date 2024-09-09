@@ -7,7 +7,9 @@ import mainImg from "@img/shop/hero_wwdc23_apple__f6s4xvm9mk2u_largetall.jpg";
 import mainText from "@img/shop/hero_logo_wwdc23__bgfcj40dxkpe_largetall.png";
 
 const HomeWrap = styled.div`
-  
+    font-size: 25px;
+    font-weight: 100;
+    padding-top: 44px;
 `;
 
 const LineMiddle = styled.div`
@@ -22,7 +24,7 @@ const LineMiddle = styled.div`
   color: #1d1d1f;
   
    & > span {
-    font-weight: 400;
+    font-weight: 200;
     text-align: center;
     display: inline-block;
     line-height: 20px;
@@ -38,8 +40,6 @@ const LineMiddle = styled.div`
 
   a {
     margin-top: 5px;
-
-    font-weight: 400;
     color: #06c;
     white-space: nowrap;
   }
@@ -115,6 +115,7 @@ const TextWrap = styled.div`
   padding: 55px 0;
   position: relative;
 `;
+
 const MainText = styled.h2`
   display: block;
   width: 100%;
@@ -127,9 +128,8 @@ const MainText = styled.h2`
   background-repeat: no-repeat;
   background-position: center;
 `;
+
 const MiddleText = styled.p`
-  font-size: 25px;
-  font-weight: 500;
   margin-top: 10px;
   line-height: 1.1;
   color: white;
@@ -140,8 +140,7 @@ const LinkWrap = styled.div`
 
   & > a {
     color: #2997ff;
-    font-size: 20px;
-    font-weight: 400;
+    font-size: 18px;
   }
 `;
 

@@ -151,7 +151,14 @@
 
 @font-face {
     font-family: "SF Pro Icons";
-    font-weight: 400;
+    font-weight: 100;
+    font-style: normal;
+    src: url('/fonts/sf-pro-icons_ultralight.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: "SF Pro Icons";
+    font-weight: 300;
     font-style: normal;
     src: url('/fonts/sf-pro-icons_light.woff2') format('woff2');
 }
@@ -160,14 +167,103 @@
     font-family: "SF Pro Icons";
     font-weight: 500;
     font-style: normal;
-    src: url('/fonts/sf-pro-icons_regular.woff2') format('woff2');
+    src: url('/fonts/sf-pro-icons_medium.woff2') format('woff2');
 }
 
 @font-face {
     font-family: "SF Pro Icons";
     font-weight: 600;
     font-style: normal;
+    src: url('/fonts/sf-pro-icons_semibold.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: "SF Pro Icons";
+    font-weight: 700;
+    font-style: normal;
     src: url('/fonts/sf-pro-icons_bold.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: "SF Pro Icons";
+    font-weight: 800;
+    font-style: normal;
+    src: url('/fonts/sf-pro-icons_heavy.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: "SF Pro KR";
+    font-weight: 400;
+    font-style: normal;
+    src: url('/fonts/SFProKRDisplay_regular.woff2') format('woff2');
+}
+@font-face {
+    font-family: "SF Pro KR";
+    font-weight: 600;
+    font-style: normal;
+    src: url('/fonts/SFProKRDisplay_semibold.woff2') format('woff2');
+}
+@font-face {
+    font-family: "SF Pro KR";
+    font-weight: 700;
+    font-style: normal;
+    src: url('/fonts/SFProKRDisplay_bold.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: "SF Pro Text";
+    font-weight: 400;
+    font-style: normal;
+    src: url('/fonts/sf-pro-text_regular.woff2') format('woff2');
+}
+@font-face {
+    font-family: "SF Pro Text";
+    font-weight: 600;
+    font-style: normal;
+    src: url('/fonts/sf-pro-text_semibold.woff2') format('woff2');
+}
+@font-face {
+    font-family: "SF Pro Text";
+    font-weight: 700;
+    font-style: normal;
+    src: url('/fonts/sf-pro-text_bold.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: "SF Pro Display";
+    font-weight: 100;
+    font-style: normal;
+    src: url('/fonts/sf-pro-display_ultralight.woff2') format('woff2');
+}
+@font-face {
+    font-family: "SF Pro Display";
+    font-weight: 400;
+    font-style: normal;
+    src: url('/fonts/sf-pro-display_regular.woff2') format('woff2');
+}
+@font-face {
+    font-family: "SF Pro Display";
+    font-weight: 500;
+    font-style: normal;
+    src: url('/fonts/sf-pro-display_medium.woff2') format('woff2');
+}
+@font-face {
+    font-family: "SF Pro Display";
+    font-weight: 600;
+    font-style: normal;
+    src: url('/fonts/sf-pro-display_semibold.woff2') format('woff2');
+}
+@font-face {
+    font-family: "SF Pro Display";
+    font-weight: 700;
+    font-style: normal;
+    src: url('/fonts/sf-pro-display_bold.woff2') format('woff2');
+}
+@font-face {
+    font-family: "SF Pro Display";
+    font-weight: 800;
+    font-style: normal;
+    src: url('/fonts/sf-pro-display_heavy.woff2') format('woff2');
 }
 
 /* 네이버 아이콘 */

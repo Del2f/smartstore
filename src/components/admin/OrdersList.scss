@@ -1,0 +1,302 @@
+.ag-theme-alpine {
+  --ag-border-color: #ffffff;
+  --ag-checkbox-checked-color: #00c73c;
+  // --ag-checkbox-unchecked-color: #00ae34;
+
+
+
+  .ag-checkbox {
+
+    .ag-input-wrapper:focus-within {
+      box-shadow: none;
+    }
+  }
+
+  .ag-checked::after {
+    width: 20px;
+    height: 20px;
+  }
+
+  .ag-root-wrapper {
+    font-size: 13px;
+    border: 1px solid #d3d8e1;
+    border-radius: 8px;
+
+    .ag-cell {
+      color: #555;
+      display: flex;
+    }
+
+    .ag-row-selected:before {
+      // 선택된 백그라운드 hover 컬러
+      background-image: none;
+    }
+
+    .ag-selection-checkbox {
+      margin: 0px;
+    }
+
+    .ag-checkbox-input-wrapper {
+      width: 20px;
+      height: 20px;
+    }
+
+    .ag-checkbox-input-wrapper:focus-within {
+      box-shadow: none;
+    }
+
+    .ag-checkbox-input-wrapper::after {
+      content: "" !important;
+      outline: none;
+      width: 20px;
+      height: 20px;
+      background: url(/img/sp_icon_pc.png) no-repeat;
+      background-position: -30px -530px;
+    }
+
+    .ag-checked:after {
+      content: "" !important;
+      width: 20px;
+      height: 20px;
+      background: url(/img/sp_icon_pc.png) no-repeat;
+      background-position: -0px -530px;
+    }
+
+    .ag-checkbox-input {}
+  }
+}
+
+.table-product-list {
+  font-size: 12px;
+  margin-bottom: 5px;
+
+  .unselectedErr {
+    color: red;
+    margin-left: 10px;
+  }
+
+  .delete-agree {
+    position: absolute;
+    display: none;
+    padding: 20px;
+    border: 1px solid #dbdde2;
+    border-radius: 10px;
+    z-index: 5;
+    margin-top: 10px;
+    margin-left: 10px;
+    width: 300px;
+    height: 200px;
+    background-color: #fff;
+
+    .err {
+      color: red;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .input {
+      outline: transparent;
+      width: 100%;
+      border: none;
+      font-size: 13px;
+      line-height: 34px;
+      color: #000;
+      letter-spacing: -.2px;
+    }
+
+    #input-inner {
+      position: relative;
+      padding: 1px 15px;
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      margin-top: 10px;
+      margin-bottom: 10px;
+      margin-right: 8px;
+      background-color: #fff;
+    }
+
+    #input-inner:hover {
+      border: 1px solid rgb(117, 117, 117);
+    }
+
+    #input-inner-active {
+      position: relative;
+      padding: 1px 15px;
+      border: 1px solid rgba(0, 0, 0, .15);
+      margin-top: 10px;
+      margin-bottom: 10px;
+      margin-right: 8px;
+      background-color: #fff;
+      border: 1px solid #03c75a;
+      z-index: 20;
+    }
+  }
+
+  .show {
+    display: block;
+  }
+}
+
+.delete-btn {
+  background-color: #fff;
+  border: 1px solid #dbdde2;
+  padding: 2px 10px;
+
+  span {
+    color: #666;
+    font-size: 12px;
+    line-height: 24px;
+  }
+}
+
+.tableright {
+  display: inline-block;
+  position: absolute;
+  right: 0px;
+  // margin-top: 10px;
+  margin-right: 20px;
+
+   .page-size {
+    border: 0;
+   }
+}
+
+.editBtn {
+  width: 35px;
+  height: 35px;
+  font-size: 12px;
+  color: rgb(31, 31, 31);
+  background-color: #f1f1f1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border: none;
+  border-radius: 8px;
+
+  a {
+    color: #292929;
+  }
+
+  span {
+    display: inline-block;
+  }
+}
+
+.ag-paging-page-size {
+  display: block;
+}
+
+.ag-header-cell-label {
+  justify-content: center;
+}
+
+
+// /* row 호버인데 중첩됨 이상함 */
+// .ag-row-hover:not(.ag-full-width-row)::before {
+//   background-color: transparent;
+// }
+
+// /* row 호버시 */
+// .ag-row:hover {
+//   background-color: var(--row-hover-color);
+// }
+
+// /* row 선택시 */
+// .ag-row-selected::before {
+//   background-color: var(--row-selected-color);
+// }
+
+// /* 선택된 row 호버시 */
+// .ag-row-hover.ag-row-selected::before {
+//   background-color: var(--row-selected-hover-color);
+//   background-image: linear-gradient(var(--row-selected-hover-color), var(--row-selected-hover-color));
+// }
+
+// /* 선택된 셀 */
+// .ag-ltr .ag-cell-focus:not(.ag-cell-range-selected):focus-within {
+//   border-color: var(--cell-selected-color);
+//   border-radius: 10px;
+// }
+
+// /* 체크 안된 박스 */
+// .ag-checkbox-input-wrapper {
+//   background-color: white;
+// }
+
+// /* 체크 안된 박스 after */
+// .ag-checkbox-input-wrapper::after {
+//   content: var(--ag-icon-font-code-checkbox-unchecked, "\f108");
+//   color: var(--checkbox-unchecked-color);
+//   position: absolute;
+//   top: 0;
+//   left: 0;
+//   pointer-events: none;
+// }
+
+// /* 체크된 박스 */
+// .ag-checkbox-input-wrapper.ag-checked::after {
+//   content: var(--ag-icon-font-code-checkbox-checked, "\f106");
+//   color: var(--checkbox-checked-color);
+//   position: absolute;
+//   top: 0;
+//   left: 0;
+//   pointer-events: none;
+//   /* color: #3a3a3a; */
+// }
+
+// /* 박스 그림자 */
+// .ag-checkbox-input-wrapper:focus-within {
+//   box-shadow: var(--input-focus-boxshadow-color);
+// }
+
+// .ag-row .ag-cell {
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+// }
+
+// .ag-header-cell-label {
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+// }
+
+// .ag-cell-wrapper {
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+// }
+
+// .ag-selection-checkbox {
+//   margin-right: 0 !important;
+// }
+
+// .ag-paging-panel {
+//   justify-content: space-around;
+// }
+
+// .ag-paging-page-size {
+//   order: 3;
+// }
+
+// .ag-paging-row-summary-panel {
+//   order: 1;
+// }
+
+// .ag-paging-page-summary-panel {
+//   order: 2;
+// }
+
+// #ag-225-label {
+//   display: none;
+// }
+
+
+
+
+// /* 색상 */
+
+// .ag-header-cell {
+//   background-color: var(--white-color) !important;
+//   color: var(--grid-BG-color);
+// }

@@ -3,6 +3,7 @@ import styled from "styled-components";
 import plus from "@img/plus1.svg";
 import { useState, useEffect } from "react";
 import { InputWrap } from "../../pages/adminPage/Category";
+import { admin } from "@styles/icons";
 
 const Icon = styled.div`
   position: relative;
@@ -13,10 +14,31 @@ const IconInner = styled.div`
   width: 100%;
   height: 100px;
   border-radius: 12px;
-  height: 100px;
   display: flex;
   align-items: center;
-  background-color: #f5f5f7;
+  font-size: 15px;
+  font-weight: 100;
+  color: #888;
+  border: 1px solid #86868b;
+  border-radius: 12px;
+  background-color: transparent;
+
+  & > span {
+    color: #888;
+  }
+
+  .addbutton-wrap {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 `;
 
 interface IconI {
@@ -72,6 +94,34 @@ const Error = styled.span`
   margin-top: 10px;
 `;
 
+const AddButton = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  transition: fill 0.3s ease-in-out;
+
+  path {
+    fill: #353535;
+  }
+
+  &:hover {
+    path {
+      fill: #272727;
+    }
+  }
+
+  & > span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    font-weight: 500;
+  }
+`;
+
 function ImagePreview({ image, deleteFunc }: any) {
   return (
     <div className="ImagePreview" draggable>
@@ -86,8 +136,6 @@ function ImageUploadBox(props: any) {
   const [previewImages, setPreviewImages] = useState<any>([]);
   const [errorMessage, setErrorMessage] = useState<any>([]);
   const [isImage, setIsImage] = useState<boolean>(false);
-
-  console.log(props.selectedDarkMode);
 
   const validFileTypes = ["image/svg+xml", "image/png"];
 
@@ -187,19 +235,23 @@ function ImageUploadBox(props: any) {
     <>
       <Icon className="Icon">
         <InputWrap className="IconWrap">
-        <IconInner className="IconInner">
-          <h5 className="cateInfo-name">아이콘</h5>
-          <IconI className="IconI" isImage={isImage}></IconI>
-          <IconLabel className="IconLabel dragorclick" onDragOver={dragOverHandler} onDrop={dropHandler}>
-            {previewImages}
-            <IconInput type="file" multiple accept="image/*" onChange={changeHandler} />
-          </IconLabel>
-          <div className="text-btn-wrap" style={{ position: "absolute", right: "20px" }}>
-            <button className="text-btn" onClick={IconDelete}>
-              <span className="text">삭제</span>
-            </button>
-          </div>
-        </IconInner>
+          <IconInner className="IconInner">
+            <h5 className="cateInfo-name">아이콘</h5>
+            <div className="addbutton-wrap">
+              <AddButton className="addbutton">
+                <admin.Plus width="18px" height="18px" fill={"#0071e3"}></admin.Plus>
+              </AddButton>
+            </div>
+            <IconLabel className="IconLabel dragorclick" onDragOver={dragOverHandler} onDrop={dropHandler}>
+              {previewImages}
+              <IconInput type="file" multiple accept="image/*" onChange={changeHandler} />
+            </IconLabel>
+            <div className="text-btn-wrap" style={{ position: "absolute", right: "20px" }}>
+              <button className="text-btn" onClick={IconDelete}>
+                <span>삭제</span>
+              </button>
+            </div>
+          </IconInner>
         </InputWrap>
         <Error>{errorMessage}</Error>
       </Icon>

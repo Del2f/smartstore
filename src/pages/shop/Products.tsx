@@ -1,13 +1,12 @@
 import axios from "../../api/axios";
-import styled, {css} from "styled-components";
+import styled, { css } from "styled-components";
 import { useState, useRef, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { GmIdType } from "./Shop";
 import { ColumnType, TaskType, SubTaskType } from "../adminPage/Category";
 import { cartListType } from "../shop/Cart";
 import { productList } from "./Category";
-import "./Products.scss";
 import MacBookAirM2 from "../adminPage/Product/Mac/macbook-air-m2";
+import "./Products.scss";
 
 interface Type {
   number?: number;
@@ -24,21 +23,16 @@ const ProductNav = styled.div<Type>`
   @media only screen and (min-width: 1024px) {
     min-width: 1024px;
   }
-  
+
   @media only screen and (max-width: 833px) {
     z-index: 2;
 
-    ${(props) =>
-      props.isSideMenu &&
-      css`
-      `}
+    ${(props) => props.isSideMenu && css``}
   }
 `;
 
 // 상품 전체 Wrap
 const Product = styled.div`
-  /* display: flex;
-  justify-content: center; */
 `;
 
 // 상품 상단 Nav
@@ -48,11 +42,8 @@ const ProductWrap = styled.div<Type>`
   left: 0;
   width: 100%;
   height: auto;
-  /* min-height: 100%; */
-  /* backdrop-filter: saturate(180%) blur(20px); */
-  
+
   @media only screen and (max-width: 833px) {
-    /* z-index: 2; */
     border-bottom: 1px solid rgba(0, 0, 0, 0.181818);
 
     ${(props) =>
@@ -80,9 +71,7 @@ const ProductBG = styled.div<ProductBG>`
   padding-top: 44px;
   width: 100%;
   height: 100%;
-  /* z-index: 1; */
   transition: background 0.5s cubic-bezier(0.28, 0.11, 0.32, 1);
-  /* background: var(--localnav-background); */
 `;
 
 const ProductContent = styled.div`
@@ -93,7 +82,7 @@ const ProductContent = styled.div`
   padding: 0 22px;
   position: relative;
   border-bottom: 1px solid rgba(0, 0, 0, 0.181818);
-  
+
   @media only screen and (max-width: 833px) {
     display: flex;
     /* z-index: 2; */
@@ -136,7 +125,6 @@ const ProductMenu = styled.div<Type>`
   line-height: 1;
   font-weight: 400;
   float: right;
-  margin-top: -3px;
   letter-spacing: 0em;
 `;
 
@@ -181,7 +169,7 @@ const MenuItem = styled.li<Type>`
     display: flex;
     align-items: center;
     height: 44px;
-    &:not(:first-child){
+    &:not(:first-child) {
       border-top: 1px solid rgba(0, 0, 0, 0.181818);
     }
 
@@ -208,7 +196,7 @@ const MenuItem = styled.li<Type>`
 
 // 구입하기 버튼
 const BuyBtnWrap = styled.div`
-  padding-top: 32px;
+  padding-top: 34px;
   float: left;
 
   @media only screen and (max-width: 833px) {
@@ -232,25 +220,18 @@ const BuyBtn = styled.div`
 `;
 
 const BuyBtnLink = styled(Link)`
-  cursor: pointer;
-  display: inline-block;
-  text-align: center;
-  white-space: nowrap;
-  background: #0071e3;
-  color: #fff;
-  border-color: rgba(0, 0, 0, 0);
-  border-radius: 980px;
-  font-size: 12px;
+
   line-height: 1.33337;
-  font-weight: 400;
-  letter-spacing: -0.01em;
-  border-style: solid;
-  border-width: 1px;
   min-width: 25px;
   padding-left: 10px;
   padding-right: 10px;
   padding-top: 3px;
   padding-bottom: 3px;
+
+  .text {
+    font-size: 12px;
+    font-weight: 400;
+  }
 `;
 
 const IconWrap = styled.div<Type>`
@@ -353,7 +334,6 @@ const Blur = styled.div<Type>`
 `;
 
 interface Props {
-  gmId: GmIdType;
   categoryList: ColumnType[];
   setNavCart: React.Dispatch<React.SetStateAction<cartListType[] | undefined>>;
   isMobile: boolean;
@@ -361,7 +341,7 @@ interface Props {
 
 // smartstore/shop/products/상품명
 // 샵에서 상품 구매할때 나오는 페이지
-function Products({ gmId, categoryList, setNavCart, isMobile }: Props) {
+function Products({ categoryList, setNavCart, isMobile }: Props) {
   const { id } = useParams();
 
   const [product, setProduct] = useState<productList | null>();
@@ -376,29 +356,6 @@ function Products({ gmId, categoryList, setNavCart, isMobile }: Props) {
 
   // 구매창 상단 고정
   const stickyNavRef = useRef<HTMLDivElement>(null);
-
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     const stickyDiv = stickyNavRef.current;
-
-  //     if (stickyDiv) {
-  //       const scrollPosition = window.scrollY;
-
-  //       if (scrollPosition > stickyDiv.offsetTop) {
-  //         stickyDiv.style.position = "fixed";
-  //         stickyDiv.style.top = "0";
-  //       } else {
-  //         stickyDiv.style.position = "static";
-  //       }
-  //     }
-  //   };
-
-  //   window.addEventListener("scroll", handleScroll);
-
-  //   return () => {
-  //     window.removeEventListener("scroll", handleScroll);
-  //   };
-  // }, []);
 
   useEffect(() => {
     const ProductData = async () => {
@@ -491,20 +448,6 @@ function Products({ gmId, categoryList, setNavCart, isMobile }: Props) {
                           <span>{list.title}</span>
                         </MenuItem>
                       ))}
-                      {/* <MenuItem className="MenuItem" number={1} isSideMenu={isSideMenu}>
-                        <span>개요</span>
-                      </MenuItem>
-                      <MenuItem className="MenuItem" number={2} isSideMenu={isSideMenu}>
-                        <a href="">제품 사양</a>
-                      </MenuItem>
-                      <MenuItem className="MenuItem" number={3} isSideMenu={isSideMenu}>
-                        <a href="">비교하기</a>
-                      </MenuItem> */}
-                      {/* <MenuItem className="MenuItem">
-                          <a href="">
-                            Mac이 처음이라면
-                          </a>
-                        </MenuItem> */}
                     </MenuItems>
                   </MenuWrap>
                   <BuyBtnWrap className="buy-btn-wrap">
@@ -512,8 +455,8 @@ function Products({ gmId, categoryList, setNavCart, isMobile }: Props) {
                       <Icon className="buy-btn-icon" isSideMenu={isSideMenu}></Icon>
                     </IconWrap>
                     <BuyBtn className="buy-btn">
-                      <BuyBtnLink className="buy-btn-link" to={`../buy/${URL}`}>
-                        구입하기
+                      <BuyBtnLink className="adver-blue-btn" to={`../buy/${URL}`}>
+                        <span className="text">구입하기</span>
                       </BuyBtnLink>
                     </BuyBtn>
                   </BuyBtnWrap>

@@ -1,3 +1,7 @@
+body.header-dark {
+    background: linear-gradient(#1D1D1F calc(44px), #fff 0%);
+}
+
 .modal {
     --modal-overlay-background: rgb(255, 255, 255);
     --modal-overlay-padding-top: 76px;
@@ -17,7 +21,11 @@
     --modal-close-icon-svg-size: 20px;
     --modal-overlay-padding-top: 96px;
     --modal-overlay-padding-bottom: 96px;
+}
 
+button {
+    border: 0;
+    background-color: transparent;
 }
 
 .blur {
@@ -30,6 +38,18 @@
     z-index: 1;
 }
 
+.text-ct {
+    text-align: center;
+}
+
+.show {
+    display: block !important;
+}
+
+.hide {
+    display: none !important;
+}
+
 // 모달창
 .modalpage {
     position: relative;
@@ -39,7 +59,7 @@
     border-radius: 12px;
     display: flex;
     flex-direction: column;
-    transition: opacity 0.32s cubic-bezier(0.4,0,0.6,1) 80ms,visibility 0.32s step-start 80ms;
+    transition: opacity 0.32s cubic-bezier(0.4, 0, 0.6, 1) 80ms, visibility 0.32s step-start 80ms;
 
     h1 {
         font-size: 40px;
@@ -53,7 +73,7 @@
         font-weight: 600;
         text-align: center;
         padding: 20px;
-      }
+    }
 }
 
 .LR-margin-10 {
@@ -92,47 +112,353 @@
     margin: 40px;
 }
 
-.input-box {
+
+
+// 상점 페이지
+// 로컬 nav
+.localnav-content {
+    position: relative;
+    height: 52px;
+    border-bottom: 1px solid #cccccc;
+
+    .localnav-inner {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 0 22px;
+    }
+
+}
+
+// 로컬 상단 nav 좌측 타이틀
+.localnav-title {
+    font-size: 24px;
+    line-height: 2.125;
+    font-weight: 500;
+    letter-spacing: .015em;
+    cursor: default;
+    display: block;
+    float: left;
+    margin: 0;
+    padding: 0;
+    height: 52px;
+    white-space: nowrap;
+}
+
+// 로컬 상단 nav 우측 메뉴
+.localnav-menu {
+    color: #333;
+    display: inline-block;
+    line-height: 22px;
+    white-space: nowrap;
+    font-size: 11px;
+    font-weight: 400;
+}
+
+// 인풋
+.input-wrap {
+    position: relative;
     width: 100%;
     background-color: #fff;
     border-radius: 12px;
     display: flex;
     align-items: center;
-    
-    #input-inner {
+    background-color: transparent;
+
+    .input,
+    .input2 {
         position: relative;
+        font-size: 17px;
+        line-height: 1.23543;
+        font-weight: 200;
+        letter-spacing: -.022em;
+        display: inline-block;
+        vertical-align: top;
+        width: 100%;
+        height: 3.3em;
+        padding-top: 18px;
+        padding-left: 16px;
+        padding-right: 16px;
+        text-align: left;
+        color: #494949;
+        border: 1px solid #86868b;
         border-radius: 12px;
-        padding: 1px 15px;
+        background-color: transparent;
     }
-    
-    // #input-inner:hover {
-    //     border: 1px solid rgb(117, 117, 117);
-    // }
-    
-    #input-inner-active {
-        position: relative;
-        padding: 1px 15px;
-        // border: 1px solid rgba(0,0,0,.15);
-        border: 1px solid #03c75a;
-        border-radius: 12px;
-        z-index: 20;
+
+    .input:focus,
+    .input2:focus,
+    select:focus {
+        border-width: 2px;
+        border-color: #0071e3;
+        outline: none;
+        padding-left: .92735rem;
     }
 }
 
-.input { // 인풋
-    outline: transparent;
-    width: 100%;
+// input 에러 처리
+.error {
+    border-color: #de071c !important;
+    background: #fef0f0 !important;
+    margin-bottom: 0 !important;
+    margin-top: 0;
+}
+
+.error-opacity {
+    opacity: 0;
+}
+
+
+.input-text,
+.input2-text {
+    position: absolute;
+    font-size: 15px;
+    font-weight: 100;
+    top: 20px;
+    left: 17px;
+    color: #888;
+    padding: 0;
+    z-index: 0;
+    pointer-events: none;
+    transition-timing-function: ease-in;
+    transition-duration: 0.125s;
+}
+
+.input-text-error {
+    color: #de071c;
+}
+
+.input:focus+.input-text,
+.input2:focus+.input2-text,
+.input.not-empty+.input-text,
+.input2.not-empty+.input2-text {
+    font-size: 11px;
+    font-weight: 300;
+    top: 12px;
+}
+
+// input에 인증 버튼이 있을때
+.input-auth-btn {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 11px;
+    right: 12px;
+    width: 70px;
+    height: 35px;
     border: none;
-    font-size: 13px;
-    line-height: 34px;
-    color: #000;
+    border-radius: 14px;
+    background-color: transparent;
+
+    .input-auth-text {
+        color: rgba(0, 0, 0, .26);
+        font-size: 14px;
+        font-weight: 500;
+    }
+}
+
+.input-auth-btn-active {
+    // background-color: var(--blue-color);
+
+    .input-auth-text {
+        color: #0070c9;
+        font-size: 14px;
+        font-weight: 700;
+    }
+}
+
+.select {
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.23543;
+    letter-spacing: -.022em;
+    display: block;
+    width: 100%;
+    height: 56px;
+    color: #333;
+    text-align: left;
+    background: hsla(0, 0%, 100%, .8);
+    border: 1px solid #d6d6d6;
+    border-radius: 4px;
+    box-sizing: border-box;
+    appearance: none;
+    min-height: 32px;
+    padding-left: 16px;
+    padding-right: 28px;
+}
+
+.input2:focus,
+.select:focus {
+    border-color: #0070c9;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(131, 192, 253, .5);
+}
+
+.error-wrap {
+    // margin-bottom: 10px;
+}
+
+// 에러 대신 기본 메세지
+.input-default-message {
+    span {
+        color: #666;
+        font-size: 12px;
+        line-height: 1.42861;
+        font-weight: 300;
+    }
+
+    margin-bottom: 10px;
+}
+
+// 성공 메세지
+.success-default-message {
+    display: none;
+    color: #0070c9;
+    letter-spacing: -.2px;
+    margin-top: 8px;
+    margin-bottom: 12px;
+    font-size: 11px;
+    line-height: 1.5;
+    font-weight: 500;
+}
+
+.success-message-active {
+    display: block;
+}
+
+// 에러 메세지
+.error-default {
+    display: block;
+    color: #0070c9;
+    letter-spacing: -.2px;
+    margin-top: 8px;
+    margin-bottom: 12px;
+    font-size: 12px;
+    line-height: 1.5;
+    font-weight: 400;
+}
+
+.error-message-active {
+    display: block;
+    color: #ff3627;
+    letter-spacing: -.2px;
+    margin-top: 8px;
+    margin-bottom: 12px;
+    font-size: 12px;
+    line-height: 1.5;
+    font-weight: 400;
+}
+
+.error-message-active::before {
+    content: "";
+    font-family: SF Pro Icons;
+    color: inherit;
+    display: inline-block;
+    font-style: normal;
+    font-weight: inherit;
+    font-size: inherit;
+    line-height: 1;
+    text-decoration: underline;
+    position: relative;
+    z-index: 1;
+    alt: "";
+    text-decoration: none;
+    padding-right: .3em;
+    display: inline-block;
+    top: 0;
+}
+
+.error-message {
+    margin-top: 8px;
+    color: #ff3627;
     letter-spacing: -.2px;
 }
 
-.input::placeholder {
-    color: #b9b9b9;
-    font-size: 13px;
-    font-weight: 100;
+
+// 체크박스
+.checkbox-wrap {
+    position: relative;
+
+    .checkbox-input {
+        position: absolute;
+        top: 3px;
+        left: 0;
+        // opacity: 0;
+        cursor: pointer;
+        width: 14px;
+        height: 14px;
+        border-radius: 3px;
+
+    }
+
+
+    .checkbox-input:focus {
+        outline: none;
+        // outline: 3px solid rgba(131, 192, 253, .5);
+        // outline-offset: 1px;
+        border-radius: 3px;
+    }
+
+    .checkbox-input:checked+.checkbox-label .checkbox-icon {
+        border-color: #0070c9;
+        background: #0070c9;
+        // text-align: center;
+    }
+
+    .checkbox-input:focus+.checkbox-label .checkbox-icon {
+        box-shadow: 0 0 0 3px rgba(131, 192, 253, .5);
+        border-color: #0070c9;
+    }
+
+
+    .checkbox-input:checked~.checkbox-label .checkbox-icon {
+        // border: 6px solid #0070c9;
+        // width: .23529rem;
+        // height: .23529rem;
+    }
+
+    .checkbox-label {
+        display: block;
+        padding-left: 26px;
+        padding-top: 2px;
+        color: #333;
+        cursor: pointer;
+
+        .checkbox-icon {
+            position: absolute;
+            top: 3px;
+            left: 0;
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 1px solid #ccc;
+            background: #fff;
+            border-radius: 3px;
+        }
+
+        .checkbox-icon-error {
+            background: #fff2f4;
+            border-color: #e30000;
+        }
+
+        .checkbox-icon:after {
+            display: inline-block;
+            position: relative;
+            content: "";
+            font-size: 19px;
+            top: -8px;
+            left: -7px;
+            line-height: 1.47384;
+            font-weight: 400;
+            letter-spacing: .015em;
+            font-family: SF Pro Display, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif;
+            color: #fff;
+            padding: 0;
+            vertical-align: top;
+            text-align: center;
+            width: 28px;
+        }
+    }
 }
 
 // 일반 버튼
@@ -152,6 +478,35 @@
     }
 }
 
+// 광고 구입하기 버튼
+.adver-blue-btn {
+    cursor: pointer;
+    display: inline-block;
+    margin-top: 14px;
+    text-align: center;
+    white-space: nowrap;
+    line-height: 1.17648;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border-radius: 980px;
+    background: rgb(0, 113, 227);
+    color: #fff;
+    margin: 0 10px;
+
+    .text {
+        color: #fff;
+        font-size: 17px;
+        font-weight: 400;
+    }
+}
+
+.adver-blue-btn:hover {
+    background: #0076DF;
+}
+
+
 // 일반 블루 버튼
 .normal-blue-btn {
     display: flex;
@@ -170,9 +525,6 @@
         font-weight: 600;
     }
 
-    &:not(:last-child) {
-        margin-right: 4px;
-    }
 }
 
 .circle-btn-wrap2 {
@@ -194,7 +546,6 @@
     }
 }
 
-
 // 동그란 버튼
 .circle-btn-wrap {
     position: absolute;
@@ -208,7 +559,7 @@
         border: none;
         border-radius: 20px;
         background-color: transparent;
-    
+
         .text {
             display: inline-block;
             color: var(--blue-color);
@@ -234,7 +585,7 @@
         height: 25px;
         border: none;
         background-color: transparent;
-    
+
         .text {
             display: inline-block;
             color: var(--black2-color);
@@ -255,11 +606,11 @@
     .submit-btn {
         display: inline-block;
         width: 100%;
-        height: 40px;
         border: none;
         border-radius: 10px;
         background-color: var(--btn-blue-color);
-    
+        padding: 20px;
+
         .text {
             display: inline-block;
             color: var(--white-color);
@@ -269,28 +620,57 @@
     }
 }
 
+// 계속 버튼 (그라데이션 파랑)
+.continue-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 1.47059;
+    font-weight: 400;
+    letter-spacing: -.022em;
+    font-family: SF Pro Text, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif;
+    background-color: #0070c9;
+    background: linear-gradient(#42a1ec, #0070c9);
+    border: 1px solid #07c;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+    min-width: 30px;
+    padding: 4px 15px;
+    text-align: center;
+    white-space: nowrap;
 
-.error-active {
-    display: block;
-    margin-top: 8px;
-    color: #ff3627;
-    letter-spacing: -.2px;
-    font-size: 12px;
-    font-weight: 700;
+    .continue-text {
+        color: #fff;
+        font-size: 14px;
+        font-weight: 700;
+    }
 }
 
-.error {
-    display: none;
-    margin-top: 8px;
-    letter-spacing: -.2px;
+// 새 코드 보내기 및 취소 (그라데이션 그레이)
+.gradient-btn2 {
+    background: linear-gradient(#fff, #e3e3e3);
+    border-color: #d6d6d6;
+
+    .gradient-btn2-text {
+        color: #0070c9;
+    }
 }
 
-.show {
-    display: block;
-}
+.gray-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 40px;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, .08);
+    margin-top: 20px;
 
-.hide {
-    display: none;
+    .text {
+        font-size: 12px;
+        font-weight: 400;
+    }
 }
 
 .modal-close-button {
@@ -345,4 +725,190 @@
         height: var(--modal-close-icon-svg-size);
         width: var(--modal-close-icon-svg-size);
     }
+}
+
+// shop 결제 input
+.shop-info-button {
+    width: 100%;
+    height: 83px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #86868b;
+    background-color: transparent;
+    border-radius: 12px;
+    padding: 20px;
+
+    span {
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .inner-left {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 20px;
+        text-align: left;
+
+        h3 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        h4 {
+            font-size: 12px;
+            font-weight: 400;
+            margin-top: 5px;
+        }
+    }
+
+    .inner-right {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 20px;
+
+        span {
+            font-size: 16px;
+            font-weight: 400;
+        }
+    }
+
+    @media only screen and (max-width: 833px) {
+        width: 100%;
+    }
+}
+
+.selected {
+    border-color: #0070c9;
+    border-width: 2px;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(131, 192, 253, 0.5);
+}
+
+.shop-info-button-input {
+
+    &.selected {
+        border: 2px solid #0071e3;
+    }
+
+    position: relative;
+    width: 100%;
+    height: 60px;
+    border-radius: 12px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #86868b;
+    background-color: transparent;
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 20px;
+
+    span {
+        position: absolute;
+        top: 10px;
+        color: #86868b;
+        font-size: 11px;
+        font-weight: 300;
+    }
+
+    input {
+        margin-top: 15px;
+        width: 100%;
+        border: 0;
+        outline: 0;
+    }
+}
+
+// shop 파란색 제출 버튼
+.form-button {
+    background-color: #0071e3;
+    padding: 17px 30px;
+    width: 100%;
+}
+
+// 파란 글씨 텍스트 버튼이며 우측에 화살표 아이콘이 들어감
+.arrow-btn {
+    display: block;
+    color: #0066cc;
+    font-size: inherit;
+    font-weight: inherit;
+    padding-left: 0;
+}
+
+.arrow-btn:after {
+    content: "\f301";
+    display: inline-block;
+    font-family: SF Pro Icons;
+    font-size: inherit;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 1;
+    position: relative;
+    text-decoration: underline;
+    z-index: 1;
+    text-decoration: none;
+    padding-inline-start: 0.24em;
+}
+
+.arrow-wrap {
+    position: relative;
+}
+
+.arrow {
+    position: absolute;
+    display: block;
+    pointer-events: none;
+    color: #888;
+    right: 17px;
+    font-size: 21px;
+    font-weight: 300;
+    top: 1rem;
+    line-height: 0;
+}
+
+.arrow::after {
+    content: "";
+}
+
+.arrow-right::after {
+    content: "";
+    display: inline-block;
+    font-family: SF Pro Icons;
+    font-size: inherit;
+    font-style: normal;
+    font-weight: inherit;
+    line-height: 1;
+    position: relative;
+    text-decoration: underline;
+    z-index: 1;
+    text-decoration: none;
+    padding-inline-start: 0.24em;
+}
+
+
+.icon-pluscircle {
+    padding-left: 2px;
+}
+
+.icon-pluscircle::after {
+    content: "";
+}
+
+.icon::after {
+    color: inherit;
+    display: inline-block;
+    font-family: SF Pro Icons;
+    font-size: inherit;
+    font-style: normal;
+    font-weight: inherit;
+    line-height: 1;
+    position: relative;
+    text-decoration: underline;
+    z-index: 1;
+    alt: "";
+    text-decoration: none;
 }

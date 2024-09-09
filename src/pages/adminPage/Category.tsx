@@ -1,26 +1,34 @@
 import axios from "../../api/axios";
-import { AxiosError } from "axios";
-import styled from "styled-components";
 import React, { useState, useRef, useEffect, SetStateAction, useCallback } from "react";
+import styled, { css } from "styled-components";
+import { motion } from "framer-motion";
+import { AxiosError } from "axios";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import { selectToken } from "../../store/authSlice";
-// import TableProductList from "../../components/admin/TableProductList";
 import CategoryIconRegi from "../../components/admin/CategoryIconRegi";
-import AdvertiseImage from "../../components/admin/AdvertiseImage";
 import Column from "./CategoryDnD/Column";
-import type1 from "@img/home/category/type1.png";
-import type2 from "@img/home/category/type2.png";
-import type3 from "@img/home/category/type3.png";
 import "./Category.scss";
-import SaveModal from "../../components/admin/CategorySave";
 
 type Props = {
   setNoticeIcon?: React.Dispatch<SetStateAction<any>>;
   setNotice?: React.Dispatch<SetStateAction<string>>;
   setNoticeDate?: React.Dispatch<SetStateAction<string>>;
 };
+
+interface Type {
+  isVisible: boolean;
+}
+
+interface Input {
+  checked: boolean;
+}
+
+interface TypeBox {
+  number: number;
+  selectedType: number;
+}
 
 const Container = styled.div`
   display: flex;
@@ -35,7 +43,6 @@ const CategoryInfoUl = styled.ul`
 const CategoryInfoLi = styled.li``;
 
 // 이름 체크박스
-
 const Label = styled.label`
   display: flex;
   align-items: center;
@@ -53,10 +60,6 @@ const Label = styled.label`
     font-weight: 800;
   }
 `;
-
-interface Input {
-  checked: boolean;
-}
 
 const Input = styled.input.attrs({ type: "checkbox" })<Input>`
   display: none;
@@ -79,42 +82,6 @@ const CustomCheckbox = styled.span`
   }
 `;
 
-const AdvertiseBtn = styled.button`
-  margin-right: 10px;
-  border: none;
-  border-radius: 15px;
-  background-color: var(--blue-color);
-  padding: 8px 15px;
-
-  & span {
-    color: var(--white-color);
-    font-weight: 600;
-  }
-`;
-
-const AdvertiseListBtn = styled.button`
-  border: none;
-  border-radius: 15px;
-  background-color: var(--blue-color);
-  padding: 8px 15px;
-  bottom: 5px;
-
-  & span {
-    color: var(--white-color);
-    font-weight: 600;
-  }
-`;
-
-interface TypeBox {
-  number: number;
-  selectedType: number;
-}
-
-const TypeBoxWrap = styled.div`
-  display: flex;
-  gap: 15px;
-`;
-
 const TypeBox = styled.label<TypeBox>`
   height: 100%;
 
@@ -129,251 +96,48 @@ const TypeBox = styled.label<TypeBox>`
   }
 `;
 
-const AdSubmitBtn = styled.button`
-  margin-top: 30px;
-  display: inline-block;
-  width: 100%;
-  height: 40px;
-  border: none;
-  border-radius: 10px;
-  background-color: var(--btn-blue-color);
-
-  & span {
-    display: inline-block;
-    color: var(--white-color);
-    font-size: 16px;
-    font-weight: 700;
-  }
-`;
-
-interface showProductList {
-  isProductListShow: boolean;
-}
-
-const ProductListWrap = styled.div<showProductList>`
-  position: absolute;
-  z-index: 2;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  ${(props) =>
-    props.isProductListShow
-      ? `
-opacity: 1;
-visibility: visible;
-`
-      : `
-opacity: 0;
-visibility: hidden;
-   `}
-  transition: opacity 0.32s cubic-bezier(0.4, 0, 0.6, 1) 80ms, visibility 0.32s step-start 80ms;
-`;
-const ProductList = styled.div`
-  position: relative;
-  width: 1000px;
-`;
-
-const Blur = styled.div<showProductList>`
-  backdrop-filter: blur(20px);
+const ModalInner = styled.div<Type>`
   position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 1;
-
-  ${(props) =>
-    props.isProductListShow
-      ? `
-      opacity: 1;
-      visibility: visible;
-      `
-      : `
-      opacity: 0;
-      visibility: hidden;
-  `}
-  transition: opacity 0.32s cubic-bezier(0.4, 0, 0.6, 1) 80ms, visibility 0.32s step-start 80ms;
-`;
-
-const BlurWrap = styled.div<showProductList>`
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  ${(props) =>
-    props.isProductListShow
-      ? `
-      visibility: visible;
-      `
-      : `
-      visibility: hidden;
-  `}
-`;
-
-interface showAdverList {
-  isAdverListShow: boolean;
-}
-
-const AdverListWrap = styled.div<showAdverList>`
-  position: absolute;
-  z-index: 2;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  ${(props) =>
-    props.isAdverListShow
-      ? `
-      opacity: 1;
-      visibility: visible;
-      `
-      : `
-      opacity: 0;
-      visibility: hidden;
-   `}
-  transition: opacity 0.32s cubic-bezier(0.4, 0, 0.6, 1) 80ms, visibility 0.32s 80ms;
-`;
-
-const AdverList = styled.div`
-  position: relative;
   width: 600px;
   background-color: white;
   padding: 30px 25px;
   border-radius: 12px;
   display: flex;
   flex-direction: column;
-`;
-
-const AdverBlur = styled.div<showAdverList>`
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 1;
-  backdrop-filter: blur(20px);
-
-  ${(props) =>
-    props.isAdverListShow
-      ? `
-      opacity: 1;
-      visibility: visible;
-      `
-      : `
-      opacity: 0;
-      visibility: hidden;
-  `}
+  z-index: 2;
   transition: opacity 0.32s cubic-bezier(0.4, 0, 0.6, 1) 80ms, visibility 0.32s 80ms;
-`;
-
-const AdverBlurWrap = styled.div<showAdverList>`
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 
   ${(props) =>
-    props.isAdverListShow
-      ? `
-      visibility: visible;
-      `
-      : `
-      visibility: hidden;
-  `}
-`;
+    props.isVisible
+      ? css`
+          opacity: 1;
+          visibility: visible;
+        `
+      : css`
+          opacity: 0;
+          visibility: hidden;
+        `}
 
-interface adverPreview {
-  adBackColor: string;
-}
-
-const AdverPreview = styled.div<adverPreview>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  margin-top: 30px;
-  border-radius: 15px;
-  background-color: ${(props) => props.adBackColor};
-
-  & input {
-    background-color: transparent;
+  & > .normal-blue-btn {
+    width: 100%;
+    padding: 30px 20px;
+    span {
+      color: #fff;
+      font-size: 17px;
+      font-weight: 400;
+    }
   }
-`;
 
-const AdverPreviewColumn = styled.div<adverPreview>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: row;
-  margin-top: 30px;
-  border-radius: 15px;
-  background-color: ${(props) => props.adBackColor};
+  & > .cancel-btn {
+    display: flex;
+    justify-content: center;
+    color: #06c;
+    width: 100%;
+    padding: 30px 20px;
 
-  & input {
-    background-color: transparent;
-  }
-`;
-
-interface Modal {
-  isAdvertiseModal: boolean;
-}
-
-const Modal = styled.div<Modal>`
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  backdrop-filter: blur(20px);
-
-  ${(props) =>
-    props.isAdvertiseModal
-      ? `
-      visibility: visible;
-      `
-      : `
-      visibility: hidden;
-  `}
-`;
-const ModalInner = styled.div<Modal>`
-  position: relative;
-  width: 600px;
-  background-color: white;
-  padding: 30px 25px;
-  border-radius: 12px;
-  display: flex;
-  flex-direction: column;
-  transition: opacity 0.32s cubic-bezier(0.4, 0, 0.6, 1) 80ms, visibility 0.32s step-start 80ms;
-
-  ${(props) =>
-    props.isAdvertiseModal
-      ? `
-      opacity: 1;
-      visibility: visible;
-      `
-      : `
-      opacity: 0;
-      visibility: hidden;
-  `}
-
-  span {
-    font-size: 20px;
-    font-weight: 700;
-    text-align: center;
-    padding: 20px;
+    .text {
+      cursor: pointer;
+    }
   }
 `;
 
@@ -388,6 +152,7 @@ export interface SubTaskType {
   navHide?: boolean;
   chapterNavHide?: boolean;
   darkMode?: boolean;
+  message: string | undefined;
 }
 
 export interface TaskType {
@@ -403,6 +168,8 @@ export interface TaskType {
   darkMode?: boolean;
   subTaskIds?: SubTaskType[] | null;
   advertise?: Advertise[] | undefined;
+  pold: boolean;
+  message: string | undefined;
 }
 
 export interface ColumnType {
@@ -415,6 +182,7 @@ export interface ColumnType {
   navHide?: boolean;
   darkMode?: boolean;
   advertise?: Advertise[] | undefined;
+  pold: boolean;
 }
 
 export interface DndState {
@@ -443,38 +211,96 @@ export const InputWrap = styled.div`
     padding-left: 10px;
     padding-right: 10px;
   }
-`
+`;
 
 const Error = styled.div`
-  position: absolute;
-`
+  font-size: 13px;
+  margin-top: 12px;
+`;
+
+const InputButton = {
+  Wrap: styled.div`
+    position: absolute;
+    right: 5px;
+
+    &.edit {
+      right: 50px;
+    }
+
+    @media only screen and (max-width: 833px) {
+      display: block;
+      width: 48px;
+      z-index: 3;
+      margin: 0;
+      position: absolute;
+      inset-inline-end: max(0px, -16px);
+    }
+  `,
+  Btn: styled.button`
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #000;
+    opacity: 0.8;
+    width: 48px;
+    height: 48px;
+    cursor: pointer;
+    outline-offset: -7px;
+    transition: opacity 0.32s cubic-bezier(0.4, 0, 0.6, 1), color 0.32s cubic-bezier(0.4, 0, 0.6, 1);
+
+    & > svg > polyline {
+      stroke: ${(props) => props.theme.navText};
+      transition: stroke 0.32s cubic-bezier(0.4, 0, 0.6, 1);
+    }
+
+    &:hover {
+      & > svg > polyline {
+        stroke: ${(props) => props.theme.navMainHover};
+      }
+    }
+
+    @media only screen and (max-width: 833px) {
+    }
+  `,
+};
+
+const Blur = styled.div<any>`
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(20px);
+
+  ${(props) =>
+    props.isVisible
+      ? css`
+          opacity: 1;
+          visibility: visible;
+        `
+      : css`
+          opacity: 0;
+          visibility: hidden;
+        `}
+  transition: opacity 0.32s cubic-bezier(0.4, 0, 0.6, 1) 80ms, visibility 0.32s 80ms;
+`;
 
 function Category(props: Props) {
   const token = useSelector(selectToken);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    props.setNoticeIcon && props.setNoticeIcon("");
-    props.setNotice && props.setNotice("카테고리 관리");
-    props.setNoticeDate && props.setNoticeDate("");
-  }, []);
-
-  // 우측 상품목록
-  const [selectedProductList, setSelectedProductList] = useState<any>([]);
-  // console.log(selectedProductList);
-
   // 중앙 카테고리에 등록된 상품 목록
   const [addedProductList, setAddedProductList] = useState<any>([]);
 
   const [iconImg, setIconImg] = useState<string>("");
-
-  const [addedErrMessage, setAddedErrMessage] = useState<string>("");
-  const [addedSelected, setAddedSelected] = useState<any>([]);
-  const [addedSelectedName, setAddedSelectedName] = useState<string | null>();
-  const [isAddedSelected, setIsAddedSelected] = useState<boolean>(false);
-
   const [selectedList, setSelectedList] = useState<any>([]);
-  console.log(selectedList);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+
+  // console.log(selectedList);
 
   const [selectedName, setSelectedName] = useState<string>();
   const [selectedURL, setSelectedURL] = useState<string>();
@@ -483,9 +309,8 @@ function Category(props: Props) {
   const [selectedNavHide, setSelectedNavHide] = useState<boolean>(false);
   const [selectedChapNavHide, setSelectedChapNavHide] = useState<boolean>(false);
   const [selectedDarkMode, setSelectedDarkMode] = useState<boolean>(false);
-  const [selectedColumnDarkMode, setSelectedColumnDarkMode] = useState<boolean>(false);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  console.log(selectedColumnDarkMode);
+  const [selectedPold, setSelectedPold] = useState<boolean>(false);
+  const [selectedMessage, setSelectedMessage] = useState<string>();
 
   const [addColumn, setAddColumn] = useState<string>("");
 
@@ -502,13 +327,8 @@ function Category(props: Props) {
   const [isAdd, setIsAdd] = useState<boolean>(false);
 
   // Ref
-  const inputRef = useRef<any>();
   const listRef = useRef<any>(null);
-  const AdverBlurWrapRef = useRef<any>();
-  const AdverBlurRef = useRef<any>();
-  const AdvertiseModalRef = useRef<any>();
-  const blurWrapRef = useRef<any>();
-  const blurRef = useRef<any>();
+  const modalRef = useRef<any>();
   const colorRef = useRef<any>();
   const imgRef = useRef<any>();
 
@@ -518,7 +338,6 @@ function Category(props: Props) {
     columns: [],
     tasks: [],
   });
-  console.log(dnd);
 
   const flatColumn = dnd.columns.flatMap((column) => column); // dnd.columns를 배열로 평탄화 하여 나열합니다.
   const flatColumnInTaskIds = dnd.columns.flatMap((column) => column.taskIds); // 모든 taskIds를 배열로 평탄화 하여 나열합니다.
@@ -528,17 +347,10 @@ function Category(props: Props) {
   const [isAdvertise, setIsAdvertise] = useState<boolean>(false);
   const [isAdvertiseEdit, setIsAdvertiseEdit] = useState<boolean>(false);
 
-  // console.log("isAdvertise " + isAdvertise);
-  // console.log("isAdvertiseEdit " + isAdvertiseEdit);
-
   // 광고 목록 클릭 여부
   const [isAdverListClick, setIsAdverListClick] = useState<boolean>(false);
   const [selectedAdvertise, setSelectedAdvertise] = useState<Advertise[]>([]);
   const [selectedAdverID, setSelectedAdverID] = useState<string>("");
-
-  // console.log(isAdverListClick);
-  // console.log(selectedAdvertise);
-  // console.log(selectedAdverID);
 
   // 광고페이지의 광고타입을 지정합니다.
   const [adName, setAdname] = useState<string>("");
@@ -555,7 +367,6 @@ function Category(props: Props) {
 
   // 광고 페이지 상품 클릭 여부
   const [isProductClick, setIsProductClick] = useState<boolean>(false);
-
   const [isAdName, setIsAdName] = useState<boolean>(false);
   const [isAdSubTitle, setIsAdSubTitle] = useState<boolean>(false);
   const [isAdMainTitle, setIsAdMainTitle] = useState<boolean>(false);
@@ -565,9 +376,6 @@ function Category(props: Props) {
   const [isAdImage, setIsAdImage] = useState<boolean>(false);
   const [isBackColor, setIsBackColor] = useState<boolean>(false);
   const [advertise, setAdvertise] = useState<Advertise[]>([]);
-
-  // console.log(advertise);
-
   const [isAdFinish, setIsAdFinish] = useState<boolean>(false);
 
   // 광고 등록 에러 메세지
@@ -584,17 +392,31 @@ function Category(props: Props) {
   const [isProductListShow, setIsProductListShow] = useState<boolean>(false);
 
   // 광고 목록창 boolean
-  const [isAdverListShow, setIsAdverListShow] = useState<boolean>(false);
+  const [isAdverListModal, setIsAdverListModal] = useState<boolean>(false);
 
   // 배경 색상
   const [colorSelector, setColorSelector] = useState<boolean>(false);
+
+  // 카테고리 등록 inner or outer
+  const [isCategoryType, setIsCategoryType] = useState<string | null>(null);
+
+  // 카테고리 등록 모달창
+  const [isCategoryAddModal, setIsCategoryAddModal] = useState<boolean>(false);
+
+  // 카테고리 삭제 모달창
+  const [isCategoryDeleteModal, setIsCategoryDeleteModal] = useState<boolean>(false);
 
   // 광고 등록 모달창
   const [isAdvertiseModal, setIsAdvertiseModal] = useState<boolean>(false);
 
   // 저장 모달창
   const [isSaveModal, setIsSaveModal] = useState<boolean>(false);
-  // console.log(isAdvertiseModal);
+
+  // 저장 모달창
+  const [isDrag, setIsDrag] = useState<boolean>(false);
+
+  const [isDisabled, setIsDisabled] = useState<boolean>(false);
+  const [isHeight, setIsHeight] = useState<boolean>(false);
 
   // 광고 관련 함수 모음.
   const Advertise = {
@@ -614,46 +436,10 @@ function Category(props: Props) {
       }
     },
     advertiseListShow: () => {
-      setIsAdverListShow(true);
+      setIsAdverListModal(true);
     },
     advertiseShow: () => {
       setIsAdvertise(true);
-    },
-    advertiseEdit: () => {
-      console.log("광고 수정 버튼을 누름");
-
-      const data = advertise.filter((list: any) => list._id === selectedAdverID);
-      setSelectedAdvertise(data);
-      console.log(data);
-
-      setIsAdvertise(true);
-      setIsAdvertiseEdit(true);
-
-      setAdname(data[0].name);
-      setIsAdName(true);
-
-      setAdType(data[0].type);
-
-      setAdSubTitle(data[0].subtitle);
-      setIsAdSubTitle(true);
-
-      setAdMainTitle(data[0].maintitle);
-      setIsAdMainTitle(true);
-
-      setAdDetail(data[0].detail);
-      setIsAdDetail(true);
-
-      setAdSubDetail(data[0].subdetail);
-      setIsAdSubDetail(true);
-
-      setAdImage(data[0].image);
-      setIsAdImage(true);
-
-      setAdBackColor(data[0].backcolor);
-      setIsBackColor(true);
-
-      setAdURL(data[0].url);
-      setIsAdURL(true);
     },
     // 광고 목록 리스트 클릭시
     adListSelect: (id: string) => {
@@ -688,10 +474,10 @@ function Category(props: Props) {
         setSelectedAdvertise([]);
         setIsAdvertiseEdit(false);
       }
-      setIsAdverListShow(false);
+      setIsAdverListModal(false);
     },
     adverListClose: () => {
-      setIsAdverListShow(false);
+      setIsAdverListModal(false);
     },
     cateInfoShow: () => {
       setIsAdvertise(false);
@@ -712,9 +498,6 @@ function Category(props: Props) {
         setAdname(e.target.value);
         setIsAdName(true);
       }
-    },
-    adTypeChange: (e: React.ChangeEvent<HTMLInputElement>) => {
-      setAdType(Number(e.target.value));
     },
     adSubTitle: (e: any) => {
       if (e.target.value.length > 21) {
@@ -754,10 +537,6 @@ function Category(props: Props) {
         setIsAdSubDetail(true);
       }
     },
-    // 등록된 상품 클릭시
-    // adProductClick: () => {
-    //   setIsProductClick(true);
-    // },
     adColorSelect: () => {
       console.log("colorSelectHandler");
       setColorSelector((e) => !e);
@@ -769,121 +548,6 @@ function Category(props: Props) {
     ProductListClose: () => {
       setIsProductListShow(false);
     },
-    // 상품 추가 버튼
-    ProductAdd: async (e: any) => {
-      e.preventDefault();
-
-      if (!selectedProductList[0]) {
-        setErrProductList("상품을 선택 해주세요.");
-        setIsAdURL(false);
-        return;
-      }
-
-      if (!selectedProductList[0]?.url || selectedProductList[0]?.url === "") {
-        setErrProductList("상품의 URL이 없습니다. 상품 수정으로 URL을 등록해주세요.");
-        setIsAdURL(false);
-        return;
-      }
-
-      Advertise.ProductListClose();
-
-      setIsAdURL(true);
-      setAdProduct(selectedProductList);
-      setAdURL(selectedProductList[0].url);
-    },
-    // 상품 삭제 버튼
-    ProductDelete: async (e: any) => {
-      e.preventDefault();
-
-      if (!isProductClick) {
-        console.log("카테고리가 등록된 상품이 선택되지 않았습니다.");
-        return;
-      }
-
-      setAdProduct([]);
-      setAdURL("");
-    },
-    // adSubmit: async (e: any) => {
-    //   e.preventDefault();
-
-    //   if (isSelectedSubTask) {
-    //     setIsAdFinish(false);
-    //     setErrAdFinish("해당 카테고리는 광고를 노출 할 수 없습니다.");
-    //     return;
-    //   }
-
-    //   if (isSelected || isSelectedTask) {
-    //     setIsAdFinish(true);
-    //     setErrAdFinish("");
-
-    //     if (isAdName && isAdSubTitle && isAdMainTitle && isAdDetail && isAdSubDetail && isAdURL && isBackColor) {
-    //       setIsAdFinish(true);
-    //       setErrAdFinish("");
-
-    //       let newAdvertise;
-    //       if (isAdvertiseEdit) {
-    //         newAdvertise = {
-    //           _id: selectedAdverID,
-    //           type: adType,
-    //           name: adName,
-    //           subtitle: adSubTitle,
-    //           maintitle: adMainTitle,
-    //           detail: adDetail,
-    //           subdetail: adSubDetail,
-    //           image: adImage,
-    //           url: adURL,
-    //           backcolor: adBackColor,
-    //           product_id: adProduct[0]._id,
-    //         };
-    //       } else {
-    //         newAdvertise = {
-    //           type: adType,
-    //           name: adName,
-    //           subtitle: adSubTitle,
-    //           maintitle: adMainTitle,
-    //           detail: adDetail,
-    //           subdetail: adSubDetail,
-    //           image: adImage,
-    //           url: adURL,
-    //           backcolor: adBackColor,
-    //           product_id: adProduct[0]._id,
-    //         };
-    //       }
-
-    //       try {
-    //         const res = await axios.post(
-    //           "/smartstore/home/category/advertise",
-    //           { isAdvertiseEdit, newAdvertise, selectedList },
-    //           { withCredentials: true }
-    //         );
-    //         const { success, Advertises } = res.data;
-
-    //         console.log(res);
-    //         if (success) {
-    //           setAdvertise(Advertises);
-    //           setIsAdvertise(false);
-
-    //           // 광고 등록후 초기화
-    //           Advertise.InputReset();
-    //         }
-    //       } catch (err) {
-    //         console.log(err);
-    //       }
-    //     } else {
-    //       setIsAdFinish(false);
-    //       setErrAdFinish("내용을 전부 입력해주세요.");
-    //     }
-    //   } else {
-    //     setIsAdFinish(false);
-    //     setErrAdFinish("카테고리를 선택 해주세요.");
-    //   }
-
-    //   if (!adProduct[0]) {
-    //     setErrAdFinish("상품을 선택 해주세요.");
-    //     setIsAdURL(false);
-    //     return;
-    //   }
-    // },
     Delete: async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, id: string) => {
       e.stopPropagation();
       const advertiseID = id;
@@ -902,50 +566,6 @@ function Category(props: Props) {
           navigate("../home");
         }
       }
-
-      // if (isSelectedSubTask) {
-      //   setIsAdFinish(false);
-      //   setErrAdFinish("해당 카테고리는 광고를 노출 할 수 없습니다.");
-      //   return;
-      // }
-
-      // if (isSelected || isSelectedTask) {
-      //   setIsAdFinish(true);
-      //   setErrAdFinish("");
-
-      //   if (isAdName && isAdSubTitle && isAdMainTitle && isAdDetail && isAdSubDetail && isAdURL && isBackColor) {
-      //     setIsAdFinish(true);
-      //     setErrAdFinish("");
-
-      //     const newAdvertise = {
-      //       type: selectedType,
-      //       name: adName,
-      //       subtitle: adSubTitle,
-      //       maintitle: adMainTitle,
-      //       detail: adDetail,
-      //       subdetail: adSubDetail,
-      //       image: adImage,
-      //       url: adURL,
-      //       backcolor: adBackColor,
-      //       product_id: adProduct[0]._id,
-      //     };
-
-      //     console.log(advertise);
-
-      //   } else {
-      //     setIsAdFinish(false);
-      //     setErrAdFinish("내용을 전부 입력해주세요.");
-      //   }
-      // } else {
-      //   setIsAdFinish(false);
-      //   setErrAdFinish("카테고리를 선택 해주세요.");
-      // }
-
-      // if (!adProduct[0]) {
-      //   setErrAdFinish("상품을 선택 해주세요.");
-      //   setIsAdURL(false);
-      //   return;
-      // }
     },
     InputReset: () => {
       console.log("Advertise InputReset");
@@ -1001,7 +621,6 @@ function Category(props: Props) {
 
         // 불러오면서 초기화
         console.log("admin의 카테고리 값을 불러오면서 초기화 합니다");
-        setSelectedId("");
         setIsSelected(false);
         setIsSelectedTask(false);
         setIsSelectedSubTask(false);
@@ -1023,55 +642,73 @@ function Category(props: Props) {
     const input = e.target.value;
     // const regex = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]+$/;
     setAddColumn(input);
-    setAddMessage("");
+    if (input === "") {
+      setAddMessage("");
+    }
     if (input.length > 20) {
       setAddMessage("20글자 이내로 작성해주세요.");
       return;
     }
   };
 
-  // 추가하려는 메인 카테고리
-  const addCategory = {
-    beforeData: dnd,
-    newData: addColumn,
-  };
-
-  // 추가하려는 서브 카테고리
-  const addSubCategory = {
-    beforeData: dnd,
-    parentID: selectedList._id,
-    name: addColumn,
-    icon: iconImg,
-  };
-
-  // 추가하려는 서브테스크 카테고리
-  const addSubTaskCategory = {
-    beforeData: dnd,
-    findID: selectedList._id,
-    parentID: selectedList.parentID,
-    user: selectedList.user,
-    name: addColumn,
-    icon: iconImg,
-  };
-
   // 카테고리 추가
   const categoryAdd = async () => {
+    // 추가하려는 메인 카테고리
+    const addCategory = {
+      beforeData: dnd,
+      newData: addColumn,
+    };
+
     if (addColumn === "") {
+      setIsAdd(false);
       setAddMessage("카테고리 이름을 입력해주세요.");
       return;
+    } else {
+      setIsAdd(true);
+      setAddMessage("");
     }
     setSelectedName("");
 
-    // if (isSelectedTask) {
-    //   setAddMessage("세부 카테고리는 추가 할수 없습니다.");
-    //   return;
-    // }
-
-    if (isSelected) {
-      console.log("서브카테고리 추가");
+    const Category = async (type: string) => {
       try {
-        const res = await axios.post("/smartstore/home/category/subplus", addSubCategory, { withCredentials: true });
+        const res = await axios.post("/smartstore/home/category/plus", { addCategory, selectedIndex, type }, { withCredentials: true });
         console.log(res.data);
+
+        const newColumnOrder = res.data.map((list: any) => list._id);
+        const newColumns = res.data;
+
+        const sendingDND = {
+          columnOrder: newColumnOrder,
+          columns: newColumns,
+          tasks: dnd.tasks,
+        };
+
+        console.log(sendingDND);
+
+        setDnd(sendingDND);
+        setAddColumn("");
+      } catch (err: unknown) {
+        console.log(err);
+        if ((err as AxiosError).response && (err as AxiosError).response?.status === 401) {
+          navigate("../home");
+        }
+      }
+    };
+
+    const subCategory = async (type: string) => {
+      console.log("서브 카테고리 추가");
+      console.log(type);
+
+      // 추가하려는 서브 카테고리
+      const addSubCategory = {
+        beforeData: dnd,
+        parentID: type === "inner" ? selectedList._id : selectedList.parentID,
+        name: addColumn,
+        icon: iconImg,
+      };
+
+      try {
+        const res = await axios.post("/smartstore/home/category/subplus", { addSubCategory, selectedIndex, type }, { withCredentials: true });
 
         const newColumnIndex = dnd.columns.findIndex((list: any) => list._id === res.data.newTask._id);
 
@@ -1083,7 +720,8 @@ function Category(props: Props) {
           tasks: res.data.sub,
         };
 
-        // setSubCategoryList(res.data.sub);
+        console.log(sendingDND);
+
         setDnd(sendingDND);
         setAddColumn("");
       } catch (err: unknown) {
@@ -1092,10 +730,23 @@ function Category(props: Props) {
           navigate("../home");
         }
       }
-    } else if (isSelectedTask) {
+    };
+
+    const subTaskCategory = async (type: string) => {
       console.log("서브테스크 카테고리 추가");
+
+      // 추가하려는 서브테스크 카테고리
+      const addSubTaskCategory = {
+        beforeData: dnd,
+        findID: selectedList._id,
+        parentID: selectedList.parentID,
+        user: selectedList.user,
+        name: addColumn,
+        icon: iconImg,
+      };
+
       try {
-        const res = await axios.post("/smartstore/home/category/subtaskplus", addSubTaskCategory, { withCredentials: true });
+        const res = await axios.post("/smartstore/home/category/subtaskplus", { addSubTaskCategory, selectedIndex, type }, { withCredentials: true });
         console.log(res.data);
 
         const newColumnIndex = dnd.tasks.findIndex((list: any) => list._id === res.data.newTask._id);
@@ -1117,32 +768,28 @@ function Category(props: Props) {
           navigate("../home");
         }
       }
-    } else {
-      try {
-        const res = await axios.post("/smartstore/home/category/plus", addCategory, { withCredentials: true });
-        console.log(res.data);
+    };
 
-        const newColumnOrder = res.data.map((list: any) => list._id);
-        const newColumns = res.data;
-
-        const sendingDND = {
-          columnOrder: newColumnOrder,
-          columns: newColumns,
-          tasks: dnd.tasks,
-        };
-
-        console.log();
-
-        // setCategoryList(res.data);
-        setDnd(sendingDND);
-        setAddColumn("");
-      } catch (err: unknown) {
-        console.log(err);
-        if ((err as AxiosError).response && (err as AxiosError).response?.status === 401) {
-          navigate("../home");
-        }
+    if (isSelected) {
+      if (isCategoryType === "inner") {
+        subCategory("inner");
+      } else {
+        Category("outer");
       }
     }
+    if (isSelectedTask) {
+      if (isCategoryType === "inner") {
+        subTaskCategory("inner");
+      } else {
+        subCategory("outer");
+      }
+    }
+    if (isSelectedSubTask) {
+      subTaskCategory("outer");
+    }
+
+    setIsCategoryAddModal(false);
+    setSelectedList("");
   };
 
   // 카테고리 삭제
@@ -1255,6 +902,10 @@ function Category(props: Props) {
     setIsSelected(false);
     setIsSelectedTask(false);
     setIsSelectedSubTask(false);
+
+    setIsCategoryAddModal(false);
+    setIsCategoryDeleteModal(false);
+    setSelectedList("");
   };
 
   // 카테고리 이름
@@ -1268,6 +919,13 @@ function Category(props: Props) {
   const onChangeURL = (e: any) => {
     if (isSelected || isSelectedTask || isSelectedSubTask) {
       setSelectedURL(e.target.value);
+    }
+  };
+
+  // 메세지
+  const onChangeMessage = (e: any) => {
+    if (isSelected || isSelectedTask || isSelectedSubTask) {
+      setSelectedMessage(e.target.value);
     }
   };
 
@@ -1298,10 +956,13 @@ function Category(props: Props) {
       console.log("Column 저장");
 
       if (selectedName === "") {
+        setIsName(false);
         setNameMessage("카테고리 이름을 입력해 주세요.");
         return;
+      } else {
+        setIsName(true);
+        setNameMessage("");
       }
-      setNameMessage("");
 
       const updatedColumns = dnd.columns.map((column) => {
         if (column._id === selectedList._id) {
@@ -1329,13 +990,11 @@ function Category(props: Props) {
       try {
         await axios.post("/smartstore/home/category/edit", { updatedDnd, selectedList, selectedName }, { withCredentials: true });
         setIsSaveModal(true);
-
       } catch (err: unknown) {
         console.log(err);
         if ((err as AxiosError).response && (err as AxiosError).response?.status === 401) {
           navigate("../home");
         }
-
       }
     } else if (isSelectedTask) {
       console.log("Task 저장");
@@ -1359,6 +1018,7 @@ function Category(props: Props) {
               chapterNavHide: selectedChapNavHide,
               darkMode: selectedDarkMode,
               url: selectedURL,
+              message: selectedMessage,
             };
           }
           return taskid;
@@ -1377,6 +1037,7 @@ function Category(props: Props) {
             chapterNavHide: selectedChapNavHide,
             darkMode: selectedDarkMode,
             url: selectedURL,
+            message: selectedMessage,
           };
         }
         return task;
@@ -1394,7 +1055,6 @@ function Category(props: Props) {
       try {
         await axios.post("/smartstore/home/category/edit", { updatedDnd, selectedList, selectedName }, { withCredentials: true });
         setIsSaveModal(true);
-
       } catch (err: unknown) {
         console.log(err);
         if ((err as AxiosError).response && (err as AxiosError).response?.status === 401) {
@@ -1422,6 +1082,7 @@ function Category(props: Props) {
                 chapterNavHide: selectedChapNavHide,
                 darkMode: selectedDarkMode,
                 url: selectedURL,
+                message: selectedMessage,
               };
             }
             return subTask;
@@ -1443,6 +1104,7 @@ function Category(props: Props) {
               chapterNavHide: selectedChapNavHide,
               darkMode: selectedDarkMode,
               url: selectedURL,
+              message: selectedMessage,
             };
           }
           return subTask;
@@ -1484,52 +1146,17 @@ function Category(props: Props) {
     }
   };
 
-  // 상품 목록에서 바깥 클릭시 닫힘 기능
-  useEffect(() => {
-    const clickOutside = (e: any) => {
-      if (blurRef.current && !blurRef.current.contains(e.target)) {
-        setIsProductListShow(false);
-      }
-    };
-    document.addEventListener("mousedown", clickOutside);
-    return () => {
-      // Cleanup the event listener
-      document.removeEventListener("mousedown", clickOutside);
-    };
-  }, [isProductListShow]);
-
-  // 광고 목록에서 바깥 클릭시 닫힘 기능
-  useEffect(() => {
-    const clickOutside = (e: any) => {
-      if (AdverBlurRef.current && !AdverBlurRef.current.contains(e.target)) {
-        setIsAdverListShow(false);
-      }
-    };
-    document.addEventListener("mousedown", clickOutside);
-    return () => {
-      // Cleanup the event listener
-      document.removeEventListener("mousedown", clickOutside);
-    };
-  }, [isAdverListShow]);
-
-  // 광고 등록에서 바깥 클릭시 닫힘 기능
-  useEffect(() => {
-    const clickOutside = (e: any) => {
-      if (AdvertiseModalRef.current && !AdvertiseModalRef.current.contains(e.target)) {
-        setIsAdvertiseModal(false);
-      }
-    };
-    document.addEventListener("mousedown", clickOutside);
-    return () => {
-      // Cleanup the event listener
-      document.removeEventListener("mousedown", clickOutside);
-    };
-  }, [isAdvertiseModal]);
+  // 드래그 시작
+  const onDragStart = () => {
+    setIsDrag(true);
+  };
 
   // 카테고리 드래그시 dnd 업데이트
   const onDragEnd = useCallback(
     async (result: DropResult) => {
       const { destination, source, draggableId, type } = result;
+
+      setIsDrag(false);
 
       if (!destination) return;
       if (destination.droppableId === source.droppableId && source.index === destination.index) return;
@@ -1643,7 +1270,7 @@ function Category(props: Props) {
 
         // 현재 subTask가 포함된 column을 찾습니다.
         const columnIdx = flatColumn.findIndex((column) => column._id === startTask?.parentID);
-        console.log(addSubTask);
+        // console.log(addSubTask);
 
         // subTask가 다른 Task로 넘어갈때 필요한 Column Index
         const startIndex = flatColumn
@@ -1655,19 +1282,19 @@ function Category(props: Props) {
           .filter((index) => index !== -1)
           .find((index) => true);
 
-        console.log(source.droppableId);
-        console.log(destination.droppableId);
+        // console.log(source.droppableId);
+        // console.log(destination.droppableId);
 
-        console.log(startTask);
-        console.log(finishTask);
+        // console.log(startTask);
+        // console.log(finishTask);
 
         // Task Index.
-        console.log(startIndex);
-        console.log(finishIndex);
+        // console.log(startIndex);
+        // console.log(finishIndex);
 
         // SubTask Index.
-        console.log(source.index);
-        console.log(destination.index);
+        // console.log(source.index);
+        // console.log(destination.index);
         if (addSubTask && startTask && finishTask && startIndex !== undefined) {
           if (startTask._id === finishTask._id) {
             // 드래그를 시작한 subTask의 부모 ID를 이동할 task의 _id로 변경해줍니다.
@@ -1697,7 +1324,7 @@ function Category(props: Props) {
           } else {
             // 다른 카테고리로 서브 카테고리를 이동 시켰을때
             if (startTask) {
-              console.log("다른 task이동");
+              // console.log("다른 task이동");
 
               startTask.subTaskIds?.splice(source.index, 1);
               // const newStartTask = {
@@ -1705,12 +1332,12 @@ function Category(props: Props) {
               //   subTaskIds: startSubTaskIds,
 
               // };
-              console.log(startTask);
+              // console.log(startTask);
 
               finishTask.subTaskIds?.splice(destination.index, 0, addSubTask);
 
               const newDnd = { ...dnd };
-              console.log(newDnd);
+              // console.log(newDnd);
               // newDnd.columns[startIndex] = newStartTask;
               // newDnd.columns[finishIndex] = newFinishTask;
 
@@ -1747,10 +1374,120 @@ function Category(props: Props) {
     };
   }, [colorSelector]);
 
-  useEffect(() => {
-    setSelectedColumnDarkMode(selectedList.darkMode);
+  const ModalClose = () => {
+    console.log("모달 닫기");
 
-  },[selectedList])
+    setIsSaveModal(false);
+    setIsAdverListModal(false);
+    setIsAdvertiseModal(false);
+    setIsCategoryAddModal(false);
+  };
+
+  const animation = {
+    open1: {
+      points: ["2 12, 16 12", "2 9, 16 9", "3.5 15, 15 3.5"],
+    },
+    close1: {
+      points: ["3.5 15, 15 3.5", "2 9, 16 9", "2 12, 16 12"],
+    },
+    open2: {
+      points: ["2 5, 16 5", "2 9, 16 9", "3.5 3.5, 15 15"],
+    },
+    close2: {
+      points: ["3.5 3.5, 15 15", "2 9, 16 9", "2 5, 16 5"],
+    },
+  };
+
+  const onChangePold = async (type: string, id: string) => {
+    if (isDisabled) return; // 애니메이션 중에는 클릭 무시
+    setIsDisabled(true);
+
+    if (type === 'column') {
+      // console.log('column pold변경');
+
+      // 해당 index의 column의 pold 값을 반대로 변경
+      const updatedColumns = dnd.columns.map((column, colIndex) => {
+        if (column._id === id) {
+          return {
+            ...column,
+            pold: !column.pold,  // pold 값 반전
+          };
+        }
+        return column;
+      });
+  
+      setDnd({ ...dnd, columns: updatedColumns });
+  
+      const updatedDnd = {
+        columnOrder: dnd.columnOrder,
+        columns: updatedColumns,
+        tasks: dnd.tasks,
+      };
+
+      try {
+        await axios.post("/smartstore/home/category/pold", { updatedDnd }, { withCredentials: true });
+
+      } catch (err: unknown) {
+        console.log(err);
+        if ((err as AxiosError).response && (err as AxiosError).response?.status === 401) {
+          navigate("../home");
+        }
+      }
+    }
+  
+    if (type === 'task') {
+      // console.log('task pold변경'); 
+
+      // 해당 index의 taskIds 내부 task의 pold 값을 반대로 변경
+      const updatedColumns = dnd.columns.map((column) => {
+        const updatedTaskIds = column.taskIds.map((taskId, taskIndex) => {
+          if (taskId._id === id) {
+            return {
+              ...taskId,
+              pold: !taskId.pold,  // task의 pold 값 반전
+            };
+          }
+          return taskId;
+        });
+        return { ...column, taskIds: updatedTaskIds };
+      });
+      
+      // console.log(updatedColumns);
+
+      // dnd.tasks 내부 task의 pold 값을 반대로 변경
+      const updatedTasks = dnd.tasks.map((task, taskIndex) => {
+        if (task._id === id) {
+          return {
+            ...task,
+            pold: !task.pold,  // tasks의 pold 값 반전
+          };
+        }
+        return task;
+      });
+  
+      setDnd({ ...dnd, columns: updatedColumns, tasks: updatedTasks });
+  
+      const updatedDnd = {
+        columnOrder: dnd.columnOrder,
+        columns: updatedColumns,
+        tasks: updatedTasks,
+      };
+
+      try {
+        await axios.post("/smartstore/home/category/pold", { updatedDnd }, { withCredentials: true });
+
+      } catch (err: unknown) {
+        console.log(err);
+        if ((err as AxiosError).response && (err as AxiosError).response?.status === 401) {
+          navigate("../home");
+        }
+      }
+    }
+
+    setTimeout(() => {
+      setIsDisabled(false);
+  }, 200);
+  };
 
   return (
     <>
@@ -1771,12 +1508,13 @@ function Category(props: Props) {
                   <div className="box first flex flex-ju-bt flex-di-row">
                     <div className="category-list">
                       <div ref={listRef} style={{ width: "350px" }}>
-                        <DragDropContext onDragEnd={onDragEnd}>
+                        <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
                           <Droppable droppableId="all-columns" direction="vertical" type="column">
                             {(provided) => (
-                              <Container {...provided.droppableProps} ref={provided.innerRef}>
+                              <Container {...provided.droppableProps}
+                                ref={provided.innerRef}>
                                 {dnd.columns &&
-                                  dnd.columns.map((column: any, index: any) => {
+                                  dnd.columns.map((column: any, index: number) => {
                                     const tasks = column.taskIds && column.taskIds.map((taskId: any) => taskId);
                                     return (
                                       <Column
@@ -1794,8 +1532,6 @@ function Category(props: Props) {
                                         setSelectedList={setSelectedList}
                                         setSelectedName={setSelectedName}
                                         setSelectedURL={setSelectedURL}
-                                        selectedId={selectedId}
-                                        setSelectedId={setSelectedId}
                                         setAddedProductList={setAddedProductList}
                                         setIconImg={setIconImg}
                                         setSelectedNavHide={setSelectedNavHide}
@@ -1807,6 +1543,19 @@ function Category(props: Props) {
                                         setSelectedAdvertise={setSelectedAdvertise}
                                         setSelectedAdverID={setSelectedAdverID}
                                         setIsAdvertiseEdit={setIsAdvertiseEdit}
+                                        setSelectedIndex={setSelectedIndex}
+                                        setIsCategoryAddModal={setIsCategoryAddModal}
+                                        setIsCategoryDeleteModal={setIsCategoryDeleteModal}
+                                        setIsCategoryType={setIsCategoryType}
+                                        isDrag={isDrag}
+                                        selectedPold={selectedPold}
+                                        setSelectedPold={setSelectedPold}
+                                        setSelectedMessage={setSelectedMessage}
+                                        onChangePold={onChangePold}
+                                        isDisabled={isDisabled}
+                                        setIsDisabled={setIsDisabled}
+                                        isHeight={isHeight}
+                                        setIsHeight={setIsHeight}
                                       />
                                     );
                                   })}
@@ -1820,125 +1569,152 @@ function Category(props: Props) {
                   </div>
                 )}
                 <div className="box second flex flex-ju-bt flex-di-row">
-                  <div ref={inputRef} style={{ padding: "0 20px" }}>
-                    <div>
-                      <h3 className="cateInfo-title">카테고리 추가</h3>
-                      <div className="btn-list">
-                        <InputWrap className="cateInfo-bg-input">
-                          <div id="input-inner" style={{ display: "flex", alignItems: "center", padding: "0px", width: "100%" }}>
+                  <div className="second-product-list">
+                    <div className="wrap">
+                      <h2 className="category-edit-title">카테고리 정보</h2>
+                      <InputWrap className="cateInfo-input">
+                        <div className="input-wrap">
+                          <input
+                            type="text"
+                            value={selectedName}
+                            className={`input-id input ${selectedName ? "not-empty" : ""}`}
+                            onChange={onChange}
+                          />
+                          <span className="input-text">이름</span>
+                        </div>
+                        <Error className={!isName ? "input-text-error" : ""}>{NameMessage}</Error>
+                      </InputWrap>
+                      <InputWrap className="cateInfo-input">
+                        <div className="input-wrap">
+                          <input
+                            type="text"
+                            value={selectedURL}
+                            className={`input-id input ${selectedURL ? "not-empty" : ""}`}
+                            onChange={onChangeURL}
+                          />
+                          <span className="input-text">URL</span>
+                        </div>
+                      </InputWrap>
+                      {selectedList.type !== "column" && (
+                        <InputWrap className="cateInfo-input">
+                          <div className="input-wrap">
                             <input
                               type="text"
-                              className="input"
-                              placeholder="카테고리 이름을 입력후 추가 버튼을 눌러주세요"
-                              maxLength={20}
-                              value={addColumn}
-                              onChange={inputValue}
-                              style={{}}
+                              value={selectedMessage}
+                              className={`input-id input ${selectedMessage ? "not-empty" : ""}`}
+                              onChange={onChangeMessage}
                             />
-                            <div className="text-btn-wrap" style={{ marginRight: "5px" }}>
-                              <button className="text-btn" onClick={categoryAdd}>
-                                <span className="text">추가</span>
-                              </button>
-                              <button className="text-btn" onClick={categoryDelete}>
-                                <span className="text">삭제</span>
-                              </button>
-                            </div>
+                            <span className="input-text">메세지</span>
                           </div>
                         </InputWrap>
-                        <Error className={isAdd ? "error-active" : "error"}>{AddMessage}</Error>
-                      </div>
-                      <div className="second-product-list">
-                        <div className="wrap">
-                          <h2 className="cateInfo-title">카테고리 정보</h2>
-                          <InputWrap className="cateInfo-input">
-                            <h5 className="cateInfo-name">이름</h5>
-                            <div id="input-inner">
-                              <input type="text" value={selectedName} placeholder="이름을 입력하세요" className="input" onChange={onChange} />
-                              <Error className={isName ? "error-active" : "error"}>{NameMessage}</Error>
-                            </div>
-                          </InputWrap>
-                          <InputWrap className="cateInfo-input">
-                            <h5 className="cateInfo-name">URL 주소</h5>
-                            <div id="input-inner">
-                              <input type="text" value={selectedURL} placeholder="URL 주소" className="input" onChange={onChangeURL} />
-                            </div>
-                          </InputWrap>
-                          <InputWrap className="cateInfo-input">
-                            <h5 className="cateInfo-name">광고 목록</h5>
-                            <span className="input-text">{selectedAdvertise[0]?.name}</span>
-                            <div>
-                              <AdvertiseBtn onClick={Advertise.advertiseListShow}>
-                                <span>광고 목록</span>
-                              </AdvertiseBtn>
-                              {selectedAdvertise.length === 1 ? (
-                                <AdvertiseBtn onClick={Advertise.Link}>
-                                  <span>광고 수정</span>
-                                </AdvertiseBtn>
-                              ) : (
-                                <AdvertiseBtn onClick={Advertise.Link}>
-                                  <span>광고 등록</span>
-                                </AdvertiseBtn>
-                              )}
-                            </div>
-                          </InputWrap>
-                          <div style={{ marginTop: "10px", color: "#ff3627" }}>
-                            <span>{addedErrMessage}</span>
-                          </div>
-                          <CategoryIconRegi
-                            iconImg={iconImg}
-                            setIconImg={setIconImg}
-                            isSelectedTask={isSelectedTask}
-                            isSelectedSubTask={isSelectedSubTask}
-                            selectedDarkMode={selectedDarkMode}
-                          ></CategoryIconRegi>
-                          <CategoryInfoUl>
-                            <CategoryInfoLi>
-                              <Label>
-                                <h5>다크 모드</h5>
-                                <Input
-                                  type="checkbox"
-                                  onChange={(e) => setSelectedDarkMode(e.target.checked)}
-                                  checked={selectedDarkMode}
-                                  disabled={!selectedList}
+                      )}
+                      <InputWrap className="cateInfo-input">
+                        {/* <span className="text">{selectedAdvertise[0]?.name}</span> */}
+                        {/* <span className="input-text">목록</span> */}
+                        <div className="input-wrap">
+                          <input
+                            type="text"
+                            value={selectedAdvertise.length !== 0 ? selectedAdvertise[0]?.name : ""}
+                            className={`input-id input ${selectedAdvertise.length !== 0 ? "not-empty" : ""}`}
+                            onChange={onChange}
+                          />
+                          <span className="input-text">광고 ({advertise.length})</span>
+                          <InputButton.Wrap className="edit" onClick={Advertise.Link}>
+                            <InputButton.Btn>{selectedAdvertise.length === 1 ? <span>수정</span> : <span>등록</span>}</InputButton.Btn>
+                          </InputButton.Wrap>
+                          <InputButton.Wrap onClick={Advertise.advertiseListShow}>
+                            <InputButton.Btn>
+                              <motion.svg width="18" height="18" viewBox="0 0 18 18">
+                                <motion.polyline
+                                  variants={animation}
+                                  initial="close1"
+                                  animate={isAdverListModal ? "open1" : "close1"}
+                                  transition={{ duration: 0.24 }}
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="1.2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  className="NavMobileMenu-buttom"
                                 />
-                                <CustomCheckbox />
-                              </Label>
-                            </CategoryInfoLi>
-                            <CategoryInfoLi>
-                              <Label>
-                                <h5>메인 메뉴 숨김</h5>
-                                <Input
-                                  type="checkbox"
-                                  onChange={(e) => setSelectedNavHide(e.target.checked)}
-                                  checked={selectedNavHide}
-                                  disabled={!selectedList}
+                                <motion.polyline
+                                  variants={animation}
+                                  initial="close2"
+                                  animate={isAdverListModal ? "open2" : "close2"}
+                                  transition={{ duration: 0.24 }}
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="1.2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  className="NavMobileMenu-top"
                                 />
-                                <CustomCheckbox />
-                              </Label>
-                            </CategoryInfoLi>
-                            {selectedList.type === "task" ? (
-                              <CategoryInfoLi>
-                                <Label>
-                                  <h5>챕터 메뉴 숨김</h5>
-                                  <Input
-                                    type="checkbox"
-                                    onChange={(e) => setSelectedChapNavHide(e.target.checked)}
-                                    checked={selectedChapNavHide}
-                                    disabled={!selectedList}
-                                  />
-                                  <CustomCheckbox />
-                                </Label>
-                              </CategoryInfoLi>
-                            ) : (
-                              ``
-                            )}
-                          </CategoryInfoUl>
-                          <div className="submit-btn-wrap" style={{ marginTop: "50px" }}>
-                            <button className="submit-btn" onClick={CategoryEdit}>
-                              <span className="text">저장</span>
-                            </button>
-                          </div>
+                              </motion.svg>
+                            </InputButton.Btn>
+                          </InputButton.Wrap>
                         </div>
+                        <div>
+                          {/* <AdvertiseBtn onClick={Advertise.advertiseListShow}>
+                                <span>광고 목록</span>
+                              </AdvertiseBtn> */}
+                        </div>
+                      </InputWrap>
+                      {/* <div style={{ marginTop: "10px", color: "#ff3627" }}>
+                        <span>{addedErrMessage}</span>
+                      </div> */}
+                      <CategoryIconRegi
+                        iconImg={iconImg}
+                        setIconImg={setIconImg}
+                        isSelectedTask={isSelectedTask}
+                        isSelectedSubTask={isSelectedSubTask}
+                        selectedDarkMode={selectedDarkMode}
+                      ></CategoryIconRegi>
+                      <CategoryInfoUl>
+                        <CategoryInfoLi>
+                          <Label>
+                            <h5>다크 모드</h5>
+                            <Input
+                              type="checkbox"
+                              onChange={(e) => setSelectedDarkMode(e.target.checked)}
+                              checked={selectedDarkMode}
+                              disabled={!selectedList}
+                            />
+                            <CustomCheckbox />
+                          </Label>
+                        </CategoryInfoLi>
+                        <CategoryInfoLi>
+                          <Label>
+                            <h5>메인 메뉴 숨김</h5>
+                            <Input
+                              type="checkbox"
+                              onChange={(e) => setSelectedNavHide(e.target.checked)}
+                              checked={selectedNavHide}
+                              disabled={!selectedList}
+                            />
+                            <CustomCheckbox />
+                          </Label>
+                        </CategoryInfoLi>
+                        {selectedList.type === "task" ? (
+                          <CategoryInfoLi>
+                            <Label>
+                              <h5>챕터 메뉴 숨김</h5>
+                              <Input
+                                type="checkbox"
+                                onChange={(e) => setSelectedChapNavHide(e.target.checked)}
+                                checked={selectedChapNavHide}
+                                disabled={!selectedList}
+                              />
+                              <CustomCheckbox />
+                            </Label>
+                          </CategoryInfoLi>
+                        ) : (
+                          ``
+                        )}
+                      </CategoryInfoUl>
+                      <div className="submit-btn-wrap" style={{ marginTop: "50px" }}>
+                        <button className="submit-btn" onClick={CategoryEdit}>
+                          <span className="text">저장</span>
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -1948,74 +1724,78 @@ function Category(props: Props) {
             <div className="panel-footer"></div>
           </div>
         </div>
-        <SaveModal isBoolean={isSaveModal} setIsBoolean={setIsSaveModal}></SaveModal>
-        <AdverBlurWrap isAdverListShow={isAdverListShow} ref={AdverBlurWrapRef} className="modal">
-          <AdverListWrap isAdverListShow={isAdverListShow} ref={AdverBlurRef}>
-            <AdverList>
-              <button className="modal-close-button" style={{ position: "absolute", top: "0" }} onClick={Advertise.adverListClose}>
-                <span className="modal-close-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                    <path d="M12.12,10l4.07-4.06a1.5,1.5,0,1,0-2.11-2.12L10,7.88,5.94,3.81A1.5,1.5,0,1,0,3.82,5.93L7.88,10,3.81,14.06a1.5,1.5,0,0,0,0,2.12,1.51,1.51,0,0,0,2.13,0L10,12.12l4.06,4.07a1.45,1.45,0,0,0,1.06.44,1.5,1.5,0,0,0,1.06-2.56Z"></path>
-                  </svg>
-                </span>
-              </button>
-              {advertise.length >= 1 && <h5 className="box-name">상품 목록</h5>}
-              {advertise?.length === 0 && (
-                <div style={{ textAlign: "center", padding: "20px", fontSize: "20px", fontWeight: "700" }}>등록된 광고가 없습니다.</div>
-              )}
-              <ul>
-                {advertise.map((list: any, index: any) => {
-                  return (
-                    <li
-                      key={index}
-                      value={list.name}
-                      style={{
-                        backgroundColor: list._id === selectedAdverID ? "#ececec" : "#f5f5f7",
-                        padding: "10px 10px",
-                        position: "relative",
-                        marginBottom: "5px",
-                        borderRadius: "12px",
-                        userSelect: "none",
-                        transition: "background-color 0.3s ease",
-                      }}
-                      onClick={() => Advertise.adListSelect(list._id)}
-                    >
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                        {list.image && <img src={list.image} style={{ width: "80px", marginRight: "5px", padding: "5px", marginLeft: "10px" }}></img>}
-                        <span>{list.name}</span>
-                        <button
-                          onClick={(e) => Advertise.Delete(e, list._id)}
-                          style={{ backgroundColor: "transparent", border: "none", color: "#0071e3" }}
-                        >
-                          삭제
-                        </button>
-                      </div>
-                    </li>
-                  );
-                })}
-              </ul>
-              {advertise?.length !== 0 && (
-                <div className="text-btn-wrap" style={{ marginRight: "10px", justifyContent: "end", marginTop: "10px", alignItems: "center" }}>
-                  <span style={{ marginRight: "10px", color: "red", fontWeight: "600", fontSize: "14px" }}>{ErrProductList}</span>
-                  {advertise.length >= 1 && (
-                    <button
-                      className="text-btn"
-                      onClick={(e) => Advertise.adListSelectBtn(e)}
-                      style={{ width: "100px", height: "30px", borderRadius: "20px", backgroundColor: "#0071e3" }}
-                    >
-                      <span className="text" style={{ color: "white" }}>
-                        선택
-                      </span>
-                    </button>
-                  )}
-                </div>
-              )}
-            </AdverList>
-          </AdverListWrap>
-          <AdverBlur className="AdverBlur" isAdverListShow={isAdverListShow}></AdverBlur>
-        </AdverBlurWrap>
-        <Modal isAdvertiseModal={isAdvertiseModal} className="modal">
-          <ModalInner isAdvertiseModal={isAdvertiseModal} ref={AdvertiseModalRef}>
+        <Blur isVisible={isSaveModal || isAdverListModal || isAdvertiseModal || isCategoryAddModal || isCategoryDeleteModal} onClick={ModalClose}>
+          <ModalInner isVisible={isSaveModal} ref={modalRef} onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close-button" style={{ position: "absolute", top: "0" }} onClick={() => setIsSaveModal(false)}>
+              <span className="modal-close-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                  <path d="M12.12,10l4.07-4.06a1.5,1.5,0,1,0-2.11-2.12L10,7.88,5.94,3.81A1.5,1.5,0,1,0,3.82,5.93L7.88,10,3.81,14.06a1.5,1.5,0,0,0,0,2.12,1.51,1.51,0,0,0,2.13,0L10,12.12l4.06,4.07a1.45,1.45,0,0,0,1.06.44,1.5,1.5,0,0,0,1.06-2.56Z"></path>
+                </svg>
+              </span>
+            </button>
+            <div style={{ textAlign: "center", padding: "20px", fontSize: "20px", fontWeight: "700" }}>카테고리를 저장 하였습니다.</div>
+          </ModalInner>
+          <ModalInner isVisible={isAdverListModal} ref={modalRef} onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close-button" style={{ position: "absolute", top: "0" }} onClick={Advertise.adverListClose}>
+              <span className="modal-close-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                  <path d="M12.12,10l4.07-4.06a1.5,1.5,0,1,0-2.11-2.12L10,7.88,5.94,3.81A1.5,1.5,0,1,0,3.82,5.93L7.88,10,3.81,14.06a1.5,1.5,0,0,0,0,2.12,1.51,1.51,0,0,0,2.13,0L10,12.12l4.06,4.07a1.45,1.45,0,0,0,1.06.44,1.5,1.5,0,0,0,1.06-2.56Z"></path>
+                </svg>
+              </span>
+            </button>
+            {advertise.length >= 1 && <h5 className="box-name">광고 목록</h5>}
+            {advertise?.length === 0 && (
+              <div style={{ textAlign: "center", padding: "20px", fontSize: "20px", fontWeight: "700" }}>등록된 광고가 없습니다.</div>
+            )}
+            <ul>
+              {advertise.map((list: any, index: any) => {
+                return (
+                  <li
+                    key={index}
+                    value={list.name}
+                    style={{
+                      backgroundColor: list._id === selectedAdverID ? "#ececec" : "#f5f5f7",
+                      padding: "10px 10px",
+                      position: "relative",
+                      marginBottom: "5px",
+                      borderRadius: "12px",
+                      userSelect: "none",
+                      transition: "background-color 0.3s ease",
+                    }}
+                    onClick={() => Advertise.adListSelect(list._id)}
+                  >
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                      {list.image && <img src={list.image} style={{ width: "80px", marginRight: "5px", padding: "5px", marginLeft: "10px" }}></img>}
+                      <span>{list.name}</span>
+                      <button
+                        onClick={(e) => Advertise.Delete(e, list._id)}
+                        style={{ backgroundColor: "transparent", border: "none", color: "#0071e3" }}
+                      >
+                        삭제
+                      </button>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+            {advertise?.length !== 0 && (
+              <div className="text-btn-wrap" style={{ marginRight: "10px", justifyContent: "end", marginTop: "10px", alignItems: "center" }}>
+                <span style={{ marginRight: "10px", color: "red", fontWeight: "600", fontSize: "14px" }}>{ErrProductList}</span>
+                {advertise.length >= 1 && (
+                  <button
+                    className="text-btn"
+                    onClick={(e) => Advertise.adListSelectBtn(e)}
+                    style={{ width: "100px", height: "30px", borderRadius: "20px", backgroundColor: "#0071e3" }}
+                  >
+                    <span className="text" style={{ color: "white" }}>
+                      선택
+                    </span>
+                  </button>
+                )}
+              </div>
+            )}
+          </ModalInner>
+          <ModalInner isVisible={isAdvertiseModal} ref={modalRef} onClick={(e) => e.stopPropagation()}>
             <span>카테고리가 선택 되지 않았습니다.</span>
             <button className="modal-close-button" style={{ position: "absolute", top: "0" }} onClick={() => setIsAdvertiseModal(false)}>
               <span className="modal-close-icon">
@@ -2025,7 +1805,51 @@ function Category(props: Props) {
               </span>
             </button>
           </ModalInner>
-        </Modal>
+          <ModalInner isVisible={isCategoryAddModal} ref={modalRef} onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close-button" style={{ position: "absolute", top: "0" }} onClick={() => setIsCategoryAddModal(false)}>
+              <span className="modal-close-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                  <path d="M12.12,10l4.07-4.06a1.5,1.5,0,1,0-2.11-2.12L10,7.88,5.94,3.81A1.5,1.5,0,1,0,3.82,5.93L7.88,10,3.81,14.06a1.5,1.5,0,0,0,0,2.12,1.51,1.51,0,0,0,2.13,0L10,12.12l4.06,4.07a1.45,1.45,0,0,0,1.06.44,1.5,1.5,0,0,0,1.06-2.56Z"></path>
+                </svg>
+              </span>
+            </button>
+            <div className="btn-list">
+              <h3 className="cateInfo-title">카테고리 추가</h3>
+              <InputWrap className="cateInfo-bg-input">
+                <div className="input-wrap">
+                  <input
+                    type="text"
+                    className={`input-id input ${addColumn ? "not-empty" : ""}`}
+                    maxLength={20}
+                    value={addColumn}
+                    onChange={inputValue}
+                  />
+                  <span className="input-text">이름</span>
+                  <InputButton.Wrap className="input-btn" onClick={categoryAdd}>
+                    <InputButton.Btn>추가</InputButton.Btn>
+                  </InputButton.Wrap>
+                </div>
+              </InputWrap>
+              <Error className={!isAdd ? "input-text-error" : ""}>{AddMessage}</Error>
+            </div>
+          </ModalInner>
+          <ModalInner isVisible={isCategoryDeleteModal} ref={modalRef} onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close-button" style={{ position: "absolute", top: "0" }} onClick={() => setIsCategoryDeleteModal(false)}>
+              <span className="modal-close-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                  <path d="M12.12,10l4.07-4.06a1.5,1.5,0,1,0-2.11-2.12L10,7.88,5.94,3.81A1.5,1.5,0,1,0,3.82,5.93L7.88,10,3.81,14.06a1.5,1.5,0,0,0,0,2.12,1.51,1.51,0,0,0,2.13,0L10,12.12l4.06,4.07a1.45,1.45,0,0,0,1.06.44,1.5,1.5,0,0,0,1.06-2.56Z"></path>
+                </svg>
+              </span>
+            </button>
+            <div style={{ textAlign: "center", padding: "60px 0 60px", fontSize: "30px", fontWeight: "700" }}>카테고리를 삭제 하시겠습니까?</div>
+            <button className="normal-blue-btn" onClick={categoryDelete}>
+              <span className="text">삭제</span>
+            </button>
+            <div className="cancel-btn" onClick={() => setIsCategoryDeleteModal(false)}>
+              <span className="text">취소</span>
+            </div>
+          </ModalInner>
+        </Blur>
       </div>
     </>
   );

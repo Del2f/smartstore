@@ -4,19 +4,20 @@
     background-color: #f5f5f7;
     display: flex;
     justify-content: center;
-
     transition: all .4s;
-
 
     .Sellerdashboard {
         position: relative;
+        width: 100%;
+
     }
 
     .SellerSubframe {
         display: flex;
         justify-content: center;
         padding: 25px;
-        max-width: 1300px;
+        width: 100%;
+        max-width: 600px;
     }
 
     .product-list {
@@ -72,8 +73,9 @@
     }
 
     .panel-body {
+        width: 100%;
         position: relative;
-        padding: 15px 0;
+        padding: 40px;
     }
 
     .salesinfo .info-title {
@@ -135,6 +137,7 @@
     }
 
     .list-wrap {
+        flex-basis: 50%;
         padding-left: 25px;
         padding-right: 25px;
     }
@@ -142,31 +145,11 @@
 
     /* 오늘출발 예약구매 정기구독 */
 
-    .deposit-list .panel-list {
-        padding: 3px 0 0 57px;
-        margin: 0px 25px 0 0;
-    }
-
-    .delivery-list .panel-list {
-        padding: 3px 0 0 57px;
-        margin: 0px;
-    }
-
-    .return-list .panel-list {
-        margin: 0px 25px 0 0;
-        padding: 3px 0 0 57px;
-    }
-
-    .settlement-list .panel-list {
-        padding: 3px 0 0 57px;
-        margin: 0px;
-    }
-
     .panel-list .text-box {
         margin-bottom: 9px;
         line-height: 20px;
-        clear: both;
         font-size: 14px;
+        cursor: pointer;
     }
 
     .panel-list .text-box:last-child {
@@ -208,19 +191,7 @@
         right: 4px;
         font-size: 20px;
         font-weight: 500;
-        color: #4dc089;
-    }
-
-    .delivery-list .number {
-        color: #d390e6;
-    }
-
-    .return-list .number {
-        color: #69c6ce;
-    }
-
-    .settlement-list .number {
-        color: #628ca6;
+        color: #06c;
     }
 
     .panel-sub-info {
@@ -235,41 +206,6 @@
         font-size: 13px;
         font-weight: 500;
         color: #8f95a0;
-    }
-
-
-    /* 배송준비 배송중 배송완료 */
-
-    @media (min-width:1531px) {
-        .delivery-list {
-            border-left: 1px solid #e2e6ee;
-        }
-
-        .settlement-list {
-            border-left: 1px solid #e2e6ee;
-        }
-    }
-
-    @media (max-width: 1531px) {
-        .column {
-            flex-direction: column;
-        }
-
-        .list-wrap+.list-wrap {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid #e2e6ee;
-        }
-
-        .deposit-list .panel-list {
-            padding: 3px 0 0 57px;
-            margin: 0;
-        }
-
-        .return-list .panel-list {
-            padding: 3px 0 0 57px;
-            margin: 0;
-        }
     }
 
     /* 차트 */

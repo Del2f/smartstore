@@ -6,23 +6,29 @@ import { useDispatch } from "react-redux";
 import { UserLogin } from "../../store/userSlice";
 import { useCookies } from "react-cookie";
 import { cartListType } from "../shop/Cart";
+import Spinner from "../../components/Spinner";
 
 const LayoutInner = styled.div`
+          .input-text,
+          .input2-text {
+            transition-timing-function: ease-in;
+            transition-duration: 0.125s;
+          }
+
   margin-left: auto;
   margin-right: auto;
   width: 980px;
 
   @media only screen and (max-width: 833px) {
-width: 100%;
-
-
+    width: 100%;
   }
 `;
 
 const LoginArea = styled.div`
-  max-width: 300px;
+  position: relative;
+  max-width: 480px;
   height: 480px;
-  margin: 0 auto 90px;
+  margin: 0 auto;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -37,7 +43,6 @@ const LoginH2 = styled.h2`
   @media only screen and (max-width: 833px) {
     font-size: 24px;
     padding-left: 10px;
-
   }
 `;
 
@@ -53,37 +58,12 @@ const LoginBox = styled.div`
 `;
 
 const LoginItem = css`
-  position: relative;
-  width: 100%;
-  height: 44px;
   font-size: 15px;
-  border-radius: 6px;
-  border: 1px solid #d6d6d6;
-  background: transparent;
   margin: 0;
-  vertical-align: top;
   transition: 0.32s cubic-bezier(0.4, 0, 0.6, 1);
 `;
 
-const InputStyle = css`
-  position: relative;
-  width: 100%;
-  height: 100%;
-  padding-left: 15px;
-  padding-right: 43px;
-  border-radius: 6px;
-  border: 0;
-
-  &:focus {
-    border: 0;
-    outline: 0;
-  }
-
-  &::placeholder {
-    color: #a1a1a1;
-    font-weight: 100;
-  }
-`;
+const InputStyle = css``;
 
 const LoginItemID = styled.div`
   ${LoginItem}
@@ -129,38 +109,31 @@ const LoginList = styled.ul<LoginList>`
   ${(props) =>
     props.InputFocus === "id"
       ? css`
-          ${LoginItemID} {
-            border: 1px solid #0070c9;
-            border-width: 1px;
-            box-shadow: 0 0 0 1px #0070c9;
-            outline: 0;
-          }
-
           ${InputBtn} {
           }
         `
-      : css`
-          ${LoginItemPW} {
-            border: 1px solid #0070c9;
-            border-width: 1px;
-            box-shadow: 0 0 0 1px #0070c9;
-            outline: 0;
-          }
-
-          ${InputBtn2} {
-          }
-        `}
+      : css``}
 
   ${(props) =>
-    props.pwInputShow === false && props.Id.length > 0
-      ? css`
-      ${InputBtn}{
-        cursor: pointer;
-        & > i { 
-          color: #494949;
+    props.InputFocus === "pw" &&
+    css`
+      .input-wrap {
+        .input-pass {
+          border-top-width: 2px;
         }
       }
-      `
+    `}
+
+  ${(props) =>
+    !props.pwInputShow && props.Id.length > 0
+      ? css`
+          ${InputBtn} {
+            cursor: pointer;
+            & > i {
+              color: #494949;
+            }
+          }
+        `
       : `
 
   `}
@@ -168,73 +141,69 @@ const LoginList = styled.ul<LoginList>`
   ${(props) =>
     props.pwInputShow === true && props.Password.length > 0
       ? css`
-      ${InputBtn2}{
-        cursor: pointer;
-        & > i { 
-          color: #494949;
-        }
-      }
-      `
+          ${InputBtn2} {
+            cursor: pointer;
+            & > i {
+              color: #494949;
+            }
+          }
+        `
       : css`
-      ${InputBtn2}{
-        cursor: pointer;
-        & > i { 
-          color: #929292;
-        }
-      }
-  `}
+          ${InputBtn2} {
+            cursor: pointer;
+            & > i {
+              color: #929292;
+            }
+          }
+        `}
 
   ${(props) =>
     props.pwInputShow
       ? css`
+          .input-id {
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+          }
+          .input-pass {
+            border-top-width: 0;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+          }
 
-      ${LoginItemID} {
-        border-top-left-radius: 6px;
-        border-top-right-radius: 6px;
-        border-bottom-left-radius: 0;
-        border-bottom-right-radius: 0;
-      }
+          ${LoginItemPW} {
+            opacity: 1;
+          }
 
-      ${LoginItemPW} {
-        opacity: 1;
-      }
+          ${InputBtn} {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.32s cubic-bezier(0.4, 0, 0.6, 1) 80ms, visibility 0.32s step-end 80ms;
+          }
 
-      ${LoginItemPW} {
-        border-top-left-radius: 0;
-        border-top-right-radius: 0;
-        border-bottom-left-radius: 6px;
-        border-bottom-right-radius: 6px;
-      }
-
-      ${InputBtn}{
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity .32s cubic-bezier(.4, 0, .6, 1) 80ms, visibility .32s step-end 80ms;
-      }
-
-      ${InputBtn2}{
-        opacity: 1;
-        visibility: visible;
-        transition: opacity .32s cubic-bezier(.4, 0, .6, 1) 80ms, visibility .32s step-start 80ms;
-      }
-      `
+          ${InputBtn2} {
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.32s cubic-bezier(0.4, 0, 0.6, 1) 80ms, visibility 0.32s step-start 80ms;
+          }
+        `
       : css`
-      ${LoginItemPW} {
-        opacity: 0;
-      }
+          ${LoginItemPW} {
+            display: none;
+            opacity: 0;
+          }
 
-      ${InputBtn}{
-        opacity: 1;
-        visibility: visible;
-        transition: opacity .32s cubic-bezier(.4, 0, .6, 1) 80ms, visibility .32s step-start 80ms;
-      }
+          ${InputBtn} {
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.32s cubic-bezier(0.4, 0, 0.6, 1) 80ms, visibility 0.32s step-start 80ms;
+          }
 
-      ${InputBtn2}{
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity .32s cubic-bezier(.4, 0, .6, 1) 80ms, visibility .32s step-end 80ms;
-      }
-    `};
+          ${InputBtn2} {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.32s cubic-bezier(0.4, 0, 0.6, 1) 80ms, visibility 0.32s step-end 80ms;
+          }
+        `};
 `;
 
 interface LoginError {
@@ -245,11 +214,11 @@ const LoginError = styled.div<LoginError>`
   ${(props) =>
     props.isError
       ? css`
-      display: block;
-      `
+          display: block;
+        `
       : css`
-      display: none;
-  `};
+          display: none;
+        `};
 
   color: #503e30;
   background-color: #fae9a3;
@@ -326,8 +295,14 @@ const InputBtn = styled.button<LoginBtn>`
 `;
 
 const InputBtn2 = styled(InputBtn)`
-  top: 3em;
+  top: 11px;
   cursor: pointer;
+
+   .spinner-wrap {
+    position: relative;
+    top: 15px;
+    right: 15px;
+  } 
 
   & > i {
     color: #494949;
@@ -336,11 +311,10 @@ const InputBtn2 = styled(InputBtn)`
 
 interface Props {
   setNavCart: React.Dispatch<React.SetStateAction<cartListType[] | undefined>>;
+  setCookie: any;
 }
 
-function Login({ setNavCart }: Props) {
-  const [cookies, setCookie, removeCookie] = useCookies(["userjwt"]);
-
+function Login({ setNavCart, setCookie }: Props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -349,12 +323,11 @@ function Login({ setNavCart }: Props) {
   const [Password, setPassword] = useState<string>("");
   const [InputFocus, setInputFocus] = useState<string>("");
 
-  const idinput = useRef<any>(null);
-  const pwinput = useRef<any>(null);
-
-  const [pwInputShow, setPwInputShow] = useState(false);
-  const [IDDeleteIconShow, setIDDeleteIconShow] = useState(false);
-  const [PWDeleteIconShow, setPWDeleteIconShow] = useState(false);
+  const [pwInputShow, setPwInputShow] = useState<Boolean>(false);
+  const [IDDeleteIconShow, setIDDeleteIconShow] = useState<Boolean>(false);
+  const [PWDeleteIconShow, setPWDeleteIconShow] = useState<Boolean>(false);
+  const [isLoginLoading, setIsLoginLoading] = useState<Boolean>(false);
+  const [isLoading, setIsLoading] = useState<Boolean>(false);
 
   // 오류메시지 상태저장
   const [ErrorMessage, setErrorMessage] = useState<string>("");
@@ -362,30 +335,45 @@ function Login({ setNavCart }: Props) {
   // 유효성 검사
   const [isError, setIsError] = useState<boolean>(false);
 
-  // 유저의 로그인 상태를 확인.
-  useEffect(() => {
-    const verifyUser = async () => {
-      if (cookies.userjwt) {
-        navigate("/shop");
-      }
+  const [inputClickNumber, setInputClickNumber] = useState<Number>(0);
+  const [inputClick, setInputClick] = useState<Boolean>(false);
 
-      try {
-        const res = await axios.post("/smartstore/user/login", {}, { withCredentials: true });
-        console.log(res);
-        if (!res.data.status) {
-          window.onpopstate = function (event) {
-            if (event) {
-              event.preventDefault();
-            }
-            navigate(-2);
-          };
-        } 
-      } catch (errors) {
-        console.log(errors);
+  const inputRef = useRef<HTMLUListElement>(null);
+  const idinput = useRef<any>(null);
+  const pwinput = useRef<any>(null);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoginLoading(true);
       }
-    };
-    verifyUser();
-  }, [cookies, navigate]);
+      , 1000)
+  },[])
+
+  // 유저의 로그인 상태를 확인.
+  // useEffect(() => {
+  //   const verifyUser = async () => {
+  //     if (cookies.userjwt) {
+  //       navigate("/shop");
+  //       return;
+  //     }
+
+  //     try {
+  //       const res = await axios.post("/smartstore/user/login", {}, { withCredentials: true });
+  //       console.log(res);
+  //       if (!res.data.status) {
+  //         window.onpopstate = function (event) {
+  //           if (event) {
+  //             event.preventDefault();
+  //           }
+  //           navigate(-2);
+  //         };
+  //       }
+  //     } catch (errors) {
+  //       console.log(errors);
+  //     }
+  //   };
+  //   verifyUser();
+  // }, [cookies, navigate]);
 
   const IdHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setId(e.target.value);
@@ -420,15 +408,15 @@ function Login({ setNavCart }: Props) {
   };
 
   const userdata = {
-    id: Id,
+    email: Id,
     password: Password,
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      LoginBtn(e);
-      pwinput.current.focus();
       setInputFocus("pw");
+      pwinput.current.focus();
+      LoginBtn(e);
     }
   };
 
@@ -446,37 +434,38 @@ function Login({ setNavCart }: Props) {
       return;
     }
 
+    setIsLoading(true); // 스피너 표시
+
     try {
       const res = await axios.post("/smartstore/user/loginbtn", userdata, { withCredentials: true });
-      console.log(res.data);
 
       if (res.data.error === "아이디및비밀번호오류") {
-        setErrorMessage("아이디 혹은 비밀번호가 틀렸습니다.");
-        setIsError(true);
+        setTimeout(() => {
+          setIsLoading(false);
+          setErrorMessage("아이디 혹은 비밀번호가 틀렸습니다.");
+          setIsError(true);
+        }, 1000); // 스피너 지연 시간 후에 숨김
         return;
       }
 
-      let redirectUrl = new URLSearchParams(location.search).get('redirect') || '/';
-      redirectUrl = redirectUrl.replace('/smartstore/', '/');
+      setCookie('userjwt', res.data.token, { path: '/', httpOnly: true });
       dispatch(UserLogin(res.data.user));
-      const from = location.state?.from || '/';
-      console.log(from)
 
-      if (location.search === '') {
+      let redirectUrl = new URLSearchParams(location.search).get("redirect") || "/";
+      const from = location.state?.from || "/";
+
+      redirectUrl = redirectUrl.replace("/smartstore/", "/");
+
+      if (location.search === "") {
         navigate(from, { replace: true });
       } else {
         navigate(redirectUrl);
       }
 
-      window.location.reload();
     } catch (err) {
       console.log(err);
-    }
+    } 
   };
-
-  const [inputClickNumber, setInputClickNumber] = useState<Number>(0);
-  const [inputClick, setInputClick] = useState<Boolean>(false);
-  const inputRef = useRef<HTMLUListElement>(null);
 
   const handleFocus = (name: any) => {
     setInputFocus(name);
@@ -486,33 +475,13 @@ function Login({ setNavCart }: Props) {
     setInputFocus("");
   };
 
-  // 모달의 바깥쪽을 눌렀을 때 창 닫기
-  useEffect(() => {
-    const clickOutside = (e: any) => {
-      // useRef의 current 값은 선택한 DOM을 말함.
-      // 드롭메뉴를 제외한 나머지 공간을 클릭하면 닫히게된다.
-
-      if (inputClick && inputRef.current && !inputRef.current.contains(e.target)) {
-        setInputClick(false);
-        setInputClickNumber(0);
-      }
-    };
-
-    document.addEventListener("mousedown", clickOutside);
-
-    return () => {
-      // Cleanup the event listener
-      document.removeEventListener("mousedown", clickOutside);
-    };
-  }, [inputClick]);
-
   return (
-    <>
-      <form onSubmit={(e) => LoginBtn(e)}>
-        <div className="userlogin-layout-wrap">
-          <LayoutInner className="LayoutInner">
-            <LoginH2>더욱 빠르게 결제하시려면 로그인하세요.</LoginH2>
-            <LoginArea className="LoginArea">
+    <div className="userlogin-layout-wrap">
+      <LayoutInner className="LayoutInner">
+        <LoginH2>더욱 빠르게 결제하시려면 로그인하세요.</LoginH2>
+        <LoginArea className="LoginArea">
+          {isLoginLoading ? (
+            <>
               <LoginH3 className="LoginH3">Apple Store에 로그인하세요</LoginH3>
               <LoginBox className="LoginBox">
                 <LoginList
@@ -525,12 +494,10 @@ function Login({ setNavCart }: Props) {
                   inputClickNumber={inputClickNumber}
                   InputFocus={InputFocus}
                 >
-                  <LoginItemID className="LoginItem">
+                  <LoginItemID className="input-wrap">
                     <LoginInputID
                       type="text"
-                      name="id"
-                      placeholder="아이디"
-                      className="LoginInput"
+                      className={`input-id input ${Id ? "not-empty" : ""}`}
                       ref={idinput}
                       onKeyDown={handleKeyDown}
                       onClick={() => {
@@ -541,15 +508,15 @@ function Login({ setNavCart }: Props) {
                       onBlur={handleBlur}
                       onChange={IdHandler}
                     />
+                    <span className="input-text">이메일 또는 전화번호</span>
                     <span className={!IDDeleteIconShow ? "delete-icon-none delete-icon" : "delete-icon"} onClick={IDinputDelete}></span>
                   </LoginItemID>
-                  <LoginItemPW className="LoginItem PW">
+                  <LoginItemPW className="input-wrap">
                     <LoginInputPW
                       type="password"
-                      name="password"
-                      placeholder="비밀번호"
-                      className="login-input"
+                      className={`input-pass input ${Password ? "not-empty" : ""}`}
                       ref={pwinput}
+                      onKeyDown={handleKeyDown}
                       onClick={() => {
                         setInputClick(true);
                         setInputClickNumber(2);
@@ -558,14 +525,18 @@ function Login({ setNavCart }: Props) {
                       onBlur={handleBlur}
                       onChange={PasswordHandler}
                     />
-                    <span className={!PWDeleteIconShow? "delete-icon-none delete-icon" : "delete-icon"} onClick={PWinputDelete}></span>
+                    <span className="input-text">암호</span>
+                    <span className={!PWDeleteIconShow ? "delete-icon-none delete-icon" : "delete-icon"} onClick={PWinputDelete}></span>
+                    <InputBtn2 type="submit" className="pw" onClick={LoginBtn}>
+                      {isLoading ? (
+                        <div className="spinner-wrap">
+                          <Spinner />
+                        </div>
+                      ) : (
+                        <i className="shared-icon"></i>
+                      )}
+                    </InputBtn2>
                   </LoginItemPW>
-                  <InputBtn type="submit" className="id">
-                    <i className="shared-icon"></i>
-                  </InputBtn>
-                  <InputBtn2 type="submit" className="pw">
-                    <i className="shared-icon"></i>
-                  </InputBtn2>
                 </LoginList>
                 <LoginError isError={isError}>
                   <p className="login-error">Apple&nbsp;ID 또는 암호가 올바르지 않습니다.</p>
@@ -573,12 +544,17 @@ function Login({ setNavCart }: Props) {
                     <span className="">암호를 잊으셨습니까?</span>
                   </a>
                 </LoginError>
+                {!pwInputShow &&
+                  <button className="gray-btn" onClick={(e) => LoginBtn(e)}>
+                    <span className="text">암호로 계속 진행</span>
+                  </button>
+                }
               </LoginBox>
-            </LoginArea>
-          </LayoutInner>
-        </div>
-      </form>
-    </>
+            </>
+          ) : <Spinner></Spinner>}
+        </LoginArea>
+      </LayoutInner>
+    </div>
   );
 }
 

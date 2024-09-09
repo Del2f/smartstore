@@ -10,6 +10,7 @@ import Product from "./pages/adminPage/Product";
 import ProductRegister from "./pages/adminPage/ProductRegister";
 import Category from "./pages/adminPage/Category";
 import Advertise from "./pages/adminPage/Advertise";
+import Orders from "./pages/adminPage/Orders";
 
 import $ from "jquery";
 import "./App.scss";
@@ -24,26 +25,25 @@ function App() {
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
   const [showdropmenu, setShowdrop] = useState(false);
   const dropmenu = useRef<HTMLDivElement>(null);
-  
+
   // 관리자의 로그인 상태를 확인.
   // checkAdmin 미들웨어가 실행되면서 프론트엔드로 status를 보내줍니다.
   // App에 Routing 되어있는 component들은 함께 적용됩니다.
 
   useEffect(() => {
     const verifyUser = async () => {
-
       if (!cookies.jwt) {
         navigate("/");
       }
 
       try {
         const res = await axios.post("/smartstore/home", {}, { withCredentials: true });
-          if (!res.data.status) {
-            removeCookie("jwt");
-            navigate("/");
-          } else {
-            console.log(`안녕하세요 ${res.data.user} 님. 관리자 페이지 입니다.`);
-          }
+        if (!res.data.status) {
+          removeCookie("jwt");
+          navigate("/");
+        } else {
+          console.log(`안녕하세요 ${res.data.user} 님. 관리자 페이지 입니다.`);
+        }
       } catch (errors) {
         console.log(errors);
       }
@@ -94,9 +94,9 @@ function App() {
 
   return (
     <div className="App">
-      <div className="flex flex-ju-center flex-align-center">
-        <div className="navi flex flex-ju-bt flex-align-center" style={{ width: "1280px" }}>
-          <div className="nav-left flex flex-align-center">
+      <div className="navi-wrap flex flex-ju-center flex-align-center">
+        <div className="navi flex flex-ju-bt flex-align-center">
+          <div className="nav-left flex">
             <ul className="nav-logo flex flex-wrap flex-align-center">
               <li>
                 <a
@@ -137,11 +137,6 @@ function App() {
                 </a>
               </li>
               <li>
-                <i className="icon-alarm">
-                  <i className="icon-alarm-new"></i>
-                </i>
-              </li>
-              <li>
                 <a onClick={logOut} className="logout">
                   로그아웃
                 </a>
@@ -158,6 +153,7 @@ function App() {
           <Route path="/category" element={<Category />} />
           <Route path="/advertise" element={<Advertise />} />
           <Route path="/product" element={<Product />} />
+          <Route path="/orders" element={<Orders />} />
           {/* <Route path="*" element={<Notfound/>}/> */}
         </Routes>
       </div>

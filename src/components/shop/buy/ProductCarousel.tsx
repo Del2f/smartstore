@@ -83,8 +83,8 @@ const ImgItemWrap = styled.div<Carousel>`
   flex-direction: column;
   height: calc(100vh - 189px);
   justify-content: center;
-  min-height: 460px;
-  min-width: 592px;
+  /* min-height: 460px; */
+  /* min-width: 592px; */
 `;
 
 const ImgItem = styled.div<Carousel>`
@@ -92,10 +92,13 @@ const ImgItem = styled.div<Carousel>`
   display: flex;
   justify-content: center;
   position: relative;
-  /* width: ${(props) => props.width};
-  height: ${(props) => props.height}; */
+  width: ${(props) => props.width};
+  height: ${(props) => props.height};
   width: 100%;
-  height: 100%;
+  /* height: 100%; */
+
+  @media only screen and (max-width: 833px) {
+  }
 `;
 
 const ImgContent = styled.div`
@@ -111,12 +114,16 @@ const ImgContent = styled.div`
 `;
 
 const ImgWrap = styled.div`
-  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
   width: auto;
+  height: 100%;
 
   img {
-    width: auto;
-    height: 100%;
+    width: 100%;
+    height: auto;
     max-width: none;
     max-height: 1200px;
     display: block;
@@ -195,7 +202,7 @@ const RightBtn = styled(ButtonWrap)`
 `;
 
 interface Props {
-  mainimage: string[] | undefined | null;
+  mainimage?: string[] | undefined | null;
   subimage: string[] | undefined | null;
 }
 
@@ -256,9 +263,9 @@ function Swiper_Buy({ mainimage, subimage }: Props) {
   return (
     <Carousel className="carousel" width={width} height={height} ref={widthRef}>
       <Slider className={"Slider"} {...settings}>
-        {subimage?.map((list: any) => {
+        {subimage?.map((list: any, index) => {
           return (
-            <ImgItemWrap className="ImgItemWrap" width={width} height={height}>
+            <ImgItemWrap className="ImgItemWrap" width={width} height={height} key={index}>
               <ImgItem className="ImgItem" width={width} height={height}>
                 <ImgContent className="ImgContent">
                   <ImgWrap className="ImgWrap">

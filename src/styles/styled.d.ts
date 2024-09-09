@@ -9,7 +9,10 @@ declare module 'styled-components' {
     navMainHover: string;
     navBG: string;
     navMobileBG: string;
+    navText: string;
+
     navSubBG: string;
+    navSubBGOpened: string;
     navSubHeader: string;
     navSub: string;
     navCartBtnBG: string;

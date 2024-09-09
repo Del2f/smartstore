@@ -78,21 +78,19 @@ const DeleteBtn = styled.button<isImage>`
 `;
 
 const ImagePreviewWrap = styled.div`
-
     img {
       max-width: 100%;
     }
-
 `
 
-function ImagePreview({ imageURL, setAdBackColor, colorSelector, setIsBackColor }: any) {
+function ImagePreview({ imageURL, setAdBackColor, colorSelector }: any) {
   
   const image = new Image();
   image.src = imageURL;
   image.crossOrigin = "Anonymous";
 
   const colorPicker = (e: any) => {
-    console.log("colorpicker");
+    // console.log("colorpicker");
 
     if (!colorSelector) {
       console.log('colorSelector false')
@@ -120,7 +118,6 @@ function ImagePreview({ imageURL, setAdBackColor, colorSelector, setIsBackColor 
   
           const color = `rgba(${pixelData[0]}, ${pixelData[1]}, ${pixelData[2]}, ${pixelData[3] / 255})`;
           setAdBackColor(color);
-          setIsBackColor(true);
           console.log("클릭한 픽셀의 색상:", color);
         }
     }
@@ -231,7 +228,6 @@ function AdvertiseImage(props: any) {
     props.setColorSelector(false);
 
     props.setIsAdImage(false);
-    props.setIsBackColor(false);
 
     setPreviewImages("");
   };
@@ -250,7 +246,6 @@ function AdvertiseImage(props: any) {
           key={index}
           colorSelector={props.colorSelector}
           setAdBackColor={props.setAdBackColor}
-          setIsBackColor={props.setIsBackColor}
         />
       );
     });
@@ -281,7 +276,6 @@ function AdvertiseImage(props: any) {
         imageURL={imageURL}
         colorSelector={props.colorSelector}
         setAdBackColor={props.setAdBackColor}
-        setIsBackColor={props.setIsBackColor}
       />
     );
 

@@ -219,6 +219,8 @@ react-router-dom의 Link를 사용해 상품의 _id를 기반으로 다시 상�
 
 5) 스토어 카테고리 관리
 
+![image](https://github.com/user-attachments/assets/7a843246-d733-47ca-a519-c0c5058cec64)
+
 사용한 라이브러리
 - react-beautiful-dnd
 
@@ -255,7 +257,69 @@ Column 안에서 Task가 map 메소드로 생성 되고 있으니 똑같은 원�
 상품 등록에서 작성한 URL 주소와 현재 소개한 URL 주소가 같으면 해당 주소에서
 상품 정보를 불러올 수 있다.
 
-광고 목록 및 등록
+
+- 추가된 기능 2024-09-07
+
+접기 기능 
+
+![apple-menu13](https://github.com/user-attachments/assets/5c3477c6-2ead-49bd-938e-325221c0ff87)
+
+카테고리가 길어지면 스크롤 및 드래그에 편의성이 떨어져 카테고리를 접는 기능을 추가 하였습니다.
+column, task 우측 상단 화살표를 누르면 카테고리를 접거나 펼수 있습니다.
+
+- 드래그시 잘못된 위치로 이동하는 버그 발생
+
+첫번째 column 내부 task를 드래그 할때는 큰 이상이 없었으나
+두번째 column 내부 task를 드래그 할때 문제가 발생했다.
+
+두번째 task를 드래그 하는 도중 숨겨진 첫 column이 인식 되어 잘못된 위치로 task가 옮겨지는것 이었다.
+
+첫번째 시도. 카테고리 폴딩시 opacity 와 visibility를 함께 사용하는것 이었는데,
+겉모습으로는 정상작동 하지만 잘못된 위치를 인식 하는것에는 변함이 없었다.
+
+두번째 시도는 display: none;에 setTimeout을 합쳐서 애니메이션은 유지하되, style 적용에 지연을 시켜
+효과를 보려고 했다. 결과적으로는 성공했지만 애니메이션이 부드럽지 못하고 빠르게 폴딩 버튼을 누르면 출력이
+이상하게 되는 버그가 발생했다.
+
+세번째 시도는 task를 드래그 할때, 인식되는 범위 자체의 height를 조작 하면 어떨까 하는 생각이 떠올랐다.
+처음 폴딩 기능을 만들때, 카테고리의 가장 외곽 div의 height를 조작해서 구현 하였고 overflow: hidden;을 사용하면
+아무 간섭도 없겠다고 생각 하였지만 아니었다.
+내부 Droppable의 height가 존재하는 한 첫번째 column을 접더라도
+두번째 column task가 첫번째 column을 인식하게 되는것 이었다.
+결국 폴딩을 Droppable의 height를 조작하여 만들었고, 결과적으로는 성공 했다.
+
+
+- 접힌 column과 펼쳐진 column이 있을때, 펼쳐진 column의 task를 이동 시키고 싶을때 어떻게 해야할까?
+
+첫번째 column이 접혀있고, 두번째 column이 펼쳐져 있을때, 유저가 두번째 column의 task를
+첫번째 column으로 드래그하여 옮긴다고 예를 들어보자.
+
+가장 단순한 방법으로는 드래그 하여 옮겼을때 맞닿는 순간 약간의 상호작용과 함께 최상단, 혹은 최하단으로 이동하게 하는것.
+그러나 폴딩 구조 자체를 Droppable의 height를 바꾸어 만들었기 때문에 더 큰 문제가 생길것 같았다.
+
+그래서 생각해낸 방법은, 드래그 하여 옮겼을때 맞닿는 순간 다시 펼쳐지게 만든다.
+
+````
+    isPold={column.pold || snapshot.isDraggingOver}
+````
+
+기본적으로 유저가 폴딩 버튼을 눌렀을때 작동하고, 그 외에는 드래깅하여 접촉했을때 펼쳐지게 된다.
+
+
+
+카테고리 인덱스 기반으로 추가
+
+![apple-menu14](https://github.com/user-attachments/assets/f8a47388-d8eb-4bdb-a47f-591f646b433f)
+
+기존에는 카테고리를 클릭하고 추가 버튼을 누르면 최하단에 추가 되었으나,
+선택된 카테고리 내부 및 하단에 + 버튼을 출력해 클릭시 해당 index + 1에
+새 카테고리가 추가되도록 변경 했다.
+
+
+6) 광고 목록 및 등록
+
+![apple-menu15](https://github.com/user-attachments/assets/beea9b65-dbfb-406f-89bb-6561f97da093)
+
 애플 스토어에서 카테고리 중간에 끼워넣은 광고를 관리자 페이지에서 등록 및 관리 할 수 있도록 했다.
 먼저 카테고리에 등록된 광고 목록을 볼 수 있다. 그리고 새로운 광고를 등록 할 수 있다.
 광고 타입은 총 3가지. number로 저장되며 값에 따라 광고를 다르게 출력 해준다.
@@ -333,6 +397,23 @@ cloudfront를 중간에 추가하는 방법도 있었지만 실패. (현재 코�
 
 라이브러리 기본 구조 Column, Task에서 SubTask를 추가하여 애플 스토어의 구조와 동일하게 하였습니다.
 
+- 추가된 기능 2024-09-07
+
+텍스트 색상 변경
+react-color 라이브러리를 추가하여 광고 텍스트 및 배경의 색상을 변경 할수 있습니다.
+기존의 스포이드 배경 색상 기능 뿐만 아니라 컬러 픽커를 사용한 배경 색상 변경도 가능합니다.
+
+
+7) 유저 주문 상태 변경
+![apple-menu10](https://github.com/user-attachments/assets/61588d84-e356-4f3b-9f40-cefa25069e17)
+
+유저가 구매한 상품의 주문 내역을 확인 할수 있습니다.
+주문 접수 -> 처리중 -> 출고 준비중 -> 출고됨 -> 배송중 순서로 진행 됩니다.
+
+![apple-menu12](https://github.com/user-attachments/assets/91174f95-ab68-4a6b-8dab-d64ef859b967)
+
+변경된 주문 상태를 볼수 있습니다.
+
 
 ### 애플 스토어
 
@@ -345,11 +426,80 @@ cloudfront를 중간에 추가하는 방법도 있었지만 실패. (현재 코�
 - http://57.181.111.217/smartstore/shop
 
 테스트 유저 계정
-- ID: user
-- PW: 123456789a!
+- ID: thanks6@naver.com
+- PW: 45124512a
 
 모든 카테고리는 관리자 페이지에 연동 되어 작동합니다.
 - 유저 회원가입(이메일 인증 가능) 및 토큰 인증하는 로그인 및 로그아웃
+
+
+1) 회원 가입
+![스크린샷 2024-08-07 012813](https://github.com/user-attachments/assets/02758434-fedc-48c1-8e47-51c23005c66c)
+
+이름, 이메일, 암호, 암호 확인, 전화 번호, 동의 체크가 확인 되면 회원 가입이 가능합니다.
+이메일은 작성된 값이 서버로 전송되어 중복을 확인 합니다.
+
+
+2) 로그인
+![apple-menu4](https://github.com/user-attachments/assets/efabd1ce-9999-4f77-aad2-c394b5765758)
+
+공식 홈페이지처럼 로그인 전 회전하는 톱니바퀴 애니메이션이 있으며
+아이디를 입력하면 패스워드 input이 나타나고, 로그인이 가능합니다.
+
+
+3) 상품 구매
+![apple-menu5](https://github.com/user-attachments/assets/124b1405-6171-464f-babf-46a1a50f733f)
+
+관리자 페이지에서 등록된 상품을 유저 계정으로 구매 할수 있습니다.
+모든 옵션을 선택하면 장바구니로 상품이 추가됩니다.
+
+
+4) 장바구니
+![image](https://github.com/user-attachments/assets/c19b0088-983c-4086-9b4e-167b071171f6)
+
+장바구니에서 상품 구매 개수를 수정 할수 있습니다.
+결제 버튼을 누르면 결제창으로 이동합니다.
+
+
+5) 배송 방법 선택
+![image](https://github.com/user-attachments/assets/f383c681-828e-49ce-a0ec-9f543136c00f)
+
+제품의 배송 방법을 선택하는 페이지 입니다. 현재 직접 픽업이 선택 되지 않으며 배송만 선택이 가능합니다.
+
+
+6) 배송 주소지 선택
+![apple-menu6](https://github.com/user-attachments/assets/5b5c882d-8164-474a-9d4c-99c973ab92ce)
+
+처음 계정을 만들면 주소가 없습니다.
+바로 상품 주문을 하면 새로운 주소를 입력해야 하며 건물 출입 코드를 제외한 나머지 input에서 유효성 검사를
+진행합니다. 연락처 정보는 가입시 입력했던 이메일과 연락처를 사용합니다.
+주소록 저장 체크박스를 선택하지 않으면 주소가 서브 주소로 저장되어 결제시 사라지게 됩니다.
+
+
+7) 배송 주소지 수정 및 삭제
+![apple-menu7](https://github.com/user-attachments/assets/cfd62f37-56d8-472b-81db-5d679cddb860)
+
+등록된 주소를 수정 및 삭제가 가능합니다.
+
+
+8) 주문서 확인
+![image](https://github.com/user-attachments/assets/854ee3d9-097e-4835-9ea1-f7c04e4833a6)
+
+상품과 주문 내역을 마지막으로 확인 할수 있습니다.
+결제는 구현 되어 있지 않으므로 바로 주문번호가 생성되며 끝이 납니다.
+
+![image](https://github.com/user-attachments/assets/44a90eab-57ad-4932-b60b-33d3f1348058)
+
+![apple-menu8](https://github.com/user-attachments/assets/08cbdce1-6c8b-4606-9d51-f0ebe2318127)
+
+주문내역을 확인 할수 있습니다.
+
+
+9) 유저 계정 페이지
+![apple-menu9](https://github.com/user-attachments/assets/e229012c-75b4-4644-922d-57711e476f39)
+
+주소 및 연락처 변경을 계정 페이지에서도 할수 있습니다.
+
 
 ### 이슈
 

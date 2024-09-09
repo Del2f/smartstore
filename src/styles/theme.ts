@@ -1,6 +1,6 @@
 import { DefaultTheme } from "styled-components";
 
-const navRate = "240ms";
+const navRate = "180ms";
 const navVisibleRate = "240ms";
 const navColorRate = "240ms";
 
@@ -19,12 +19,14 @@ const color = {
 };
 
 export const lightTheme: DefaultTheme = {
-  navMain: "rgba(0,0,0,.8)",
+  navMain: "rgb(250, 250, 252);",
   navMainHover: "#000000",
   navBG: "#fff",
   navMobileBG: "#fff",
+  navText: "rgba(0,0,0,.8)",
 
   navSubBG: "#fbfbfd",
+  navSubBGOpened: "#fff",
   navSubHeader: "rgb(110,110,115)",
   navSub: "#333336",
 
@@ -80,12 +82,14 @@ export const lightTheme: DefaultTheme = {
 };
 
 export const darkTheme: DefaultTheme = {
-  navMain: "rgba(255,255,255,.8)",
+  navMain: "rgba(22, 22, 23, 0.8)",
   navMainHover: "#ffffff",
-  navBG: "rgba(22, 22, 23, .8);",
+  navBG: "#1d1d1f",
   navMobileBG: "#161617",
+  navText: "rgba(255,255,255,.8)",
 
-  navSubBG: "#161617",
+  navSubBG: "rgba(22, 22, 23, .8)",
+  navSubBGOpened: "#161617",
   navSubHeader: "rgb(134,134,139)",
   navSub: "#E8E8ED",
 

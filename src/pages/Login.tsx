@@ -2,21 +2,28 @@ import axios from "../api/axios";
 import styled, { css } from "styled-components";
 import { SET_TOKEN } from "../store/authSlice";
 import { AdminLogin } from "../store/adminSlice";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useCookies } from "react-cookie";
+import Spinner from "../components/Spinner";
 
 const LayoutInner = styled.div`
   margin-left: auto;
   margin-right: auto;
-  width: 980px;
+
+  .input-text,
+  .input2-text {
+    transition-timing-function: ease-in;
+    transition-duration: 0.125s;
+  }
 `;
 
 const LoginArea = styled.div`
-  max-width: 300px;
+padding: 0 20px;
+  max-width: 480px;
   height: 480px;
-  margin: 0 auto 90px;
+  margin: auto;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -29,13 +36,17 @@ const SVG = styled.div<any>`
   font-weight: 700;
 
   svg {
-    ${props => props.size === "apple" && `
-      transform: scale(1);
-    `}
-    ${props => props.size === "saw" && `
-      transform: scale(5);
-      fill: #2e2e2e;
-    `}
+    ${(props) =>
+      props.size === "apple" &&
+      css`
+        transform: scale(1);
+      `}
+    ${(props) =>
+      props.size === "saw" &&
+      css`
+        transform: scale(5);
+        fill: #2e2e2e;
+      `}
   }
 `;
 
@@ -48,39 +59,19 @@ const LoginBox = styled.div`
   margin-top: 20px;
   width: 100%;
   position: relative;
+
+  .signup-wrap {
+    margin-top: 20px;
+  }
 `;
 
 const LoginItem = css`
-  position: relative;
-  width: 100%;
-  height: 44px;
   font-size: 15px;
-  border-radius: var(--input-border-radius);
-  border: 1px solid #d6d6d6;
-  background: transparent;
   margin: 0;
-  vertical-align: top;
   transition: 0.32s cubic-bezier(0.4, 0, 0.6, 1);
 `;
 
 const InputStyle = css`
-  position: relative;
-  width: 100%;
-  height: 100%;
-  padding-left: 15px;
-  padding-right: 43px;
-  border-radius: var(--input-border-radius);
-  border: 0;
-
-  &:focus {
-    border: 0;
-    outline: 0;
-  }
-
-  &::placeholder {
-    color: #a1a1a1;
-    font-weight: 100;
-  }
 `;
 
 const LoginItemID = styled.div`
@@ -126,116 +117,102 @@ const LoginList = styled.ul<LoginList>`
 
   ${(props) =>
     props.InputFocus === "id"
-      ? `
-    ${LoginItemID}{
-      border: 1px solid #0070c9;
-      border-width: 1px;
-      box-shadow: 0 0 0 1px #0070c9;
-      outline: 0;
-      z-index: 2;
-    }
-    
-    ${InputBtn}{
-      z-index: 2;
-    }
-    `
-      : `
-    ${LoginItemPW}{
-      border: 1px solid #0070c9;
-      border-width: 1px;
-      box-shadow: 0 0 0 1px #0070c9;
-      outline: 0;
-      z-index: 2;
-    }
-    ${InputBtn2}{
-      z-index: 2;
-    }
-`}
+      ? css`
+          ${InputBtn} {
+          }
+        `
+      : css``}
 
   ${(props) =>
-    props.pwInputShow === false && props.Id.length > 0
-      ? `
-      ${InputBtn}{
-        cursor: pointer;
-        & > i { 
-          color: #494949;
+    props.InputFocus === "pw" &&
+    css`
+      .input-wrap {
+        .input-pass {
+          border-top-width: 2px;
         }
       }
-      `
+    `}
+
+  ${(props) =>
+    !props.pwInputShow && props.Id.length > 0
+      ? css`
+          ${InputBtn} {
+            cursor: pointer;
+            & > i {
+              color: #494949;
+            }
+          }
+        `
       : `
 
   `}
 
   ${(props) =>
     props.pwInputShow === true && props.Password.length > 0
-      ? `
-      ${InputBtn2}{
-        cursor: pointer;
-        & > i { 
-          color: #494949;
-        }
-      }
-      `
-      : `
-      ${InputBtn2}{
-        cursor: pointer;
-        & > i { 
-          color: #929292;
-        }
-      }
-  `}
+      ? css`
+          ${InputBtn2} {
+            cursor: pointer;
+            & > i {
+              color: #494949;
+            }
+          }
+        `
+      : css`
+          ${InputBtn2} {
+            cursor: pointer;
+            & > i {
+              color: #929292;
+            }
+          }
+        `}
 
   ${(props) =>
     props.pwInputShow
-      ? `
+      ? css`
+          .input-id {
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+          }
+          .input-pass {
+            border-top-width: 0;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+          }
 
-      ${LoginItemID} {
-        border-top-left-radius: var(--input-border-radius);
-        border-top-right-radius: var(--input-border-radius);
-        border-bottom-left-radius: 0;
-        border-bottom-right-radius: 0;
-      }
+          ${LoginItemPW} {
+            opacity: 1;
+          }
 
-      ${LoginItemPW} {
-        opacity: 1;
-      }
+          ${InputBtn} {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.32s cubic-bezier(0.4, 0, 0.6, 1) 80ms, visibility 0.32s step-end 80ms;
+          }
 
-      ${LoginItemPW} {
-        border-top-left-radius: 0;
-        border-top-right-radius: 0;
-        border-bottom-left-radius: var(--input-border-radius);
-        border-bottom-right-radius: var(--input-border-radius);
-      }
+          ${InputBtn2} {
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.32s cubic-bezier(0.4, 0, 0.6, 1) 80ms, visibility 0.32s step-start 80ms;
+          }
+        `
+      : css`
+          ${LoginItemPW} {
+            display: none;
+            opacity: 0;
+          }
 
-      ${InputBtn}{
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity .32s cubic-bezier(.4, 0, .6, 1) 80ms, visibility .32s step-end 80ms;
-      }
+          ${InputBtn} {
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.32s cubic-bezier(0.4, 0, 0.6, 1) 80ms, visibility 0.32s step-start 80ms;
+          }
 
-      ${InputBtn2}{
-        opacity: 1;
-        visibility: visible;
-        transition: opacity .32s cubic-bezier(.4, 0, .6, 1) 80ms, visibility .32s step-start 80ms;
-      }
-      `
-      : `
-      ${LoginItemPW} {
-        opacity: 0;
-      }
-
-      ${InputBtn}{
-        opacity: 1;
-        visibility: visible;
-        transition: opacity .32s cubic-bezier(.4, 0, .6, 1) 80ms, visibility .32s step-start 80ms;
-      }
-
-      ${InputBtn2}{
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity .32s cubic-bezier(.4, 0, .6, 1) 80ms, visibility .32s step-end 80ms;
-      }
-    `};
+          ${InputBtn2} {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.32s cubic-bezier(0.4, 0, 0.6, 1) 80ms, visibility 0.32s step-end 80ms;
+          }
+        `};
 `;
 
 interface LoginError {
@@ -245,12 +222,12 @@ interface LoginError {
 const LoginError = styled.div<LoginError>`
   ${(props) =>
     props.isError
-      ? `
-      display: block;
-      `
-      : `
-      display: none;
-  `};
+      ? css`
+          display: block;
+        `
+      : css`
+          display: none;
+        `};
 
   color: #503e30;
   background-color: #fae9a3;
@@ -305,7 +282,7 @@ const InputBtn = styled.button<LoginBtn>`
   background: transparent;
   margin: 0;
   border: 1px solid transparent;
-  top: 6px;
+  top: 14px;
   right: 10px;
   padding: 0 1px 0 2px;
   z-index: 2;
@@ -327,8 +304,14 @@ const InputBtn = styled.button<LoginBtn>`
 `;
 
 const InputBtn2 = styled(InputBtn)`
-  top: 3em;
+  top: 11px;
   cursor: pointer;
+
+   .spinner-wrap {
+    position: relative;
+    top: 15px;
+    right: 15px;
+  } 
 
   & > i {
     color: #494949;
@@ -346,17 +329,18 @@ const SignUpBtn = styled.button`
     font-weight: 600;
     color: var(--black2-color);
   }
-`
+`;
 
 interface Props {
   // setNavCart: React.Dispatch<React.SetStateAction<cartListType[] | undefined>>;
 }
 
 function Login() {
-  const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
+  const [cookies] = useCookies(["jwt"]);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState<Boolean>(false);
 
   const [Id, setId] = useState<string>("");
   const [Password, setPassword] = useState<string>("");
@@ -438,12 +422,17 @@ function Login() {
       return;
     }
 
+    setIsLoading(true); // 스피너 표시
+
     try {
       const res = await axios.post("/smartstore/commerce/loginbtn", userdata, { withCredentials: true });
 
       if (res.data.error == "아이디및비밀번호오류") {
-        setErrorMessage("아이디 혹은 비밀번호가 틀렸습니다.");
-        setIsError(true);
+        setTimeout(() => {
+          setIsLoading(false);
+          setErrorMessage("아이디 혹은 비밀번호가 틀렸습니다.");
+          setIsError(true);
+        }, 1000); // 스피너 지연 시간 후에 숨김
         return;
       }
 
@@ -512,17 +501,8 @@ function Login() {
     <>
       <div className="userlogin-layout-wrap">
         <LayoutInner className="LayoutInner">
-          <SVG size={"saw"}>
-            <svg id="Outlined" xmlns="http://www.w3.org/2000/svg" className="ac-gn-bagview-nav-svgicon" width="11" height="16" viewBox="0 0 16 25">
-              <path
-                id="art_"
-                d="M15.6094,12.3252a.5142.5142,0,0,0-.2959-.2959l-.5972-.2324a6.6665,6.6665,0,0,0-.16-.917l.4809-.42a.5172.5172,0,0,0-.3291-.9073l-.6372-.0136c-.0654-.1377-.1343-.2784-.2139-.4151s-.1635-.2636-.2519-.3935l.3076-.5576a.517.517,0,0,0-.62-.7393l-.6035.2051a6.68,6.68,0,0,0-.7134-.5977l.0986-.6328a.5172.5172,0,0,0-.43-.5918.54.54,0,0,0-.4052.1084l-.5015.4033A6.911,6.911,0,0,0,9.87,6.01l-.124-.6328a.5178.5178,0,0,0-.9512-.167l-.333.5507a7.2576,7.2576,0,0,0-.92.0039L7.2056,5.207a.518.518,0,0,0-.9512.167l-.125.6377a6.6192,6.6192,0,0,0-.8652.31l-.501-.4063a.5176.5176,0,0,0-.8364.4834l.0991.6358a6.6073,6.6073,0,0,0-.7017.5947L2.71,7.417a.5173.5173,0,0,0-.6211.7392l.3134.5694a6.7192,6.7192,0,0,0-.4653.7959l-.6421.0117a.516.516,0,0,0-.5083.5264.52.52,0,0,0,.1763.38l.4849.4238a6.8261,6.8261,0,0,0-.16.9111l-.6006.23a.5176.5176,0,0,0-.001.9658l.5972.2324a6.6665,6.6665,0,0,0,.16.917l-.4809.419a.5184.5184,0,0,0-.05.7314.52.52,0,0,0,.3789.1758l.6367.0137c.063.1318.1333.2754.2144.416.0673.1172.143.2246.2163.3281l.04.0566-.312.5664a.5176.5176,0,0,0,.2036.7032.52.52,0,0,0,.416.0361l.5967-.2031a6.82,6.82,0,0,0,.7207.5937l-.0991.6348a.5153.5153,0,0,0,.0933.3857.5187.5187,0,0,0,.7421.0977l.5064-.4082a6.6137,6.6137,0,0,0,.8628.3193l.1245.6358a.5139.5139,0,0,0,.22.33.53.53,0,0,0,.3877.0782.5193.5193,0,0,0,.3433-.24l.3388-.56.0577.0049a4.8076,4.8076,0,0,0,.7871.0019l.0669-.0058.3383.5625a.518.518,0,0,0,.9512-.167l.1245-.6348a6.6152,6.6152,0,0,0,.8589-.3193l.5088.4131a.5176.5176,0,0,0,.8364-.4834l-.0991-.6358a6.6173,6.6173,0,0,0,.7017-.5947l.6142.2119a.5174.5174,0,0,0,.6211-.7392l-.3135-.5694a6.6548,6.6548,0,0,0,.4649-.7959l.6421-.0117a.5168.5168,0,0,0,.5088-.5264.5166.5166,0,0,0-.1768-.38l-.4849-.4238a6.6694,6.6694,0,0,0,.16-.9111l.6006-.2315a.5177.5177,0,0,0,.2969-.6689ZM6.4941,13.9043,4.7666,16.8926a5.4449,5.4449,0,0,1,.0044-8.792L6.5,11.0986A2.0525,2.0525,0,0,0,6.4941,13.9043Zm2.1646-1.7822a.7608.7608,0,1,1-.4609-.3555A.7543.7543,0,0,1,8.6587,12.1221ZM7.54,10.499,5.8154,7.5068A5.4579,5.4579,0,0,1,7.9907,7.041h.0239a5.4693,5.4693,0,0,1,5.4068,4.8633l-3.457-.0029a2.0363,2.0363,0,0,0-.18-.43A2.0586,2.0586,0,0,0,7.54,10.499Zm-.0058,4.0049a2.0556,2.0556,0,0,0,2.435-1.4023l3.4512.0029a5.4455,5.4455,0,0,1-7.6147,4.3877Z"
-                fill="6E6E73"
-              ></path>
-            </svg>
-          </SVG>
           <LoginArea className="LoginArea">
-            <LoginH3 className="LoginH3">Apple Store 관리자 로그인.</LoginH3>
+            <LoginH3 className="LoginH3">Apple Store 관리자 로그인</LoginH3>
             <LoginBox className="LoginBox">
               <LoginList
                 className="LoginList"
@@ -534,12 +514,10 @@ function Login() {
                 inputClickNumber={inputClickNumber}
                 InputFocus={InputFocus}
               >
-                <LoginItemID className="LoginItem">
+                <LoginItemID className="input-wrap">
                   <LoginInputID
                     type="text"
-                    name="id"
-                    placeholder="아이디"
-                    className="LoginInput"
+                    className={`input-id input ${Id ? "not-empty" : ""}`}
                     ref={idinput}
                     onKeyDown={handleKeyDown}
                     onClick={() => {
@@ -550,45 +528,47 @@ function Login() {
                     onBlur={handleBlur}
                     onChange={IdHandler}
                   />
-                  <span className={IDDeleteIconShow == false ? "delete-icon-none delete-icon" : "delete-icon"} onClick={IDinputDelete}></span>
+                  <span className="input-text">아이디</span>
+                  <span className={!IDDeleteIconShow ? "delete-icon-none delete-icon" : "delete-icon"} onClick={IDinputDelete}></span>
                 </LoginItemID>
-                <LoginItemPW className="LoginItem PW">
+                <LoginItemPW className="input-wrap">
                   <LoginInputPW
                     type="password"
-                    name="password"
-                    placeholder="비밀번호"
-                    className="login-input"
+                    className={`input-pass input ${Password ? "not-empty" : ""}`}
                     ref={pwinput}
+                    onKeyDown={handleKeyDown}
                     onClick={() => {
                       setInputClick(true);
                       setInputClickNumber(2);
                     }}
-                    onKeyDown={handleKeyDown}
                     onFocus={() => handleFocus("pw")}
                     onBlur={handleBlur}
                     onChange={PasswordHandler}
                   />
-                  <span className={PWDeleteIconShow == false ? "delete-icon-none delete-icon" : "delete-icon"} onClick={PWinputDelete}></span>
+                  <span className="input-text">암호</span>
+                  <span className={!PWDeleteIconShow ? "delete-icon-none delete-icon" : "delete-icon"} onClick={PWinputDelete}></span>
+                  <InputBtn2 type="submit" className="pw" onClick={LoginBtn}>
+                    {isLoading ? (
+                      <div className="spinner-wrap">
+                        <Spinner />
+                      </div>
+                    ) : (
+                      <i className="shared-icon"></i>
+                    )}
+                  </InputBtn2>
                 </LoginItemPW>
-                <InputBtn className="id" onClick={LoginBtn}>
-                  <i className="shared-icon"></i>
-                </InputBtn>
-                <InputBtn2 className="pw" onClick={LoginBtn}>
-                  <i className="shared-icon"></i>
-                </InputBtn2>
               </LoginList>
-              <Link to={"./signup"}>
-                <SignUpBtn>
-                  <span>가입</span>
-                </SignUpBtn>
-              </Link>
-
               <LoginError isError={isError}>
-                <p className="login-error">ID 또는 암호가 올바르지 않습니다.</p>
+                <p className="login-error">관리자 ID 또는 암호가 올바르지 않습니다.</p>
                 {/* <a className="login-error under" target="_blank">
                   <span className="">암호를 잊으셨습니까?</span>
                 </a> */}
               </LoginError>
+              {!pwInputShow && (
+                <button className="gray-btn" onClick={(e) => LoginBtn(e)}>
+                  <span className="text">암호로 계속 진행</span>
+                </button>
+              )}
             </LoginBox>
           </LoginArea>
         </LayoutInner>
