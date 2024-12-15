@@ -215,15 +215,22 @@ const BlurWrap = styled.div<showProductList>`
   display: flex;
   justify-content: center;
   align-items: center;
+  backdrop-filter: blur(20px);
 
   ${(props) =>
     props.isProductListShow
-      ? `
-      visibility: visible;
-      `
-      : `
-      visibility: hidden;
-  `}
+      ? css`
+          opacity: 1;
+
+          visibility: visible;
+        `
+      : css`
+          opacity: 0;
+
+          visibility: hidden;
+        `}
+
+  transition: opacity 0.32s cubic-bezier(0.4, 0, 0.6, 1) 80ms, visibility 0.32s 80ms;
 `;
 
 interface showAdverList {
@@ -261,7 +268,6 @@ const AdverList = styled.div`
 `;
 
 const AdverBlur = styled.div<showAdverList>`
-  backdrop-filter: blur(20px);
   position: fixed;
   top: 0;
   right: 0;
@@ -1264,7 +1270,7 @@ function Advertise(props: Props) {
             <div className="panel-footer"></div>
           </div>
         </div>
-        <BlurWrap isProductListShow={isProductListShow} ref={blurWrapRef}>
+        <BlurWrap className="blurwrap" isProductListShow={isProductListShow} ref={blurWrapRef}>
           <ProductListWrap isProductListShow={isProductListShow} ref={blurRef}>
             <ProductList>
               <h5 className="box-name">상품 목록</h5>

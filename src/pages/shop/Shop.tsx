@@ -280,6 +280,7 @@ export const MainWrap = styled.div`
     transition-property: opacity;
     transition-timing-function: ease-in-out;
   }
+  
   .contents.visible {
     opacity: 1;
   }

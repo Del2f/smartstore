@@ -8,7 +8,8 @@ $modalBackColor: white;
     overflow: hidden;
 }
 
-.router-item-copy, .router-item-cta {
+.router-item-copy,
+.router-item-cta {
     font-size: 21px;
     line-height: 1.381002381;
     font-weight: 400;
@@ -54,7 +55,8 @@ $modalBackColor: white;
     --sk-button-margin-vertical: 10px;
 }
 
-.icon-copy, .icon-more {
+.icon-copy,
+.icon-more {
     color: $blueColor;
 }
 
@@ -494,10 +496,11 @@ br.small {
         align-self: flex-end;
         position: sticky;
     }
+
     display: flex;
     flex-direction: column;
     overflow: scroll;
-    z-index: 3;
+    z-index: 4;
     position: fixed;
     top: 0;
     left: 0;
@@ -1095,6 +1098,11 @@ article.section-performance .subsection-apps .tile-content {
             flex-shrink: 0;
             width: var(--item-width);
             padding-right: var(--item-gap);
+            user-select: none;
+
+            img {
+                pointer-events: none;
+            }
         }
 
         .gallery-item:last-child {
@@ -1222,7 +1230,7 @@ article.section-performance .subsection-apps .tile-content {
     }
 
     // 컨텐츠
-    .contents {
+    .product-contents {
         margin: 57px 0 41px;
         min-height: 300px;
         position: relative;
@@ -1395,7 +1403,7 @@ article.section-performance .subsection-apps .tile-content {
         color: #6e6e73;
     }
 
-    .contents {
+    .product-contents {
         height: 562px;
         background-color: #fbfbfb;
     }
@@ -1551,8 +1559,8 @@ article.section-performance .subsection-apps .tile-content {
                     position: relative;
                     display: flex;
                     padding-top: 100px;
-                            max-width: 980px;
-                                margin: 0 auto;
+                    max-width: 980px;
+                    margin: 0 auto;
 
                     .item {
                         flex: 40%;
@@ -1663,34 +1671,34 @@ article.section-performance .subsection-apps .tile-content {
 
         .router-item-accessories {
 
-                .router-item-content {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                }
+            .router-item-content {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
 
-                .router-item-picture {
+            .router-item-picture {
 
-                    padding-top: var(--minimum-row-spacing);
-                    padding-bottom: var(--minimum-row-spacing);
-                }
+                padding-top: var(--minimum-row-spacing);
+                padding-bottom: var(--minimum-row-spacing);
+            }
 
-                .router-item-headline {
-                    max-width: 400px;
-                    text-align: center;
-                }
+            .router-item-headline {
+                max-width: 400px;
+                text-align: center;
+            }
 
-                .router-item-content,
-                .router-item-header {
-                    margin-top: 52px;
-                    padding-left: var(--router-item-column-padding);
-                    padding-right: var(--router-item-column-padding);
-                    z-index: 1;
-                }
+            .router-item-content,
+            .router-item-header {
+                margin-top: 52px;
+                padding-left: var(--router-item-column-padding);
+                padding-right: var(--router-item-column-padding);
+                z-index: 1;
+            }
         }
 
         .router-item-enviroment {
-            .router-item-content > picture {
+            .router-item-content>picture {
                 margin: 0 auto 26px;
             }
 
@@ -1703,7 +1711,8 @@ article.section-performance .subsection-apps .tile-content {
                 align-items: center;
             }
 
-            .router-item-headline, .router-item-text {
+            .router-item-headline,
+            .router-item-text {
                 text-align: center;
             }
 
@@ -1725,7 +1734,7 @@ article.section-performance .subsection-apps .tile-content {
             .icon-after {
                 content: "\f301";
             }
-            
+
             // .router-item-headline::before {
             //     content: "";
             //     position: absolute;
@@ -1799,20 +1808,20 @@ article.section-performance .subsection-apps .tile-content {
                 width: 980px;
                 width: 928px;
                 margin-bottom: 68px;
-                grid-template-columns: repeat(4,minmax(0,1fr));
+                grid-template-columns: repeat(4, minmax(0, 1fr));
                 grid-template-areas:
-                "mbam1-hw mba1315-hw mbp13-hw mbp1416-hw"
-                "mbam1-swatch mba1315-swatch mbp13-swatch mbp1416-swatch"
-                "mbam1-headline mba1315-headline mbp13-headline mbp1416-headline"
-                "mbam1-pricing mba1315-pricing mbp13-pricing mbp1416-pricing"
-                "mbam1-display mba1315-display mbp13-display mbp1416-display"
-                "mbam1-processor mba1315-processor mbp13-processor mbp1416-processor"
-                "mbam1-memory mba1315-memory mbp13-memory mbp1416-memory"
-                "mbam1-storage mba1315-storage mbp13-storage mbp1416-storage"
-                "mbam1-battery mba1315-battery mbp13-battery mbp1416-battery"
-                "mbam1-biometrics mba1315-biometrics mbp13-biometrics mbp1416-biometrics"
-                "mbam1-btn mba1315-btn mbp13-btn mbp1416-btn"
-                "mbam1-cta mba1315-cta mbp13-cta mbp1416-cta";
+                    "mbam1-hw mba1315-hw mbp13-hw mbp1416-hw"
+                    "mbam1-swatch mba1315-swatch mbp13-swatch mbp1416-swatch"
+                    "mbam1-headline mba1315-headline mbp13-headline mbp1416-headline"
+                    "mbam1-pricing mba1315-pricing mbp13-pricing mbp1416-pricing"
+                    "mbam1-display mba1315-display mbp13-display mbp1416-display"
+                    "mbam1-processor mba1315-processor mbp13-processor mbp1416-processor"
+                    "mbam1-memory mba1315-memory mbp13-memory mbp1416-memory"
+                    "mbam1-storage mba1315-storage mbp13-storage mbp1416-storage"
+                    "mbam1-battery mba1315-battery mbp13-battery mbp1416-battery"
+                    "mbam1-biometrics mba1315-biometrics mbp13-biometrics mbp1416-biometrics"
+                    "mbam1-btn mba1315-btn mbp13-btn mbp1416-btn"
+                    "mbam1-cta mba1315-cta mbp13-cta mbp1416-cta";
             }
 
             .product-swatch {
@@ -1880,7 +1889,10 @@ article.section-performance .subsection-apps .tile-content {
                 margin-top: 22px;
             }
 
-            .product-battery, .product-biometrics, .product-memory, .product-storage {
+            .product-battery,
+            .product-biometrics,
+            .product-memory,
+            .product-storage {
                 margin-top: 12px;
             }
 
@@ -2083,7 +2095,8 @@ article.section-performance .subsection-apps .tile-content {
 
         .router-item-tradein {
 
-            .router-item-copy, .router-item-cta {
+            .router-item-copy,
+            .router-item-cta {
                 font-size: 20px;
                 line-height: 1.5238095238;
                 font-weight: 400;
@@ -2098,15 +2111,17 @@ article.section-performance .subsection-apps .tile-content {
         .full-bleed {
             color: white;
 
-            .icon-copy{
+            .icon-copy {
                 color: white;
             }
 
-            .router-item-content, .router-item-header {
+            .router-item-content,
+            .router-item-header {
                 margin-top: 250px;
             }
 
-            .router-item-content, .router-item-header {
+            .router-item-content,
+            .router-item-header {
                 padding-left: var(--router-item-column-padding);
                 padding-right: var(--router-item-column-padding);
                 z-index: 1;
@@ -2144,7 +2159,8 @@ article.section-performance .subsection-apps .tile-content {
             }
         }
 
-        .overview-routers-business, .overview-routers-education {
+        .overview-routers-business,
+        .overview-routers-education {
             display: block;
             width: var(--p-width);
             height: var(--p-height);
@@ -2212,12 +2228,12 @@ article.section-performance .subsection-apps .tile-content {
             text-align: left;
             padding-right: 50px;
         }
-        
+
     }
 }
 
 @media only screen and (min-width: 940px) {
-    .section-routers { 
+    .section-routers {
         .router-item-tradein .router-content-wrapper {
             padding-right: 50px;
         }
@@ -2231,7 +2247,7 @@ article.section-performance .subsection-apps .tile-content {
             margin-bottom: 52px;
         }
     }
-    
+
 }
 
 @media only screen and (min-width: 1069px) {
@@ -2267,21 +2283,22 @@ article.section-performance .subsection-apps .tile-content {
 
 @media only screen and (max-width: 1068px) and (min-width: 735px) {
 
-    .section-routers{
-        
+    .section-routers {
+
         .router-grid {
 
             .router-item-tradein {
-    
+
                 .overview-routers-trade-in {
                     img {
                         width: 356px;
                         height: 216px;
-                
+
                     }
                 }
 
-                .router-item-copy, .router-item-cta {
+                .router-item-copy,
+                .router-item-cta {
                     font-size: 17px;
                     line-height: 1.5882352941;
                     font-weight: 400;
@@ -2294,6 +2311,5 @@ article.section-performance .subsection-apps .tile-content {
                 }
             }
         }
-    } 
+    }
 }
-

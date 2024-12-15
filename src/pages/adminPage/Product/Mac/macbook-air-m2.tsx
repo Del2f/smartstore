@@ -852,7 +852,7 @@ function MacBookAirM2() {
             <h2 className="h2 black">디스플레이, 카메라, 오디오</h2>
             <span className="typography-headline">또렷이 앞서다.</span>
           </div>
-          <div className="contents">
+          <div className="product-contents">
             <div className="subsection-apps grid-item">
               <div className="tile stile-with-overlay">
                 <div className="image-wrap">
@@ -1079,7 +1079,7 @@ function MacBookAirM2() {
             <span className="typography-headline">보다 자유로운 커넥션.</span>
           </div>
           <div style={{ width: "980px", margin: "40px auto 0", position: "relative" }}>
-            <div className="contents">
+            <div className="product-contents">
               <div style={{ position: "absolute", top: "190px", right: "0" }}>
                 <img src={connectRight} alt="" />
                 <div className="smart-pin">
