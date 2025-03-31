@@ -155,7 +155,7 @@ function ProductRegister(props: Props) {
 
   const [OptionResult, setOptionResult] = useState<any>([]);
   
-  const [addProductResult, setAddProductResult] = useState<InstanceType<typeof addProductModel>[]>([]);
+  const [addProductResult, setAddProductResult] = useState<any>([]);
 
   // 옵션 이미지 드롭메뉴
   const [isOptionDropMenu, setIsOptionDropMenu] = useState<boolean[]>([false]);
