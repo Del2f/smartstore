@@ -36,14 +36,14 @@
 - AWS
 
 주소
-- http://57.181.111.217/smartstore/shop
-- http://57.181.111.217/smartstore
+- http://del2f.sytes.net/smartstore/shop
+- http://del2f.sytes.net/smartstore
 
 ## 개발 과정
 
 ### 애플 스토어 관리자 페이지
 
-- http://57.181.111.217/smartstore
+- http://del2f.sytes.net/smartstore
 
 관리자 계정
 - ID: thanks6
@@ -427,7 +427,7 @@ react-color 라이브러리를 추가하여 광고 텍스트 및 배경의 색�
 - 모바일
 ![apple-menu](https://github.com/Del2f/smartstore/assets/92422357/ba50c9f6-bbe6-432c-905d-51afec09ebc5)
 
-- http://57.181.111.217/smartstore/shop
+- http://del2f.sytes.net/smartstore/shop
 
 테스트 유저 계정
 - ID: thanks6@naver.com
