@@ -148,7 +148,7 @@ export interface SubTaskType {
   name: string | undefined;
   url: string | undefined;
   user: string;
-  icon?: string;
+  icon?: string[];
   navHide?: boolean;
   chapterNavHide?: boolean;
   darkMode?: boolean;
@@ -162,7 +162,7 @@ export interface TaskType {
   name: string | undefined;
   url: string | undefined;
   user: string;
-  icon?: string;
+  icon?: string[];
   navHide?: boolean;
   chapterNavHide?: boolean;
   darkMode?: boolean;
@@ -296,7 +296,7 @@ function Category(props: Props) {
   // 중앙 카테고리에 등록된 상품 목록
   const [addedProductList, setAddedProductList] = useState<any>([]);
 
-  const [iconImg, setIconImg] = useState<string>("");
+  const [iconImg, setIconImg] = useState<string[]>([]);
   const [selectedList, setSelectedList] = useState<any>([]);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 

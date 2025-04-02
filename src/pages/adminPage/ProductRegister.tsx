@@ -151,7 +151,6 @@ function ProductRegister(props: Props) {
   const [Price, setPrice] = useState<Number | null>(null);
 
   const [options, setOptions] = useState<options[]>([{ name: "", values: [], image: [], price: [] }]);
-  console.log(options);
 
   const [OptionResult, setOptionResult] = useState<any>([]);
   
@@ -189,9 +188,6 @@ function ProductRegister(props: Props) {
 
   const [isOptionName, setIsOptionName] = useState<boolean[]>([]);
   const [isOptionValue, setIsOptionValue] = useState<boolean[]>([]);
-  console.log(isOptionName)
-  console.log(isOptionValue)
-
   const [isOptionNameFin, setIsOptionNameFin] = useState<boolean>(false);
   const [isOptionValueFin, setIsOptionValueFin] = useState<boolean>(false);
 

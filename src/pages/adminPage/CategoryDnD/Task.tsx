@@ -385,7 +385,7 @@ interface ITaskProps {
   setSelectedName: React.Dispatch<SetStateAction<string | undefined>>;
   setSelectedURL: React.Dispatch<SetStateAction<string | undefined>>;
   setAddedProductList: React.Dispatch<any>;
-  setIconImg: React.Dispatch<React.SetStateAction<string>>;
+  setIconImg: React.Dispatch<React.SetStateAction<string[]>>;
   setInitialName: React.Dispatch<React.SetStateAction<string | undefined>>;
   setSelectedNavHide: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedChapNavHide: React.Dispatch<React.SetStateAction<boolean>>;
@@ -481,7 +481,7 @@ const Task = ({
       if (selectedTask.icon) {
         setIconImg(selectedTask.icon);
       } else {
-        setIconImg("");
+        setIconImg([]);
       }
 
       if (selectedTask.navHide) {
@@ -511,7 +511,7 @@ const Task = ({
         setSelectedName("");
         setSelectedURL("");
         setInitialName("");
-        setIconImg("");
+        setIconImg([]);
         setAdvertise([]);
         setSelectedAdvertise([]);
         setSelectedAdverID("");
@@ -633,7 +633,7 @@ const Task = ({
             <Title {...provided.dragHandleProps} onClick={taskSelected} task={task} selectedList={selectedList} column={column}>
               {task.icon ? (
                 <IconWrap>
-                  <Icon icon={task.icon} column={column} />
+                  <Icon icon={task.icon[0]} column={column} />
                 </IconWrap>
               ) : (
                 ""

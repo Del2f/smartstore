@@ -1,8 +1,7 @@
 import axios from "../../api/axios";
 import styled, { css, keyframes } from "styled-components";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation, useParams } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
 import { ObjectId } from "mongodb";
 import { ColumnType, TaskType, SubTaskType, Advertise } from "../adminPage/Category";
 import "./Category.scss";
@@ -1102,10 +1101,11 @@ function Category({ categoryList, selectedColumn, setSelectedColumn, selectedTas
 
   useEffect(() => {
     const loadImageSize = async (list: any) => {
+      console.log(list);
       return new Promise<IconSize>((resolve) => {
         let width: number | undefined;
         let height: number | undefined;
-        if (list.icon && list.icon.startsWith("http")) {
+        if (list.icon[0]) {
           const img = new Image();
           img.src = list.icon;
           img.onload = () => {

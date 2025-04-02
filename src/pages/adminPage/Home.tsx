@@ -572,9 +572,6 @@ function Home(props: Props) {
     delivering: 0,
   });
 
-  console.log(orders);
-  console.log(counts);
-
   useEffect(() => {
     const fetchData = async () => {
       try {

@@ -222,7 +222,7 @@ interface ISubTaskProps {
   setSelectedName: React.Dispatch<SetStateAction<string | undefined>>;
   setSelectedURL: React.Dispatch<SetStateAction<string | undefined>>;
   setAddedProductList: React.Dispatch<any>;
-  setIconImg: React.Dispatch<React.SetStateAction<string>>;
+  setIconImg: React.Dispatch<React.SetStateAction<string[]>>;
   setInitialName: React.Dispatch<React.SetStateAction<string | undefined>>;
   setSelectedNavHide: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedChapNavHide: React.Dispatch<React.SetStateAction<boolean>>;
@@ -286,7 +286,7 @@ const SubTask = ({
       if (selectedSubTask.icon) {
         setIconImg(selectedSubTask.icon);
       } else {
-        setIconImg("");
+        setIconImg([]);
       }
 
       if (selectedSubTask.navHide) {
@@ -316,7 +316,7 @@ const SubTask = ({
         setSelectedName("");
         setSelectedURL("");
         setInitialName("");
-        setIconImg("");
+        setIconImg([]);
         setSelectedNavHide(false);
         setSelectedChapNavHide(false);
         setSelectedDarkMode(false);
@@ -380,7 +380,7 @@ const SubTask = ({
             </button>
             {subtask.icon && (
               <IconWrap>
-                <Icon icon={subtask.icon} column={column} />
+                <Icon icon={subtask.icon[0]} column={column} />
               </IconWrap>
             )}
             <span style={{ display: "inline-block" }}>{subtask.name}</span>

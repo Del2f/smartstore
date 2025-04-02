@@ -26,24 +26,23 @@
 서버
 - bcrypt
 - mongoose
-- multer-s3
 - nodemailer
 
 데이터베이스
 - MongoDB
 
 배포
-- AWS
+- 노트북
 
 주소
-- http://del2f.sytes.net/smartstore/shop
-- http://del2f.sytes.net/smartstore
+- http://del2f.sytes.net:20001/smartstore/shop
+- http://del2f.sytes.net:20001/smartstore
 
 ## 개발 과정
 
 ### 애플 스토어 관리자 페이지
 
-- http://del2f.sytes.net/smartstore
+- http://del2f.sytes.net:20001/smartstore
 
 관리자 계정
 - ID: thanks6

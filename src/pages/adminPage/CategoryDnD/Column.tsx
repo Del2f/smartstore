@@ -280,7 +280,7 @@ interface IColumnProps {
   setSelectedName: React.Dispatch<SetStateAction<string | undefined>>;
   setSelectedURL: React.Dispatch<SetStateAction<string | undefined>>;
   setAddedProductList: React.Dispatch<any>;
-  setIconImg: React.Dispatch<React.SetStateAction<string>>;
+  setIconImg: React.Dispatch<React.SetStateAction<string[]>>;
   setSelectedNavHide: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedChapNavHide: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedDarkMode: React.Dispatch<React.SetStateAction<boolean>>;
@@ -371,7 +371,7 @@ const Column = ({
       }
 
       setInitialName(selectedColumn.name);
-      setIconImg("");
+      setIconImg([]);
 
       if (selectedColumn.navHide) {
         setSelectedNavHide(true);

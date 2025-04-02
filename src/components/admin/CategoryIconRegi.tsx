@@ -4,7 +4,7 @@ import plus from "@img/plus1.svg";
 import { useState, useEffect } from "react";
 import { InputWrap } from "../../pages/adminPage/Category";
 import { admin } from "@styles/icons";
-
+import useUploadImage from "../../api/useUploadImage";
 const Icon = styled.div`
   position: relative;
 `;
@@ -122,53 +122,67 @@ const AddButton = styled.div`
   }
 `;
 
-function ImagePreview({ image, deleteFunc }: any) {
+function ImagePreview({ image }: { image: string }) {
+
   return (
-    <div className="ImagePreview" draggable>
+    <div className="ImagePreview">
       <img src={image} alt="preview" />
     </div>
   );
 }
 
-function ImageUploadBox(props: any) {
+function CategoryIconRegi(props: any) {
   const [max, setMax] = useState<any>(1); // 이미지 최대 개수
-  const [uploadedImages, setUploadedImages] = useState<any>([]);
-  const [previewImages, setPreviewImages] = useState<any>([]);
-  const [errorMessage, setErrorMessage] = useState<any>([]);
+  const [uploadedImages, setUploadedImages] = useState<string[]>(props.iconImg);
+  const [mainImage, setMainImage] = useState<any>([]);
+  // const [errorMessage, setErrorMessage] = useState<any>([]);
   const [isImage, setIsImage] = useState<boolean>(false);
 
-  const validFileTypes = ["image/svg+xml", "image/png"];
+ const { handleFiles, errorMessage } = useUploadImage(setUploadedImages, props.setIconImg, setIsImage);
 
-  const handleFiles = async (files: any) => {
-    if (!validFileTypes.find((type: any) => type === files[0].type)) {
-      setErrorMessage("SVG 파일을 업로드 해주세요.");
-      return;
+  console.log(props);
+  console.log(isImage);
+
+  useEffect(() => {
+    if (props.iconImg.length > 0) {
+      setUploadedImages(props.iconImg);
+      setIsImage(true);
+    } else {
+      setUploadedImages([]);
+      setIsImage(false);
     }
-    setErrorMessage("");
+  }, [props.iconImg]);
 
-    const img = files[0];
-    const formData = new FormData();
-    formData.append("CategoryImage", img);
-    try {
-      for (const file of files) {
-        if (!file.type.startsWith("image/")) continue;
-        const reader = new FileReader();
-        reader.onloadend = (e: any) => {
-          let result = e.target.result;
-          if (result) {
-            setUploadedImages([result].slice(0, max));
-            setIsImage(true);
-          }
-        };
-        reader.readAsDataURL(file);
-      }
+  // const handleFiles = async (files: any) => {
+  //   if (!validFileTypes.find((type: any) => type === files[0].type)) {
+  //     setErrorMessage("SVG 파일을 업로드 해주세요.");
+  //     return;
+  //   }
+  //   setErrorMessage("");
 
-      const URL = await axios.post("/smartstore/home/categoryicon/img", formData);
-      props.setIconImg(URL.data.location);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //   const img = files[0];
+  //   const formData = new FormData();
+  //   formData.append("CategoryImage", img);
+  //   try {
+  //     for (const file of files) {
+  //       if (!file.type.startsWith("image/")) continue;
+  //       const reader = new FileReader();
+  //       reader.onloadend = (e: any) => {
+  //         let result = e.target.result;
+  //         if (result) {
+  //           setUploadedImages([result].slice(0, max));
+  //           setIsImage(true);
+  //         }
+  //       };
+  //       reader.readAsDataURL(file);
+  //     }
+
+  //     const URL = await axios.post("/smartstore/home/categoryicon/img", formData);
+  //     props.setIconImg(URL.data.location);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const changeHandler = (event: any) => {
     const files = event.target.files;
@@ -203,17 +217,17 @@ function ImageUploadBox(props: any) {
     event.preventDefault();
     event.stopPropagation();
     setUploadedImages([]);
-    props.setIconImg("");
+    props.setIconImg([]);
     setIsImage(false);
   };
 
   // 상품 최초 등록시 미리보기
-  useEffect(() => {
-    const imageJSXs = uploadedImages.map((image: any, index: any) => {
-      return <ImagePreview image={image} key={index} />;
-    });
-    setPreviewImages(imageJSXs);
-  }, [uploadedImages]);
+  // useEffect(() => {
+  //   const imageJSXs = uploadedImages.map((image: any, index: any) => {
+  //     return <ImagePreview image={image} key={index} />;
+  //   });
+  //   // props.setIconImg(imageJSXs);
+  // }, [uploadedImages]);
 
   // 상품 수정시
   useEffect(() => {
@@ -221,15 +235,15 @@ function ImageUploadBox(props: any) {
 
     if (!editImg) {
       props.setIconImg("");
-      setPreviewImages("");
+      // setMainImage("");
       setIsImage(false);
       return;
     }
 
     const imageJSXs = <ImagePreview image={editImg} />;
     setIsImage(true);
-    setPreviewImages(imageJSXs);
-  }, [props.iconImg]);
+    props.setIconImg(editImg);
+  }, []);
 
   return (
     <>
@@ -238,12 +252,15 @@ function ImageUploadBox(props: any) {
           <IconInner className="IconInner">
             <h5 className="cateInfo-name">아이콘</h5>
             <div className="addbutton-wrap">
-              <AddButton className="addbutton">
+              {isImage ?  <></> :<AddButton className="addbutton">
                 <admin.Plus width="18px" height="18px" fill={"#0071e3"}></admin.Plus>
-              </AddButton>
+              </AddButton>}
+
             </div>
             <IconLabel className="IconLabel dragorclick" onDragOver={dragOverHandler} onDrop={dropHandler}>
-              {previewImages}
+            {props.iconImg.map((image, index) => (
+              <ImagePreview image={image} key={index} />
+            ))}
               <IconInput type="file" multiple accept="image/*" onChange={changeHandler} />
             </IconLabel>
             <div className="text-btn-wrap" style={{ position: "absolute", right: "20px" }}>
@@ -259,4 +276,4 @@ function ImageUploadBox(props: any) {
   );
 }
 
-export default ImageUploadBox;
+export default CategoryIconRegi;
