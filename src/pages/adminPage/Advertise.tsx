@@ -466,7 +466,6 @@ function Advertise(props: Props) {
   }, []);
 
   const [selectedList, setSelectedList] = useState<any>([]);
-  console.log(selectedList);
 
   const [adName, setAdname] = useState<string>("");
   const [adType, setAdType] = useState<number>(0);
@@ -477,7 +476,9 @@ function Advertise(props: Props) {
   const [adURL, setAdURL] = useState<string>("");
   const [adBackColor, setAdBackColor] = useState<string>("");
   const [adProduct, setAdProduct] = useState<any>([]);
-  const [adImage, setAdImage] = useState<string>("");
+  const [adImage, setAdImage] = useState<string[]>([]);
+
+  console.log(adImage);
 
   // 텍스트 클릭 여부
   const [isBackClick, setIsBackClick] = useState<boolean>(false);
@@ -492,19 +493,10 @@ function Advertise(props: Props) {
   const [detailColor, setDetailColor] = useState<string>("");
   const [subDetailColor, setSubDetailColor] = useState<string>("");
 
-  // console.log(isSubTitleClick);
-  // console.log(isMainTitleClick);
-  // console.log(isDetailClick);
-  // console.log(isSubDetailClick);
-
   // 유효성 검사
   const [isSelected, setIsSelected] = useState<boolean>(false);
   const [isSelectedTask, setIsSelectedTask] = useState<boolean>(false);
   const [isSelectedSubTask, setIsSelectedSubTask] = useState<boolean>(false);
-
-  // console.log(isSelected);
-  // console.log(isSelectedTask);
-  // console.log(isSelectedSubTask);
 
   // 광고페이지 전환
   const [isAdvertise, setIsAdvertise] = useState<boolean>(false);
@@ -587,8 +579,6 @@ function Advertise(props: Props) {
     isSubDetailClick: isSubDetailClick,
     isBackClick: isBackClick,
   };
-
-  console.log(test);
 
   // 클릭 이벤트 핸들러
   const handleInputClick = (e, type) => {
@@ -753,7 +743,7 @@ function Advertise(props: Props) {
               maintitleColor: mainTitleColor,
               detailColor: detailColor,
               subdetailColor: subDetailColor,
-              image: adImage,
+              image: adImage[0],
               url: adURL,
               backcolor: adBackColor,
               product_id: adProduct[0]._id,
@@ -770,7 +760,7 @@ function Advertise(props: Props) {
               maintitleColor: mainTitleColor,
               detailColor: detailColor,
               subdetailColor: subDetailColor,
-              image: adImage,
+              image: adImage[0],
               url: adURL,
               backcolor: adBackColor,
               product_id: adProduct[0]._id,
@@ -894,7 +884,7 @@ function Advertise(props: Props) {
       setAdURL("");
       setAdBackColor("");
       setAdProduct([]);
-      setAdImage("");
+      setAdImage([]);
 
       setIsAdName(false);
       setIsAdSubTitle(false);

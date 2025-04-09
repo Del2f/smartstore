@@ -2,6 +2,7 @@ import axios from "../../api/axios";
 import styled from "styled-components";
 import plus from "@img/plus1.svg";
 import { useState, useEffect, useRef } from "react";
+import useUploadImage from "../../api/useUploadImage";
 
 const IconWrap = styled.div`
   position: relative;
@@ -133,59 +134,62 @@ function ImagePreview({ imageURL, setAdBackColor, colorSelector }: any) {
 }
 
 function AdvertiseImage(props: any) {
-  const [max, setMax] = useState<any>(1); // 이미지 최대 개수
   const [uploadedImages, setUploadedImages] = useState<any>([]);
   const [previewImages, setPreviewImages] = useState<any>([]);
-  const [errorMessage, setErrorMessage] = useState<any>([]);
+  const { handleFiles, errorMessage } = useUploadImage(setUploadedImages, props.setAdImage, props.setIsAdImage);
+  console.log(uploadedImages);
 
-  const validFileTypes = ["image/jpg", "image/jpeg", "image/png"];
-
-  // console.log(props.colorSelector);
-  // console.log(previewImages);
-  // console.log(props.adImage);
-  // console.log(props.isAdvertiseEdit);
+  useEffect(() => {
+    if (props.adImage.length > 0) {
+      setPreviewImages(props.adImage);
+      props.setIsAdImage(true);
+    } else {
+      setPreviewImages([]);
+      props.setIsAdImage(false);
+    }
+  }, [props.adImage]);
 
   // 이미지 업로드
-  const handleFiles = async (files: any) => {
-    if (!validFileTypes.find((type: any) => type === files[0].type)) {
-      setErrorMessage("이미지 파일을 업로드 해주세요.");
-      return;
-    }
-    setErrorMessage("");
+  // const handleFiles = async (files: any) => {
+  //   if (!validFileTypes.find((type: any) => type === files[0].type)) {
+  //     setErrorMessage("이미지 파일을 업로드 해주세요.");
+  //     return;
+  //   }
+  //   setErrorMessage("");
 
-    try {
-      for (const file of files) {
-        if (!file.type.startsWith("image/")) continue;
+  //   try {
+  //     for (const file of files) {
+  //       if (!file.type.startsWith("image/")) continue;
 
-        const image = new Image();
-        image.src = URL.createObjectURL(file);
+  //       const image = new Image();
+  //       image.src = URL.createObjectURL(file);
 
-        image.onload = async () => {
-          if (image.width <= 2200 && image.height <= 1700) {
-            const reader = new FileReader();
-            reader.onloadend = (e: any) => {
-              let result = e.target.result;
-              if (result) {
-                setUploadedImages([result].slice(0, max));
-                props.setIsAdImage(true);
-              }
-            };
-            reader.readAsDataURL(file);
+  //       image.onload = async () => {
+  //         if (image.width <= 2200 && image.height <= 1700) {
+  //           const reader = new FileReader();
+  //           reader.onloadend = (e: any) => {
+  //             let result = e.target.result;
+  //             if (result) {
+  //               setUploadedImages([result].slice(0, max));
+  //               props.setIsAdImage(true);
+  //             }
+  //           };
+  //           reader.readAsDataURL(file);
 
-            const formData = new FormData();
-            formData.append("AdvertiseImage", file);
+  //           const formData = new FormData();
+  //           formData.append("AdvertiseImage", file);
 
-            const URL = await axios.post("/smartstore/home/advertise/img", formData);
-            props.setAdImage(URL.data.location);
-          } else {
-            setErrorMessage("이미지의 가로는 2200px 이하, 세로는 1700px 이하이어야 합니다.");
-          }
-        };
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //           const URL = await axios.post("/smartstore/home/advertise/img", formData);
+  //           props.setAdImage(URL.data.location);
+  //         } else {
+  //           setErrorMessage("이미지의 가로는 2200px 이하, 세로는 1700px 이하이어야 합니다.");
+  //         }
+  //       };
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   // 이미지 교체
   const changeHandler = (event: any) => {
@@ -222,7 +226,7 @@ function AdvertiseImage(props: any) {
     event.stopPropagation();
     
     setUploadedImages([]);
-    props.setAdImage("");
+    props.setAdImage([]);
 
     props.setAdBackColor();
     props.setColorSelector(false);
@@ -266,7 +270,7 @@ function AdvertiseImage(props: any) {
     if (!imageURL) {
       console.log("imageURL이 없으므로 수정이 아닌것으로 판단, return");
       setPreviewImages("");
-      props.setAdImage("");
+      props.setAdImage([]);
       props.setIsAdImage(false);
       return;
     }

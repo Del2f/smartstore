@@ -173,9 +173,18 @@ const AdverImageWrap = styled.div<Type>`
       display: flex;
       justify-content: center;
       align-items: center;
-      margin-top: 170px;
-      margin-bottom: 100px;
+      margin-top: 0px;
+      margin-bottom: 0px;
     `}
+
+    @media only screen and (max-width: 400px) {
+    ${(props) =>
+      props.type === 0 &&
+      css`
+      margin-top: 0px;
+      margin-bottom: 0px;
+      `}
+  }
 
   ${(props) =>
     props.type === 1 &&
@@ -211,21 +220,35 @@ const AdverImageWrap = styled.div<Type>`
 
 const AdverImage = styled.img<TypeImage>`
   ${(props) =>
-    props.type === 0 &&
-    `
+  props.type === 0 &&
+  css`
+    
+    max-width: 100%;
+    max-height: 800px;
+
 
   `}
+
+  @media only screen and (max-width: 400px) {
+    ${(props) =>
+      props.type === 0 &&
+      css`
+        max-width: 400px;
+        max-height: 800px;
+      `}
+  }
+
   ${(props) =>
-    props.type === 1 &&
-    `
+  props.type === 1 && css`
+  max-width: 700px;
+  max-height: 800px;
+  
+    
 
   `}
   ${(props) =>
     props.type === 2 &&
     css`
-      /* position: absolute; */
-      /* left: 50%; */
-      /* margin-left: -210px; */
       max-width: 700px;
       max-height: 800px;
     `}
